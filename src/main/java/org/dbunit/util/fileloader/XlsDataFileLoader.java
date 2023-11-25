@@ -45,7 +45,7 @@ public class XlsDataFileLoader extends AbstractDataFileLoader {
     /**
      * Create new instance with replacement objects.
      * 
-     * @param replacementObjects
+     * @param ro
      *            The replacement objects for use with
      *            {@link org.dbunit.dataset.ReplacementDataSet}.
      */
@@ -63,8 +63,8 @@ public class XlsDataFileLoader extends AbstractDataFileLoader {
      *            The replacement substrings for use with
      *            {@link org.dbunit.dataset.ReplacementDataSet}.
      */
-    public XlsDataFileLoader(Map ro, Map rs) {
-        super(ro, rs);
+    public XlsDataFileLoader(Map ro, Map rs, Map rf) {
+        super(ro, rs, rf);
     }
 
     /**

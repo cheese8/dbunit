@@ -26,6 +26,8 @@ import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Decorator that replaces configured values from the decorated table
@@ -50,6 +52,11 @@ public class ReplacementTable implements ITable
     private String _endDelim;
     private boolean _strictReplacement;
 
+    private Map<Object, ReplacementFunction> _functionMap;
+
+    private final static String regex = "\\[(.*)\\((.*)\\)\\]";
+    private final static Pattern pattern = Pattern.compile(regex);
+
     /**
      * Create a new ReplacementTable object that decorates the specified table.
      *
@@ -68,6 +75,7 @@ public class ReplacementTable implements ITable
         _substringMap = substringMap;
         _startDelim = startDelimiter;
         _endDelim = endDelimiter;
+        _functionMap = new HashMap();
     }
 
     /**
@@ -114,6 +122,19 @@ public class ReplacementTable implements ITable
         }
 
         _substringMap.put(originalSubstring, replacementSubstring);
+    }
+
+    /**
+     * Add a new function replacement mapping.
+     *
+     * @param originalObject the object to replace
+     * @param replacementFunction the replacement function
+     */
+    public void addReplacementFunction(Object originalObject, ReplacementFunction replacementFunction)
+    {
+        logger.debug("addReplacementFunction(originalObject={}, replacementFunction={}) - start", originalObject, replacementFunction);
+
+        _functionMap.put(originalObject, replacementFunction);
     }
 
     /**
@@ -252,21 +273,31 @@ public class ReplacementTable implements ITable
             return _objectMap.get(value);
         }
 
+        if (value instanceof String) {
+            // Function replacement
+            String valueStr = (String) value;
+            Matcher m = pattern.matcher(valueStr);
+            if (!m.find()) {
+                // Substring replacement
+                if (_startDelim != null && _endDelim != null)
+                {
+                    return replaceDelimitedSubstrings(valueStr);
+                }
+                return replaceSubstrings((String)value);
+            } else {
+                String functionKey = m.group(1);
+                String parameter = m.group(2);
+                if (_functionMap.containsKey(functionKey)) {
+                    return _functionMap.get(functionKey).evaluate(parameter);
+                } else {
+                    throw new DataSetException("");
+                }
+            }
+        }
         // Stop here if substring replacement not applicable
-        if (_substringMap.size() == 0 || !(value instanceof String))
-        {
-            return value;
-        }
-
-        // Substring replacement
-        if (_startDelim != null && _endDelim != null)
-        {
-            return replaceDelimitedSubstrings((String)value);
-        }
-        return replaceSubstrings((String)value);
+        return value;
     }
-    
-    
+
     public String toString()
     {
     	StringBuffer sb = new StringBuffer();
