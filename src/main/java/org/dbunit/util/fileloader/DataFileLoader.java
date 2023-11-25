@@ -44,7 +44,7 @@ public interface DataFileLoader {
      * {@link org.dbunit.dataset.DefaultDataSet}. The type of dbUnit dataset
      * created is delegated to the implementing subclass.
      * 
-     * @param filename
+     * @param fileName
      *            The dbUnit file to load, in the format for the loader
      *            implementation and fully qualified name with package syntax.
      * @return The dbUnit dataset of the specified file.
@@ -90,6 +90,16 @@ public interface DataFileLoader {
     void addReplacementSubstrings(Map replacementSubstrings);
 
     /**
+     * Add the specified replacement substrings to existing ones for use with
+     * {@link org.dbunit.dataset.ReplacementDataSet}.
+     *
+     * @param replacementFunctions
+     *            The replacement substrings to include.
+     * @since 2.4.8
+     */
+    void addReplacementFunctions(Map replacementFunctions);
+
+    /**
      * Remove all existing replacement objects, resetting to none so no object
      * replacements occur.
      * 
@@ -104,4 +114,12 @@ public interface DataFileLoader {
      * @since 2.4.8
      */
     void removeAllReplacementSubstrings();
+
+    /**
+     * Remove all existing replacement substring objects, resetting to none so
+     * no substring replacements occur.
+     *
+     * @since 2.4.8
+     */
+    void removeAllReplacementFunctions();
 }

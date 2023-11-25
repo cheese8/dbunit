@@ -44,7 +44,7 @@ public class FullXmlDataFileLoader extends AbstractDataFileLoader {
     /**
      * Create new instance with replacement objects.
      * 
-     * @param replacementObjects
+     * @param ro
      *            The replacement objects for use with
      *            {@link org.dbunit.dataset.ReplacementDataSet}.
      */
@@ -62,8 +62,8 @@ public class FullXmlDataFileLoader extends AbstractDataFileLoader {
      *            The replacement substrings for use with
      *            {@link org.dbunit.dataset.ReplacementDataSet}.
      */
-    public FullXmlDataFileLoader(Map ro, Map rs) {
-        super(ro, rs);
+    public FullXmlDataFileLoader(Map ro, Map rs, Map rf) {
+        super(ro, rs, rf);
     }
 
     /**

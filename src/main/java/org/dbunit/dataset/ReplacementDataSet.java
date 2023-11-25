@@ -45,10 +45,10 @@ public class ReplacementDataSet extends AbstractDataSet
     private final IDataSet _dataSet;
     private final Map _objectMap;
     private final Map _substringMap;
+    private final Map<String, ReplacementFunction> _functionMap;
     private String _startDelim;
     private String _endDelim;
     private boolean _strictReplacement;
-
 
     /**
      * Create a new ReplacementDataSet object that decorates the specified dataset.
@@ -57,7 +57,7 @@ public class ReplacementDataSet extends AbstractDataSet
      */
     public ReplacementDataSet(IDataSet dataSet)
     {
-        this(dataSet, new HashMap(), new HashMap());
+        this(dataSet, new HashMap(), new HashMap(), new HashMap<>());
     }
 
     /**
@@ -66,13 +66,15 @@ public class ReplacementDataSet extends AbstractDataSet
      * @param dataSet the decorated dataset
      * @param objectMap the replacement objects mapping
      * @param substringMap the replacement substrings mapping
+     * @param functionMap the replacement function mapping
      */
-    public ReplacementDataSet(IDataSet dataSet, Map objectMap, Map substringMap)
+    public ReplacementDataSet(IDataSet dataSet, Map objectMap, Map substringMap, Map functionMap)
     {
         super(dataSet.isCaseSensitiveTableNames());
         _dataSet = dataSet;
         _objectMap = objectMap == null ? new HashMap() : objectMap;
         _substringMap = substringMap == null ? new HashMap() : substringMap;
+        _functionMap = functionMap == null ? new HashMap() : functionMap;
     }
 
     /**
@@ -96,6 +98,19 @@ public class ReplacementDataSet extends AbstractDataSet
         logger.debug("addReplacementObject(originalObject={}, replacementObject={}) - start", originalObject, replacementObject);
 
         _objectMap.put(originalObject, replacementObject);
+    }
+
+    /**
+     * Add a new function replacement mapping.
+     *
+     * @param originalObject the object to replace
+     * @param replacementFunction the replacement function
+     */
+    public void addReplacementFunction(String originalObject, ReplacementFunction replacementFunction)
+    {
+        logger.debug("addReplacementFunction(originalObject={}, replacementFunction={}) - start", originalObject, replacementFunction);
+
+        _functionMap.put(originalObject, replacementFunction);
     }
 
     /**

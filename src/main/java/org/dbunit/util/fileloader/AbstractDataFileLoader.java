@@ -47,21 +47,22 @@ public abstract class AbstractDataFileLoader implements DataFileLoader {
 
     private Map replacementObjects;
     private Map replacementSubstrings;
+    private Map replacementFunctions;
 
     /** Create new instance. */
     public AbstractDataFileLoader() {
-        this(new HashMap(), new HashMap());
+        this(new HashMap(), new HashMap(), new HashMap<>());
     }
 
     /**
      * Create new instance with replacement objects.
      * 
-     * @param replacementObjects
+     * @param ro
      *            The replacement objects for use with
      *            {@link org.dbunit.dataset.ReplacementDataSet}.
      */
     public AbstractDataFileLoader(Map ro) {
-        this(ro, new HashMap());
+        this(ro, new HashMap(), new HashMap());
     }
 
     /**
@@ -74,7 +75,7 @@ public abstract class AbstractDataFileLoader implements DataFileLoader {
      *            The replacement substrings for use with
      *            {@link org.dbunit.dataset.ReplacementDataSet}.
      */
-    public AbstractDataFileLoader(Map ro, Map rs) {
+    public AbstractDataFileLoader(Map ro, Map rs, Map rf) {
         if (ro == null) {
             throw new IllegalArgumentException(
                     "Replacement object map is null.");
@@ -85,8 +86,14 @@ public abstract class AbstractDataFileLoader implements DataFileLoader {
                     "Replacement substrings map is null.");
         }
 
+        if (rf == null) {
+            throw new IllegalArgumentException(
+                    "Replacement functions map is null.");
+        }
+
         this.replacementObjects = ro;
         this.replacementSubstrings = rs;
+        this.replacementFunctions = rf;
     }
 
     /**
@@ -146,7 +153,7 @@ public abstract class AbstractDataFileLoader implements DataFileLoader {
     protected ReplacementDataSet processReplacementTokens(IDataSet ds) {
         ReplacementDataSet rds =
                 new ReplacementDataSet(ds, replacementObjects,
-                        replacementSubstrings);
+                        replacementSubstrings, replacementFunctions);
 
         return rds;
     }
@@ -168,6 +175,14 @@ public abstract class AbstractDataFileLoader implements DataFileLoader {
     /**
      * {@inheritDoc}
      */
+    public void addReplacementFunctions(Map rf) {
+        this.replacementFunctions.putAll(rf);
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
     public void removeAllReplacementObjects() {
         this.replacementObjects.clear();
     }
@@ -176,6 +191,13 @@ public abstract class AbstractDataFileLoader implements DataFileLoader {
      * {@inheritDoc}
      */
     public void removeAllReplacementSubstrings() {
+        this.replacementSubstrings.clear();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void removeAllReplacementFunctions() {
         this.replacementSubstrings.clear();
     }
 }
