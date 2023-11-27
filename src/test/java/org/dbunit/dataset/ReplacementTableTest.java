@@ -159,7 +159,7 @@ public class ReplacementTableTest extends AbstractTableTest
         actualTable.addReplacementObject(null, "nullreplacement");
         actualTable.addReplacementFunction("add", new ReplacementFunction() {
             @Override
-            public String evaluate(String parameter) {
+            public String evaluate(String parameter) throws DataSetException {
                 return "123";
             }
         });
