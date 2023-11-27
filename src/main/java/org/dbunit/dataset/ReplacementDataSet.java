@@ -153,7 +153,7 @@ public class ReplacementDataSet extends AbstractDataSet
         logger.debug("createReplacementTable(table={}) - start", table);
         
         ReplacementTable replacementTable = new ReplacementTable(
-                table, _objectMap, _substringMap, _startDelim, _endDelim);
+                table, _objectMap, _substringMap, _functionMap, _startDelim, _endDelim);
         replacementTable.setStrictReplacement(_strictReplacement);
         return replacementTable;
     }

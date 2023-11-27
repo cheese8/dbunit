@@ -64,18 +64,18 @@ public class ReplacementTable implements ITable
      */
     public ReplacementTable(ITable table)
     {
-        this(table, new HashMap(), new HashMap(), null, null);
+        this(table, new HashMap(), new HashMap(), new HashMap(), null, null);
     }
 
-    public ReplacementTable(ITable table, Map objectMap, Map substringMap,
+    public ReplacementTable(ITable table, Map objectMap, Map substringMap, Map functionMap,
             String startDelimiter, String endDelimiter)
     {
         _table = table;
         _objectMap = objectMap;
         _substringMap = substringMap;
+        _functionMap = functionMap;
         _startDelim = startDelimiter;
         _endDelim = endDelimiter;
-        _functionMap = new HashMap();
     }
 
     /**
@@ -285,12 +285,12 @@ public class ReplacementTable implements ITable
                 }
                 return replaceSubstrings((String)value);
             } else {
-                String functionKey = m.group(1);
+                String functionName = m.group(1);
                 String parameter = m.group(2);
-                if (_functionMap.containsKey(functionKey)) {
-                    return _functionMap.get(functionKey).evaluate(parameter);
+                if (_functionMap.containsKey(functionName)) {
+                    return _functionMap.get(functionName).evaluate(parameter);
                 } else {
-                    throw new DataSetException("");
+                    throw new DataSetException("ReplacementFunction " + functionName + " was not registered.");
                 }
             }
         }
