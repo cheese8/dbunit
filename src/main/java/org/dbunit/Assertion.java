@@ -63,25 +63,25 @@ public class Assertion
 
     /**
      * @see DbUnitAssert#assertEqualsIgnoreCols(IDataSet, IDataSet, String,
-     *      String[])
+     *      String[], FailureHandler)
      */
     public static void assertEqualsIgnoreCols(final IDataSet expectedDataset,
             final IDataSet actualDataset, final String tableName,
-            final String[] ignoreCols) throws DatabaseUnitException
+            final String[] ignoreCols, FailureHandler failureHandler) throws DatabaseUnitException
     {
         EQUALS_INSTANCE.assertEqualsIgnoreCols(expectedDataset, actualDataset,
-                tableName, ignoreCols);
+                tableName, ignoreCols, failureHandler);
     }
 
     /**
-     * @see DbUnitAssert#assertEqualsIgnoreCols(ITable, ITable, String[])
+     * @see DbUnitAssert#assertEqualsIgnoreCols(ITable, ITable, String[], FailureHandler)
      */
     public static void assertEqualsIgnoreCols(final ITable expectedTable,
-            final ITable actualTable, final String[] ignoreCols)
+            final ITable actualTable, final String[] ignoreCols, FailureHandler failureHandler)
             throws DatabaseUnitException
     {
         EQUALS_INSTANCE.assertEqualsIgnoreCols(expectedTable, actualTable,
-                ignoreCols);
+                ignoreCols, failureHandler);
     }
 
     /**

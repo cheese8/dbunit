@@ -66,14 +66,14 @@ public class DbUnitAssert extends DbUnitAssertBase
      */
     public void assertEqualsIgnoreCols(final IDataSet expectedDataset,
             final IDataSet actualDataset, final String tableName,
-            final String[] ignoreCols) throws DatabaseUnitException
+            final String[] ignoreCols, FailureHandler failureHandler) throws DatabaseUnitException
     {
         logger.debug(
                 "assertEqualsIgnoreCols(expectedDataset={}, actualDataset={}, tableName={}, ignoreCols={}) - start",
                 expectedDataset, actualDataset, tableName, ignoreCols);
 
         assertEqualsIgnoreCols(expectedDataset.getTable(tableName),
-                actualDataset.getTable(tableName), ignoreCols);
+                actualDataset.getTable(tableName), ignoreCols, failureHandler);
     }
 
     /**
@@ -89,7 +89,7 @@ public class DbUnitAssert extends DbUnitAssertBase
      *             If an error occurs.
      */
     public void assertEqualsIgnoreCols(final ITable expectedTable,
-            final ITable actualTable, final String[] ignoreCols)
+            final ITable actualTable, final String[] ignoreCols, FailureHandler failureHandler)
             throws DatabaseUnitException
     {
         logger.debug(
@@ -100,7 +100,7 @@ public class DbUnitAssert extends DbUnitAssertBase
                 .excludedColumnsTable(expectedTable, ignoreCols);
         final ITable actualTableFiltered = DefaultColumnFilter
                 .excludedColumnsTable(actualTable, ignoreCols);
-        assertEquals(expectedTableFiltered, actualTableFiltered);
+        assertEquals(expectedTableFiltered, actualTableFiltered, failureHandler);
     }
 
     /**
