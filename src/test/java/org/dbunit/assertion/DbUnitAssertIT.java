@@ -193,7 +193,7 @@ public class DbUnitAssertIT extends TestCase
         String[] allColumnsThatAreNotEqual = new String[] {"COLUMN2"};
         assertion.assertEqualsIgnoreCols(dataSet.getTable("TEST_TABLE"),
                 dataSet.getTable("TEST_TABLE_WITH_WRONG_VALUE"),
-                allColumnsThatAreNotEqual );
+                allColumnsThatAreNotEqual, new DefaultFailureHandler());
     }
 
     public void testAssertTablesWithColFilterAndValuesNotEqualNotExcluded() throws Exception
@@ -206,7 +206,7 @@ public class DbUnitAssertIT extends TestCase
         try {
             assertion.assertEqualsIgnoreCols(dataSet.getTable("TEST_TABLE"),
 	                dataSet.getTable("TEST_TABLE_WITH_WRONG_VALUE"),
-	                filteredColumns );
+	                filteredColumns, null);
             throw new IllegalStateException("Should throw an AssertionFailedError");
         }
         catch (ComparisonFailure expected)
