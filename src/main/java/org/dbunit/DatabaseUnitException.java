@@ -21,13 +21,11 @@
 
 package org.dbunit;
 
-
 /**
  * @author Manuel Laflamme
  * @version $Revision$
  */
-public class DatabaseUnitException extends Exception
-{
+public class DatabaseUnitException extends Exception {
 
     /**
 	 * 

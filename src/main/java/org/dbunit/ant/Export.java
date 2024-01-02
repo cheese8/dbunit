@@ -57,8 +57,7 @@ import org.slf4j.LoggerFactory;
  * @since Jun 10, 2002
  * @see DbUnitTaskStep
  */
-public class Export extends AbstractStep
-{
+public class Export extends AbstractStep {
 
     /**
      * Logger for this class

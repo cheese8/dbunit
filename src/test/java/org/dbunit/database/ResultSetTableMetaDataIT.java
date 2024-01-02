@@ -1,6 +1,5 @@
 package org.dbunit.database;
 
-import java.io.File;
 import java.sql.Connection;
 
 import org.dbunit.AbstractDatabaseIT;
@@ -27,7 +26,7 @@ public class ResultSetTableMetaDataIT extends AbstractDatabaseIT
 
     protected IDataSet createDataSet() throws Exception
     {
-        return _connection.createDataSet();
+        return connection.createDataSet();
     }
 
     /**

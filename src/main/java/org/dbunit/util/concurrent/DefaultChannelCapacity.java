@@ -13,8 +13,7 @@
 
 package org.dbunit.util.concurrent;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * A utility class to set the default capacity of
@@ -28,19 +27,14 @@ import org.slf4j.LoggerFactory;
  * @version $Revision$ $Date$
  * @since ? (pre 2.1)
  */
+@Slf4j
 public class DefaultChannelCapacity {
-
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(DefaultChannelCapacity.class);
 
   /** The initial value of the default capacity is 1024 **/
   public static final int INITIAL_DEFAULT_CAPACITY = 1024;
 
   /**  the current default capacity **/
-  private static final SynchronizedInt defaultCapacity_ = 
-    new SynchronizedInt(INITIAL_DEFAULT_CAPACITY);
+  private static final SynchronizedInt defaultCapacity = new SynchronizedInt(INITIAL_DEFAULT_CAPACITY);
 
   /**
    * Set the default capacity used in 
@@ -49,9 +43,9 @@ public class DefaultChannelCapacity {
    * @exception IllegalArgumentException if capacity less or equal to zero
    */
   public static void set(int capacity) {
-    logger.debug("set(capacity={}) - start", String.valueOf(capacity));
-    if (capacity <= 0) throw new IllegalArgumentException();
-    defaultCapacity_.set(capacity);
+      log.debug("set(capacity={}) - start", String.valueOf(capacity));
+      if (capacity <= 0) throw new IllegalArgumentException();
+      defaultCapacity.set(capacity);
   }
 
   /**
@@ -62,6 +56,6 @@ public class DefaultChannelCapacity {
    * @see #INITIAL_DEFAULT_CAPACITY
    */
   public static int get() {
-    return defaultCapacity_.get();
+      return defaultCapacity.get();
   }
 }

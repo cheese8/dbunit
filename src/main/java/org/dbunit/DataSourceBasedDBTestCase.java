@@ -34,17 +34,14 @@ import javax.sql.DataSource;
  * @version $Revision$ $Date$
  * @since 2.2.0
  */
-public abstract class DataSourceBasedDBTestCase extends DBTestCase
-{
+public abstract class DataSourceBasedDBTestCase extends DBTestCase {
 
     /**
      * Logger for this class
      */
     private static final Logger logger = LoggerFactory.getLogger(DataSourceBasedDBTestCase.class);
 
-   public DataSourceBasedDBTestCase()
-   {
-   }
+   public DataSourceBasedDBTestCase() {}
 
    public DataSourceBasedDBTestCase( String name )
    {
@@ -56,10 +53,8 @@ public abstract class DataSourceBasedDBTestCase extends DBTestCase
     * Default implementation returns a {@link DataSourceDatabaseTester}
     * configured with the value returned from {@link #getDataSource()}.
     */
-   protected IDatabaseTester newDatabaseTester()
-   {
+   protected IDatabaseTester newDatabaseTester() {
         logger.debug("newDatabaseTester() - start");
-
       return new DataSourceDatabaseTester( getDataSource() );
    }
 

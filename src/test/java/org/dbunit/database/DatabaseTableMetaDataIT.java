@@ -61,7 +61,7 @@ public class DatabaseTableMetaDataIT extends AbstractDatabaseIT
 
     protected IDataSet createDataSet() throws Exception
     {
-        return _connection.createDataSet();
+        return connection.createDataSet();
     }
 
     protected String convertString(String str) throws Exception
@@ -165,7 +165,7 @@ public class DatabaseTableMetaDataIT extends AbstractDatabaseIT
 				return DataType.UNKNOWN;
 			}
         };
-        this._connection.getConfig().setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, dataTypeFactory);
+        this.connection.getConfig().setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, dataTypeFactory);
     	
         String tableName = "EMPTY_MULTITYPE_TABLE";
         ITableMetaData metaData = createDataSet().getTableMetaData(tableName);
@@ -256,7 +256,7 @@ public class DatabaseTableMetaDataIT extends AbstractDatabaseIT
 //            String tableName = "empty_multitype_table";
             String tableName = "EMPTY_MULTITYPE_TABLE";
 
-            IDataSet dataSet = this._connection.createDataSet();
+            IDataSet dataSet = this.connection.createDataSet();
             ITable table = dataSet.getTable(tableName);
             // Should now find the table, regardless that we gave the tableName in lowerCase
             assertNotNull("Table '" + tableName + "' was not found", table);
@@ -352,7 +352,7 @@ public class DatabaseTableMetaDataIT extends AbstractDatabaseIT
         assertNotNull("Precondition: db environment 'schema' must not be null", schema);
 //        Connection jdbcConn = _connection.getConnection();
 //        String schema = SQLHelper.getSchema(jdbcConn);
-        DatabaseTableMetaData metaData = new DatabaseTableMetaData(schema + "." + TEST_TABLE, _connection);
+        DatabaseTableMetaData metaData = new DatabaseTableMetaData(schema + "." + TEST_TABLE, connection);
         assertEquals(schema + "." + convertString(TEST_TABLE), metaData.getTableName());
     }
     
@@ -362,7 +362,7 @@ public class DatabaseTableMetaDataIT extends AbstractDatabaseIT
         DatabaseMetaData metaData = connection.getConnection().getMetaData();
         if(metaData.storesUpperCaseIdentifiers())
         {
-            DatabaseTableMetaData dbTableMetaData = new DatabaseTableMetaData(TEST_TABLE.toLowerCase(Locale.ENGLISH), _connection);
+            DatabaseTableMetaData dbTableMetaData = new DatabaseTableMetaData(TEST_TABLE.toLowerCase(Locale.ENGLISH), this.connection);
             // Table name should have been "toUpperCase'd"
             assertEquals(TEST_TABLE.toUpperCase(Locale.ENGLISH), dbTableMetaData.getTableName());
         }
@@ -379,7 +379,7 @@ public class DatabaseTableMetaDataIT extends AbstractDatabaseIT
         DatabaseMetaData metaData = connection.getConnection().getMetaData();
         if(metaData.storesLowerCaseIdentifiers())
         {
-            DatabaseTableMetaData dbTableMetaData = new DatabaseTableMetaData(TEST_TABLE.toUpperCase(Locale.ENGLISH), _connection);
+            DatabaseTableMetaData dbTableMetaData = new DatabaseTableMetaData(TEST_TABLE.toUpperCase(Locale.ENGLISH), this.connection);
             // Table name should have been "toUpperCase'd"
             assertEquals(TEST_TABLE.toLowerCase(Locale.ENGLISH), dbTableMetaData.getTableName());
         }

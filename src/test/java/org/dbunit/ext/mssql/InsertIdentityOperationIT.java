@@ -21,7 +21,6 @@
 
 package org.dbunit.ext.mssql;
 
-import java.io.FileReader;
 import java.io.Reader;
 
 import org.dbunit.AbstractDatabaseIT;
@@ -91,10 +90,10 @@ public class InsertIdentityOperationIT extends AbstractDatabaseIT
 
     private void testExecute(IDataSet dataSet) throws Exception
     {
-        ITable[] tablesBefore = DataSetUtils.getTables(_connection.createDataSet());
+        ITable[] tablesBefore = DataSetUtils.getTables(connection.createDataSet());
 //        InsertIdentityOperation.CLEAN_INSERT.execute(_connection, dataSet);
-        InsertIdentityOperation.INSERT.execute(_connection, dataSet);
-        ITable[] tablesAfter = DataSetUtils.getTables(_connection.createDataSet());
+        InsertIdentityOperation.INSERT.execute(connection, dataSet);
+        ITable[] tablesAfter = DataSetUtils.getTables(connection.createDataSet());
 
         assertEquals("table count", tablesBefore.length, tablesAfter.length);
 
@@ -134,9 +133,9 @@ public class InsertIdentityOperationIT extends AbstractDatabaseIT
         Reader in = TestUtils.getFileReader("xml/insertIdentityOperationTestNoPK.xml");
         IDataSet xmlDataSet = new FlatXmlDataSetBuilder().build(in);
 
-        ITable[] tablesBefore = DataSetUtils.getTables(_connection.createDataSet());
-        InsertIdentityOperation.CLEAN_INSERT.execute(_connection, xmlDataSet);
-        ITable[] tablesAfter = DataSetUtils.getTables(_connection.createDataSet());
+        ITable[] tablesBefore = DataSetUtils.getTables(connection.createDataSet());
+        InsertIdentityOperation.CLEAN_INSERT.execute(connection, xmlDataSet);
+        ITable[] tablesAfter = DataSetUtils.getTables(connection.createDataSet());
 
         // Verify tables after
         for (int i = 0; i < tablesAfter.length; i++)
@@ -160,24 +159,24 @@ public class InsertIdentityOperationIT extends AbstractDatabaseIT
     
     public void testSetCustomIdentityColumnFilter() throws Exception
     {
-        _connection.getConfig().setProperty(DatabaseConfig.PROPERTY_IDENTITY_COLUMN_FILTER, IDENTITY_FILTER_INVALID);
+        connection.getConfig().setProperty(DatabaseConfig.PROPERTY_IDENTITY_COLUMN_FILTER, IDENTITY_FILTER_INVALID);
         try {
-            IDataSet dataSet = _connection.createDataSet();
+            IDataSet dataSet = connection.createDataSet();
             ITable table = dataSet.getTable("IDENTITY_TABLE");
             
             InsertIdentityOperation op = new InsertIdentityOperation(DatabaseOperation.INSERT);
-            boolean hasIdentityColumn = op.hasIdentityColumn(table.getTableMetaData(), _connection);
+            boolean hasIdentityColumn = op.hasIdentityColumn(table.getTableMetaData(), connection);
             assertFalse("Identity column recognized", hasIdentityColumn);
 
             // Verify that identity column is still correctly recognized with default identityColumnFilter
-            _connection.getConfig().setProperty(DatabaseConfig.PROPERTY_IDENTITY_COLUMN_FILTER, null);
+            connection.getConfig().setProperty(DatabaseConfig.PROPERTY_IDENTITY_COLUMN_FILTER, null);
             op = new InsertIdentityOperation(DatabaseOperation.INSERT);
-            hasIdentityColumn = op.hasIdentityColumn(table.getTableMetaData(), _connection);
+            hasIdentityColumn = op.hasIdentityColumn(table.getTableMetaData(), connection);
             assertTrue("Identity column not recognized", hasIdentityColumn);
         }
         finally{
             // Reset property
-            _connection.getConfig().setProperty(DatabaseConfig.PROPERTY_IDENTITY_COLUMN_FILTER, null);
+            connection.getConfig().setProperty(DatabaseConfig.PROPERTY_IDENTITY_COLUMN_FILTER, null);
         }
     }
 

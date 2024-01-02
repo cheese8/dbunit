@@ -212,7 +212,9 @@ public class SynchronizedVariable implements Executor {
 
   public void execute(Runnable command) throws InterruptedException {
     logger.debug("execute(command={}) - start", command);
-    if (Thread.interrupted()) throw new InterruptedException();
+    if (Thread.interrupted()) {
+      throw new InterruptedException();
+    }
     synchronized (lock_) { 
       command.run();
     }

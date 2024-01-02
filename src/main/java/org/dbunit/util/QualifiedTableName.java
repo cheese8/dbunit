@@ -20,10 +20,9 @@
  */
 package org.dbunit.util;
 
+import lombok.extern.slf4j.Slf4j;
 import org.dbunit.DatabaseUnitRuntimeException;
 import org.dbunit.database.DatabaseConfig;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Utility to parse a fully qualified table name into its components <i>schema</i> and <i>table</i>.
@@ -32,13 +31,8 @@ import org.slf4j.LoggerFactory;
  * @version $Revision$ $Date$
  * @since 2.3.0
  */
-public class QualifiedTableName
-{
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(QualifiedTableName.class);
-
+@Slf4j
+public class QualifiedTableName {
 	private String schema;
 	private String table;
 	private String escapePattern;
@@ -50,8 +44,7 @@ public class QualifiedTableName
 	 * @param defaultSchema The schema that is used when the given tableName is not fully qualified
 	 * (i.e. it is not like "MYSCHEMA.MYTABLE"). Can be null
 	 */
-	public QualifiedTableName(String tableName, String defaultSchema)
-	{
+	public QualifiedTableName(String tableName, String defaultSchema) {
 		this(tableName, defaultSchema, null);
 	}
 	
@@ -63,9 +56,8 @@ public class QualifiedTableName
 	 * (i.e. it is not like "MYSCHEMA.MYTABLE"). Can be null
      * @param escapePattern The escape pattern to be applied on the prefix and the name. Can be null.
 	 */
-	public QualifiedTableName(String tableName, String defaultSchema, String escapePattern)
-	{
-		if(tableName==null){
+	public QualifiedTableName(String tableName, String defaultSchema, String escapePattern) {
+		if (tableName == null) {
 			throw new NullPointerException("The parameter 'tableName' must not be null");
 		}
     	parseFullTableName(tableName, defaultSchema);
@@ -80,9 +72,8 @@ public class QualifiedTableName
 	 * @param defaultSchema The schema that is used when the given tableName is not fully qualified
 	 * (i.e. it is not like "MYSCHEMA.MYTABLE"). Can be null
 	 */
-	private void parseFullTableName(String fullTableName, String defaultSchema)
-	{
-		if(fullTableName==null){
+	private void parseFullTableName(String fullTableName, String defaultSchema) {
+		if (fullTableName == null) {
 			throw new NullPointerException("The parameter 'fullTableName' must not be null");
 		}
         // check if a schema is in front
@@ -92,9 +83,7 @@ public class QualifiedTableName
         	this.schema = fullTableName.substring(0, firstDotIndex);
             // set table name without schema
         	this.table = fullTableName.substring(firstDotIndex + 1);
-        }
-        else 
-        {
+        } else {
         	// No schema name found in table
         	this.table = fullTableName;
         	// If the schema has not been found in the given table name 
@@ -121,10 +110,8 @@ public class QualifiedTableName
 	/**
 	 * @return The qualified table name with the prepended schema if a schema is available
 	 */
-	public String getQualifiedName() 
-	{
-		logger.debug("getQualifiedName() - start");
-		
+	public String getQualifiedName() {
+		log.debug("getQualifiedName() - start");
 		return getQualifiedName(this.schema, this.table, this.escapePattern);
 	}
 
@@ -137,19 +124,15 @@ public class QualifiedTableName
 	 * The qualified table name is <b>only</b> returned if the feature 
 	 * {@link DatabaseConfig#FEATURE_QUALIFIED_TABLE_NAMES} is set in the given <code>config</code>.
 	 */
-	public String getQualifiedNameIfEnabled(DatabaseConfig config) 
-	{
-		logger.debug("getQualifiedNameIfEnabled(config={}) - start", config);
+	public String getQualifiedNameIfEnabled(DatabaseConfig config) {
+		log.debug("getQualifiedNameIfEnabled(config={}) - start", config);
 
         boolean feature = config.getFeature(DatabaseConfig.FEATURE_QUALIFIED_TABLE_NAMES);
-        if (feature)
-        {
-        	logger.debug("Qualified table names feature is enabled. Returning qualified table name");
+        if (feature) {
+        	log.debug("Qualified table names feature is enabled. Returning qualified table name");
             return getQualifiedName(this.schema, this.table, this.escapePattern);
-        }
-        else 
-        {
-        	logger.debug("Qualified table names feature is disabled. Returning plain table name");
+        } else {
+			log.debug("Qualified table names feature is disabled. Returning plain table name");
 //        	return this.table;
         	return getQualifiedName(null, this.table, this.escapePattern);
         }
@@ -163,9 +146,7 @@ public class QualifiedTableName
 		sb.append("]");
 		return sb.toString();
 	}
-	
-	
-	
+
     /**
      * Returns the specified name qualified with the specified prefix. The name
      * is not modified if the prefix is <code>null</code> or if the name is
@@ -183,77 +164,59 @@ public class QualifiedTableName
      * @param escapePattern The escape pattern to be applied on the prefix and the name. Can be null.
      * @return The qualified name
      */
-    private String getQualifiedName(String prefix, String name,
-            String escapePattern)
-    {
-        if(logger.isDebugEnabled())
-            logger.debug("getQualifiedName(prefix={}, name={}, escapePattern={}) - start", 
-                    new String[] {prefix, name, escapePattern});
+    private String getQualifiedName(String prefix, String name, String escapePattern) {
+        if (log.isDebugEnabled())
+            log.debug("getQualifiedName(prefix={}, name={}, escapePattern={}) - start", new String[] {prefix, name, escapePattern});
 
-        if (escapePattern != null)
-        {
+        if (escapePattern != null) {
             prefix = getEscapedName(prefix, escapePattern);
             name = getEscapedName(name, escapePattern);
         }
 
-        if (prefix == null || prefix.equals("") || name.indexOf(".") >= 0)
-        {
+        if (prefix == null || prefix.equals("") || name.indexOf(".") >= 0) {
             return name;
         }
 
         return prefix + "." + name;
     }
 	
-    
     /**
      * @param name
      * @param escapePattern
      * @return
      */
-    private String getEscapedName(String name, String escapePattern)
-    {
-        logger.debug("getEscapedName(name={}, escapePattern={}) - start", name, escapePattern);
+    private String getEscapedName(String name, String escapePattern) {
+        log.debug("getEscapedName(name={}, escapePattern={}) - start", name, escapePattern);
 
-        if (name == null)
-        {
+        if (name == null) {
             return name;
         }
 
-        if (escapePattern == null) 
-        {
-            throw new NullPointerException(
-                    "The parameter 'escapePattern' must not be null");
+        if (escapePattern == null) {
+            throw new NullPointerException("The parameter 'escapePattern' must not be null");
         }
-        if(escapePattern.trim().equals(""))
-        {
+        if(escapePattern.trim().equals("")) {
             throw new DatabaseUnitRuntimeException("Empty string is an invalid escape pattern!");
         }
     
         int split = name.indexOf(".");
-        if (split > 1)
-        {
+        if (split > 1) {
         	return getEscapedName(name.substring(0, split), escapePattern) + "." + getEscapedName(name.substring(split + 1), escapePattern);
         }
 
         int index = escapePattern.indexOf("?");
-        if (index >=0 )
-        {
+        if (index >=0 ) {
             String prefix = escapePattern.substring(0, index);
             String suffix = escapePattern.substring(index + 1);
 
             return prefix + name + suffix;
-        }
-        else if(escapePattern.length() == 1)
-        {
+        } else if(escapePattern.length() == 1) {
             // No "?" in the escape pattern and only one character.
             // use the given escapePattern to surround the given name
             return escapePattern + name + escapePattern;
-        }
-        else
-        {
-            logger.warn("Invalid escape pattern '" + escapePattern + "'. Will not escape name '" + name + "'.");
+        } else {
+            log.warn("Invalid escape pattern '" + escapePattern + "'. Will not escape name '" + name + "'.");
             return name;
         }
     }
-
 }

@@ -41,8 +41,7 @@ import org.dbunit.database.IDatabaseConnection;
  * @version $Revision$ $Date$
  * @since 2.2.0
  */
-public class JndiDatabaseTester extends AbstractDatabaseTester
-{
+public class JndiDatabaseTester extends AbstractDatabaseTester {
 
     /**
      * Logger for this class
@@ -59,10 +58,7 @@ public class JndiDatabaseTester extends AbstractDatabaseTester
      *
      * @param lookupName the name of the resource in the JNDI context
      */
-    public JndiDatabaseTester(String lookupName)
-    {
-        this(null, lookupName);
-    }
+    public JndiDatabaseTester(String lookupName) {this(null, lookupName);}
 
     /**
      * Creates a JndiDatabaseTester with specific JNDI properties.
@@ -83,26 +79,20 @@ public class JndiDatabaseTester extends AbstractDatabaseTester
      * @param schema The schema name to be used for new dbunit connections. Can be <code>null</code>
      * @since 2.4.5
      */
-    public JndiDatabaseTester(Properties environment, String lookupName, String schema) 
-    {
+    public JndiDatabaseTester(Properties environment, String lookupName, String schema) {
         super(schema);
-
         if (lookupName == null) {
-            throw new NullPointerException(
-                    "The parameter 'lookupName' must not be null");
+            throw new NullPointerException("The parameter 'lookupName' must not be null");
         }
         this.lookupName = lookupName;
         this.environment = environment;
     }
 
-    public IDatabaseConnection getConnection() throws Exception
-    {
+    public IDatabaseConnection getConnection() throws Exception {
         logger.trace("getConnection() - start");
-
-        if( !initialized ){
+        if(!initialized){
             initialize();
         }
-
         return new DatabaseConnection( dataSource.getConnection(), getSchema() );
     }
 
@@ -112,23 +102,19 @@ public class JndiDatabaseTester extends AbstractDatabaseTester
      * This method is called by {@link getConnection} if the tester has not been
      * initialized yet.
      */
-    private void initialize() throws NamingException
-    {
+    private void initialize() throws NamingException {
         logger.trace("initialize() - start");
-
         Context context = new InitialContext( environment );
         assertNotNullNorEmpty( "lookupName", lookupName );
         Object obj = context.lookup( lookupName );
         assertTrue( "JNDI object with [" + lookupName + "] not found", obj!=null );
-        assertTrue( "Object [" + obj + "] at JNDI location [" + lookupName
-                + "] is not of type [" + DataSource.class.getName() + "]", obj instanceof DataSource );
+        assertTrue( "Object [" + obj + "] at JNDI location [" + lookupName + "] is not of type [" + DataSource.class.getName() + "]", obj instanceof DataSource );
         dataSource = (DataSource) obj;
         assertTrue( "DataSource is not set", dataSource!=null );
         initialized = true;
     }
 
-    public String toString()
-    {
+    public String toString() {
         StringBuffer sb = new StringBuffer();
         sb.append(getClass().getName()).append("[");
         sb.append("lookupName=").append(this.lookupName);
@@ -139,5 +125,4 @@ public class JndiDatabaseTester extends AbstractDatabaseTester
         sb.append("]");
         return sb.toString();
     }
-
 }

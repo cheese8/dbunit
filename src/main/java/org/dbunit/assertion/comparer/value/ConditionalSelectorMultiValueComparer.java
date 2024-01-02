@@ -15,18 +15,13 @@ import org.dbunit.dataset.datatype.DataType;
  * @author Jeff Jensen
  * @since 2.6.0
  */
-public class ConditionalSelectorMultiValueComparer extends ValueComparerBase
-{
+public class ConditionalSelectorMultiValueComparer extends ValueComparerBase {
     private final ValueComparerSelector valueComparerSelector;
     private final Map<Object, ValueComparer> valueComparers;
 
-    public ConditionalSelectorMultiValueComparer(
-            final Map<Object, ValueComparer> valueComparers,
-            final ValueComparerSelector valueComparerSelector)
-    {
+    public ConditionalSelectorMultiValueComparer(final Map<Object, ValueComparer> valueComparers, final ValueComparerSelector valueComparerSelector) {
         assertNotNull("valueComparerSelector is null.", valueComparerSelector);
         assertNotNull("valueComparers is null.", valueComparers);
-
         this.valueComparerSelector = valueComparerSelector;
         this.valueComparers = valueComparers;
     }
@@ -54,8 +49,7 @@ public class ConditionalSelectorMultiValueComparer extends ValueComparerBase
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         final StringBuilder sb = new StringBuilder(400);
         sb.append(super.toString());
         sb.append(": [valueComparerSelector=");
@@ -63,7 +57,6 @@ public class ConditionalSelectorMultiValueComparer extends ValueComparerBase
         sb.append(", inValuesValueComparer=");
         sb.append(valueComparers);
         sb.append("]");
-
         return sb.toString();
     }
 }

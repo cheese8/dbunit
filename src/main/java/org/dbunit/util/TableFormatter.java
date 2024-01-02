@@ -34,13 +34,9 @@ import org.dbunit.dataset.ITableMetaData;
  * @version $Revision$ $Date$
  * @since 2.4.1
  */
-public class TableFormatter
-{
+public class TableFormatter {
     
-    public TableFormatter()
-    {
-        
-    }
+    public TableFormatter() {}
     
     /**
      * Formats a table with all data in a beautiful way.
@@ -49,8 +45,7 @@ public class TableFormatter
      * @return The table data as a formatted String
      * @throws DataSetException
      */
-    public String format(ITable table) throws DataSetException
-    {
+    public String format(ITable table) throws DataSetException {
         StringBuffer sb = new StringBuffer();
         ITableMetaData tableMetaData = table.getTableMetaData();
         // Title line
@@ -100,14 +95,12 @@ public class TableFormatter
      * @param padChar
      * @return The padded string
      */
-    public static final String padLeft(String s, int length, char padChar)
-    {
+    public static final String padLeft(String s, int length, char padChar) {
         String result = s;
-        
         char[] padCharArray = getPadCharArray(s, length, padChar);
-        if(padCharArray != null)
+        if (padCharArray != null) {
             result = pad(s, padCharArray, true);
-
+        }
         return result;
     }
     
@@ -119,45 +112,35 @@ public class TableFormatter
      * @param padChar
      * @return The padded string
      */
-    public static final String padRight(String s, int length, char padChar)
-    {
+    public static final String padRight(String s, int length, char padChar) {
         String result = s;
-        
         char[] padCharArray = getPadCharArray(s, length, padChar);
-        if(padCharArray != null)
+        if (padCharArray != null) {
             result = pad(s, padCharArray, false);
-
+        }
         return result;
     }
 
-
     private static final char[] getPadCharArray(String s, int length, char padChar) {
-        if(length > 0 && length > s.length())
-        {
+        if (length > 0 && length > s.length()) {
             int padCount = length - s.length();
             char[] padArray = new char[padCount];
-            for(int i=0; i<padArray.length; i++){
+            for (int i=0; i<padArray.length; i++) {
                 padArray[i] = padChar;
             }
             return padArray;
-        }
-        else
-        {
+        } else {
             return null;
         }
     }
 
     private static final String pad(String s, char[] padArray, boolean padLeft) {
         StringBuffer sb = new StringBuffer(s);
-        if(padLeft)
-        {
+        if (padLeft) {
             sb.insert(0, padArray);
-        }
-        else
-        {
+        } else {
             sb.append(padArray);
         }
         return sb.toString();
     }
-
 }

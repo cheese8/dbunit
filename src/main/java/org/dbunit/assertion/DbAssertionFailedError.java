@@ -33,8 +33,7 @@ public class DbAssertionFailedError extends Error {
 
     private static final long serialVersionUID = 1L;
 
-    public DbAssertionFailedError () {
-    }
+    public DbAssertionFailedError () {}
     
     public DbAssertionFailedError (String message) {
         super (message);

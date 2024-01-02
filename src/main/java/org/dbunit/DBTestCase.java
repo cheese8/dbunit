@@ -21,8 +21,7 @@
 
 package org.dbunit;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import org.dbunit.database.IDatabaseConnection;
 
@@ -36,12 +35,8 @@ import org.dbunit.database.IDatabaseConnection;
  * @version $Revision$ $Date$
  * @since 2.2.0
  */
+@Slf4j
 public abstract class DBTestCase extends DatabaseTestCase {
-
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(DBTestCase.class);
 
   public DBTestCase() {
     super();
@@ -52,14 +47,13 @@ public abstract class DBTestCase extends DatabaseTestCase {
   }
 
   protected final IDatabaseConnection getConnection() throws Exception {
-        logger.debug("getConnection() - start");
-
-    final IDatabaseTester databaseTester = getDatabaseTester();
-    assertNotNull( "DatabaseTester is not set", databaseTester );
-    IDatabaseConnection connection = databaseTester.getConnection();
-    // Ensure that users have the possibility to configure the connection's configuration
-    setUpDatabaseConfig(connection.getConfig());
-    return connection;
+      log.debug("getConnection() - start");
+      final IDatabaseTester databaseTester = getDatabaseTester();
+      assertNotNull( "DatabaseTester is not set", databaseTester);
+      IDatabaseConnection connection = databaseTester.getConnection();
+      // Ensure that users have the possibility to configure the connection's configuration
+      setUpDatabaseConfig(connection.getConfig());
+      return connection;
  }
 
   /**
@@ -67,7 +61,6 @@ public abstract class DBTestCase extends DatabaseTestCase {
    * Default implementation returns a {@link PropertiesBasedJdbcDatabaseTester}.
    */
   protected IDatabaseTester newDatabaseTester() throws Exception {
-    return new PropertiesBasedJdbcDatabaseTester();
+      return new PropertiesBasedJdbcDatabaseTester();
   }
-
 }

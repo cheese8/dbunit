@@ -21,7 +21,6 @@
 
 package org.dbunit.operation;
 
-import java.io.FileReader;
 import java.io.Reader;
 
 import org.dbunit.AbstractDatabaseIT;
@@ -93,7 +92,7 @@ public class RefreshOperationIT extends AbstractDatabaseIT
             assertEquals("row count before", tableRowCount[i], tableBefore.getRowCount());
         }
 
-        DatabaseOperation.REFRESH.execute(_connection, dataSet);
+        DatabaseOperation.REFRESH.execute(connection, dataSet);
 
         // verify table after
         IDataSet expectedDataSet = new FlatXmlDataSetBuilder().build(
@@ -115,11 +114,11 @@ public class RefreshOperationIT extends AbstractDatabaseIT
         IDataSet dataSet = new FlatXmlDataSetBuilder().build(reader);
 
         // verify table before
-        assertEquals("row count before", 6, _connection.getRowCount(tableName));
+        assertEquals("row count before", 6, connection.getRowCount(tableName));
 
         try
         {
-            DatabaseOperation.REFRESH.execute(_connection, dataSet);
+            DatabaseOperation.REFRESH.execute(connection, dataSet);
             fail("Should not be here!");
         }
         catch (NoPrimaryKeyException e)
@@ -128,7 +127,7 @@ public class RefreshOperationIT extends AbstractDatabaseIT
         }
 
         // verify table after
-        assertEquals("row count before", 6, _connection.getRowCount(tableName));
+        assertEquals("row count before", 6, connection.getRowCount(tableName));
     }
 
     public void testExecuteWithEmptyTable() throws Exception

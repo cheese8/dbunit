@@ -21,7 +21,6 @@
 
 package org.dbunit.operation;
 
-import java.io.File;
 import java.io.FileReader;
 import java.io.Reader;
 import java.sql.Connection;
@@ -57,19 +56,19 @@ public class TransactionOperationIT extends AbstractDatabaseIT
         Reader in = new FileReader(
                 TestUtils.getFile("xml/transactionOperationTest.xml"));
         IDataSet xmlDataSet = new XmlDataSet(in);
-        Connection jdbcConnection = _connection.getConnection();
+        Connection jdbcConnection = connection.getConnection();
 
-        ITable tableBefore = _connection.createDataSet().getTable(tableName);
+        ITable tableBefore = connection.createDataSet().getTable(tableName);
         assertEquals("before row count", 6, tableBefore.getRowCount());
         assertEquals("autocommit before", true, jdbcConnection.getAutoCommit());
 
         DatabaseOperation operation = new CompositeOperation(
                 DatabaseOperation.DELETE_ALL, DatabaseOperation.INSERT);
         operation = new TransactionOperation(operation);
-        operation.execute(_connection, xmlDataSet);
+        operation.execute(connection, xmlDataSet);
 
         // snapshot after operation
-        ITable tableAfter = _connection.createDataSet().getTable(tableName);
+        ITable tableAfter = connection.createDataSet().getTable(tableName);
         assertEquals("after row count", 1, tableAfter.getRowCount());
         assertEquals("autocommit after", true, jdbcConnection.getAutoCommit());
     }
@@ -80,13 +79,13 @@ public class TransactionOperationIT extends AbstractDatabaseIT
         Reader in = new FileReader(
                 TestUtils.getFile("xml/transactionOperationTest.xml"));
         IDataSet xmlDataSet = new XmlDataSet(in);
-        Connection jdbcConnection = _connection.getConnection();
+        Connection jdbcConnection = connection.getConnection();
 
         jdbcConnection.setAutoCommit(false);
 
         // before operation
         assertEquals("autocommit before", false, jdbcConnection.getAutoCommit());
-        ITable tableBefore = _connection.createDataSet().getTable(tableName);
+        ITable tableBefore = connection.createDataSet().getTable(tableName);
         assertEquals("before exclusive", 6, tableBefore.getRowCount());
 
         try
@@ -94,7 +93,7 @@ public class TransactionOperationIT extends AbstractDatabaseIT
             // try with exclusive transaction
             DatabaseOperation operation = new TransactionOperation(
                     DatabaseOperation.DELETE);
-            operation.execute(_connection, xmlDataSet);
+            operation.execute(connection, xmlDataSet);
             fail("Should throw ExclusiveTransactionException");
         }
         catch (ExclusiveTransactionException e)
@@ -106,7 +105,7 @@ public class TransactionOperationIT extends AbstractDatabaseIT
         }
 
         // after operation
-        ITable tableAfter = _connection.createDataSet().getTable(tableName);
+        ITable tableAfter = connection.createDataSet().getTable(tableName);
         assertEquals("after", 6, tableAfter.getRowCount());
     }
 
@@ -121,14 +120,14 @@ public class TransactionOperationIT extends AbstractDatabaseIT
             new DatabaseUnitException(),
             new RuntimeException(),
         };
-        Connection jdbcConnection = _connection.getConnection();
+        Connection jdbcConnection = connection.getConnection();
 
 
         for (int i = 0; i < exceptions.length; i++)
         {
 
             // snapshot before operation
-            ITable tableBefore = _connection.createDataSet().getTable(tableName);
+            ITable tableBefore = connection.createDataSet().getTable(tableName);
             assertEquals("before row count", 6, tableBefore.getRowCount());
             assertEquals("autocommit before", true, jdbcConnection.getAutoCommit());
 
@@ -142,7 +141,7 @@ public class TransactionOperationIT extends AbstractDatabaseIT
                         DatabaseOperation.DELETE_ALL,
                         mockOperation);
                 operation = new TransactionOperation(operation);
-                operation.execute(_connection, xmlDataSet);
+                operation.execute(connection, xmlDataSet);
                 fail("Should throw an exception");
             }
             catch (Exception e)
@@ -151,7 +150,7 @@ public class TransactionOperationIT extends AbstractDatabaseIT
             }
 
             // snapshot after operation
-            ITable tableAfter = _connection.createDataSet().getTable(tableName);
+            ITable tableAfter = connection.createDataSet().getTable(tableName);
             assertEquals("after row count", 6, tableAfter.getRowCount());
             assertEquals("autocommit after", true, jdbcConnection.getAutoCommit());
 

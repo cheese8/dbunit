@@ -46,76 +46,56 @@ import org.dbunit.dataset.ITable;
  * @version $Revision$ $Date$
  * @since 1.3 (Mar 22, 2002)
  */
-public class Assertion
-{
+public class Assertion {
     /** Assert using equals comparisons. */
     private static final DbUnitAssert EQUALS_INSTANCE = new DbUnitAssert();
 
     /** Assert using compare comparisons. @since 2.6.0 */
-    private static final DbUnitValueComparerAssert VALUE_COMPARE_INSTANCE =
-            new DbUnitValueComparerAssert();
+    private static final DbUnitValueComparerAssert VALUE_COMPARE_INSTANCE = new DbUnitValueComparerAssert();
 
-    private Assertion()
-    {
-        throw new UnsupportedOperationException(
-                "this class has only static methods");
+    private Assertion() {
+        throw new UnsupportedOperationException("this class has only static methods");
     }
 
     /**
      * @see DbUnitAssert#assertEqualsIgnoreCols(IDataSet, IDataSet, String,
      *      String[], FailureHandler)
      */
-    public static void assertEqualsIgnoreCols(final IDataSet expectedDataset,
-            final IDataSet actualDataset, final String tableName,
-            final String[] ignoreCols, FailureHandler failureHandler) throws DatabaseUnitException
-    {
-        EQUALS_INSTANCE.assertEqualsIgnoreCols(expectedDataset, actualDataset,
-                tableName, ignoreCols, failureHandler);
+    public static void assertEqualsIgnoreCols(final IDataSet expectedDataset, final IDataSet actualDataset, final String tableName,
+                                              final String[] ignoreCols, FailureHandler failureHandler) throws DatabaseUnitException {
+        EQUALS_INSTANCE.assertEqualsIgnoreCols(expectedDataset, actualDataset, tableName, ignoreCols, failureHandler);
     }
 
     /**
      * @see DbUnitAssert#assertEqualsIgnoreCols(ITable, ITable, String[], FailureHandler)
      */
-    public static void assertEqualsIgnoreCols(final ITable expectedTable,
-            final ITable actualTable, final String[] ignoreCols, FailureHandler failureHandler)
-            throws DatabaseUnitException
-    {
-        EQUALS_INSTANCE.assertEqualsIgnoreCols(expectedTable, actualTable,
-                ignoreCols, failureHandler);
+    public static void assertEqualsIgnoreCols(final ITable expectedTable, final ITable actualTable,
+                                              final String[] ignoreCols, FailureHandler failureHandler) throws DatabaseUnitException {
+        EQUALS_INSTANCE.assertEqualsIgnoreCols(expectedTable, actualTable, ignoreCols, failureHandler);
     }
 
     /**
      * @see DbUnitAssert#assertEqualsByQuery(IDataSet, IDatabaseConnection,
      *      String, String, String[])
      */
-    public static void assertEqualsByQuery(final IDataSet expectedDataset,
-            final IDatabaseConnection connection, final String sqlQuery,
-            final String tableName, final String[] ignoreCols)
-            throws DatabaseUnitException, SQLException
-    {
-        EQUALS_INSTANCE.assertEqualsByQuery(expectedDataset, connection,
-                sqlQuery, tableName, ignoreCols);
+    public static void assertEqualsByQuery(final IDataSet expectedDataset, final IDatabaseConnection connection, final String sqlQuery,
+            final String tableName, final String[] ignoreCols) throws DatabaseUnitException, SQLException {
+        EQUALS_INSTANCE.assertEqualsByQuery(expectedDataset, connection, sqlQuery, tableName, ignoreCols);
     }
 
     /**
      * @see DbUnitAssert#assertEqualsByQuery(ITable, IDatabaseConnection,
      *      String, String, String[])
      */
-    public static void assertEqualsByQuery(final ITable expectedTable,
-            final IDatabaseConnection connection, final String tableName,
-            final String sqlQuery, final String[] ignoreCols)
-            throws DatabaseUnitException, SQLException
-    {
-        EQUALS_INSTANCE.assertEqualsByQuery(expectedTable, connection,
-                tableName, sqlQuery, ignoreCols);
+    public static void assertEqualsByQuery(final ITable expectedTable, final IDatabaseConnection connection, final String tableName,
+            final String sqlQuery, final String[] ignoreCols) throws DatabaseUnitException, SQLException {
+        EQUALS_INSTANCE.assertEqualsByQuery(expectedTable, connection, tableName, sqlQuery, ignoreCols);
     }
 
     /**
      * @see DbUnitAssert#assertEquals(IDataSet, IDataSet)
      */
-    public static void assertEquals(final IDataSet expectedDataSet,
-            final IDataSet actualDataSet) throws DatabaseUnitException
-    {
+    public static void assertEquals(final IDataSet expectedDataSet, final IDataSet actualDataSet) throws DatabaseUnitException {
         EQUALS_INSTANCE.assertEquals(expectedDataSet, actualDataSet);
     }
 
@@ -123,44 +103,31 @@ public class Assertion
      * @see DbUnitAssert#assertEquals(IDataSet, IDataSet, FailureHandler)
      * @since 2.4
      */
-    public static void assertEquals(final IDataSet expectedDataSet,
-            final IDataSet actualDataSet, final FailureHandler failureHandler)
-            throws DatabaseUnitException
-    {
-        EQUALS_INSTANCE.assertEquals(expectedDataSet, actualDataSet,
-                failureHandler);
+    public static void assertEquals(final IDataSet expectedDataSet, final IDataSet actualDataSet,
+                                    final FailureHandler failureHandler) throws DatabaseUnitException {
+        EQUALS_INSTANCE.assertEquals(expectedDataSet, actualDataSet, failureHandler);
     }
 
     /**
      * @see DbUnitAssert#assertEquals(ITable, ITable)
      */
-    public static void assertEquals(final ITable expectedTable,
-            final ITable actualTable) throws DatabaseUnitException
-    {
+    public static void assertEquals(final ITable expectedTable, final ITable actualTable) throws DatabaseUnitException {
         EQUALS_INSTANCE.assertEquals(expectedTable, actualTable);
     }
 
     /**
      * @see DbUnitAssert#assertEquals(ITable, ITable, Column[])
      */
-    public static void assertEquals(final ITable expectedTable,
-            final ITable actualTable, final Column[] additionalColumnInfo)
-            throws DatabaseUnitException
-    {
-        EQUALS_INSTANCE.assertEquals(expectedTable, actualTable,
-                additionalColumnInfo);
+    public static void assertEquals(final ITable expectedTable, final ITable actualTable, final Column[] additionalColumnInfo) throws DatabaseUnitException {
+        EQUALS_INSTANCE.assertEquals(expectedTable, actualTable, additionalColumnInfo);
     }
 
     /**
      * @see DbUnitAssert#assertEquals(ITable, ITable, FailureHandler)
      * @since 2.4
      */
-    public static void assertEquals(final ITable expectedTable,
-            final ITable actualTable, final FailureHandler failureHandler)
-            throws DatabaseUnitException
-    {
-        EQUALS_INSTANCE.assertEquals(expectedTable, actualTable,
-                failureHandler);
+    public static void assertEquals(final ITable expectedTable, final ITable actualTable, final FailureHandler failureHandler) throws DatabaseUnitException {
+        EQUALS_INSTANCE.assertEquals(expectedTable, actualTable, failureHandler);
     }
 
     /**
@@ -168,14 +135,9 @@ public class Assertion
      *      IDataSet, ValueComparer, Map)
      * @since 2.6.0
      */
-    public static void assertWithValueComparer(final IDataSet expectedDataSet,
-            final IDataSet actualDataSet,
-            final ValueComparer defaultValueComparer,
-            final Map<String, Map<String, ValueComparer>> tableColumnValueComparers)
-            throws DatabaseUnitException
-    {
-        VALUE_COMPARE_INSTANCE.assertWithValueComparer(expectedDataSet,
-                actualDataSet, defaultValueComparer, tableColumnValueComparers);
+    public static void assertWithValueComparer(final IDataSet expectedDataSet, final IDataSet actualDataSet, final ValueComparer defaultValueComparer,
+                                               final Map<String, Map<String, ValueComparer>> tableColumnValueComparers) throws DatabaseUnitException {
+        VALUE_COMPARE_INSTANCE.assertWithValueComparer(expectedDataSet, actualDataSet, defaultValueComparer, tableColumnValueComparers);
     }
 
     /**
@@ -183,13 +145,9 @@ public class Assertion
      *      ValueComparer, Map)
      * @since 2.6.0
      */
-    public static void assertWithValueComparer(final ITable expectedTable,
-            final ITable actualTable, final ValueComparer defaultValueComparer,
-            final Map<String, ValueComparer> columnValueComparers)
-            throws DatabaseUnitException
-    {
-        VALUE_COMPARE_INSTANCE.assertWithValueComparer(expectedTable,
-                actualTable, defaultValueComparer, columnValueComparers);
+    public static void assertWithValueComparer(final ITable expectedTable, final ITable actualTable, final ValueComparer defaultValueComparer,
+                                               final Map<String, ValueComparer> columnValueComparers) throws DatabaseUnitException {
+        VALUE_COMPARE_INSTANCE.assertWithValueComparer(expectedTable, actualTable, defaultValueComparer, columnValueComparers);
     }
 
     /**
@@ -197,15 +155,9 @@ public class Assertion
      *      IDataSet, FailureHandler, ValueComparer, Map)
      * @since 2.6.0
      */
-    public static void assertWithValueComparer(final IDataSet expectedDataSet,
-            final IDataSet actualDataSet, final FailureHandler failureHandler,
-            final ValueComparer defaultValueComparer,
-            final Map<String, Map<String, ValueComparer>> tableColumnValueComparers)
-            throws DatabaseUnitException
-    {
-        VALUE_COMPARE_INSTANCE.assertWithValueComparer(expectedDataSet,
-                actualDataSet, failureHandler, defaultValueComparer,
-                tableColumnValueComparers);
+    public static void assertWithValueComparer(final IDataSet expectedDataSet, final IDataSet actualDataSet, final FailureHandler failureHandler,
+                                               final ValueComparer defaultValueComparer, final Map<String, Map<String, ValueComparer>> tableColumnValueComparers) throws DatabaseUnitException {
+        VALUE_COMPARE_INSTANCE.assertWithValueComparer(expectedDataSet, actualDataSet, failureHandler, defaultValueComparer, tableColumnValueComparers);
     }
 
     /**
@@ -213,15 +165,9 @@ public class Assertion
      *      Column[], ValueComparer, Map)
      * @since 2.6.0
      */
-    public static void assertWithValueComparer(final ITable expectedTable,
-            final ITable actualTable, final Column[] additionalColumnInfo,
-            final ValueComparer defaultValueComparer,
-            final Map<String, ValueComparer> columnValueComparers)
-            throws DatabaseUnitException
-    {
-        VALUE_COMPARE_INSTANCE.assertWithValueComparer(expectedTable,
-                actualTable, additionalColumnInfo, defaultValueComparer,
-                columnValueComparers);
+    public static void assertWithValueComparer(final ITable expectedTable, final ITable actualTable, final Column[] additionalColumnInfo,
+                                               final ValueComparer defaultValueComparer, final Map<String, ValueComparer> columnValueComparers) throws DatabaseUnitException {
+        VALUE_COMPARE_INSTANCE.assertWithValueComparer(expectedTable, actualTable, additionalColumnInfo, defaultValueComparer, columnValueComparers);
     }
 
     /**
@@ -229,15 +175,9 @@ public class Assertion
      *      FailureHandler, ValueComparer, Map)
      * @since 2.6.0
      */
-    public static void assertWithValueComparer(final ITable expectedTable,
-            final ITable actualTable, final FailureHandler failureHandler,
-            final ValueComparer defaultValueComparer,
-            final Map<String, ValueComparer> columnValueComparers)
-            throws DatabaseUnitException
-    {
-        VALUE_COMPARE_INSTANCE.assertWithValueComparer(expectedTable,
-                actualTable, failureHandler, defaultValueComparer,
-                columnValueComparers);
+    public static void assertWithValueComparer(final ITable expectedTable, final ITable actualTable, final FailureHandler failureHandler,
+                                               final ValueComparer defaultValueComparer, final Map<String, ValueComparer> columnValueComparers) throws DatabaseUnitException {
+        VALUE_COMPARE_INSTANCE.assertWithValueComparer(expectedTable, actualTable, failureHandler, defaultValueComparer, columnValueComparers);
     }
 
     public static DbUnitAssert getEqualsInstance()

@@ -70,35 +70,28 @@ public class RelativeDateTimeParser
             "^\\[[nN][oO][wW]\\s*(([-+][0-9]+[yMdhms]\\s*)*)([0-9:]*)?\\]$");
     private static final int GROUP_DIFFS = 1;
     private static final int GROUP_TIME = 3;
-    private static final Pattern diffPattern =
-            Pattern.compile("([+-][0-9]+[yMdhms])");
+    private static final Pattern diffPattern = Pattern.compile("([+-][0-9]+[yMdhms])");
 
     private Clock clock;
     private LocalDateTime now;
 
-    public RelativeDateTimeParser()
-    {
+    public RelativeDateTimeParser() {
         // Use fixed clock to provide consistent 'now' values.
         this(Clock.fixed(Instant.now(), ZoneId.systemDefault()));
     }
 
-    public RelativeDateTimeParser(Clock clock)
-    {
+    public RelativeDateTimeParser(Clock clock) {
         this.clock = clock;
         cacheLocalDateTime(clock);
     }
 
-    public LocalDateTime parse(String input)
-    {
-        if (input == null || input.isEmpty())
-        {
-            throw new IllegalArgumentException(
-                    "Relative datetime input must not be null or empty.");
+    public LocalDateTime parse(String input) {
+        if (input == null || input.isEmpty()) {
+            throw new IllegalArgumentException("Relative datetime input must not be null or empty.");
         }
 
         Matcher matcher = inputPattern.matcher(input);
-        if (!matcher.matches())
-        {
+        if (!matcher.matches()) {
             throw new IllegalArgumentException("'" + input
                     + "' does not match the expected pattern [now{diff}{time}]. "
                     + "Please see the data types documentation for the details. "
@@ -108,14 +101,12 @@ public class RelativeDateTimeParser
         LocalDateTime datetime = initLocalDateTime(matcher);
 
         String diffStr = matcher.group(GROUP_DIFFS);
-        if (diffStr.isEmpty())
-        {
+        if (diffStr.isEmpty()) {
             return datetime;
         }
 
         Matcher diffMatcher = diffPattern.matcher(diffStr);
-        while (diffMatcher.find())
-        {
+        while (diffMatcher.find()) {
             String diff = diffMatcher.group();
             int amountLength = diff.length() - 1;
             TemporalUnit unit = resolveUnit(diff.charAt(amountLength));
@@ -130,29 +121,23 @@ public class RelativeDateTimeParser
         return clock;
     }
 
-    public void setClock(Clock clock)
-    {
+    public void setClock(Clock clock) {
         this.clock = clock;
         cacheLocalDateTime(clock);
     }
 
-    private LocalDateTime initLocalDateTime(Matcher matcher)
-    {
+    private LocalDateTime initLocalDateTime(Matcher matcher) {
         String timeStr = matcher.group(GROUP_TIME);
-        if (timeStr.isEmpty())
-        {
+        if (timeStr.isEmpty()) {
             return now;
-        } else
-        {
+        } else {
             LocalTime time = LocalTime.parse(timeStr);
             return LocalDateTime.of(now.toLocalDate(), time);
         }
     }
 
-    private static TemporalUnit resolveUnit(char c)
-    {
-        switch (c)
-        {
+    private static TemporalUnit resolveUnit(char c) {
+        switch (c) {
         case 'y':
             return ChronoUnit.YEARS;
         case 'M':
@@ -166,8 +151,7 @@ public class RelativeDateTimeParser
         case 's':
             return ChronoUnit.SECONDS;
         default:
-            throw new IllegalArgumentException("'" + c
-                    + "' is not a valid unit. It has to be one of 'yMdhms'.");
+            throw new IllegalArgumentException("'" + c + "' is not a valid unit. It has to be one of 'yMdhms'.");
         }
     }
 

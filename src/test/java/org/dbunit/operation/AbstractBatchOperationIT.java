@@ -26,7 +26,6 @@ import org.dbunit.dataset.*;
 import org.dbunit.dataset.xml.XmlDataSet;
 import org.dbunit.testutil.TestUtils;
 
-import java.io.FileReader;
 import java.io.Reader;
 
 /**
@@ -34,8 +33,7 @@ import java.io.Reader;
  * @version $Revision$
  * @since May 7, 2002
  */
-public class AbstractBatchOperationIT extends AbstractDatabaseIT
-{
+public class AbstractBatchOperationIT extends AbstractDatabaseIT {
     public AbstractBatchOperationIT(String s)
     {
         super(s);
@@ -53,7 +51,7 @@ public class AbstractBatchOperationIT extends AbstractDatabaseIT
             ITableMetaData xmlMetaData = xmlTable.getTableMetaData();
             String tableName = xmlMetaData.getTableName();
 
-            ITable databaseTable = _connection.createDataSet().getTable(tableName);
+            ITable databaseTable = connection.createDataSet().getTable(tableName);
             ITableMetaData databaseMetaData = databaseTable.getTableMetaData();
 
             // ensure xml table is missing some columns present in database table
@@ -61,7 +59,7 @@ public class AbstractBatchOperationIT extends AbstractDatabaseIT
                     databaseMetaData.getColumns().length);
 
             ITableMetaData resultMetaData =
-                    AbstractBatchOperation.getOperationMetaData(_connection, xmlMetaData);
+                    AbstractBatchOperation.getOperationMetaData(connection, xmlMetaData);
 
             // result metadata must contains database columns matching the xml columns
             Column[] resultColumns = resultMetaData.getColumns();
@@ -91,23 +89,15 @@ public class AbstractBatchOperationIT extends AbstractDatabaseIT
         }
     }
 
-    public void testGetOperationMetaDataAndUnknownColumns() throws Exception
-    {
+    public void testGetOperationMetaDataAndUnknownColumns() throws Exception {
         String tableName = "PK_TABLE";
         Reader in = TestUtils.getFileReader("xml/unknownColumnTest.xml");
         IDataSet xmlDataSet = new XmlDataSet(in);
-
         ITable xmlTable = xmlDataSet.getTable(tableName);
-
-        try
-        {
-            AbstractBatchOperation.getOperationMetaData(_connection,
-                    xmlTable.getTableMetaData());
+        try {
+            AbstractBatchOperation.getOperationMetaData(connection, xmlTable.getTableMetaData());
             fail("Should throw a NoSuchColumnException");
-        }
-        catch (NoSuchColumnException e)
-        {
-        }
+        } catch (NoSuchColumnException e) {}
     }
 
 }

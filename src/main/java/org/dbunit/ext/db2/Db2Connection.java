@@ -36,15 +36,11 @@ import java.sql.Connection;
  * @version $Revision$ $Date$
  * @since 1.5.5 (Jul 17, 2003)
  */
-public class Db2Connection extends DatabaseConnection
-{
+public class Db2Connection extends DatabaseConnection {
 
-    public Db2Connection(Connection connection, String schema) throws DatabaseUnitException
-    {
+    public Db2Connection(Connection connection, String schema) throws DatabaseUnitException {
         super(connection, schema);
-        getConfig().setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY,
-                new Db2DataTypeFactory());
-        getConfig().setProperty(DatabaseConfig.PROPERTY_METADATA_HANDLER, 
-                new Db2MetadataHandler());
+        getConfig().setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new Db2DataTypeFactory());
+        getConfig().setProperty(DatabaseConfig.PROPERTY_METADATA_HANDLER, new Db2MetadataHandler());
     }
 }

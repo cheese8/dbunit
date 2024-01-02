@@ -48,14 +48,14 @@ public abstract class SemaphoreControlledChannel implements BoundedChannel {
    * @exception IllegalArgumentException if capacity less or equal to zero
    **/
 
-  public SemaphoreControlledChannel(int capacity) 
-   throws IllegalArgumentException {
-    if (capacity <= 0) throw new IllegalArgumentException();
+  public SemaphoreControlledChannel(int capacity) throws IllegalArgumentException {
+    if (capacity <= 0) {
+        throw new IllegalArgumentException();
+    }
     capacity_ = capacity;
     putGuard_ = new Semaphore(capacity);
     takeGuard_ = new Semaphore(0);
   }
-
 
   /**
    * Create a channel with the given capacity and 

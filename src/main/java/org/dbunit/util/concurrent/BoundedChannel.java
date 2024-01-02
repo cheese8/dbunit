@@ -11,7 +11,6 @@
   11Jun1998  dl               Create public version
 */
 
-
 package org.dbunit.util.concurrent;
 
 /**

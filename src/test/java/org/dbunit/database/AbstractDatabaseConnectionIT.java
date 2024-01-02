@@ -54,13 +54,13 @@ public abstract class AbstractDatabaseConnectionIT extends AbstractDatabaseIT
 
 	public final void testGetRowCount() throws Exception
     {
-        assertEquals("EMPTY_TABLE", 0, _connection.getRowCount("EMPTY_TABLE", null));
-        assertEquals("EMPTY_TABLE", 0, _connection.getRowCount("EMPTY_TABLE"));
+        assertEquals("EMPTY_TABLE", 0, connection.getRowCount("EMPTY_TABLE", null));
+        assertEquals("EMPTY_TABLE", 0, connection.getRowCount("EMPTY_TABLE"));
 
-        assertEquals("TEST_TABLE", 6, _connection.getRowCount("TEST_TABLE", null));
-        assertEquals("TEST_TABLE", 6, _connection.getRowCount("TEST_TABLE"));
+        assertEquals("TEST_TABLE", 6, connection.getRowCount("TEST_TABLE", null));
+        assertEquals("TEST_TABLE", 6, connection.getRowCount("TEST_TABLE"));
 
-        assertEquals("PK_TABLE", 1, _connection.getRowCount("PK_TABLE", "where PK0 = 0"));
+        assertEquals("PK_TABLE", 1, connection.getRowCount("PK_TABLE", "where PK0 = 0"));
     }
 
     public final void testGetRowCount_NonexistingSchema() throws Exception
@@ -98,7 +98,7 @@ public abstract class AbstractDatabaseConnectionIT extends AbstractDatabaseIT
 			IDatabaseConnection dbConnection = dbTester.getConnection();
 			
 			assertEquals(null, dbConnection.getSchema());
-	        assertEquals("TEST_TABLE", 6, _connection.getRowCount("TEST_TABLE", null));
+	        assertEquals("TEST_TABLE", 6, connection.getRowCount("TEST_TABLE", null));
     	}
     	finally {
     		// Reset the testers schema for subsequent tests (environment.dbTester is a singleton)
@@ -120,7 +120,7 @@ public abstract class AbstractDatabaseConnectionIT extends AbstractDatabaseIT
         Connection connection = DriverManager.getConnection(
                 profile.getConnectionUrl(), profile.getUser(),
                 profile.getPassword());
-        _connection = new DatabaseConnection(connection,
+        this.connection = new DatabaseConnection(connection,
                 profile.getSchema());
 		
         IDatabaseConnection dbunitConnection = new DatabaseConnection(connection,

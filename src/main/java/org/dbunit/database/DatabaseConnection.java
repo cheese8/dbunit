@@ -37,9 +37,7 @@ import org.slf4j.LoggerFactory;
  * @version $Revision$
  * @since Feb 21, 2002
  */
-public class DatabaseConnection extends AbstractDatabaseConnection
-        implements IDatabaseConnection
-{
+public class DatabaseConnection extends AbstractDatabaseConnection implements IDatabaseConnection {
 
     /**
      * Logger for this class

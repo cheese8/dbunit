@@ -32,8 +32,7 @@ import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.xml.sax.InputSource;
 
 /**
@@ -43,12 +42,10 @@ import org.xml.sax.InputSource;
  * @version $Revision$
  * @since 2.3.0
  */
-public class FileHelper
-{
-	private static Logger logger = LoggerFactory.getLogger(FileHelper.class);
+@Slf4j
+public class FileHelper {
 
-	private FileHelper(){
-	}
+	private FileHelper(){}
 	
 	/**
      * Recursively deletes the given directory
@@ -57,7 +54,7 @@ public class FileHelper
 	 */
 	public static void deleteDirectory(File directory, boolean failOnError) {
 	    boolean success = deleteDirectory(directory);
-	    if(!success){
+	    if (!success) {
 	        throw new RuntimeException("Failed to delete directory " + directory);
 	    }
 	}
@@ -67,10 +64,9 @@ public class FileHelper
 	 * @param directory The directory to delete
 	 * @return <code>true</code> if the deletion was successfully.
 	 */
-	public static boolean deleteDirectory(File directory)
-	{
-		if(!directory.isDirectory()) {
-			logger.warn("The directory '" + directory + "' does not exist. Will return without delete.");
+	public static boolean deleteDirectory(File directory) {
+		if (!directory.isDirectory()) {
+			log.warn("The directory '" + directory + "' does not exist. Will return without delete.");
 			return false;
 		}
 		
@@ -81,31 +77,28 @@ public class FileHelper
 			if(currentFile.isDirectory()) {
 				// First delete children recursively
 				deleteDirectory(currentFile);
-			}
-			else {
+			} else {
 				// Delete the file itself
 				boolean success = currentFile.delete();
 				if(!success){
-					logger.warn("Failed to delete file '" + currentFile + "'");
+					log.warn("Failed to delete file '" + currentFile + "'");
 				}
 			}		
 		}
 		// Finally delete the directory itself
 		boolean success = directory.delete();
-		if(!success){
-			logger.warn("Failed to delete file '" + directory + "'");
+		if (!success) {
+			log.warn("Failed to delete file '" + directory + "'");
 		}
 		return success;
 	}
 
-	public static InputSource createInputSource(File file) throws MalformedURLException
-	{
+	public static InputSource createInputSource(File file) throws MalformedURLException {
         String uri = file/*.getAbsoluteFile()*/.toURI().toURL().toString();
         InputSource source = new InputSource(uri);
         return source;
 	}
-	
-	
+
     /**
      * Copy file.
      * 
@@ -113,9 +106,8 @@ public class FileHelper
      * @param destFile the dest file
      * @throws IOException 
      */
-    public static void copyFile(File srcFile, File destFile) throws IOException 
-    {
-        logger.debug("copyFile(srcFile={}, destFile={}) - start", srcFile, destFile);
+    public static void copyFile(File srcFile, File destFile) throws IOException {
+        log.debug("copyFile(srcFile={}, destFile={}) - start", srcFile, destFile);
 
         // Create channel on the source
         FileChannel srcChannel = new FileInputStream(srcFile).getChannel();
@@ -126,8 +118,7 @@ public class FileHelper
         try {
             // Copy file contents from source to destination
             dstChannel.transferFrom(srcChannel, 0, srcChannel.size());
-        }
-        finally {
+        } finally {
             // Close the channels
             srcChannel.close();
             dstChannel.close();
@@ -142,9 +133,8 @@ public class FileHelper
      * @return a list of Strings, each one representing one line from the given file
      * @throws IOException
      */
-    public static List readLines(File theFile) throws IOException 
-    {
-        logger.debug("readLines(theFile={}) - start", theFile);
+    public static List readLines(File theFile) throws IOException {
+        log.debug("readLines(theFile={}) - start", theFile);
 
         InputStream tableListStream = new FileInputStream(theFile);
         try {
@@ -158,10 +148,8 @@ public class FileHelper
                 }
             }
             return orderedNames;
-        }
-        finally {
+        } finally {
             tableListStream.close();
         }
     }
-
 }

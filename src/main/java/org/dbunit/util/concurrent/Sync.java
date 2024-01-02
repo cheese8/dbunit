@@ -336,7 +336,4 @@ public interface Sync {
   /**  One century in milliseconds; convenient as a time-out value **/
   public static final long ONE_CENTURY = 100 * ONE_YEAR;
 
-
 }
-
-

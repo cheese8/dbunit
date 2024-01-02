@@ -21,8 +21,7 @@
 
 package org.dbunit.operation;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.IDatabaseConnection;
@@ -39,22 +38,16 @@ import java.util.Arrays;
  * @version $Revision$
  * @since Feb 18, 2002
  */
-public class CompositeOperation extends DatabaseOperation
-{
+@Slf4j
+public class CompositeOperation extends DatabaseOperation {
 
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(CompositeOperation.class);
-
-    private final DatabaseOperation[] _actions;
+    private final DatabaseOperation[] actions;
 
     /**
      * Creates a new composite operation combining the two specified operations.
      */
-    public CompositeOperation(DatabaseOperation action1, DatabaseOperation action2)
-    {
-        _actions = new DatabaseOperation[]{action1, action2};
+    public CompositeOperation(DatabaseOperation action1, DatabaseOperation action2) {
+        actions = new DatabaseOperation[]{action1, action2};
     }
 
     /**
@@ -62,35 +55,23 @@ public class CompositeOperation extends DatabaseOperation
      */
     public CompositeOperation(DatabaseOperation[] actions)
     {
-        _actions = actions;
+        this.actions = actions;
     }
 
-    ////////////////////////////////////////////////////////////////////////////
-    // DatabaseOperation class
+    public void execute(IDatabaseConnection connection, IDataSet dataSet) throws DatabaseUnitException, SQLException {
+        log.debug("execute(connection={}, , dataSet={}) - start", connection, dataSet);
 
-    public void execute(IDatabaseConnection connection, IDataSet dataSet)
-            throws DatabaseUnitException, SQLException
-    {
-        logger.debug("execute(connection={}, , dataSet={}) - start", connection, dataSet);
-
-        for (int i = 0; i < _actions.length; i++)
-        {
-            DatabaseOperation action = _actions[i];
+        for (int i = 0; i < actions.length; i++) {
+            DatabaseOperation action = actions[i];
             action.execute(connection, dataSet);
         }
     }
     
-    public String toString()
-    {
+    public String toString() {
     	StringBuffer sb = new StringBuffer();
     	sb.append(getClass().getName()).append("[");
-    	sb.append("_actions=").append(this._actions==null ? "null" : Arrays.asList(this._actions).toString());
+    	sb.append("actions=").append(this.actions==null ? "null" : Arrays.asList(this.actions).toString());
     	sb.append("]");
     	return sb.toString();
     }
 }
-
-
-
-
-

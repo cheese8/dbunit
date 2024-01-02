@@ -34,14 +34,13 @@ import org.slf4j.LoggerFactory;
  * @version $Revision$ $Date$
  * @since 2.4.4
  */
-public class DefaultOperationListener implements IOperationListener{
+public class DefaultOperationListener implements IOperationListener {
     
     /**
      * Logger for this class
      */
     private static final Logger logger = LoggerFactory.getLogger(DefaultOperationListener.class);
 
-    
     public void connectionRetrieved(IDatabaseConnection connection) {
         logger.debug("connectionCreated(connection={}) - start", connection);
         // Is by default a no-op
@@ -57,8 +56,7 @@ public class DefaultOperationListener implements IOperationListener{
         closeConnection(connection);
     }
 
-    private void closeConnection(IDatabaseConnection connection)
-    {
+    private void closeConnection(IDatabaseConnection connection) {
         logger.debug("closeConnection(connection={}) - start",connection);
         try {
             connection.close();
@@ -66,5 +64,4 @@ public class DefaultOperationListener implements IOperationListener{
             logger.warn("Exception while closing the connection: " + e, e);
         }
     }
-    
 }

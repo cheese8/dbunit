@@ -231,7 +231,6 @@ package org.dbunit.util.concurrent;
  * @see Sync 
  * @see BoundedChannel 
  */
-
 public interface Channel extends Puttable, Takable {
 
   /** 
@@ -279,8 +278,7 @@ public interface Channel extends Puttable, Takable {
   **/
   public Object take() throws InterruptedException;
 
-
-  /** 
+  /**
    * Return and remove an item from channel only if one is available within
    * msecs milliseconds. The time bound is interpreted in a coarse
    * grained, best-effort fashion.
@@ -306,4 +304,3 @@ public interface Channel extends Puttable, Takable {
   public Object peek();
 
 }
-
