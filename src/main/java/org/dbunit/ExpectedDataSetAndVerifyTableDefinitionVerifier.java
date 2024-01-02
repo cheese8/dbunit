@@ -11,13 +11,10 @@ import org.dbunit.dataset.IDataSet;
  *
  * @author Jeff Jensen
  */
-public interface ExpectedDataSetAndVerifyTableDefinitionVerifier
-{
+public interface ExpectedDataSetAndVerifyTableDefinitionVerifier {
     /**
      * Verify {@link VerifyTableDefinition}s and expectedDataSet configurations
      * agree.
      */
-    void verify(VerifyTableDefinition[] verifyTableDefinitions,
-            IDataSet expectedDataSet, DatabaseConfig config)
-            throws DataSetException;
+    void verify(VerifyTableDefinition[] verifyTableDefinitions, IDataSet expectedDataSet, DatabaseConfig config) throws DataSetException;
 }

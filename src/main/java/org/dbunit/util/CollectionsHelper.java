@@ -25,8 +25,7 @@ import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Helper for collections-related methods.
@@ -37,12 +36,8 @@ import org.slf4j.LoggerFactory;
  * @version $Revision$ $Date$
  * @since Nov 5, 2005
  */
+@Slf4j
 public class CollectionsHelper {
-
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(CollectionsHelper.class);
 
     // class is "static"
     private CollectionsHelper() {}
@@ -53,10 +48,10 @@ public class CollectionsHelper {
      * @param objects array of objects
      * @return Set with the elements of the array or null if entry is null
      */
-    public static Set objectsToSet( Object[] objects ) {
-        logger.debug("objectsToSet(objects={}) - start", objects);
+    public static Set objectsToSet(Object[] objects) {
+        log.debug("objectsToSet(objects={}) - start", objects);
 
-        if ( objects == null ) {
+        if (objects == null) {
             return null;
         }
         return new LinkedHashSet(Arrays.asList(objects));
@@ -67,15 +62,13 @@ public class CollectionsHelper {
      * @param set a Set 
      * @return array of Objects with the elements of the Set or null if set is null
      */
-    public static Object[] setToObjects( Set set ) {
-        logger.debug("setToObjects(set={}) - start", set);
+    public static Object[] setToObjects(Set set) {
+        log.debug("setToObjects(set={}) - start", set);
 
-        if ( set == null ) {
+        if (set == null) {
             return null;
         }
-        else {
-            return set.toArray();
-        }
+        return set.toArray();
     }
 
     /**
@@ -83,16 +76,14 @@ public class CollectionsHelper {
      * @param set a Set of Strings
      * @return array of Strings with the elements of the Set or null if set is null
      */
-    public static String[] setToStrings( Set set ) {
-        logger.debug("setToStrings(set={}) - start", set);
+    public static String[] setToStrings(Set set) {
+        log.debug("setToStrings(set={}) - start", set);
 
-        if ( set == null ) {
+        if (set == null) {
             return null;
         }
-        else {
-            String[] strings = (String[]) set.toArray(new String[0]);
-            return strings;
-        }
-    };
+        String[] strings = (String[]) set.toArray(new String[0]);
+        return strings;
+    }
 
 }

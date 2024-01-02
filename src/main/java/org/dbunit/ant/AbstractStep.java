@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.tools.ant.ProjectComponent;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConfig;
@@ -46,8 +47,6 @@ import org.dbunit.dataset.xml.FlatDtdProducer;
 import org.dbunit.dataset.xml.FlatXmlProducer;
 import org.dbunit.dataset.xml.XmlProducer;
 import org.dbunit.util.FileHelper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 
 /**
@@ -56,14 +55,8 @@ import org.xml.sax.InputSource;
  * @version $Revision$ $Date$
  * @since 2.1 (Apr 3, 2004)
  */
-public abstract class AbstractStep extends ProjectComponent implements DbUnitTaskStep
-{
-
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(AbstractStep.class);
-
+@Slf4j
+public abstract class AbstractStep extends ProjectComponent implements DbUnitTaskStep {
     public static final String FORMAT_FLAT = "flat";
     public static final String FORMAT_XML = "xml";
     public static final String FORMAT_DTD = "dtd";
@@ -72,148 +65,102 @@ public abstract class AbstractStep extends ProjectComponent implements DbUnitTas
 
     private boolean ordered = false;
 
-    
-    protected IDataSet getDatabaseDataSet(IDatabaseConnection connection,
-            List tables) throws DatabaseUnitException
-    {
-    	if (logger.isDebugEnabled())
-    	{
-            logger.debug("getDatabaseDataSet(connection={}, tables={}) - start",
-            		new Object[] { connection, tables});
-    	}
+    protected IDataSet getDatabaseDataSet(IDatabaseConnection connection, List tables) throws DatabaseUnitException {
+        log.debug("getDatabaseDataSet(connection={}, tables={}) - start", new Object[] { connection, tables});
 
-        try
-        {
+        try {
             DatabaseConfig config = connection.getConfig();
 
             // Retrieve the complete database if no tables or queries specified.
-            if (tables.size() == 0)
-            {
-            	logger.debug("Retrieving the whole database because tables/queries have not been specified");
+            if (tables.size() == 0) {
+            	log.debug("Retrieving the whole database because tables/queries have not been specified");
                 return connection.createDataSet();
             }
 
             List queryDataSets = createQueryDataSet(tables, connection);
 
-            IDataSet[] dataSetsArray = null;
+            IDataSet[] dataSetsArray;
             if (config.getProperty(DatabaseConfig.PROPERTY_RESULTSET_TABLE_FACTORY)
                     .getClass().getName().equals("org.dbunit.database.ForwardOnlyResultSetTableFactory")) {
-                dataSetsArray = (IDataSet[]) createForwardOnlyDataSetArray(queryDataSets);
+                dataSetsArray = createForwardOnlyDataSetArray(queryDataSets);
             } else {
                 dataSetsArray = (IDataSet[]) queryDataSets.toArray(new IDataSet[queryDataSets.size()]);
             }
             return new CompositeDataSet(dataSetsArray);
-        }
-        catch (SQLException e)
-        {
+        } catch (SQLException e) {
             throw new DatabaseUnitException(e);
         }
     }
 
 
-    private ForwardOnlyDataSet[] createForwardOnlyDataSetArray(List<QueryDataSet> dataSets) throws DataSetException, SQLException {
+    private ForwardOnlyDataSet[] createForwardOnlyDataSetArray(List<QueryDataSet> dataSets) throws SQLException {
         ForwardOnlyDataSet[] forwardOnlyDataSets = new ForwardOnlyDataSet[dataSets.size()];
-
         for (int i = 0; i < dataSets.size(); i++) {
             forwardOnlyDataSets[i] = new ForwardOnlyDataSet(dataSets.get(i));
         }
-
         return forwardOnlyDataSets;
     }
    
-	private List createQueryDataSet(List tables, IDatabaseConnection connection) 
-	throws DataSetException, SQLException 
-	{
-		logger.debug("createQueryDataSet(tables={}, connection={})", tables, connection);
+	private List createQueryDataSet(List tables, IDatabaseConnection connection) throws DataSetException, SQLException {
+		log.debug("createQueryDataSet(tables={}, connection={})", tables, connection);
 		
 		List queryDataSets = new ArrayList();
 		
         QueryDataSet queryDataSet = new QueryDataSet(connection);
         
-        for (Iterator it = tables.iterator(); it.hasNext();)
-        {
+        for (Iterator it = tables.iterator(); it.hasNext();) {
             Object item = it.next();
             
             if(item instanceof QuerySet) {
-				if(queryDataSet.getTableNames().length > 0) 
-            		queryDataSets.add(queryDataSet);
+				if(queryDataSet.getTableNames().length > 0) {
+                    queryDataSets.add(queryDataSet);
+                }
 				
 				QueryDataSet newQueryDataSet = (((QuerySet)item).getQueryDataSet(connection));
 				queryDataSets.add(newQueryDataSet);
 				queryDataSet = new QueryDataSet(connection);
-            }
-            else if (item instanceof Query)
-            {
+            } else if (item instanceof Query) {
                 Query queryItem = (Query)item;
                 queryDataSet.addTable(queryItem.getName(), queryItem.getSql());
-            }
-            else if (item instanceof Table)
-            {
+            } else if (item instanceof Table) {
                 Table tableItem = (Table)item;
                 queryDataSet.addTable(tableItem.getName());
-            }
-            else
-            {
+            } else {
             	throw new IllegalArgumentException("Unsupported element type " + item.getClass().getName() + ".");
             }
         }
         
-        if(queryDataSet.getTableNames().length > 0) 
-        	queryDataSets.add(queryDataSet);
-        
+        if(queryDataSet.getTableNames().length > 0) {
+            queryDataSets.add(queryDataSet);
+        }
         return queryDataSets;
 	}
 
-
-	protected IDataSet getSrcDataSet(File src, String format,
-            boolean forwardonly) throws DatabaseUnitException
-    {
-		if (logger.isDebugEnabled())
-		{
-			logger.debug("getSrcDataSet(src={}, format={}, forwardonly={}) - start",
-					new Object[]{ src, format, String.valueOf(forwardonly) });
-		}
-
-        try
-        {
-            IDataSetProducer producer = null;
-            if (format.equalsIgnoreCase(FORMAT_XML))
-            {
+	protected IDataSet getSrcDataSet(File src, String format, boolean forwardOnly) throws DatabaseUnitException {
+        log.debug("getSrcDataSet(src={}, format={}, forwardOnly={}) - start", src, format, forwardOnly);
+        try {
+            IDataSetProducer producer;
+            if (format.equalsIgnoreCase(FORMAT_XML)) {
                 producer = new XmlProducer(getInputSource(src));
-            }
-            else if (format.equalsIgnoreCase(FORMAT_CSV))
-            {
+            } else if (format.equalsIgnoreCase(FORMAT_CSV)) {
                 producer = new CsvProducer(src);
-            }
-            else if (format.equalsIgnoreCase(FORMAT_FLAT))
-            {
+            } else if (format.equalsIgnoreCase(FORMAT_FLAT)) {
                 producer = new FlatXmlProducer(getInputSource(src), true, true);
-            }
-            else if (format.equalsIgnoreCase(FORMAT_DTD))
-            {
+            } else if (format.equalsIgnoreCase(FORMAT_DTD)) {
                 producer = new FlatDtdProducer(getInputSource(src));
-            }
-            else if (format.equalsIgnoreCase(FORMAT_XLS))
-            {
+            } else if (format.equalsIgnoreCase(FORMAT_XLS)) {
                 return new CachedDataSet(new XlsDataSet(src));
-            }
-            else
-            {
+            } else {
                 throw new IllegalArgumentException("Type must be either 'flat'(default), 'xml', 'csv', 'xls' or 'dtd' but was: " + format);
             }
-
-            if (forwardonly)
-            {
+            if (forwardOnly) {
                 return new StreamingDataSet(producer);
             }
             return new CachedDataSet(producer);
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             throw new DatabaseUnitException(e);
         }
     }
-    
 
     /**
 	 * Checks if the given format is a format which contains tabular data.
@@ -224,22 +171,13 @@ public abstract class AbstractStep extends ProjectComponent implements DbUnitTas
 	 * holds only metadata information.
 	 * @since 2.4
 	 */
-	public boolean isDataFormat(String format)
-	{
-        logger.debug("isDataFormat(format={}) - start", format);
-
-        if (format.equalsIgnoreCase(FORMAT_FLAT)
-                || format.equalsIgnoreCase(FORMAT_XML)
-                || format.equalsIgnoreCase(FORMAT_CSV)
-                || format.equalsIgnoreCase(FORMAT_XLS)
-        )
-        {
+	public boolean isDataFormat(String format) {
+        log.debug("isDataFormat(format={}) - start", format);
+        if (format.equalsIgnoreCase(FORMAT_FLAT) || format.equalsIgnoreCase(FORMAT_XML)
+                || format.equalsIgnoreCase(FORMAT_CSV) || format.equalsIgnoreCase(FORMAT_XLS)) {
             return true;
         }
-        else
-        {
-            return false;
-        }
+        return false;
 	}
 	
     /**
@@ -251,45 +189,35 @@ public abstract class AbstractStep extends ProjectComponent implements DbUnitTas
      * a valid data format
      * @since 2.4
      */
-    protected void checkDataFormat(String format) 
-    {
-        logger.debug("checkDataFormat(format={}) - start", format);
-
-        if (!isDataFormat(format))
-        {
+    protected void checkDataFormat(String format) {
+        log.debug("checkDataFormat(format={}) - start", format);
+        if (!isDataFormat(format)) {
             throw new IllegalArgumentException("format must be either 'flat'(default), 'xml', 'csv' or 'xls' but was: " + format);
         }
     }
 
-	
 	/**
 	 * Creates and returns an {@link InputSource}
 	 * @param file The file for which an {@link InputSource} should be created
 	 * @return The input source for the given file
 	 * @throws MalformedURLException
 	 */
-	public static InputSource getInputSource(File file) throws MalformedURLException
-	{
-        InputSource source = FileHelper.createInputSource(file);
-        return source;
+	public static InputSource getInputSource(File file) throws MalformedURLException {
+        return FileHelper.createInputSource(file);
 	}
 	
-    public boolean isOrdered() 
-    {
+    public boolean isOrdered() {
         return ordered;
     }
 
-    public void setOrdered(boolean ordered) 
-    {
+    public void setOrdered(boolean ordered) {
         this.ordered = ordered;
     }
     
-    public String toString()
-    {
+    public String toString() {
         StringBuffer result = new StringBuffer();
         result.append("AbstractStep: ");
         result.append("ordered=").append(this.ordered);
         return result.toString();
     }
-
 }

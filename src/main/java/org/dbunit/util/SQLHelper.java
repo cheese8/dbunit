@@ -71,7 +71,6 @@ public class SQLHelper {
      */
     public static String getPrimaryKeyColumn( Connection conn, String table ) throws SQLException {
         logger.debug("getPrimaryKeyColumn(conn={}, table={}) - start", conn, table);
-
         DatabaseMetaData metadata = conn.getMetaData();
         ResultSet rs = metadata.getPrimaryKeys( null, null, table );
         rs.next();
@@ -87,7 +86,6 @@ public class SQLHelper {
      */
     public static void close(ResultSet rs, Statement stmt) throws SQLException {
         logger.debug("close(rs={}, stmt={}) - start", rs, stmt);
-
         try {
             SQLHelper.close(rs);
         } finally {
@@ -102,8 +100,7 @@ public class SQLHelper {
      */
     public static void close(Statement stmt) throws SQLException {
         logger.debug("close(stmt={}) - start", stmt);
-
-        if ( stmt != null ) {
+        if (stmt != null) {
             stmt.close();
         }
     }
@@ -115,8 +112,7 @@ public class SQLHelper {
      */
     public static void close(ResultSet resultSet) throws SQLException {
         logger.debug("close(resultSet={}) - start", resultSet);
-
-        if(resultSet != null) {
+        if (resultSet != null) {
             resultSet.close();
         }
     }
@@ -129,43 +125,33 @@ public class SQLHelper {
      * @throws SQLException
      * @since 2.3.0
      */
-    public static boolean schemaExists(Connection connection, String schema)
-            throws SQLException
-            {
+    public static boolean schemaExists(Connection connection, String schema) throws SQLException {
         logger.trace("schemaExists(connection={}, schema={}) - start", connection, schema);
-
-        if(schema == null)
-        {
+        if (schema == null) {
             throw new NullPointerException("The parameter 'schema' must not be null");
         }
 
         DatabaseMetaData metaData = connection.getMetaData();
         ResultSet rs = metaData.getSchemas(); //null, schemaPattern);
-        try
-        {
-            while(rs.next())
-            {
+        try {
+            while (rs.next()) {
                 String foundSchema = rs.getString("TABLE_SCHEM");
-                if(foundSchema.equals(schema))
-                {
+                if (foundSchema.equals(schema)) {
                     return true;
                 }
             }
 
             // Especially for MySQL check the catalog
-            if(catalogExists(connection, schema))
-            {
+            if (catalogExists(connection, schema)) {
                 logger.debug("Found catalog with name {}. Returning true because DB is probably on MySQL", schema);
                 return true;
             }
 
             return false;
-        }
-        finally
-        {
+        } finally {
             rs.close();
         }
-            }
+    }
 
     /**
      * Checks via {@link DatabaseMetaData#getCatalogs()} whether or not the given catalog exists.
@@ -175,31 +161,23 @@ public class SQLHelper {
      * @throws SQLException
      * @since 2.4.4
      */
-    private static boolean catalogExists(Connection connection, String catalog) throws SQLException
-    {
+    private static boolean catalogExists(Connection connection, String catalog) throws SQLException {
         logger.trace("catalogExists(connection={}, catalog={}) - start", connection, catalog);
-
-        if(catalog == null)
-        {
+        if (catalog == null) {
             throw new NullPointerException("The parameter 'catalog' must not be null");
         }
 
         DatabaseMetaData metaData = connection.getMetaData();
         ResultSet rs = metaData.getCatalogs();
-        try
-        {
-            while(rs.next())
-            {
+        try {
+            while (rs.next()) {
                 String foundCatalog = rs.getString("TABLE_CAT");
-                if(foundCatalog.equals(catalog))
-                {
+                if (foundCatalog.equals(catalog)) {
                     return true;
                 }
             }
             return false;
-        }
-        finally
-        {
+        } finally {
             rs.close();
         }
 
@@ -217,20 +195,14 @@ public class SQLHelper {
      * @since 2.3.0
      * @deprecated since 2.4.5 - use {@link IMetadataHandler#tableExists(DatabaseMetaData, String, String)}
      */
-    public static boolean tableExists(DatabaseMetaData metaData, String schema,
-            String tableName)
-                    throws SQLException
-                    {
+    public static boolean tableExists(DatabaseMetaData metaData, String schema, String tableName) throws SQLException {
         ResultSet tableRs = metaData.getTables(null, schema, tableName, null);
-        try
-        {
+        try {
             return tableRs.next();
-        }
-        finally
-        {
+        } finally {
             SQLHelper.close(tableRs);
         }
-                    }
+    }
 
     /**
      * Utility method for debugging to print all tables of the given metadata on the given stream
@@ -238,13 +210,10 @@ public class SQLHelper {
      * @param outputStream
      * @throws SQLException
      */
-    public static void printAllTables(DatabaseMetaData metaData, PrintStream outputStream) throws SQLException
-    {
+    public static void printAllTables(DatabaseMetaData metaData, PrintStream outputStream) throws SQLException {
         ResultSet rs = metaData.getTables(null, null, null, null);
-        try
-        {
-            while (rs.next())
-            {
+        try {
+            while (rs.next()) {
                 String catalog = rs.getString("TABLE_CAT");
                 String schema = rs.getString("TABLE_SCHEM");
                 String table = rs.getString("TABLE_NAME");
@@ -256,12 +225,9 @@ public class SQLHelper {
                 outputStream.println(tableInfo);
             }
             outputStream.flush();
-        }
-        finally
-        {
+        } finally {
             SQLHelper.close(rs);
         }
-
     }
 
     /**
@@ -269,63 +235,62 @@ public class SQLHelper {
      * @param metaData The JDBC database metadata needed to retrieve database information
      * @return The database information as formatted string
      */
-    public static String getDatabaseInfo(DatabaseMetaData metaData)
-    {
+    public static String getDatabaseInfo(DatabaseMetaData metaData) {
         StringBuffer sb = new StringBuffer();
         sb.append("\n");
 
         String dbInfo = null;
 
-        dbInfo = new ExceptionWrapper(){
+        dbInfo = new ExceptionWrapper() {
             public String wrappedCall(DatabaseMetaData metaData) throws Exception {
                 return metaData.getDatabaseProductName();
             }
         }.executeWrappedCall(metaData);
         sb.append("\tdatabase product name=").append(dbInfo).append("\n");
 
-        dbInfo = new ExceptionWrapper(){
+        dbInfo = new ExceptionWrapper() {
             public String wrappedCall(DatabaseMetaData metaData) throws Exception {
                 return metaData.getDatabaseProductVersion();
             }
         }.executeWrappedCall(metaData);
         sb.append("\tdatabase version=").append(dbInfo).append("\n");
 
-        dbInfo = new ExceptionWrapper(){
+        dbInfo = new ExceptionWrapper() {
             public String wrappedCall(DatabaseMetaData metaData) throws Exception {
                 return String.valueOf(metaData.getDatabaseMajorVersion());
             }
         }.executeWrappedCall(metaData);
         sb.append("\tdatabase major version=").append(dbInfo).append("\n");
 
-        dbInfo = new ExceptionWrapper(){
+        dbInfo = new ExceptionWrapper() {
             public String wrappedCall(DatabaseMetaData metaData) throws Exception {
                 return String.valueOf(metaData.getDatabaseMinorVersion());
             }
         }.executeWrappedCall(metaData);
         sb.append("\tdatabase minor version=").append(dbInfo).append("\n");
 
-        dbInfo = new ExceptionWrapper(){
+        dbInfo = new ExceptionWrapper() {
             public String wrappedCall(DatabaseMetaData metaData) throws Exception {
                 return metaData.getDriverName();
             }
         }.executeWrappedCall(metaData);
         sb.append("\tjdbc driver name=").append(dbInfo).append("\n");
 
-        dbInfo = new ExceptionWrapper(){
+        dbInfo = new ExceptionWrapper() {
             public String wrappedCall(DatabaseMetaData metaData) throws Exception {
                 return metaData.getDriverVersion();
             }
         }.executeWrappedCall(metaData);
         sb.append("\tjdbc driver version=").append(dbInfo).append("\n");
 
-        dbInfo = new ExceptionWrapper(){
+        dbInfo = new ExceptionWrapper() {
             public String wrappedCall(DatabaseMetaData metaData) throws Exception {
                 return String.valueOf(metaData.getDriverMajorVersion());
             }
         }.executeWrappedCall(metaData);
         sb.append("\tjdbc driver major version=").append(dbInfo).append("\n");
 
-        dbInfo = new ExceptionWrapper(){
+        dbInfo = new ExceptionWrapper() {
             public String wrappedCall(DatabaseMetaData metaData) throws Exception {
                 return String.valueOf(metaData.getDriverMinorVersion());
             }
@@ -341,13 +306,11 @@ public class SQLHelper {
      * @param outputStream The stream to which the information is printed
      * @throws SQLException
      */
-    public static void printDatabaseInfo(DatabaseMetaData metaData, PrintStream outputStream) throws SQLException
-    {
+    public static void printDatabaseInfo(DatabaseMetaData metaData, PrintStream outputStream) throws SQLException {
         String dbInfo = getDatabaseInfo(metaData);
         try {
             outputStream.println(dbInfo);
-        }
-        finally {
+        } finally {
             outputStream.flush();
         }
     }
@@ -359,8 +322,7 @@ public class SQLHelper {
      * @return <code>true</code> if and only if the given metadata belongs to a Sybase database.
      * @throws SQLException
      */
-    public static boolean isSybaseDb(DatabaseMetaData metaData) throws SQLException
-    {
+    public static boolean isSybaseDb(DatabaseMetaData metaData) throws SQLException {
         String dbProductName = metaData.getDatabaseProductName();
         boolean isSybase = (dbProductName != null && dbProductName.equals(DB_PRODUCT_SYBASE));
         return isSybase;
@@ -380,16 +342,13 @@ public class SQLHelper {
      * @throws DataTypeException
      * @since 2.4.0
      */
-    public static final Column createColumn(ResultSet resultSet,
-            IDataTypeFactory dataTypeFactory, boolean datatypeWarning)
-                    throws SQLException, DataTypeException
-                    {
+    public static final Column createColumn(ResultSet resultSet, IDataTypeFactory dataTypeFactory,
+                                            boolean datatypeWarning) throws SQLException, DataTypeException {
         String tableName = resultSet.getString(3);
         String columnName = resultSet.getString(4);
         int sqlType = resultSet.getInt(5);
         //If Types.DISTINCT like SQL DOMAIN, then get Source Date Type of SQL-DOMAIN
-        if(sqlType == java.sql.Types.DISTINCT)
-        {
+        if (sqlType == java.sql.Types.DISTINCT) {
             sqlType = resultSet.getInt("SOURCE_DATA_TYPE");
         }
 
@@ -402,9 +361,7 @@ public class SQLHelper {
         String isAutoIncrement = Column.AutoIncrement.NO.getKey();
         try {
             isAutoIncrement = resultSet.getString(23);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             // Ignore this one here
             final String msg =
                     "Could not retrieve the 'isAutoIncrement' property"
@@ -414,17 +371,13 @@ public class SQLHelper {
         }
 
         // Convert SQL type to DataType
-        DataType dataType =
-                dataTypeFactory.createDataType(sqlType, sqlTypeName, tableName, columnName);
-        if (dataType != DataType.UNKNOWN)
-        {
+        DataType dataType = dataTypeFactory.createDataType(sqlType, sqlTypeName, tableName, columnName);
+        if (dataType != DataType.UNKNOWN) {
             Column column = new Column(columnName, dataType,
                     sqlTypeName, Column.nullableValue(nullable), columnDefaultValue, remarks,
                     Column.AutoIncrement.autoIncrementValue(isAutoIncrement));
             return column;
-        }
-        else
-        {
+        } else {
             if (datatypeWarning)
                 logger.warn(
                         tableName + "." + columnName +
@@ -434,7 +387,7 @@ public class SQLHelper {
             // datatype unknown - column not created
             return null;
         }
-                    }
+    }
 
     /**
      * Checks if the given <code>resultSet</code> matches the given schema and table name.
@@ -449,13 +402,9 @@ public class SQLHelper {
      * @since 2.4.0
      * @deprecated since 2.4.4 - use {@link IMetadataHandler#matches(ResultSet, String, String, String, String, boolean)}
      */
-    public static boolean matches(ResultSet resultSet,
-            String schema, String table, boolean caseSensitive)
-                    throws SQLException
-                    {
+    public static boolean matches(ResultSet resultSet, String schema, String table, boolean caseSensitive) throws SQLException {
         return matches(resultSet, null, schema, table, null, caseSensitive);
-                    }
-
+    }
 
     /**
      * Checks if the given <code>resultSet</code> matches the given schema and table name.
@@ -472,30 +421,26 @@ public class SQLHelper {
      * @since 2.4.0
      * @deprecated since 2.4.4 - use {@link IMetadataHandler#matches(ResultSet, String, String, String, String, boolean)}
      */
-    public static boolean matches(ResultSet resultSet,
-            String catalog, String schema,
-            String table, String column, boolean caseSensitive)
-                    throws SQLException
-                    {
+    public static boolean matches(ResultSet resultSet, String catalog, String schema, String table, String column,
+                                  boolean caseSensitive) throws SQLException {
         String catalogName = resultSet.getString(1);
         String schemaName = resultSet.getString(2);
         String tableName = resultSet.getString(3);
         String columnName = resultSet.getString(4);
 
         // MYSQL provides only a catalog but no schema
-        if(schema != null && schemaName == null && catalog==null && catalogName != null){
+        if (schema != null && schemaName == null && catalog==null && catalogName != null) {
             logger.debug("Switching catalog/schema because the are mutually null");
             schemaName = catalogName;
             catalogName = null;
         }
 
-        boolean areEqual =
-                areEqualIgnoreNull(catalog, catalogName, caseSensitive) &&
+        boolean areEqual = areEqualIgnoreNull(catalog, catalogName, caseSensitive) &&
                 areEqualIgnoreNull(schema, schemaName, caseSensitive) &&
                 areEqualIgnoreNull(table, tableName, caseSensitive) &&
                 areEqualIgnoreNull(column, columnName, caseSensitive);
         return areEqual;
-                    }
+    }
 
     /**
      * Compares the given values and returns true if they are equal.
@@ -508,24 +453,15 @@ public class SQLHelper {
      * is <code>null</code> or empty string.
      * @since 2.4.4
      */
-    public static final boolean areEqualIgnoreNull(String value1, String value2, boolean caseSensitive)
-    {
-        if(value1==null || value1.equals(""))
-        {
+    public static final boolean areEqualIgnoreNull(String value1, String value2, boolean caseSensitive) {
+        if (value1==null || value1.equals("")) {
             return true;
-        }
-        else
-        {
-            if(caseSensitive && value1.equals(value2))
-            {
+        } else {
+            if (caseSensitive && value1.equals(value2)) {
                 return true;
-            }
-            else if(!caseSensitive && value1.equalsIgnoreCase(value2))
-            {
+            } else if (!caseSensitive && value1.equalsIgnoreCase(value2)) {
                 return true;
-            }
-            else
-            {
+            } else {
                 return false;
             }
         }
@@ -540,16 +476,12 @@ public class SQLHelper {
      * @return The database identifier in the correct case for the RDBMS
      * @since 2.4.4
      */
-    public static final String correctCase(final String databaseIdentifier, Connection connection)
-    {
+    public static final String correctCase(final String databaseIdentifier, Connection connection) {
         logger.trace("correctCase(tableName={}, connection={}) - start", databaseIdentifier, connection);
 
-        try
-        {
+        try {
             return correctCase(databaseIdentifier, connection.getMetaData());
-        }
-        catch (SQLException e)
-        {
+        } catch (SQLException e) {
             throw new DatabaseUnitRuntimeException("Exception while trying to access database metadata", e);
         }
     }
@@ -563,46 +495,35 @@ public class SQLHelper {
      * @return The database identifier in the correct case for the RDBMS
      * @since 2.4.4
      */
-    public static final String correctCase(final String databaseIdentifier, DatabaseMetaData databaseMetaData)
-    {
+    public static final String correctCase(final String databaseIdentifier, DatabaseMetaData databaseMetaData) {
         logger.trace("correctCase(tableName={}, databaseMetaData={}) - start", databaseIdentifier, databaseMetaData);
 
         if (databaseIdentifier == null) {
-            throw new NullPointerException(
-                    "The parameter 'databaseIdentifier' must not be null");
+            throw new NullPointerException("The parameter 'databaseIdentifier' must not be null");
         }
         if (databaseMetaData == null) {
-            throw new NullPointerException(
-                    "The parameter 'databaseMetaData' must not be null");
+            throw new NullPointerException("The parameter 'databaseMetaData' must not be null");
         }
 
         try {
             String resultTableName = databaseIdentifier;
             String dbIdentifierQuoteString = databaseMetaData.getIdentifierQuoteString();
-            if(!isEscaped(databaseIdentifier, dbIdentifierQuoteString)){
-                if(databaseMetaData.storesLowerCaseIdentifiers())
-                {
+            if (!isEscaped(databaseIdentifier, dbIdentifierQuoteString)) {
+                if(databaseMetaData.storesLowerCaseIdentifiers()) {
                     resultTableName = databaseIdentifier.toLowerCase(Locale.ENGLISH);
-                }
-                else if(databaseMetaData.storesUpperCaseIdentifiers())
-                {
+                } else if(databaseMetaData.storesUpperCaseIdentifiers()) {
                     resultTableName = databaseIdentifier.toUpperCase(Locale.ENGLISH);
-                }
-                else
-                {
+                } else {
                     logger.debug("Database does not store upperCase or lowerCase identifiers. " +
                             "Will not correct case of the table names.");
                 }
-            }
-            else
-            {
+            } else {
                 if(logger.isDebugEnabled())
                     logger.debug("The tableName '{}' is escaped. Will not correct case.", databaseIdentifier);
                 }
             return resultTableName;
         }
-        catch (SQLException e)
-        {
+        catch (SQLException e) {
             throw new DatabaseUnitRuntimeException("Exception while trying to access database metadata", e);
         }
     }
@@ -615,14 +536,13 @@ public class SQLHelper {
      * @param source The class which invokes this method - used for enriching the log message
      * @since 2.4.4
      */
-    public static final void logInfoIfValueChanged(String oldValue, String newValue, String message, Class source)
-    {
-        if(logger.isInfoEnabled())
-        {
-            if(oldValue != null && !oldValue.equals(newValue))
-                logger.debug("{}. {} oldValue={} newValue={}", new Object[] {source, message, oldValue, newValue});
+    public static final void logInfoIfValueChanged(String oldValue, String newValue, String message, Class source) {
+        if (logger.isInfoEnabled()) {
+            if (oldValue != null && !oldValue.equals(newValue)) {
+                logger.debug("{}. {} oldValue={} newValue={}", new Object[]{source, message, oldValue, newValue});
             }
         }
+    }
 
     /**
      * Checks whether two given values are unequal and if so print a log message (level DEBUG)
@@ -632,14 +552,13 @@ public class SQLHelper {
      * @param source The class which invokes this method - used for enriching the log message
      * @since 2.4.8
      */
-    public static final void logDebugIfValueChanged(String oldValue, String newValue, String message, Class source)
-    {
-        if (logger.isDebugEnabled())
-        {
-            if (oldValue != null && !oldValue.equals(newValue))
-                logger.debug("{}. {} oldValue={} newValue={}", new Object[] {source, message, oldValue, newValue});
+    public static final void logDebugIfValueChanged(String oldValue, String newValue, String message, Class source) {
+        if (logger.isDebugEnabled()) {
+            if (oldValue != null && !oldValue.equals(newValue)) {
+                logger.debug("{}. {} oldValue={} newValue={}", new Object[]{source, message, oldValue, newValue});
             }
         }
+    }
 
     /**
      * @param tableName
@@ -647,18 +566,15 @@ public class SQLHelper {
      * @return
      * @since 2.4.4
      */
-    private static final boolean isEscaped(String tableName, String dbIdentifierQuoteString)
-    {
+    private static final boolean isEscaped(String tableName, String dbIdentifierQuoteString) {
         logger.trace("isEscaped(tableName={}, dbIdentifierQuoteString={}) - start", tableName, dbIdentifierQuoteString);
-
         if (dbIdentifierQuoteString == null) {
-            throw new NullPointerException(
-                    "The parameter 'dbIdentifierQuoteString' must not be null");
+            throw new NullPointerException("The parameter 'dbIdentifierQuoteString' must not be null");
         }
-        boolean isEscaped = tableName!=null && (tableName.startsWith(dbIdentifierQuoteString));
-        if(logger.isDebugEnabled())
-            logger.debug("isEscaped returns '{}' for tableName={} (dbIdentifierQuoteString={})",
-                    new Object[]{Boolean.valueOf(isEscaped), tableName, dbIdentifierQuoteString} );
+        boolean isEscaped = tableName != null && (tableName.startsWith(dbIdentifierQuoteString));
+        if (logger.isDebugEnabled()) {
+            logger.debug("isEscaped returns '{}' for tableName={} (dbIdentifierQuoteString={})", new Object[]{Boolean.valueOf(isEscaped), tableName, dbIdentifierQuoteString} );
+        }
         return isEscaped;
     }
 
@@ -678,9 +594,7 @@ public class SQLHelper {
         /**
          * Default constructor
          */
-        public ExceptionWrapper()
-        {
-        }
+        public ExceptionWrapper() {}
 
         /**
          * Executes the call and catches all exception that might occur.
@@ -688,15 +602,15 @@ public class SQLHelper {
          * @return The result of the call
          */
         public final String executeWrappedCall(DatabaseMetaData metaData) {
-            try{
+            try {
                 String result = wrappedCall(metaData);
                 return result;
-            }
-            catch(Exception e){
+            } catch(Exception e) {
                 logger.trace("Problem retrieving DB information via DatabaseMetaData", e);
                 return NOT_AVAILABLE_TEXT;
             }
         }
+
         /**
          * Calls the method that might throw an exception to be handled
          * @param metaData
@@ -705,5 +619,4 @@ public class SQLHelper {
          */
         public abstract String wrappedCall(DatabaseMetaData metaData) throws Exception;
     }
-
 }

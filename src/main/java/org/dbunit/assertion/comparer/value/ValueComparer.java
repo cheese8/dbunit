@@ -11,8 +11,7 @@ import org.dbunit.dataset.datatype.DataType;
  * @since 2.6.0
  */
 @FunctionalInterface
-public interface ValueComparer
-{
+public interface ValueComparer {
     /**
      * Compare expected and actual values.
      *
@@ -35,7 +34,6 @@ public interface ValueComparer
      * @return compare failure message or null if successful compare.
      * @throws DatabaseUnitException
      */
-    String compare(ITable expectedTable, ITable actualTable, int rowNum,
-            String columnName, DataType dataType, Object expectedValue,
-            Object actualValue) throws DatabaseUnitException;
+    String compare(ITable expectedTable, ITable actualTable, int rowNum, String columnName, DataType dataType,
+                   Object expectedValue, Object actualValue) throws DatabaseUnitException;
 }

@@ -30,8 +30,7 @@ import org.dbunit.dataset.IDataSet;
  * @version $Revision$ $Date$
  * @since 2.4.8
  */
-public interface PrepAndExpectedTestCase
-{
+public interface PrepAndExpectedTestCase {
     /**
      * Configure the test. Call this method before performing the test steps.
      *
@@ -45,9 +44,7 @@ public interface PrepAndExpectedTestCase
      *            expected data and verify actual data matches at test end.
      * @throws Exception
      */
-    void configureTest(VerifyTableDefinition[] verifyTableDefinitions,
-            String[] prepDataFiles, String[] expectedDataFiles)
-            throws Exception;
+    void configureTest(VerifyTableDefinition[] verifyTableDefinitions, String[] prepDataFiles, String[] expectedDataFiles) throws Exception;
 
     /**
      * Execute pre-test steps. Call this method before performing the test
@@ -70,8 +67,7 @@ public interface PrepAndExpectedTestCase
      *            expected data and verify actual data matches at test end.
      * @throws Exception
      */
-    void preTest(VerifyTableDefinition[] verifyTables, String[] prepDataFiles,
-            String[] expectedDataFiles) throws Exception;
+    void preTest(VerifyTableDefinition[] verifyTables, String[] prepDataFiles, String[] expectedDataFiles) throws Exception;
 
     /**
      * Run the DbUnit test.
@@ -90,9 +86,8 @@ public interface PrepAndExpectedTestCase
      * @throws Exception
      * @since 2.5.2
      */
-    Object runTest(VerifyTableDefinition[] verifyTables, String[] prepDataFiles,
-            String[] expectedDataFiles, PrepAndExpectedTestCaseSteps testSteps)
-            throws Exception;
+    Object runTest(VerifyTableDefinition[] verifyTables, String[] prepDataFiles, String[] expectedDataFiles,
+                   PrepAndExpectedTestCaseSteps testSteps) throws Exception;
 
     /**
      * Execute all post-test steps. Call this method after performing the test

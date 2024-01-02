@@ -27,8 +27,7 @@ package org.dbunit;
  * @version $Revision$ $Date$
  * @since 1.0
  */
-public class DatabaseUnitRuntimeException extends RuntimeException
-{
+public class DatabaseUnitRuntimeException extends RuntimeException {
 
     /**
 	 * 
@@ -86,7 +85,3 @@ public class DatabaseUnitRuntimeException extends RuntimeException
     }
 
 }
-
-
-
-

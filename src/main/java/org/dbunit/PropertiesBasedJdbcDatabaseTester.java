@@ -44,8 +44,7 @@ package org.dbunit;
  * @version $Revision$ $Date$
  * @since 2.2.0
  */
-public class PropertiesBasedJdbcDatabaseTester extends JdbcDatabaseTester
-{
+public class PropertiesBasedJdbcDatabaseTester extends JdbcDatabaseTester {
 
     /** A key for property that defines the connection url */
     public static final String DBUNIT_CONNECTION_URL = "dbunit.connectionUrl";
@@ -63,14 +62,8 @@ public class PropertiesBasedJdbcDatabaseTester extends JdbcDatabaseTester
      * values as initialization parameters
      * @throws Exception
      */
-    public PropertiesBasedJdbcDatabaseTester() throws Exception 
-    {
-        super(  System.getProperty(DBUNIT_DRIVER_CLASS), 
-                System.getProperty(DBUNIT_CONNECTION_URL), 
-                System.getProperty(DBUNIT_USERNAME), 
-                System.getProperty(DBUNIT_PASSWORD), 
-                System.getProperty(DBUNIT_SCHEMA)
-            );
+    public PropertiesBasedJdbcDatabaseTester() throws Exception {
+        super(System.getProperty(DBUNIT_DRIVER_CLASS), System.getProperty(DBUNIT_CONNECTION_URL),
+                System.getProperty(DBUNIT_USERNAME), System.getProperty(DBUNIT_PASSWORD), System.getProperty(DBUNIT_SCHEMA));
     }
-
 }

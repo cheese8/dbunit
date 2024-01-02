@@ -14,8 +14,7 @@ import org.dbunit.dataset.ITable;
  * @since 2.6.0
  */
 @FunctionalInterface
-public interface ValueFactory<T>
-{
+public interface ValueFactory<T> {
     /**
      * Make the instance from the row in the table.
      *

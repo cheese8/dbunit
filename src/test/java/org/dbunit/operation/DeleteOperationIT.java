@@ -39,7 +39,6 @@ import org.dbunit.dataset.datatype.DataType;
 import org.dbunit.dataset.xml.XmlDataSet;
 import org.dbunit.testutil.TestUtils;
 
-import java.io.File;
 import java.io.FileReader;
 import java.io.Reader;
 
@@ -182,12 +181,12 @@ public class DeleteOperationIT extends AbstractDatabaseIT
 
     public void testExecuteAndNoPrimaryKey() throws Exception
     {
-        IDataSet dataSet = _connection.createDataSet();
+        IDataSet dataSet = connection.createDataSet();
         ITableMetaData metaData = dataSet.getTableMetaData("TEST_TABLE");
         try
         {
             new DeleteOperation().getOperationData(
-                    metaData, null, _connection);
+                    metaData, null, connection);
             fail("Should throw a NoPrimaryKeyException");
         }
         catch (NoPrimaryKeyException e)
@@ -226,7 +225,7 @@ public class DeleteOperationIT extends AbstractDatabaseIT
         assertEquals("before", "1", tableBefore.getValue(1, columnName).toString());
         assertEquals("before", "2", tableBefore.getValue(2, columnName).toString());
 
-        DatabaseOperation.DELETE.execute(_connection, dataSet);
+        DatabaseOperation.DELETE.execute(connection, dataSet);
 
         ITable tableAfter = createOrderedTable(tableName, columnName);
         assertEquals("row count after", 2, tableAfter.getRowCount());

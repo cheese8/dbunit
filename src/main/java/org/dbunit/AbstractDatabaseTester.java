@@ -38,8 +38,7 @@ import org.slf4j.LoggerFactory;
  * @version $Revision$ $Date$
  * @since 2.2.0
  */
-public abstract class AbstractDatabaseTester extends SimpleAssert implements IDatabaseTester
-{
+public abstract class AbstractDatabaseTester extends SimpleAssert implements IDatabaseTester {
     /**
      * Logger for this class
      */
@@ -48,8 +47,7 @@ public abstract class AbstractDatabaseTester extends SimpleAssert implements IDa
     /**
      * Enumeration of the valid {@link OperationType}s
      */
-    private static final class OperationType
-    {
+    private static final class OperationType {
         public static final OperationType SET_UP = new OperationType("setUp");
         public static final OperationType TEAR_DOWN = new OperationType("tearDown");
 
@@ -83,94 +81,73 @@ public abstract class AbstractDatabaseTester extends SimpleAssert implements IDa
      *            The schema to be tested. Can be <code>null</code>
      * @since 2.4.3
      */
-    public AbstractDatabaseTester(String schema)
-    {
+    public AbstractDatabaseTester(String schema) {
         super(new DefaultFailureHandler());
         this.schema = schema;
     }
 
-    public void closeConnection(IDatabaseConnection connection) throws Exception
-    {
+    public void closeConnection(IDatabaseConnection connection) throws Exception {
         logger.debug("closeConnection(connection={}) - start", connection);
-
         connection.close();
     }
 
-    public IDataSet getDataSet()
-    {
+    public IDataSet getDataSet() {
         logger.debug("getDataSet() - start");
-
         return dataSet;
     }
 
-    public void onSetup() throws Exception
-    {
+    public void onSetup() throws Exception {
         logger.debug("onSetup() - start");
         executeOperation(getSetUpOperation(), OperationType.SET_UP);
     }
 
-    public void onTearDown() throws Exception
-    {
+    public void onTearDown() throws Exception {
         logger.debug("onTearDown() - start");
         executeOperation(getTearDownOperation(), OperationType.TEAR_DOWN);
     }
 
-    public void setDataSet(IDataSet dataSet)
-    {
+    public void setDataSet(IDataSet dataSet) {
         logger.debug("setDataSet(dataSet={}) - start", dataSet);
-
         this.dataSet = dataSet;
     }
 
-    public void setSchema(String schema)
-    {
+    public void setSchema(String schema) {
         logger.debug("setSchema(schema={}) - start", schema);
-
         logger.warn("setSchema() should not be used anymore");
         this.schema = schema;
     }
 
-    public void setSetUpOperation(DatabaseOperation setUpOperation)
-    {
+    public void setSetUpOperation(DatabaseOperation setUpOperation) {
         logger.debug("setSetUpOperation(setUpOperation={}) - start", setUpOperation);
-
         this.setUpOperation = setUpOperation;
     }
 
-    public void setTearDownOperation(DatabaseOperation tearDownOperation)
-    {
+    public void setTearDownOperation(DatabaseOperation tearDownOperation) {
         logger.debug("setTearDownOperation(tearDownOperation={}) - start", tearDownOperation);
-
         this.tearDownOperation = tearDownOperation;
     }
 
     /**
      * Returns the schema value.
      */
-    protected String getSchema()
-    {
+    protected String getSchema() {
         logger.trace("getSchema() - start");
-
         return schema;
     }
 
     /**
      * Returns the DatabaseOperation to call when starting the test.
      */
-    public DatabaseOperation getSetUpOperation()
-    {
+    public DatabaseOperation getSetUpOperation() {
         logger.trace("getSetUpOperation() - start");
-
         return setUpOperation;
     }
 
     /**
      * Returns the DatabaseOperation to call when ending the test.
      */
-    public DatabaseOperation getTearDownOperation()
-    {
+    public DatabaseOperation getTearDownOperation() {
         logger.trace("getTearDownOperation() - start");
-
         return tearDownOperation;
     }
 
@@ -178,15 +155,11 @@ public abstract class AbstractDatabaseTester extends SimpleAssert implements IDa
      * Executes a DatabaseOperation with a IDatabaseConnection supplied by
      * {@link #getConnection()} and the test dataset.
      */
-    private void executeOperation(DatabaseOperation operation, OperationType type) throws Exception
-    {
+    private void executeOperation(DatabaseOperation operation, OperationType type) throws Exception {
         logger.debug("executeOperation(operation={}) - start", operation);
-
-        if (operation != DatabaseOperation.NONE)
-        {
+        if (operation != DatabaseOperation.NONE) {
             // Ensure that the operationListener is set
-            if (operationListener == null)
-            {
+            if (operationListener == null) {
                 logger.debug("OperationListener is null and will be defaulted.");
                 operationListener = new DefaultOperationListener();
             }
@@ -194,36 +167,29 @@ public abstract class AbstractDatabaseTester extends SimpleAssert implements IDa
             IDatabaseConnection connection = getConnection();
             operationListener.connectionRetrieved(connection);
 
-            try
-            {
+            try {
                 operation.execute(connection, getDataSet());
-            } finally
-            {
+            } finally {
                 // Since 2.4.4 the OperationListener is responsible for closing
                 // the connection at the right time
-                if (type == OperationType.SET_UP)
-                {
+                if (type == OperationType.SET_UP) {
                     operationListener.operationSetUpFinished(connection);
-                } else if (type == OperationType.TEAR_DOWN)
-                {
+                } else if (type == OperationType.TEAR_DOWN) {
                     operationListener.operationTearDownFinished(connection);
-                } else
-                {
+                } else {
                     throw new DatabaseUnitRuntimeException("Cannot happen - unknown OperationType specified: " + type);
                 }
             }
         }
     }
 
-    public void setOperationListener(IOperationListener operationListener)
-    {
+    public void setOperationListener(IOperationListener operationListener) {
         logger.debug("setOperationListener(operationListener={}) - start", operationListener);
         this.operationListener = operationListener;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         StringBuffer sb = new StringBuffer();
         sb.append(getClass().getName()).append("[");
         sb.append("schema=").append(schema);

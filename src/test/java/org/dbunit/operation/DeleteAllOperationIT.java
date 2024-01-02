@@ -53,7 +53,7 @@ public class DeleteAllOperationIT extends AbstractDatabaseIT
     {
         super.setUp();
 
-        DatabaseOperation.CLEAN_INSERT.execute(_connection,
+        DatabaseOperation.CLEAN_INSERT.execute(connection,
                 getEnvironment().getInitDataSet());
     }
 
@@ -137,7 +137,7 @@ public class DeleteAllOperationIT extends AbstractDatabaseIT
 
     public void testExecute() throws Exception
     {
-        IDataSet databaseDataSet = _connection.createDataSet();
+        IDataSet databaseDataSet = connection.createDataSet();
         IDataSet dataSet = AbstractDataSetTest.removeExtraTestTables(
                 databaseDataSet);
 
@@ -146,7 +146,7 @@ public class DeleteAllOperationIT extends AbstractDatabaseIT
 
     public void testExecuteEmpty() throws Exception
     {
-        IDataSet databaseDataSet = _connection.createDataSet();
+        IDataSet databaseDataSet = connection.createDataSet();
         IDataSet dataSet = AbstractDataSetTest.removeExtraTestTables(
                 databaseDataSet);
 
@@ -156,7 +156,7 @@ public class DeleteAllOperationIT extends AbstractDatabaseIT
     public void testExecuteCaseInsentive() throws Exception
     {
         IDataSet dataSet = AbstractDataSetTest.removeExtraTestTables(
-                _connection.createDataSet());
+                connection.createDataSet());
 
         testExecute(new LowerCaseDataSet(dataSet));
     }
@@ -170,9 +170,9 @@ public class DeleteAllOperationIT extends AbstractDatabaseIT
     private void testExecute(IDataSet dataSet) throws Exception
     {
         //dataSet = dataSet);
-        ITable[] tablesBefore = DataSetUtils.getTables(AbstractDataSetTest.removeExtraTestTables(_connection.createDataSet()));
-        getDeleteAllOperation().execute(_connection, dataSet);
-        ITable[] tablesAfter = DataSetUtils.getTables(AbstractDataSetTest.removeExtraTestTables(_connection.createDataSet()));
+        ITable[] tablesBefore = DataSetUtils.getTables(AbstractDataSetTest.removeExtraTestTables(connection.createDataSet()));
+        getDeleteAllOperation().execute(connection, dataSet);
+        ITable[] tablesAfter = DataSetUtils.getTables(AbstractDataSetTest.removeExtraTestTables(connection.createDataSet()));
 
         assertTrue("table count > 0", tablesBefore.length > 0);
         assertEquals("table count", tablesBefore.length, tablesAfter.length);
@@ -198,7 +198,7 @@ public class DeleteAllOperationIT extends AbstractDatabaseIT
     public void testExecuteWithEmptyDataset() throws Exception
     {
         getDeleteAllOperation().execute(
-                _connection, new DefaultDataSet(new ITable[0]));
+                connection, new DefaultDataSet(new ITable[0]));
     }
 }
 

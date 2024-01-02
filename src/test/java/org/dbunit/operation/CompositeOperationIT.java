@@ -27,7 +27,6 @@ import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.xml.XmlDataSet;
 import org.dbunit.testutil.TestUtils;
 
-import java.io.File;
 import java.io.FileReader;
 import java.io.Reader;
 
@@ -60,7 +59,7 @@ public class CompositeOperationIT extends AbstractDatabaseIT
 
         DatabaseOperation operation = new CompositeOperation(
                 DatabaseOperation.DELETE_ALL, DatabaseOperation.INSERT);
-        operation.execute(_connection, xmlDataSet);
+        operation.execute(connection, xmlDataSet);
 
         ITable tableAfter = createOrderedTable(tableName, columnName);
         assertEquals("row count after", 2, tableAfter.getRowCount());

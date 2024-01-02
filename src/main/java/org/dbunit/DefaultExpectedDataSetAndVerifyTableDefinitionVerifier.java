@@ -26,15 +26,10 @@ import org.slf4j.LoggerFactory;
  *
  * @author Jeff Jensen
  */
-public class DefaultExpectedDataSetAndVerifyTableDefinitionVerifier
-        implements ExpectedDataSetAndVerifyTableDefinitionVerifier
-{
+public class DefaultExpectedDataSetAndVerifyTableDefinitionVerifier implements ExpectedDataSetAndVerifyTableDefinitionVerifier {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
-    public void verify(final VerifyTableDefinition[] verifyTableDefinitions,
-            final IDataSet expectedDataSet, final DatabaseConfig config)
-            throws DataSetException
-    {
+    public void verify(final VerifyTableDefinition[] verifyTableDefinitions, final IDataSet expectedDataSet, final DatabaseConfig config) throws DataSetException {
         final String methodName = "verify";
 
         final int verifyTableDefsCount = verifyTableDefinitions.length;
@@ -42,22 +37,15 @@ public class DefaultExpectedDataSetAndVerifyTableDefinitionVerifier
         final String[] expectedTableNames = expectedDataSet.getTableNames();
         final int expectedTablesCount = expectedTableNames.length;
 
-        log.debug(
-                "{}: expectedTables count={}, verifyTableDefinitions count={}",
-                methodName, expectedTablesCount, verifyTableDefsCount);
+        log.debug("{}: expectedTables count={}, verifyTableDefinitions count={}", methodName, expectedTablesCount, verifyTableDefsCount);
 
-        if (expectedTablesCount > verifyTableDefsCount)
-        {
-            handleCountMismatch(verifyTableDefinitions, expectedTableNames,
-                    config);
+        if (expectedTablesCount > verifyTableDefsCount) {
+            handleCountMismatch(verifyTableDefinitions, expectedTableNames, config);
         }
     }
 
-    protected void handleCountMismatch(
-            final VerifyTableDefinition[] verifyTableDefinitions,
-            final String[] expectedTableNames, final DatabaseConfig config)
-            throws DataSetException
-    {
+    protected void handleCountMismatch(final VerifyTableDefinition[] verifyTableDefinitions,
+                                       final String[] expectedTableNames, final DatabaseConfig config) throws DataSetException {
         final String methodName = "handleCountMismatch";
 
         final int verifyTableDefsCount = verifyTableDefinitions.length;
@@ -69,8 +57,7 @@ public class DefaultExpectedDataSetAndVerifyTableDefinitionVerifier
                 + " is not verified without a VerifyTableDefinition";
         log.warn(msg, methodName, expectedTablesCount, verifyTableDefsCount);
 
-        final Set<String> mismatchedTableNames = makeMismatchedTableNamesList(
-                verifyTableDefinitions, expectedTableNames);
+        final Set<String> mismatchedTableNames = makeMismatchedTableNamesList(verifyTableDefinitions, expectedTableNames);
         failOnMismatch(config, mismatchedTableNames);
     }
 

@@ -21,43 +21,36 @@
 
 package org.dbunit;
 
+import lombok.extern.slf4j.Slf4j;
 import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.SortedTable;
 import org.dbunit.operation.DatabaseOperation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author Manuel Laflamme
  * @version $Revision$
  * @since Feb 18, 2002
  */
-public abstract class AbstractDatabaseIT extends DatabaseTestCase
-{
-    protected IDatabaseConnection _connection;
+@Slf4j
+public abstract class AbstractDatabaseIT extends DatabaseTestCase {
+    protected IDatabaseConnection connection;
     
-    protected final Logger logger = LoggerFactory.getLogger(getClass());
-
     public AbstractDatabaseIT(String s)
     {
         super(s);
     }
 
-    protected DatabaseEnvironment getEnvironment() throws Exception
-    {
+    protected DatabaseEnvironment getEnvironment() throws Exception {
         return DatabaseEnvironment.getInstance();
     }
 
-    protected ITable createOrderedTable(String tableName, String orderByColumn)
-            throws Exception
-    {
-        return new SortedTable(_connection.createDataSet().getTable(tableName),
-                new String[]{orderByColumn});
-//        String sql = "select * from " + tableName + " order by " + orderByColumn;
-//        return _connection.createQueryTable(tableName, sql);
+    protected ITable createOrderedTable(String tableName, String orderByColumn) throws Exception {
+        return new SortedTable(connection.createDataSet().getTable(tableName), new String[]{orderByColumn});
+//      String sql = "select * from " + tableName + " order by " + orderByColumn;
+//      return _connection.createQueryTable(tableName, sql);
     }
 
     /**
@@ -68,84 +61,66 @@ public abstract class AbstractDatabaseIT extends DatabaseTestCase
      * @param str The identifier.
      * @return The identifier converted according to database rules.
      */
-    protected String convertString(String str) throws Exception
-    {
+    protected String convertString(String str) throws Exception {
         return getEnvironment().convertString(str);
     }
 
     ////////////////////////////////////////////////////////////////////////////
     // TestCase class
 
-    protected void setUp() throws Exception
-    {
+    protected void setUp() throws Exception {
         super.setUp();
-
-        _connection = getDatabaseTester().getConnection();
-        setUpDatabaseConfig(_connection.getConfig());
+        connection = getDatabaseTester().getConnection();
+        setUpDatabaseConfig(connection.getConfig());
     }
 
-    protected IDatabaseTester getDatabaseTester() throws Exception
-    {
-       try{
+    protected IDatabaseTester getDatabaseTester() throws Exception {
+       try {
           return getEnvironment().getDatabaseTester();
-       }
-       catch( Exception e ){
+       } catch(Exception e) {
            //TODO matthias: this here hides original exceptions from being shown in the JUnit results 
            //(logger is not configured for unit tests). Think about how exceptions can be passed through
            // So I temporarily added the "e.printStackTrace()"...
-          logger.error("getDatabaseTester()", e );
+          log.error("getDatabaseTester()", e);
           e.printStackTrace();
        }
        return super.getDatabaseTester();
     }
 
-    protected void setUpDatabaseConfig(DatabaseConfig config)
-    {
-        try
-        {
+    protected void setUpDatabaseConfig(DatabaseConfig config) {
+        try {
             getEnvironment().setupDatabaseConfig(config);
-        }
-        catch (Exception ex)
-        {
+        } catch(Exception ex) {
             throw new RuntimeException(ex); // JH_TODO: is this the "DbUnit way" to handle exceptions?
         }
     }
 
-    protected void tearDown() throws Exception
-    {
+    protected void tearDown() throws Exception {
         super.tearDown();
-
-        DatabaseOperation.DELETE_ALL.execute(_connection, _connection.createDataSet());
-
-        _connection.close();
-
-        _connection = null;
+        DatabaseOperation.DELETE_ALL.execute(connection, connection.createDataSet());
+        connection.close();
+        connection = null;
     }
 
     ////////////////////////////////////////////////////////////////////////////
     // DatabaseTestCase class
 
-    protected IDatabaseConnection getConnection() throws Exception
-    {
+    protected IDatabaseConnection getConnection() throws Exception {
         IDatabaseConnection connection = getEnvironment().getConnection();
         return connection;
-
-//        return new DatabaseEnvironment(getEnvironment().getProfile()).getConnection();
-//        return new DatabaseConnection(connection.getConnection(), connection.getSchema());
+//      return new DatabaseEnvironment(getEnvironment().getProfile()).getConnection();
+//      return new DatabaseConnection(connection.getConnection(), connection.getSchema());
     }
 
-    protected IDataSet getDataSet() throws Exception
-    {
+    protected IDataSet getDataSet() throws Exception {
         return getEnvironment().getInitDataSet();
     }
 
-    protected void closeConnection(IDatabaseConnection connection) throws Exception
-    {
+    protected void closeConnection(IDatabaseConnection connection) throws Exception {
 //        getEnvironment().closeConnection();
     }
-//
-//    protected DatabaseOperation getTearDownOperation() throws Exception
-//    {
+
+//    protected DatabaseOperation getTearDownOperation() throws Exception {
 //        return DatabaseOperation.DELETE_ALL;
 //    }
 
@@ -156,15 +131,15 @@ public abstract class AbstractDatabaseIT extends DatabaseTestCase
      * @return flag indicating if the test should be executed or not
      */
     protected boolean runTest(String testName) {
-      return true;
+        return true;
     }
 
     protected void runTest() throws Throwable {
-      if ( runTest(getName()) ) {
+      if (runTest(getName())) {
         super.runTest();
       } else { 
-        if ( logger.isDebugEnabled() ) {
-          logger.debug( "Skipping test " + getClass().getName() + "." + getName() );
+        if (log.isDebugEnabled()) {
+            log.debug( "Skipping test " + getClass().getName() + "." + getName() );
         }
       }
     }
@@ -174,15 +149,8 @@ public abstract class AbstractDatabaseIT extends DatabaseTestCase
         final DatabaseEnvironment environment = DatabaseEnvironment.getInstance();
         final boolean runIt = environment.support(feature);
         return runIt;
-      } catch ( Exception e ) {
+      } catch (Exception e) {
         throw new DatabaseUnitRuntimeException(e);
       }
     }
-    
 }
-
-
-
-
-
-

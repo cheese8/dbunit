@@ -53,8 +53,7 @@ import java.util.BitSet;
  * @version $Revision$
  * @since Feb 19, 2002
  */
-public class RefreshOperation extends AbstractOperation
-{
+public class RefreshOperation extends AbstractOperation {
 
     /**
      * Logger for this class
@@ -64,14 +63,12 @@ public class RefreshOperation extends AbstractOperation
     private final InsertOperation _insertOperation;
     private final UpdateOperation _updateOperation;
 
-    RefreshOperation()
-    {
+    RefreshOperation() {
         _insertOperation = (InsertOperation)DatabaseOperation.INSERT;
         _updateOperation = (UpdateOperation)DatabaseOperation.UPDATE;
     }
 
-    private boolean isEmpty(ITable table) throws DataSetException
-    {
+    private boolean isEmpty(ITable table) throws DataSetException {
         return AbstractBatchOperation.isEmpty(table);
     }
 
@@ -79,58 +76,42 @@ public class RefreshOperation extends AbstractOperation
     // DatabaseOperation class
 
     public void execute(IDatabaseConnection connection, IDataSet dataSet)
-            throws DatabaseUnitException, SQLException
-    {
+            throws DatabaseUnitException, SQLException {
         logger.debug("execute(connection={}, dataSet) - start", connection);
         
         // for each table
         ITableIterator iterator = dataSet.iterator();
-        while (iterator.next())
-        {
+        while (iterator.next()) {
             ITable table = iterator.getTable();
             
             String tableName=table.getTableMetaData().getTableName();
             logger.trace("execute: processing table='{}'", tableName);
 
             // Do not process empty table
-            if (isEmpty(table))
-            {
+            if (isEmpty(table)) {
                 continue;
             }
 
-            ITableMetaData metaData = getOperationMetaData(connection,
-                    table.getTableMetaData());
-            RowOperation updateRowOperation = createUpdateOperation(connection,
-                    metaData);
-            RowOperation insertRowOperation = new InsertRowOperation(connection,
-                    metaData);
+            ITableMetaData metaData = getOperationMetaData(connection, table.getTableMetaData());
+            RowOperation updateRowOperation = createUpdateOperation(connection, metaData);
+            RowOperation insertRowOperation = new InsertRowOperation(connection, metaData);
 
-            try
-            {
+            try {
                 // refresh all rows
-                for (int i = 0; ; i++)
-                {
-                    if (!updateRowOperation.execute(table, i))
-                    {
+                for (int i = 0; ; i++) {
+                    if (!updateRowOperation.execute(table, i)) {
                         insertRowOperation.execute(table, i);
                     }
                 }
-            }
-            catch (RowOutOfBoundsException e)
-            {
+            } catch (RowOutOfBoundsException e) {
             	// This exception occurs when records are exhausted
             	// and we reach the end of the table.  Ignore this error.
 
                 // end of table
-            }
-            catch (SQLException e)
-            {
-                final String msg =
-                    "Exception processing table name='" + tableName + "'";
+            } catch (SQLException e) {
+                final String msg = "Exception processing table name='" + tableName + "'";
                 throw new DatabaseUnitException(msg, e);
-            }
-            finally
-            {
+            } finally {
                 // cleanup
                 updateRowOperation.close();
                 insertRowOperation.close();
@@ -140,14 +121,11 @@ public class RefreshOperation extends AbstractOperation
     }
 
     private RowOperation createUpdateOperation(IDatabaseConnection connection,
-            ITableMetaData metaData)
-            throws DataSetException, SQLException
-    {
+            ITableMetaData metaData) throws DataSetException, SQLException {
         logger.debug("createUpdateOperation(connection={}, metaData={}) - start", connection, metaData);
 
         // update only if columns are not all primary keys
-        if (metaData.getColumns().length > metaData.getPrimaryKeys().length)
-        {
+        if (metaData.getColumns().length > metaData.getPrimaryKeys().length) {
             return new UpdateRowOperation(connection, metaData);
         }
 
@@ -158,8 +136,7 @@ public class RefreshOperation extends AbstractOperation
     /**
      * This class represents a operation executed on a single table row.
      */
-    class RowOperation
-    {
+    class RowOperation {
 
         /**
          * Logger for this class
@@ -175,16 +152,13 @@ public class RefreshOperation extends AbstractOperation
          * @return <code>true</code> if operation have been executed on the row.
          */
         public boolean execute(ITable table, int row)
-                throws DataSetException, SQLException
-        {
+                throws DataSetException, SQLException {
             logger.debug("execute(table={}, row={}) - start", table, String.valueOf(row));
 
             Column[] columns = _operationData.getColumns();
-            for (int i = 0; i < columns.length; i++)
-            {
+            for (int i = 0; i < columns.length; i++) {
                 // Bind value only if not in ignore mapping
-                if (_ignoreMapping == null || !_ignoreMapping.get(i))
-                {
+                if (_ignoreMapping == null || !_ignoreMapping.get(i)) {
                     Object value = table.getValue(row, columns[i].getColumnName());
                     _statement.addValue(value, columns[i].getDataType());
                 }
@@ -199,12 +173,10 @@ public class RefreshOperation extends AbstractOperation
         /**
          * Cleanup this operation state.
          */
-        public void close() throws SQLException
-        {
+        public void close() throws SQLException {
             logger.debug("close() - start");
 
-            if (_statement != null)
-            {
+            if (_statement != null) {
                 _statement.close();
             }
         }
@@ -213,8 +185,7 @@ public class RefreshOperation extends AbstractOperation
     /**
      * Insert row operation.
      */
-    private class InsertRowOperation extends RowOperation
-    {
+    private class InsertRowOperation extends RowOperation {
 
         /**
          * Logger for this class
@@ -226,25 +197,21 @@ public class RefreshOperation extends AbstractOperation
 
         public InsertRowOperation(IDatabaseConnection connection,
                 ITableMetaData metaData)
-                throws DataSetException, SQLException
-        {
+                throws DataSetException, SQLException {
             _connection = connection;
             _metaData = metaData;
         }
 
         public boolean execute(ITable table, int row)
-                throws DataSetException, SQLException
-        {
+                throws DataSetException, SQLException {
             logger.debug("execute(table={}, row={}) - start", table, String.valueOf(row));
 
             // If current row has a different ignore value mapping than
             // previous one, we generate a new statement
             if (_ignoreMapping == null ||
-                    !_insertOperation.equalsIgnoreMapping(_ignoreMapping, table, row))
-            {
+                    !_insertOperation.equalsIgnoreMapping(_ignoreMapping, table, row)) {
                 // Execute and close previous statement
-                if (_statement != null)
-                {
+                if (_statement != null) {
                     _statement.close();
                 }
 
@@ -263,14 +230,12 @@ public class RefreshOperation extends AbstractOperation
     /**
      * Update row operation.
      */
-    private class UpdateRowOperation extends RowOperation
-    {
+    private class UpdateRowOperation extends RowOperation {
         PreparedStatement _countStatement;
 
         public UpdateRowOperation(IDatabaseConnection connection,
                 ITableMetaData metaData)
-                throws DataSetException, SQLException
-        {
+                throws DataSetException, SQLException {
             // setup update statement
             _operationData = _updateOperation.getOperationData(
                     metaData, null, connection);
@@ -358,23 +323,17 @@ public class RefreshOperation extends AbstractOperation
             }
 
             ResultSet resultSet = _countStatement.executeQuery();
-            try
-            {
+            try {
                 resultSet.next();
                 return resultSet.getInt(1) > 0;
-            }
-            finally
-            {
+            } finally {
                 resultSet.close();
             }
         }
 
-        public void close() throws SQLException
-        {
+        public void close() throws SQLException {
             logger.debug("close() - start");
-
             _countStatement.close();
         }
     }
-
 }

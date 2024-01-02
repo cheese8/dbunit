@@ -33,8 +33,7 @@ import org.slf4j.LoggerFactory;
  * @version $Revision$
  * @since Jun 10, 2002
  */
-public class Table
-{
+public class Table {
 
     /**
      * Logger for this class
@@ -43,41 +42,22 @@ public class Table
 
     private String name;
 
-    public Table()
-    {
-    }
+    public Table() {}
 
     public String getName()
     {
         return name;
     }
 
-    public void setName(String name)
-    {
+    public void setName(String name) {
         logger.debug("setName(name={}) - start", name);
         this.name = name;
     }
 
-
-    public String toString()
-    {
+    public String toString() {
         StringBuffer result = new StringBuffer();
         result.append("Table: ");
         result.append(" name=" + name);
-
         return result.toString();
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

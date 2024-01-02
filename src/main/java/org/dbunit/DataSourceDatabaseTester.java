@@ -37,8 +37,7 @@ import org.dbunit.database.IDatabaseConnection;
  * @version $Revision$ $Date$
  * @since 2.2.0
  */
-public class DataSourceDatabaseTester extends AbstractDatabaseTester
-{
+public class DataSourceDatabaseTester extends AbstractDatabaseTester {
 
 	/**
 	 * Logger for this class
@@ -52,13 +51,10 @@ public class DataSourceDatabaseTester extends AbstractDatabaseTester
 	 *
 	 * @param dataSource the DataSource to pull connections from
 	 */
-	public DataSourceDatabaseTester( DataSource dataSource )
-	{
+	public DataSourceDatabaseTester( DataSource dataSource ) {
 		super();
-
         if (dataSource == null) {
-            throw new NullPointerException(
-                    "The parameter 'dataSource' must not be null");
+            throw new NullPointerException("The parameter 'dataSource' must not be null");
         }
 		this.dataSource = dataSource;
 	}
@@ -69,21 +65,16 @@ public class DataSourceDatabaseTester extends AbstractDatabaseTester
 	 * @param schema The schema name to be used for new dbunit connections
 	 * @since 2.4.5
 	 */
-	public DataSourceDatabaseTester(DataSource dataSource, String schema) 
-	{
+	public DataSourceDatabaseTester(DataSource dataSource, String schema) {
         super(schema);
-        
         if (dataSource == null) {
-            throw new NullPointerException(
-                    "The parameter 'dataSource' must not be null");
+            throw new NullPointerException("The parameter 'dataSource' must not be null");
         }
         this.dataSource = dataSource;
     }
 
-    public IDatabaseConnection getConnection() throws Exception
-	{
+    public IDatabaseConnection getConnection() throws Exception {
 		logger.debug("getConnection() - start");
-
 		assertTrue( "DataSource is not set", dataSource!=null );
 		return new DatabaseConnection( dataSource.getConnection(), getSchema() );
 	}

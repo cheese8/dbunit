@@ -33,8 +33,7 @@ import org.slf4j.LoggerFactory;
  * @version $Revision$ $Date$
  * @since 2.2.0
  */
-public abstract class JdbcBasedDBTestCase extends DBTestCase
-{
+public abstract class JdbcBasedDBTestCase extends DBTestCase {
 
     /**
      * Logger for this class
@@ -58,15 +57,9 @@ public abstract class JdbcBasedDBTestCase extends DBTestCase
      * {@link #getConnectionUrl}, {@link #getUsername} and {@link #getPassword()}.
      * @throws ClassNotFoundException when the driverClass was not found
      */
-    protected IDatabaseTester newDatabaseTester() throws ClassNotFoundException
-    {
+    protected IDatabaseTester newDatabaseTester() throws ClassNotFoundException {
         logger.debug("newDatabaseTester() - start");
-
-        JdbcDatabaseTester databaseTester = new JdbcDatabaseTester( 
-                getDriverClass(),
-                getConnectionUrl(),
-                getUsername(),
-                getPassword() );
+        JdbcDatabaseTester databaseTester = new JdbcDatabaseTester(getDriverClass(), getConnectionUrl(), getUsername(), getPassword());
         return databaseTester;
     }
 

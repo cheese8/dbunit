@@ -21,6 +21,7 @@
 
 package org.dbunit.operation;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,17 +48,10 @@ import java.sql.SQLException;
  * @version $Revision$
  * @see DeleteAllOperation
  */
-public class TruncateTableOperation extends DeleteAllOperation
-{
+@Slf4j
+public class TruncateTableOperation extends DeleteAllOperation {
 
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(TruncateTableOperation.class);
-
-    TruncateTableOperation()
-    {
-    }
+    TruncateTableOperation() {}
 
     ////////////////////////////////////////////////////////////////////////////
     // DeleteAllOperation class
@@ -70,21 +64,16 @@ public class TruncateTableOperation extends DeleteAllOperation
     ////////////////////////////////////////////////////////////////////////////
     // DatabaseOperation class
 
-    public void execute(IDatabaseConnection connection, IDataSet dataSet)
-            throws DatabaseUnitException, SQLException
-    {
-        logger.debug("execute(connection={}, dataSet={}) - start", connection, dataSet);
+    public void execute(IDatabaseConnection connection, IDataSet dataSet) throws DatabaseUnitException, SQLException {
+        log.debug("execute(connection={}, dataSet={}) - start", connection, dataSet);
 
         // Patch to make it work with MS SQL Server
         DatabaseConfig config = connection.getConfig();
         boolean oldValue = config.getFeature(DatabaseConfig.FEATURE_BATCHED_STATEMENTS);
-        try
-        {
+        try {
             config.setFeature(DatabaseConfig.FEATURE_BATCHED_STATEMENTS, false);
             super.execute(connection, dataSet);
-        }
-        finally
-        {
+        } finally {
             config.setFeature(DatabaseConfig.FEATURE_BATCHED_STATEMENTS, oldValue);
         }
     }

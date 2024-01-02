@@ -65,8 +65,7 @@ public interface IOperationListener {
      * Can be used via {@link IDatabaseTester#setOperationListener(IOperationListener)} to avoid that connections are closed.
      * @since 2.4.5
      */
-    public static final IOperationListener NO_OP_OPERATION_LISTENER = new IOperationListener() 
-    {
+    public static final IOperationListener NO_OP_OPERATION_LISTENER = new IOperationListener() {
         private final Logger logger = LoggerFactory.getLogger(IDatabaseTester.class);
         
         public void connectionRetrieved(IDatabaseConnection connection) {
@@ -79,5 +78,4 @@ public interface IOperationListener {
             logger.trace("operationTearDownDone(connection={}) - start", connection);
         }
     };
-
 }

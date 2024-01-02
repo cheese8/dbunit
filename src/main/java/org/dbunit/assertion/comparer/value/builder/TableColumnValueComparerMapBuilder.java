@@ -7,26 +7,21 @@ import java.util.Map;
 import org.dbunit.assertion.comparer.value.ValueComparer;
 
 /**
- * Convenience methods to help build the map of table name -> map of column name
- * -> {@link ValueComparer}.
+ * Convenience methods to help build the map of table name -> map of column name -> {@link ValueComparer}.
  *
  * @author Jeff Jensen
  * @since 2.6.0
  */
-public class TableColumnValueComparerMapBuilder
-{
-    private Map<String, Map<String, ValueComparer>> comparers = new HashMap<>();
+public class TableColumnValueComparerMapBuilder {
+    private final Map<String, Map<String, ValueComparer>> comparers = new HashMap<>();
 
     /**
      * Add all mappings from the specified table map to this builder.
      *
      * @return this for fluent syntax.
      */
-    public TableColumnValueComparerMapBuilder add(
-            final Map<String, Map<String, ValueComparer>> tableColumnValueComparers)
-    {
+    public TableColumnValueComparerMapBuilder add(final Map<String, Map<String, ValueComparer>> tableColumnValueComparers) {
         comparers.putAll(tableColumnValueComparers);
-
         return this;
     }
 
@@ -36,13 +31,9 @@ public class TableColumnValueComparerMapBuilder
      *
      * @return this for fluent syntax.
      */
-    public TableColumnValueComparerMapBuilder add(
-            final TableColumnValueComparerMapBuilder tableColumnValueComparerMapBuilder)
-    {
-        final Map<String, Map<String, ValueComparer>> map =
-                tableColumnValueComparerMapBuilder.build();
+    public TableColumnValueComparerMapBuilder add(final TableColumnValueComparerMapBuilder tableColumnValueComparerMapBuilder) {
+        final Map<String, Map<String, ValueComparer>> map = tableColumnValueComparerMapBuilder.build();
         comparers.putAll(map);
-
         return this;
     }
 
@@ -52,13 +43,9 @@ public class TableColumnValueComparerMapBuilder
      *
      * @return this for fluent syntax.
      */
-    public TableColumnValueComparerMapBuilder add(final String tableName,
-            final Map<String, ValueComparer> columnValueComparers)
-    {
+    public TableColumnValueComparerMapBuilder add(final String tableName, final Map<String, ValueComparer> columnValueComparers) {
         final Map<String, ValueComparer> map = findOrMakeColumnMap(tableName);
-
         map.putAll(columnValueComparers);
-
         return this;
     }
 
@@ -68,15 +55,10 @@ public class TableColumnValueComparerMapBuilder
      *
      * @return this for fluent syntax.
      */
-    public TableColumnValueComparerMapBuilder add(final String tableName,
-            final ColumnValueComparerMapBuilder columnValueComparerMapBuilder)
-    {
+    public TableColumnValueComparerMapBuilder add(final String tableName, final ColumnValueComparerMapBuilder columnValueComparerMapBuilder) {
         final Map<String, ValueComparer> map = findOrMakeColumnMap(tableName);
-        final Map<String, ValueComparer> columnMap =
-                columnValueComparerMapBuilder.build();
-
+        final Map<String, ValueComparer> columnMap = columnValueComparerMapBuilder.build();
         map.putAll(columnMap);
-
         return this;
     }
 
@@ -85,36 +67,27 @@ public class TableColumnValueComparerMapBuilder
      *
      * @return this for fluent syntax.
      */
-    public TableColumnValueComparerMapBuilder add(final String tableName,
-            final String columnName, final ValueComparer valueComparer)
-    {
+    public TableColumnValueComparerMapBuilder add(final String tableName, final String columnName, final ValueComparer valueComparer) {
         final Map<String, ValueComparer> map = findOrMakeColumnMap(tableName);
         map.put(columnName, valueComparer);
-
         return this;
     }
 
     /** @return The unmodifiable assembled map. */
-    public Map<String, Map<String, ValueComparer>> build()
-    {
+    public Map<String, Map<String, ValueComparer>> build() {
         return Collections.unmodifiableMap(comparers);
     }
 
-    protected Map<String, ValueComparer> findOrMakeColumnMap(
-            final String tableName)
-    {
+    protected Map<String, ValueComparer> findOrMakeColumnMap(final String tableName) {
         Map<String, ValueComparer> map = comparers.get(tableName);
-        if (map == null)
-        {
+        if (map == null) {
             map = makeColumnToValueComparerMap();
             comparers.put(tableName, map);
         }
-
         return map;
     }
 
-    protected Map<String, ValueComparer> makeColumnToValueComparerMap()
-    {
+    protected Map<String, ValueComparer> makeColumnToValueComparerMap() {
         return new HashMap<>();
     }
 }

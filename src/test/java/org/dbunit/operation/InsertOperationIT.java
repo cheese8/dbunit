@@ -20,7 +20,6 @@
  */
 package org.dbunit.operation;
 
-import java.io.File;
 import java.io.FileReader;
 import java.io.Reader;
 import java.sql.SQLException;
@@ -473,11 +472,11 @@ public class InsertOperationIT extends AbstractDatabaseIT
             Reader in = new FileReader(TestUtils.getFile("xml/clobInsertTest.xml"));
             IDataSet xmlDataSet = new FlatXmlDataSetBuilder().build(in);
 
-            assertEquals("count before", 0, _connection.getRowCount(tableName));
+            assertEquals("count before", 0, connection.getRowCount(tableName));
 
-            DatabaseOperation.INSERT.execute(_connection, xmlDataSet);
+            DatabaseOperation.INSERT.execute(connection, xmlDataSet);
 
-            ITable tableAfter = _connection.createDataSet().getTable(tableName);
+            ITable tableAfter = connection.createDataSet().getTable(tableName);
             assertEquals("count after", 3, tableAfter.getRowCount());
             Assertion.assertEquals(xmlDataSet.getTable(tableName), tableAfter);
         }
@@ -494,11 +493,11 @@ public class InsertOperationIT extends AbstractDatabaseIT
             Reader in = new FileReader(TestUtils.getFile("xml/blobInsertTest.xml"));
             IDataSet xmlDataSet = new FlatXmlDataSetBuilder().build(in);
 
-            assertEquals("count before", 0, _connection.getRowCount(tableName));
+            assertEquals("count before", 0, connection.getRowCount(tableName));
 
-            DatabaseOperation.INSERT.execute(_connection, xmlDataSet);
+            DatabaseOperation.INSERT.execute(connection, xmlDataSet);
 
-            ITable tableAfter = _connection.createDataSet().getTable(tableName);
+            ITable tableAfter = connection.createDataSet().getTable(tableName);
             assertEquals("count after", 3, tableAfter.getRowCount());
             Assertion.assertEquals(xmlDataSet.getTable(tableName), tableAfter);
         }
@@ -515,11 +514,11 @@ public class InsertOperationIT extends AbstractDatabaseIT
             Reader in = new FileReader(TestUtils.getFile("xml/sdoGeometryInsertTest.xml"));
             IDataSet xmlDataSet = new FlatXmlDataSetBuilder().build(in);
 
-            assertEquals("count before", 0, _connection.getRowCount(tableName));
+            assertEquals("count before", 0, connection.getRowCount(tableName));
 
-            DatabaseOperation.INSERT.execute(_connection, xmlDataSet);
+            DatabaseOperation.INSERT.execute(connection, xmlDataSet);
 
-            ITable tableAfter = _connection.createDataSet().getTable(tableName);
+            ITable tableAfter = connection.createDataSet().getTable(tableName);
             assertEquals("count after", 1, tableAfter.getRowCount());
             Assertion.assertEquals(xmlDataSet.getTable(tableName), tableAfter);
         }
@@ -536,11 +535,11 @@ public class InsertOperationIT extends AbstractDatabaseIT
             Reader in = new FileReader(TestUtils.getFile("xml/xmlTypeInsertTest.xml"));
             IDataSet xmlDataSet = new FlatXmlDataSetBuilder().build(in);
 
-            assertEquals("count before", 0, _connection.getRowCount(tableName));
+            assertEquals("count before", 0, connection.getRowCount(tableName));
 
-            DatabaseOperation.INSERT.execute(_connection, xmlDataSet);
+            DatabaseOperation.INSERT.execute(connection, xmlDataSet);
 
-            ITable tableAfter = _connection.createDataSet().getTable(tableName);
+            ITable tableAfter = connection.createDataSet().getTable(tableName);
             assertEquals("count after", 3, tableAfter.getRowCount());
             Assertion.assertEquals(xmlDataSet.getTable(tableName), tableAfter);
         }
@@ -551,9 +550,9 @@ public class InsertOperationIT extends AbstractDatabaseIT
         Reader in = TestUtils.getFileReader("xml/missingColumnTest.xml");
         IDataSet xmlDataSet = new XmlDataSet(in);
 
-        ITable[] tablesBefore = DataSetUtils.getTables(_connection.createDataSet());
-        DatabaseOperation.INSERT.execute(_connection, xmlDataSet);
-        ITable[] tablesAfter = DataSetUtils.getTables(_connection.createDataSet());
+        ITable[] tablesBefore = DataSetUtils.getTables(connection.createDataSet());
+        DatabaseOperation.INSERT.execute(connection, xmlDataSet);
+        ITable[] tablesAfter = DataSetUtils.getTables(connection.createDataSet());
 
         // verify tables before
         for (int i = 0; i < tablesBefore.length; i++)
@@ -674,9 +673,9 @@ public class InsertOperationIT extends AbstractDatabaseIT
 
     private void testExecute(IDataSet dataSet) throws Exception, SQLException
     {
-        ITable[] tablesBefore = DataSetUtils.getTables(_connection.createDataSet());
-        DatabaseOperation.INSERT.execute(_connection, dataSet);
-        ITable[] tablesAfter = DataSetUtils.getTables(_connection.createDataSet());
+        ITable[] tablesBefore = DataSetUtils.getTables(connection.createDataSet());
+        DatabaseOperation.INSERT.execute(connection, dataSet);
+        ITable[] tablesAfter = DataSetUtils.getTables(connection.createDataSet());
 
         assertEquals("table count", tablesBefore.length, tablesAfter.length);
         for (int i = 0; i < tablesBefore.length; i++)

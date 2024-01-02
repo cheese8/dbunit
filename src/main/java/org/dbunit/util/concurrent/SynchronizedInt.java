@@ -266,4 +266,3 @@ public class SynchronizedInt extends SynchronizedVariable implements Comparable,
   }
 
 }
-

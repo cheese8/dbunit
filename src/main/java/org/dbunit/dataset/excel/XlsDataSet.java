@@ -48,8 +48,7 @@ import org.slf4j.LoggerFactory;
  * @since Feb 21, 2003
  * @version $Revision$
  */
-public class XlsDataSet extends AbstractDataSet
-{
+public class XlsDataSet extends AbstractDataSet {
     
     /**
      * Logger for this class

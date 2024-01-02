@@ -34,8 +34,7 @@ import org.dbunit.operation.DatabaseOperation;
  * @version $Revision$ $Date$
  * @since 2.2.0
  */
-public interface IDatabaseTester
-{
+public interface IDatabaseTester {
     /**
      * Close the specified connection.
      *

@@ -21,8 +21,7 @@
 
 package org.dbunit.operation;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.IDatabaseConnection;
@@ -37,39 +36,24 @@ import java.sql.SQLException;
  * @version $Revision$
  * @since Mar 6, 2002
  */
-public class CloseConnectionOperation extends DatabaseOperation
-{
+@Slf4j
+public class CloseConnectionOperation extends DatabaseOperation {
+
+    private final DatabaseOperation operation;
 
     /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(CloseConnectionOperation.class);
-
-    private final DatabaseOperation _operation;
-
-    /**
-     * Creates a CloseConnectionOperation object that decorates the specified
-     * operation.
+     * Creates a CloseConnectionOperation object that decorates the specified operation.
      */
     public CloseConnectionOperation(DatabaseOperation operation)
     {
-        _operation = operation;
+        this.operation = operation;
     }
 
-    ////////////////////////////////////////////////////////////////////////////
-    // DatabaseOperation class
-
-    public void execute(IDatabaseConnection connection,
-            IDataSet dataSet) throws DatabaseUnitException, SQLException
-    {
-        logger.debug("execute(connection={}, dataSet={}) - start", connection, dataSet);
-
-        try
-        {
-            _operation.execute(connection, dataSet);
-        }
-        finally
-        {
+    public void execute(IDatabaseConnection connection, IDataSet dataSet) throws DatabaseUnitException, SQLException {
+        log.debug("execute(connection={}, dataSet={}) - start", connection, dataSet);
+        try {
+            operation.execute(connection, dataSet);
+        } finally {
             connection.close();
         }
     }
