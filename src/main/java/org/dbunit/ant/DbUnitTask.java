@@ -573,4 +573,3 @@ public class DbUnitTask extends Task {
         
     }
 }
-

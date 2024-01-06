@@ -31,7 +31,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.tools.ant.Project;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseSequenceFilter;
@@ -44,8 +46,6 @@ import org.dbunit.dataset.filter.ITableFilter;
 import org.dbunit.dataset.xml.FlatDtdDataSet;
 import org.dbunit.dataset.xml.FlatXmlWriter;
 import org.dbunit.dataset.xml.XmlDataSet;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * The <code>Export</code> class is the step that facilitates exporting
@@ -59,95 +59,49 @@ import org.slf4j.LoggerFactory;
  * @since Jun 10, 2002
  * @see DbUnitTaskStep
  */
+@Slf4j
+@NoArgsConstructor
 public class Export extends AbstractStep {
-
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(Export.class);
-
-    private File _dest;
+    @Getter @Setter
+    private File dest;
     @Getter @Setter
     private String format = FormatSupport.FLAT.getFormat();
-    private String _doctype = null;
-    private String _encoding = null; // if no encoding set by script than the default encoding (UTF-8) of the wrietr is used
-    private List _tables = new ArrayList();
-
-    public Export()
-    {
-    }
+    @Getter @Setter
+    private String doctype = null;
+    @Getter @Setter
+    private String encoding = null; // if no encoding set by script than the default encoding (UTF-8) of the wrietr is used
+    @Getter
+    private List tables = new ArrayList();
 
     private String getAbsolutePath(File filename)
     {
         return filename != null ? filename.getAbsolutePath() : "null";
     }
 
-    public File getDest()
-    {
-        return _dest;
-    }
-
-    public List getTables()
-    {
-        return _tables;
-    }
-
-    public void setDest(File dest)
-    {
-        logger.debug("setDest(dest={}) - start", dest);
-        _dest = dest;
-    }
-
-    /**
-     * Encoding for XML-Output
-     * @return Returns the encoding.
-     */
-    public String getEncoding() 
-    {
-        return this._encoding;
-    }
-
-    public void setEncoding(String encoding) 
-    { 
-        this._encoding = encoding;
-    }
-
     public void addTable(Table table)
     {
-        logger.debug("addTable(table={}) - start", table);
-        _tables.add(table);
+        log.debug("addTable(table={}) - start", table);
+        tables.add(table);
     }
 
     public void addQuery(Query query)
     {
-        logger.debug("addQuery(query={}) - start", query);
-        _tables.add(query);
+        log.debug("addQuery(query={}) - start", query);
+        tables.add(query);
     }
 
 	public void addQuerySet(QuerySet querySet) {
-        logger.debug("addQuerySet(querySet={}) - start", querySet);
-        _tables.add(querySet);
+        log.debug("addQuerySet(querySet={}) - start", querySet);
+        tables.add(querySet);
 	}
-	
-    
-	public String getDoctype()
-    {
-        return _doctype;
-    }
-
-    public void setDoctype(String doctype)
-    {
-        logger.debug("setDoctype(doctype={}) - start", doctype);
-        _doctype = doctype;
-    }
 
     public void execute(IDatabaseConnection connection) throws DatabaseUnitException
     {
-        logger.debug("execute(connection={}) - start", connection);
+        log.debug("execute(connection={}) - start", connection);
 
         try
         {
-            if (_dest == null)
+            if (dest == null)
             {
                 throw new DatabaseUnitException("'_dest' is a required attribute of the <export> step.");
             }
@@ -159,17 +113,17 @@ public class Export extends AbstractStep {
             // Write the dataset
             if (format.equals(FormatSupport.CSV.getFormat()))
             {
-                CsvDataSetWriter.write(dataset, _dest);
+                CsvDataSetWriter.write(dataset, dest);
             }
             else
             {
-                OutputStream out = new FileOutputStream(_dest);
+                OutputStream out = new FileOutputStream(dest);
                 try
                 {
                     if (format.equalsIgnoreCase(FormatSupport.FLAT.getFormat()))
                     {
                         FlatXmlWriter writer = new FlatXmlWriter(out, getEncoding());
-                        writer.setDocType(_doctype);
+                        writer.setDocType(doctype);
                         writer.write(dataset);
                     }
                     else if (format.equalsIgnoreCase(FormatSupport.XML.getFormat()))
@@ -197,7 +151,7 @@ public class Export extends AbstractStep {
                 }
             }
             
-            log("Successfully wrote file '" + _dest + "'", Project.MSG_INFO);
+            log("Successfully wrote file '" + dest + "'", Project.MSG_INFO);
             
         }
         catch (SQLException e)
@@ -220,7 +174,7 @@ public class Export extends AbstractStep {
     protected IDataSet getExportDataSet(IDatabaseConnection connection) 
     throws DatabaseUnitException, SQLException 
     {
-        IDataSet dataset = getDatabaseDataSet(connection, this._tables);
+        IDataSet dataset = getDatabaseDataSet(connection, tables);
         if (isOrdered()) 
         {
         	// Use topologically sorted database
@@ -234,7 +188,7 @@ public class Export extends AbstractStep {
     {
         return "Executing export: "
                 + "\n      in format: " + format
-                + " to datafile: " + getAbsolutePath(_dest);
+                + " to datafile: " + getAbsolutePath(dest);
     }
 
 
@@ -242,10 +196,10 @@ public class Export extends AbstractStep {
     {
         StringBuffer result = new StringBuffer();
         result.append("Export: ");
-        result.append(" dest=" + getAbsolutePath(_dest));
+        result.append(" dest=" + getAbsolutePath(dest));
         result.append(", format= " + format);
-        result.append(", doctype= " + _doctype);
-        result.append(", tables= " + _tables);
+        result.append(", doctype= " + doctype);
+        result.append(", tables= " + tables);
 
         return result.toString();
     }

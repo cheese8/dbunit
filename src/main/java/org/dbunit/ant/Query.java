@@ -35,7 +35,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class Query {
-
     private String name;
     private String sql;
 

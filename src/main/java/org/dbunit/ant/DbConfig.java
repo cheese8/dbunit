@@ -25,12 +25,12 @@ import java.util.Iterator;
 import java.util.Properties;
 import java.util.Set;
 
+import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.tools.ant.ProjectComponent;
 import org.apache.tools.ant.taskdefs.Property;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConfig;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * The database configuration for the ant task.
@@ -40,31 +40,19 @@ import org.slf4j.LoggerFactory;
  * @version $Revision$ $Date$
  * @since 2.4.0
  */
-public class DbConfig extends ProjectComponent
-{
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(AbstractStep.class);
-
+@Slf4j
+@NoArgsConstructor
+public class DbConfig extends ProjectComponent {
     private Set properties = new HashSet();
     private Set features = new HashSet();
-    
-    public DbConfig()
-    {
-    }
 
-    public void addProperty(Property property)
-    {
-        logger.trace("addProperty(property={}) - start)", property);
-        
+    public void addProperty(Property property) {
+        log.trace("addProperty(property={}) - start)", property);
         this.properties.add(property);
     }
 
-    public void addFeature(Feature feature)
-    {
-        logger.trace("addFeature(feature={}) - start)", feature);
-        
+    public void addFeature(Feature feature) {
+        log.trace("addFeature(feature={}) - start)", feature);
         this.features.add(feature);
     }
 
@@ -83,8 +71,8 @@ public class DbConfig extends ProjectComponent
             
             String propName = feature.getName();
             String propValue = String.valueOf(feature.isValue());
-            
-            logger.debug("Setting property {}", feature);
+
+            log.debug("Setting property {}", feature);
             javaProps.setProperty(propName, propValue);
         }
         
@@ -101,17 +89,10 @@ public class DbConfig extends ProjectComponent
             if(propValue==null)
                 throw new NullPointerException("The propValue must not be null");
 
-            logger.debug("Setting property {}", prop);
+            log.debug("Setting property {}", prop);
             javaProps.setProperty(propName, propValue);
         }
         
         config.setPropertiesByString(javaProps);
     }
-
-    /**
-     * @author gommma (gommma AT users.sourceforge.net)
-     * @author Last changed by: $Author$
-     * @version $Revision$ $Date$
-     * @since 2.4.0
-     */
 }
