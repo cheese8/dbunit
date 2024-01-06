@@ -20,6 +20,8 @@
  */
 package org.dbunit.ant;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,9 +56,9 @@ public class Compare extends AbstractStep
      */
     private static final Logger logger = LoggerFactory.getLogger(Compare.class);
 
-    private static final String DEFAULT_FORMAT = FORMAT_FLAT;
-
-    private String _format;
+    @Getter
+    @Setter
+    private String format = FormatSupport.FLAT.getFormat();
     private File _src;
     private List _tables = new ArrayList();
     private boolean _sort = false;
@@ -78,21 +80,6 @@ public class Compare extends AbstractStep
         logger.debug("setSort(sort={}) - start", String.valueOf(sort));
 
         _sort = sort;
-    }
-
-    public String getFormat()
-    {
-        return _format != null ? _format : DEFAULT_FORMAT;
-    }
-
-    public void setFormat(String format)
-    {
-        logger.debug("setFormat(format={}) - start", format);
-
-        // Check if the given format is accepted
-        checkDataFormat(format);
-        // If we get here the given format is a valid data format
-        _format = format;
     }
 
     public List getTables()
@@ -170,7 +157,7 @@ public class Compare extends AbstractStep
     {
         return "Executing compare: "
                 + "\n          from file: " + ((_src == null) ? null : _src.getAbsolutePath())
-                + "\n          with format: " + _format;
+                + "\n          with format: " + format;
     }
 
     public String toString()
@@ -180,7 +167,7 @@ public class Compare extends AbstractStep
         result.append(" src=");
         result.append((_src == null ? "null" : _src.getAbsolutePath()));
         result.append(", format= ");
-        result.append(_format);
+        result.append(format);
         result.append(", tables= ");
         result.append(_tables);
 

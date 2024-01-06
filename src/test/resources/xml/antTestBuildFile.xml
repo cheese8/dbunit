@@ -71,7 +71,7 @@
             url="${dbunit.profile.url}"
             userid="${dbunit.profile.user}"
             password="${dbunit.profile.password}">
-      <operation type="INSERT" src="${testDataSet}" format="xml"/>
+      <operation type="INSERT" src="${testDataSet}" format="XML"/>
     </dbunit>
   </target>
 
@@ -89,7 +89,7 @@
             url="${dbunit.profile.url}"
             userid="${dbunit.profile.user}"
             password="${dbunit.profile.password}">
-      <operation type="REFRESH" src="${updateDataSet}" format="flat" nullToken="row 0"/>
+      <operation type="REFRESH" src="${updateDataSet}" format="FLAT" nullToken="row 0"/>
     </dbunit>
   </target>
 
@@ -100,7 +100,7 @@
             schema="${dbunit.profile.schema}"
             userid="${dbunit.profile.user}"
             password="${dbunit.profile.password}">
-      <operation type="REFRESH" src="${updateDataSet}" format="flat" ordered="true"/>
+      <operation type="REFRESH" src="${updateDataSet}" format="FLAT" ordered="true"/>
     </dbunit>
   </target>
 
@@ -111,7 +111,7 @@
             schema="${dbunit.profile.schema}"
             userid="${dbunit.profile.user}"
             password="${dbunit.profile.password}">
-      <operation type="REFRESH" src="${updateDataSet}" format="flat" ordered="true" nullToken="row 0"/>
+      <operation type="REFRESH" src="${updateDataSet}" format="FLAT" ordered="true" nullToken="row 0"/>
     </dbunit>
   </target>
 
@@ -257,7 +257,7 @@
         <table name="TEST_TABLE"/>
         <table name="PK_TABLE"/>
       </export>
-      <compare src="${exportDataSet}" format="flat" sort="true"/>
+      <compare src="${exportDataSet}" format="FLAT" sort="true"/>
     </dbunit>
     <delete file="${exportDataSet}"/>
   </target>
@@ -268,8 +268,8 @@
             schema="${dbunit.profile.schema}"
             userid="${dbunit.profile.user}"
             password="${dbunit.profile.password}">
-      <export dest="${exportDataSet}" format="flat"/>
-      <compare src="${exportDataSet}" format="flat"/>
+      <export dest="${exportDataSet}" format="FLAT"/>
+      <compare src="${exportDataSet}" format="FLAT"/>
     </dbunit>
     <delete file="${exportDataSet}"/>
   </target>
@@ -280,7 +280,7 @@
             schema="${dbunit.profile.schema}"
             userid="${dbunit.profile.user}"
             password="${dbunit.profile.password}">
-      <export dest="${exportDataSet}" format="flat" doctype="dataset.dtd"/>
+      <export dest="${exportDataSet}" format="FLAT" doctype="dataset.dtd"/>
     </dbunit>
     <delete file="${exportDataSet}"/>
   </target>
@@ -296,7 +296,7 @@
                 <property name="resultSetTableFactory" value="org.dbunit.database.ForwardOnlyResultSetTableFactory"/>
             </dbconfig>
 
-            <export dest="${exportDataSet}" format="flat" doctype="dataset.dtd" />
+            <export dest="${exportDataSet}" format="FLAT" doctype="dataset.dtd" />
         </dbunit>
         <delete file="${exportDataSet}"/>
     </target>
@@ -307,7 +307,7 @@
               schema="${dbunit.profile.schema}"
               userid="${dbunit.profile.user}"
               password="${dbunit.profile.password}">
-        <export dest="${exportDataSet}" format="flat" encoding="ISO-8859-1"/>
+        <export dest="${exportDataSet}" format="FLAT" encoding="ISO-8859-1"/>
       </dbunit>
       <delete file="${exportDataSet}"/>
     </target>
@@ -318,8 +318,8 @@
             schema="${dbunit.profile.schema}"
             userid="${dbunit.profile.user}"
             password="${dbunit.profile.password}">
-      <export dest="${exportDataSet}" format="xml"/>
-      <compare src="${exportDataSet}" format="xml"/>
+      <export dest="${exportDataSet}" format="XML"/>
+      <compare src="${exportDataSet}" format="XML"/>
     </dbunit>
     <delete file="${exportDataSet}"/>
   </target>
@@ -330,8 +330,8 @@
               schema="${dbunit.profile.schema}"
               userid="${dbunit.profile.user}"
               password="${dbunit.profile.password}">
-        <export dest="${exportDataSet}" format="xml" ordered="true" />
-        <compare src="${exportDataSet}" format="xml"/>
+        <export dest="${exportDataSet}" format="XML" ordered="true" />
+        <compare src="${exportDataSet}" format="XML"/>
       </dbunit>
       <delete file="${exportDataSet}"/>
     </target>
@@ -342,7 +342,7 @@
             schema="${dbunit.profile.schema}"
             userid="${dbunit.profile.user}"
             password="${dbunit.profile.password}">
-      <export dest="${exportDtd}" format="dtd"/>
+      <export dest="${exportDtd}" format="DTD"/>
     </dbunit>
     <delete file="${exportDtd}"/>
   </target>
@@ -353,8 +353,8 @@
             schema="${dbunit.profile.schema}"
             userid="${dbunit.profile.user}"
             password="${dbunit.profile.password}">
-      <export dest="${exportCsv}" format="csv"/>
-      <compare src="${exportCsv}" format="csv"/>
+      <export dest="${exportCsv}" format="CSV"/>
+      <compare src="${exportCsv}" format="CSV"/>
     </dbunit>
     <delete dir="${exportCsv}" failonerror="false" />
   </target>
@@ -364,7 +364,7 @@
             url="${dbunit.profile.url}"
             userid="${dbunit.profile.user}"
             password="${dbunit.profile.password}">
-      <export dest="${exportCsv}" format="csv">
+      <export dest="${exportCsv}" format="CSV">
         <query name="SECOND_TABLE" sql="SELECT * FROM SECOND_TABLE"/>
         <queryset>
           <query name="TEST_TABLE"
@@ -386,7 +386,7 @@
             url="${dbunit.profile.url}"
             userid="${dbunit.profile.user}"
             password="${dbunit.profile.password}">
-      <export dest="${exporDataSet}" format="flat">
+      <export dest="${exporDataSet}" format="FLAT">
         <queryset id="someid" refid="someid"/>
       </export>
     </dbunit>
@@ -405,7 +405,7 @@
             url="${dbunit.profile.url}"
             userid="${dbunit.profile.user}"
             password="${dbunit.profile.password}">
-      <export dest="${exportDataSet}" format="flat">
+      <export dest="${exportDataSet}" format="FLAT">
         <queryset refid="queryset-id">
           <filterset>
             <filter token="colValue" value="row0 col0"/>
@@ -421,7 +421,7 @@
             url="${dbunit.profile.url}"
             userid="${dbunit.profile.user}"
             password="${dbunit.profile.password}">
-      <export dest="${exportDtd}" format="invalid"/>
+      <export dest="${exportDtd}" format="INVALID"/>
     </dbunit>
   </target>
 
@@ -461,10 +461,10 @@
             url="${dbunit.profile.url}"
             userid="${dbunit.profile.user}"
             password="${dbunit.profile.password}">
-      <export dest="${exportDataSet}" format="flat">
+      <export dest="${exportDataSet}" format="FLAT">
         <table name="TEST_TABLE" />
       </export>
-      <compare src="${exportDataSet}" format="xml">
+      <compare src="${exportDataSet}" format="XML">
         <table name="TEST_TABLE" />
       </compare>
     </dbunit>
@@ -476,7 +476,7 @@
             url="jdbc:mysql://localhost:3306/dbunit"
             userid="root"
             password="">
-      <operation type="INSERT" src="${testDataSet}" format="xml"/>
+      <operation type="INSERT" src="${testDataSet}" format="XML"/>
       <classpath>
         <pathelement location="./lib/mm.mysql-2.0.11-bin.jar"/>
       </classpath>
@@ -488,7 +488,7 @@
             url="jdbc:mysql://localhost:3306/dbunit"
             userid="root"
             password="">
-      <operation type="INSERT" src="${testDataSet}" format="xml"/>
+      <operation type="INSERT" src="${testDataSet}" format="XML"/>
       <classpath>
         <pathelement location="./lib/unknown.jar"/>
       </classpath>

@@ -21,8 +21,8 @@
 
 package org.dbunit.ant;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * The <code>Table</code> class is just a step placeholder for a table name
@@ -33,31 +33,13 @@ import org.slf4j.LoggerFactory;
  * @version $Revision$
  * @since Jun 10, 2002
  */
+@Data
+@NoArgsConstructor
 public class Table {
-
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(Table.class);
 
     private String name;
 
-    public Table() {}
-
-    public String getName()
-    {
-        return name;
-    }
-
-    public void setName(String name) {
-        logger.debug("setName(name={}) - start", name);
-        this.name = name;
-    }
-
     public String toString() {
-        StringBuffer result = new StringBuffer();
-        result.append("Table: ");
-        result.append(" name=" + name);
-        return result.toString();
+        return "Table: name=" + name;
     }
 }
