@@ -30,6 +30,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.tools.ant.Project;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseSequenceFilter;
@@ -65,7 +67,8 @@ public class Export extends AbstractStep {
     private static final Logger logger = LoggerFactory.getLogger(Export.class);
 
     private File _dest;
-    private String _format = FORMAT_FLAT;
+    @Getter @Setter
+    private String format = FormatSupport.FLAT.getFormat();
     private String _doctype = null;
     private String _encoding = null; // if no encoding set by script than the default encoding (UTF-8) of the wrietr is used
     private List _tables = new ArrayList();
@@ -84,11 +87,6 @@ public class Export extends AbstractStep {
         return _dest;
     }
 
-    public String getFormat()
-    {
-        return _format;
-    }
-
     public List getTables()
     {
         return _tables;
@@ -98,24 +96,6 @@ public class Export extends AbstractStep {
     {
         logger.debug("setDest(dest={}) - start", dest);
         _dest = dest;
-    }
-
-    public void setFormat(String format)
-    {
-        logger.debug("setFormat(format={}) - start", format);
-
-        if (format.equalsIgnoreCase(FORMAT_FLAT)
-                || format.equalsIgnoreCase(FORMAT_XML)
-                || format.equalsIgnoreCase(FORMAT_DTD)
-                || format.equalsIgnoreCase(FORMAT_CSV)
-                || format.equalsIgnoreCase(FORMAT_XLS))
-        {
-            _format = format;
-        }
-        else
-        {
-            throw new IllegalArgumentException("Type must be one of: 'flat'(default), 'xml', 'dtd' or 'xls' but was: " + format);
-        }
     }
 
     /**
@@ -177,7 +157,7 @@ public class Export extends AbstractStep {
 
 			
             // Write the dataset
-            if (_format.equals(FORMAT_CSV))
+            if (format.equals(FormatSupport.CSV.getFormat()))
             {
                 CsvDataSetWriter.write(dataset, _dest);
             }
@@ -186,28 +166,28 @@ public class Export extends AbstractStep {
                 OutputStream out = new FileOutputStream(_dest);
                 try
                 {
-                    if (_format.equalsIgnoreCase(FORMAT_FLAT))
+                    if (format.equalsIgnoreCase(FormatSupport.FLAT.getFormat()))
                     {
                         FlatXmlWriter writer = new FlatXmlWriter(out, getEncoding());
                         writer.setDocType(_doctype);
                         writer.write(dataset);
                     }
-                    else if (_format.equalsIgnoreCase(FORMAT_XML))
+                    else if (format.equalsIgnoreCase(FormatSupport.XML.getFormat()))
                     {
                         XmlDataSet.write(dataset, out, getEncoding());
                     }
-                    else if (_format.equalsIgnoreCase(FORMAT_DTD))
+                    else if (format.equalsIgnoreCase(FormatSupport.DTD.getFormat()))
                     {
                         //TODO Should DTD also support encoding? It is basically an XML file...
                         FlatDtdDataSet.write(dataset, out);//, getEncoding());
                     }
-                    else if (_format.equalsIgnoreCase(FORMAT_XLS))
+                    else if (format.equalsIgnoreCase(FormatSupport.XLS.getFormat()))
                     {
                         XlsDataSet.write(dataset, out);
                     }
                     else
                     {
-                        throw new IllegalArgumentException("The given format '"+_format+"' is not supported.");
+                        throw new IllegalArgumentException("The given format '"+format+"' is not supported.");
                     }
                     
                 }
@@ -253,7 +233,7 @@ public class Export extends AbstractStep {
 	public String getLogMessage()
     {
         return "Executing export: "
-                + "\n      in format: " + _format
+                + "\n      in format: " + format
                 + " to datafile: " + getAbsolutePath(_dest);
     }
 
@@ -263,7 +243,7 @@ public class Export extends AbstractStep {
         StringBuffer result = new StringBuffer();
         result.append("Export: ");
         result.append(" dest=" + getAbsolutePath(_dest));
-        result.append(", format= " + _format);
+        result.append(", format= " + format);
         result.append(", doctype= " + _doctype);
         result.append(", tables= " + _tables);
 

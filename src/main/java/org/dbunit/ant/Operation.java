@@ -21,6 +21,8 @@
 
 package org.dbunit.ant;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.types.FileSet;
 import org.apache.tools.ant.types.Resource;
@@ -63,10 +65,9 @@ public class Operation extends AbstractStep
      */
     private static final Logger logger = LoggerFactory.getLogger(Operation.class);
 
-    private static final String DEFAULT_FORMAT = FORMAT_FLAT;
-
     protected String _type = "CLEAN_INSERT";
-    private String _format;
+    @Getter @Setter
+    private String format = FormatSupport.FLAT.getFormat();
     private List<File> _sources = new ArrayList<>();
     private boolean _combine = false;
     private boolean _transaction = false;
@@ -97,21 +98,6 @@ public class Operation extends AbstractStep
         for (String file : scanner.getIncludedFiles()) {
             _sources.add(new File(scanner.getBasedir(), file));
         }
-    }
-
-    public String getFormat()
-    {
-        return _format != null ? _format : DEFAULT_FORMAT;
-    }
-
-    public void setFormat(String format)
-    {
-        logger.debug("setFormat(format={}) - start", format);
-
-        // Check if the given format is accepted
-        checkDataFormat(format);
-        // If we get here the given format is a valid data format
-        _format = format;
     }
 
     public boolean isCombine()
@@ -254,7 +240,7 @@ public class Operation extends AbstractStep
             result.append(f.getAbsolutePath() + " ");
         }
         result.append("]");
-        result.append("\n          with format: " + _format);
+        result.append("\n          with format: " + format);
         return result.toString();
     }
 
@@ -264,7 +250,7 @@ public class Operation extends AbstractStep
         StringBuffer result = new StringBuffer();
         result.append("Operation: ");
         result.append(" type=").append(_type);
-        result.append(", format=").append(_format);
+        result.append(", format=").append(format);
         result.append(", sources=[ ");
         for (File f : _sources) {
             result.append(f.getAbsolutePath() + " ");

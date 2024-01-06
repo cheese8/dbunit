@@ -36,10 +36,7 @@ import junit.framework.TestCase;
 
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.HypersonicEnvironment;
-import org.dbunit.ant.AbstractStep;
-import org.dbunit.ant.Export;
-import org.dbunit.ant.Operation;
-import org.dbunit.ant.Query;
+import org.dbunit.ant.*;
 import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
@@ -117,7 +114,7 @@ public class CsvURLProducerTest extends TestCase {
 
     public void testInsertOperationWithCsvFormat() throws SQLException, DatabaseUnitException {
         Operation operation = new Operation();
-        operation.setFormat(AbstractStep.FORMAT_CSV);
+        operation.setFormat(FormatSupport.CSV.getFormat());
         operation.setSrc(TestUtils.getFile(THE_DIRECTORY));
         operation.setType("INSERT");
         operation.execute(connection);
@@ -139,7 +136,7 @@ public class CsvURLProducerTest extends TestCase {
             FileHelper.deleteDirectory(dir);
     
             Export export = new Export();
-            export.setFormat(AbstractStep.FORMAT_CSV);
+            export.setFormat(FormatSupport.CSV.getFormat());
             export.setDest(dir);
     
             Query query = new Query();

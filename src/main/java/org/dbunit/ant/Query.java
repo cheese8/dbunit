@@ -21,8 +21,8 @@
 
 package org.dbunit.ant;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * The <code>Query</code> class is just a step placeholder for a table name
@@ -32,67 +32,14 @@ import org.slf4j.LoggerFactory;
  * @version $Revision$
  * @since Dec 10, 2002
  */
-public class Query
-{
-
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(Query.class);
+@Data
+@NoArgsConstructor
+public class Query {
 
     private String name;
     private String sql;
 
-    public Query()
-    {
-    }
-
-    public String getName()
-    {
-        return name;
-    }
-
-    public void setName(String name)
-    {
-        logger.debug("setName(name={}) - start", name);
-
-        this.name = name;
-    }
-
-
-    public String toString()
-    {
-        StringBuffer result = new StringBuffer();
-        result.append("Query: ");
-        result.append(" name=" + name);
-        result.append(" sql=" + sql);
-
-
-        return result.toString();
-    }
-
-    public String getSql()
-    {
-        return sql;
-    }
-
-    public void setSql(String sql)
-    {
-        logger.debug("setSql(sql={}) - start", sql);
-
-        this.sql = sql;
+    public String toString() {
+        return "Query: name=" + name + " sql=" + sql;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

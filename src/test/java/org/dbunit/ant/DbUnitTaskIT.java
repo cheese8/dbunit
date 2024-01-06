@@ -58,7 +58,7 @@ import org.dbunit.util.FileHelper;
  * @author Last changed by: $Author$
  * @version $Revision$ $Date$
  * @since Jun 10, 2002
- * @see org.dbunit.ant.AntTest
+ * @see org.dbunit.ant.AllTests
  */
 public class DbUnitTaskIT extends BuildFileTest
 {
@@ -248,14 +248,14 @@ public class DbUnitTaskIT extends BuildFileTest
     {
         String targetName = "test-export-format-flat";
         Export export = (Export)getFirstStepFromTarget(targetName);
-        assertEquals("format", "flat", export.getFormat());
+        assertEquals("format", "FLAT", export.getFormat());
     }
 
     public void testExportFlatWithDocytpe()
     {
         String targetName = "test-export-format-flat-with-doctype";
         Export export = (Export)getFirstStepFromTarget(targetName);
-        assertEquals("format", "flat", export.getFormat());
+        assertEquals("format", "FLAT", export.getFormat());
         assertEquals("doctype", "dataset.dtd", export.getDoctype());
     }
 
@@ -263,7 +263,7 @@ public class DbUnitTaskIT extends BuildFileTest
     {
         String targetName = "test-export-format-flat-with-encoding";
         Export export = (Export)getFirstStepFromTarget(targetName);
-        assertEquals("format", "flat", export.getFormat());
+        assertEquals("format", "FLAT", export.getFormat());
         assertEquals("encoding", "ISO-8859-1", export.getEncoding());
     }
 
@@ -320,7 +320,7 @@ public class DbUnitTaskIT extends BuildFileTest
     {
         String targetName = "test-export-query";
         Export export = (Export)getFirstStepFromTarget(targetName);
-        assertEquals("format", "flat", export.getFormat());
+        assertEquals("format", "FLAT", export.getFormat());
 
         List queries = export.getTables();
         assertEquals("query count", 2, getQueryCount(queries));
@@ -337,7 +337,7 @@ public class DbUnitTaskIT extends BuildFileTest
     public void testExportWithQuerySet() {
         String targetName = "test-export-with-queryset";
         Export export = (Export)getFirstStepFromTarget(targetName);
-        assertEquals("format", "csv", export.getFormat());
+        assertEquals("format", "CSV", export.getFormat());
 
         List queries = export.getTables();
 
@@ -401,7 +401,7 @@ public class DbUnitTaskIT extends BuildFileTest
     public void testExportQueryMixed() {
         String targetName = "test-export-query-mixed";
         Export export = (Export)getFirstStepFromTarget(targetName);
-        assertEquals("format", "flat", export.getFormat());
+        assertEquals("format", "FLAT", export.getFormat());
 
         List tables = export.getTables();
         assertEquals("total count", 2, tables.size());
@@ -431,7 +431,7 @@ public class DbUnitTaskIT extends BuildFileTest
             assertTrue(cause instanceof DatabaseUnitException);
             DatabaseUnitException dbUnitException = (DatabaseUnitException)cause;
             String filename = new File(outputDir, "antExportDataSet.xml").toString();
-            String expectedMsg = "Did not find table in source file '" + filename + "' using format 'xml'";
+            String expectedMsg = "Did not find table in source file '" + filename + "' using format 'XML'";
             assertEquals(expectedMsg, dbUnitException.getMessage());
             assertTrue(dbUnitException.getCause() instanceof NoSuchTableException);
             NoSuchTableException nstException = (NoSuchTableException)dbUnitException.getCause();

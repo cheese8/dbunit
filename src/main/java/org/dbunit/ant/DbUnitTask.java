@@ -20,9 +20,7 @@
  */
 package org.dbunit.ant;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import lombok.extern.slf4j.Slf4j;
 import org.apache.tools.ant.AntClassLoader;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
@@ -55,13 +53,8 @@ import java.util.Properties;
  * @since Jun 10, 2002
  * @see org.apache.tools.ant.Task
  */
-public class DbUnitTask extends Task
-{
-
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(DbUnitTask.class);
+@Slf4j
+public class DbUnitTask extends Task {
 
     /**
      * Database connection
@@ -161,7 +154,7 @@ public class DbUnitTask extends Task
      */
     public void setDriver(String driver)
     {
-        logger.trace("setDriver(driver={}) - start", driver);
+        log.trace("setDriver(driver={}) - start", driver);
         this.driver = driver;
     }
 
@@ -170,7 +163,7 @@ public class DbUnitTask extends Task
      */
     public void setUrl(String url)
     {
-        logger.trace("setUrl(url={}) - start", url);
+        log.trace("setUrl(url={}) - start", url);
         this.url = url;
     }
 
@@ -179,7 +172,7 @@ public class DbUnitTask extends Task
      */
     public void setUserid(String userId)
     {
-        logger.trace("setUserid(userId={}) - start", userId);
+        log.trace("setUserid(userId={}) - start", userId);
         this.userId = userId;
     }
 
@@ -188,7 +181,7 @@ public class DbUnitTask extends Task
      */
     public void setPassword(String password)
     {
-        logger.trace("setPassword(password=*****) - start");
+        log.trace("setPassword(password=*****) - start");
         this.password = password;
     }
 
@@ -197,7 +190,7 @@ public class DbUnitTask extends Task
      */
     public void setSchema(String schema)
     {
-        logger.trace("setSchema(schema={}) - start", schema);
+        log.trace("setSchema(schema={}) - start", schema);
         this.schema = schema;
     }
 
@@ -206,7 +199,7 @@ public class DbUnitTask extends Task
      */
     public void setUseQualifiedTableNames(Boolean useQualifiedTableNames)
     {
-        logger.trace("setUseQualifiedTableNames(useQualifiedTableNames={}) - start", String.valueOf(useQualifiedTableNames));
+        log.trace("setUseQualifiedTableNames(useQualifiedTableNames={}) - start", String.valueOf(useQualifiedTableNames));
         this.useQualifiedTableNames = useQualifiedTableNames;
     }
 
@@ -217,25 +210,25 @@ public class DbUnitTask extends Task
      */
     public void setSupportBatchStatement(Boolean supportBatchStatement)
     {
-        logger.trace("setSupportBatchStatement(supportBatchStatement={}) - start", String.valueOf(supportBatchStatement));
+        log.trace("setSupportBatchStatement(supportBatchStatement={}) - start", String.valueOf(supportBatchStatement));
         this.supportBatchStatement = supportBatchStatement;
     }
 
     public void setDatatypeWarning(Boolean datatypeWarning)
     {
-        logger.trace("setDatatypeWarning(datatypeWarning={}) - start", String.valueOf(datatypeWarning));
+        log.trace("setDatatypeWarning(datatypeWarning={}) - start", String.valueOf(datatypeWarning));
         this.datatypeWarning = datatypeWarning;
     }
 
     public void setDatatypeFactory(String datatypeFactory)
     {
-        logger.trace("setDatatypeFactory(datatypeFactory={}) - start", datatypeFactory);
+        log.trace("setDatatypeFactory(datatypeFactory={}) - start", datatypeFactory);
         this.dataTypeFactory = datatypeFactory;
     }
 
     public void setEscapePattern(String escapePattern)
     {
-        logger.trace("setEscapePattern(escapePattern={}) - start", escapePattern);
+        log.trace("setEscapePattern(escapePattern={}) - start", escapePattern);
         this.escapePattern = escapePattern;
     }
 
@@ -244,15 +237,9 @@ public class DbUnitTask extends Task
         return dbConfig;
     }
 
-//    public void setDbConfig(DbConfig dbConfig) 
-//    {
-//        logger.debug("setDbConfig(dbConfig={}) - start", dbConfig);
-//        this.dbConfig = dbConfig;
-//    }
-
     public void addDbConfig(DbConfig dbConfig)
     {
-        logger.trace("addDbConfig(dbConfig={}) - start", dbConfig);
+        log.trace("addDbConfig(dbConfig={}) - start", dbConfig);
         this.dbConfig = dbConfig;
     }
     
@@ -261,7 +248,7 @@ public class DbUnitTask extends Task
      */
     public void setClasspath(Path classpath)
     {
-        logger.trace("setClasspath(classpath={}) - start", classpath);
+        log.trace("setClasspath(classpath={}) - start", classpath);
         if (this.classpath == null)
         {
             this.classpath = classpath;
@@ -277,7 +264,7 @@ public class DbUnitTask extends Task
      */
     public Path createClasspath()
     {
-        logger.trace("createClasspath() - start");
+        log.trace("createClasspath() - start");
 
         if (this.classpath == null)
         {
@@ -291,7 +278,7 @@ public class DbUnitTask extends Task
      */
     public void setClasspathRef(Reference r)
     {
-        logger.trace("setClasspathRef(r={}) - start", r);
+        log.trace("setClasspathRef(r={}) - start", r);
 
         createClasspath().setRefid(r);
     }
@@ -309,7 +296,7 @@ public class DbUnitTask extends Task
      */
     public void addOperation(Operation operation)
     {
-        logger.trace("addOperation({}) - start", operation);
+        log.trace("addOperation({}) - start", operation);
 
         steps.add(operation);
     }
@@ -319,7 +306,7 @@ public class DbUnitTask extends Task
      */
     public void addCompare(Compare compare)
     {
-        logger.trace("addCompare({}) - start", compare);
+        log.trace("addCompare({}) - start", compare);
 
         steps.add(compare);
     }
@@ -329,7 +316,7 @@ public class DbUnitTask extends Task
      */
     public void addExport(Export export)
     {
-        logger.trace("addExport(export={}) - start", export);
+        log.trace("addExport(export={}) - start", export);
 
         steps.add(export);
     }
@@ -370,7 +357,7 @@ public class DbUnitTask extends Task
      */
     public void execute() throws BuildException
     {
-        logger.trace("execute() - start");
+        log.trace("execute() - start");
 
         try
         {
@@ -403,14 +390,14 @@ public class DbUnitTask extends Task
             }
             catch (SQLException e)
             {
-                logger.error("execute()", e);
+                log.error("execute()", e);
             }
         }
     }
 
     protected IDatabaseConnection createConnection() throws SQLException
     {
-        logger.trace("createConnection() - start");
+        log.trace("createConnection() - start");
 
         if (driver == null)
         {
@@ -497,7 +484,7 @@ public class DbUnitTask extends Task
     protected IDatabaseConnection createDatabaseConnection(Connection jdbcConnection,
             String dbSchema) 
     {
-        logger.trace("createDatabaseConnection(jdbcConnection={}, dbSchema={}) - start", jdbcConnection, dbSchema);
+        log.trace("createDatabaseConnection(jdbcConnection={}, dbSchema={}) - start", jdbcConnection, dbSchema);
 
         IDatabaseConnection connection = null;
         try

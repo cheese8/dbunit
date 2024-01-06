@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tools.ant.ProjectComponent;
 import org.dbunit.DatabaseUnitException;
@@ -56,12 +57,8 @@ import org.xml.sax.InputSource;
  * @since 2.1 (Apr 3, 2004)
  */
 @Slf4j
+@Data
 public abstract class AbstractStep extends ProjectComponent implements DbUnitTaskStep {
-    public static final String FORMAT_FLAT = "flat";
-    public static final String FORMAT_XML = "xml";
-    public static final String FORMAT_DTD = "dtd";
-    public static final String FORMAT_CSV = "csv";
-    public static final String FORMAT_XLS = "xls";
 
     private boolean ordered = false;
 
@@ -140,15 +137,15 @@ public abstract class AbstractStep extends ProjectComponent implements DbUnitTas
         log.debug("getSrcDataSet(src={}, format={}, forwardOnly={}) - start", src, format, forwardOnly);
         try {
             IDataSetProducer producer;
-            if (format.equalsIgnoreCase(FORMAT_XML)) {
+            if (format.equalsIgnoreCase(FormatSupport.XML.getFormat())) {
                 producer = new XmlProducer(getInputSource(src));
-            } else if (format.equalsIgnoreCase(FORMAT_CSV)) {
+            } else if (format.equalsIgnoreCase(FormatSupport.CSV.getFormat())) {
                 producer = new CsvProducer(src);
-            } else if (format.equalsIgnoreCase(FORMAT_FLAT)) {
+            } else if (format.equalsIgnoreCase(FormatSupport.FLAT.getFormat())) {
                 producer = new FlatXmlProducer(getInputSource(src), true, true);
-            } else if (format.equalsIgnoreCase(FORMAT_DTD)) {
+            } else if (format.equalsIgnoreCase(FormatSupport.DTD.getFormat())) {
                 producer = new FlatDtdProducer(getInputSource(src));
-            } else if (format.equalsIgnoreCase(FORMAT_XLS)) {
+            } else if (format.equalsIgnoreCase(FormatSupport.XLS.getFormat())) {
                 return new CachedDataSet(new XlsDataSet(src));
             } else {
                 throw new IllegalArgumentException("Type must be either 'flat'(default), 'xml', 'csv', 'xls' or 'dtd' but was: " + format);
@@ -162,40 +159,6 @@ public abstract class AbstractStep extends ProjectComponent implements DbUnitTas
         }
     }
 
-    /**
-	 * Checks if the given format is a format which contains tabular data.
-	 * @param format The format to check
-	 * @return <code>true</code> if the given format is a data format. A data
-	 * format is a format which holds tabular data that can be loaded via dbunit.
-	 * An example for a data format is "xml" or "flat". A non-data format is "dtd" which
-	 * holds only metadata information.
-	 * @since 2.4
-	 */
-	public boolean isDataFormat(String format) {
-        log.debug("isDataFormat(format={}) - start", format);
-        if (format.equalsIgnoreCase(FORMAT_FLAT) || format.equalsIgnoreCase(FORMAT_XML)
-                || format.equalsIgnoreCase(FORMAT_CSV) || format.equalsIgnoreCase(FORMAT_XLS)) {
-            return true;
-        }
-        return false;
-	}
-	
-    /**
-     * Checks if the given data format is a valid one according to
-     * the method {@link #isDataFormat(String)}. If it is not an
-     * {@link IllegalArgumentException} is thrown.
-     * @param format The format to check
-     * @throws IllegalArgumentException If the given format is not
-     * a valid data format
-     * @since 2.4
-     */
-    protected void checkDataFormat(String format) {
-        log.debug("checkDataFormat(format={}) - start", format);
-        if (!isDataFormat(format)) {
-            throw new IllegalArgumentException("format must be either 'flat'(default), 'xml', 'csv' or 'xls' but was: " + format);
-        }
-    }
-
 	/**
 	 * Creates and returns an {@link InputSource}
 	 * @param file The file for which an {@link InputSource} should be created
@@ -205,15 +168,7 @@ public abstract class AbstractStep extends ProjectComponent implements DbUnitTas
 	public static InputSource getInputSource(File file) throws MalformedURLException {
         return FileHelper.createInputSource(file);
 	}
-	
-    public boolean isOrdered() {
-        return ordered;
-    }
 
-    public void setOrdered(boolean ordered) {
-        this.ordered = ordered;
-    }
-    
     public String toString() {
         StringBuffer result = new StringBuffer();
         result.append("AbstractStep: ");
