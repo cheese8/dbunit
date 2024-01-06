@@ -32,7 +32,7 @@ import org.dbunit.dataset.DataSetException;
  */
 public interface IDataSetProducer
 {
-    public void setConsumer(IDataSetConsumer consumer) throws DataSetException;
+    void setConsumer(IDataSetConsumer consumer) throws DataSetException;
 
     /**
      * Process this dataset source. During the processing, the IDataSetProducer
@@ -43,5 +43,5 @@ public interface IDataSetProducer
      * If a client application wants to terminate parsing early, it should
      * throw an exception from the listener.
      */
-    public void produce() throws DataSetException;
+    void produce() throws DataSetException;
 }

@@ -29,6 +29,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tools.ant.ProjectComponent;
 import org.dbunit.DatabaseUnitException;
@@ -58,6 +59,7 @@ import org.xml.sax.InputSource;
  */
 @Slf4j
 @Data
+@EqualsAndHashCode(callSuper = true)
 public abstract class AbstractStep extends ProjectComponent implements DbUnitTaskStep {
 
     private boolean ordered = false;
@@ -88,7 +90,6 @@ public abstract class AbstractStep extends ProjectComponent implements DbUnitTas
             throw new DatabaseUnitException(e);
         }
     }
-
 
     private ForwardOnlyDataSet[] createForwardOnlyDataSetArray(List<QueryDataSet> dataSets) throws SQLException {
         ForwardOnlyDataSet[] forwardOnlyDataSets = new ForwardOnlyDataSet[dataSets.size()];
@@ -170,9 +171,6 @@ public abstract class AbstractStep extends ProjectComponent implements DbUnitTas
 	}
 
     public String toString() {
-        StringBuffer result = new StringBuffer();
-        result.append("AbstractStep: ");
-        result.append("ordered=").append(this.ordered);
-        return result.toString();
+        return "AbstractStep: ordered=" + ordered;
     }
 }

@@ -22,8 +22,7 @@ package org.dbunit.ant;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import org.dbunit.Assertion;
 import org.dbunit.DatabaseUnitException;
@@ -48,68 +47,38 @@ import java.util.List;
  * @since Apr 3, 2004
  * @see DbUnitTaskStep
  */
-public class Compare extends AbstractStep
-{
-
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(Compare.class);
-
-    @Getter
-    @Setter
+@Slf4j
+public class Compare extends AbstractStep {
+    @Getter @Setter
     private String format = FormatSupport.FLAT.getFormat();
-    private File _src;
-    private List _tables = new ArrayList();
-    private boolean _sort = false;
+    @Getter @Setter
+    private File src;
+    @Getter
+    private List tables = new ArrayList();
+    @Setter
+    private boolean sort = false;
 
-    public File getSrc()
-    {
-        return _src;
-    }
-
-    public void setSrc(File src)
-    {
-        logger.debug("setSrc(src={}) - start", src);
-
-        _src = src;
-    }
-
-    public void setSort(boolean sort)
-    {
-        logger.debug("setSort(sort={}) - start", String.valueOf(sort));
-
-        _sort = sort;
-    }
-
-    public List getTables()
-    {
-        return _tables;
-    }
-
-    public void addTable(Table table)
-    {
-        logger.debug("addTable(table={}) - start", table);
-
-        _tables.add(table);
+    public void addTable(Table table) {
+        log.debug("addTable(table={}) - start", table);
+        tables.add(table);
     }
 
     public void addQuery(Query query)
     {
-        logger.debug("addQuery(query={}) - start", query);
+        log.debug("addQuery(query={}) - start", query);
 
-        _tables.add(query);
+        tables.add(query);
     }
 
     public void execute(IDatabaseConnection connection) throws DatabaseUnitException
     {
-        logger.debug("execute(connection={}) - start", connection);
+        log.debug("execute(connection={}) - start", connection);
 
-        IDataSet expectedDataset = getSrcDataSet(_src, getFormat(), false);
-        IDataSet actualDataset = getDatabaseDataSet(connection, _tables);
+        IDataSet expectedDataset = getSrcDataSet(src, getFormat(), false);
+        IDataSet actualDataset = getDatabaseDataSet(connection, tables);
 
         String[] tableNames = null;
-        if (_tables.size() == 0)
+        if (tables.size() == 0)
         {
             // No tables specified, assume must compare all tables from
             // expected dataset
@@ -127,8 +96,8 @@ public class Compare extends AbstractStep
 			try {
 				expectedTable = expectedDataset.getTable(tableName);
 			} catch (NoSuchTableException e) {
-				throw new DatabaseUnitException("Did not find table in source file '" + 
-						_src + "' using format '" + getFormat() + "'", e);
+				throw new DatabaseUnitException("Did not find table in source file '" +
+                        src + "' using format '" + getFormat() + "'", e);
 			}
             ITableMetaData expectedMetaData = expectedTable.getTableMetaData();
 
@@ -144,7 +113,7 @@ public class Compare extends AbstractStep
             actualTable = DefaultColumnFilter.includedColumnsTable(
                     actualTable, expectedMetaData.getColumns());
 
-            if (_sort)
+            if (sort)
             {
                 expectedTable = new SortedTable(expectedTable);
                 actualTable = new SortedTable(actualTable);
@@ -156,7 +125,7 @@ public class Compare extends AbstractStep
     public String getLogMessage()
     {
         return "Executing compare: "
-                + "\n          from file: " + ((_src == null) ? null : _src.getAbsolutePath())
+                + "\n          from file: " + ((src == null) ? null : src.getAbsolutePath())
                 + "\n          with format: " + format;
     }
 
@@ -165,11 +134,11 @@ public class Compare extends AbstractStep
         StringBuffer result = new StringBuffer();
         result.append("Compare: ");
         result.append(" src=");
-        result.append((_src == null ? "null" : _src.getAbsolutePath()));
+        result.append((src == null ? "null" : src.getAbsolutePath()));
         result.append(", format= ");
         result.append(format);
         result.append(", tables= ");
-        result.append(_tables);
+        result.append(tables);
 
         return result.toString();
     }

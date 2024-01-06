@@ -32,12 +32,9 @@ import org.dbunit.database.IDatabaseConnection;
  * @version $Revision$
  * @since Jun 10, 2002
  */
-public interface DbUnitTaskStep
-{
+public interface DbUnitTaskStep {
 
-    public void execute(IDatabaseConnection connection) throws DatabaseUnitException;
+    void execute(IDatabaseConnection connection) throws DatabaseUnitException;
 
-    public String getLogMessage();
-
+    String getLogMessage();
 }
-

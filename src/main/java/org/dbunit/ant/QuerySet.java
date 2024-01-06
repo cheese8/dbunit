@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.ProjectComponent;
 import org.apache.tools.ant.types.FilterSet;
@@ -102,14 +103,8 @@ import org.slf4j.LoggerFactory;
  * @version $Revision$ $Date$
  * @since 2.2.0 (Sep. 13 2004)
  */
-public class QuerySet extends ProjectComponent
-{
-
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(QuerySet.class);
-
+@Slf4j
+public class QuerySet extends ProjectComponent {
 	private String id;
 	private String refid;
 	private List queries = new ArrayList();
@@ -123,13 +118,12 @@ public class QuerySet extends ProjectComponent
 	}
 
 	public void addQuery(Query query) {
-        logger.debug("addQuery(query={}) - start", query);
-
+        log.debug("addQuery(query={}) - start", query);
 		queries.add(query);
 	}
 
 	public void addFilterSet(FilterSet filterSet) {
-        logger.debug("addFilterSet(filterSet={}) - start", filterSet);
+		log.debug("addFilterSet(filterSet={}) - start", filterSet);
 
 		filterSets.add(filterSet);
 	}
@@ -143,21 +137,21 @@ public class QuerySet extends ProjectComponent
 	}
 
 	public void setId(String string) {
-        logger.debug("setId(string={}) - start", string);
+		log.debug("setId(string={}) - start", string);
 
 		if(refid != null) throw new BuildException(ERR_MSG);
 		id = string;
 	}
 
 	public void setRefid(String string) {
-        logger.debug("setRefid(string={}) - start", string);
+		log.debug("setRefid(string={}) - start", string);
 
 		if(id != null) throw new BuildException(ERR_MSG);
 		refid = string;
 	}
 
 	public List getQueries() {
-        logger.debug("getQueries() - start");
+		log.debug("getQueries() - start");
 
 		Iterator i = queries.iterator();
 		while(i.hasNext()) {
@@ -170,7 +164,7 @@ public class QuerySet extends ProjectComponent
 	}
 
 	private void replaceTokens(Query query) {
-        logger.debug("replaceTokens(query={}) - start", query);
+		log.debug("replaceTokens(query={}) - start", query);
 
 		Iterator i = filterSets.iterator();
 		while(i.hasNext()) {
@@ -181,7 +175,7 @@ public class QuerySet extends ProjectComponent
 
 
 	public void copyQueriesFrom(QuerySet referenced) {
-        logger.debug("copyQueriesFrom(referenced={}) - start", referenced);
+		log.debug("copyQueriesFrom(referenced={}) - start", referenced);
 
 		Iterator i = referenced.queries.iterator();
 		while(i.hasNext()) {
@@ -192,7 +186,7 @@ public class QuerySet extends ProjectComponent
     public QueryDataSet getQueryDataSet(IDatabaseConnection connection) 
     throws SQLException, AmbiguousTableNameException 
     {
-        logger.debug("getQueryDataSet(connection={}) - start", connection);
+		log.debug("getQueryDataSet(connection={}) - start", connection);
         
         //incorporate queries from referenced query-set
         String refid = getRefid();
