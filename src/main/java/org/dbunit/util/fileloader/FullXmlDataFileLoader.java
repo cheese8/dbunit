@@ -26,6 +26,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Map;
 
+import lombok.NoArgsConstructor;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.XmlDataSet;
@@ -36,11 +37,8 @@ import org.dbunit.dataset.xml.XmlDataSet;
  * @version $Revision$ $Date$
  * @since 2.4.8
  */
+@NoArgsConstructor
 public class FullXmlDataFileLoader extends AbstractDataFileLoader {
-    /** Create new instance. */
-    public FullXmlDataFileLoader() {
-    }
-
     /**
      * Create new instance with replacement objects.
      * 

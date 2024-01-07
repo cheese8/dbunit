@@ -96,9 +96,6 @@ public abstract class AbstractBatchOperation extends AbstractOperation {
 
     abstract OperationData getOperationData(ITableMetaData metaData, BitSet ignoreMapping, IDatabaseConnection connection) throws DataSetException;
 
-    ////////////////////////////////////////////////////////////////////////////
-    // DatabaseOperation class
-
     @Override
     public void execute(IDatabaseConnection connection, IDataSet dataSet) throws DatabaseUnitException, SQLException {
         log.debug("execute(connection={}, dataSet={}) - start", connection, dataSet);

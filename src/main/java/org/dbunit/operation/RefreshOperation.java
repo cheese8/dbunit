@@ -21,6 +21,7 @@
 
 package org.dbunit.operation;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,31 +54,18 @@ import java.util.BitSet;
  * @version $Revision$
  * @since Feb 19, 2002
  */
+@Slf4j
 public class RefreshOperation extends AbstractOperation {
-
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(RefreshOperation.class);
-
-    private final InsertOperation _insertOperation;
-    private final UpdateOperation _updateOperation;
-
-    RefreshOperation() {
-        _insertOperation = (InsertOperation)DatabaseOperation.INSERT;
-        _updateOperation = (UpdateOperation)DatabaseOperation.UPDATE;
-    }
+    private final InsertOperation insertOperation = (InsertOperation)DatabaseOperation.INSERT;
+    private final UpdateOperation updateOperation = (UpdateOperation)DatabaseOperation.UPDATE;
 
     private boolean isEmpty(ITable table) throws DataSetException {
         return AbstractBatchOperation.isEmpty(table);
     }
 
-    ////////////////////////////////////////////////////////////////////////////
-    // DatabaseOperation class
-
     public void execute(IDatabaseConnection connection, IDataSet dataSet)
             throws DatabaseUnitException, SQLException {
-        logger.debug("execute(connection={}, dataSet) - start", connection);
+        log.debug("execute(connection={}, dataSet) - start", connection);
         
         // for each table
         ITableIterator iterator = dataSet.iterator();
@@ -85,7 +73,7 @@ public class RefreshOperation extends AbstractOperation {
             ITable table = iterator.getTable();
             
             String tableName=table.getTableMetaData().getTableName();
-            logger.trace("execute: processing table='{}'", tableName);
+            log.trace("execute: processing table='{}'", tableName);
 
             // Do not process empty table
             if (isEmpty(table)) {
@@ -122,7 +110,7 @@ public class RefreshOperation extends AbstractOperation {
 
     private RowOperation createUpdateOperation(IDatabaseConnection connection,
             ITableMetaData metaData) throws DataSetException, SQLException {
-        logger.debug("createUpdateOperation(connection={}, metaData={}) - start", connection, metaData);
+        log.debug("createUpdateOperation(connection={}, metaData={}) - start", connection, metaData);
 
         // update only if columns are not all primary keys
         if (metaData.getColumns().length > metaData.getPrimaryKeys().length) {
@@ -209,14 +197,14 @@ public class RefreshOperation extends AbstractOperation {
             // If current row has a different ignore value mapping than
             // previous one, we generate a new statement
             if (_ignoreMapping == null ||
-                    !_insertOperation.equalsIgnoreMapping(_ignoreMapping, table, row)) {
+                    !insertOperation.equalsIgnoreMapping(_ignoreMapping, table, row)) {
                 // Execute and close previous statement
                 if (_statement != null) {
                     _statement.close();
                 }
 
-                _ignoreMapping = _insertOperation.getIgnoreMapping(table, row);
-                _operationData = _insertOperation.getOperationData(_metaData,
+                _ignoreMapping = insertOperation.getIgnoreMapping(table, row);
+                _operationData = insertOperation.getOperationData(_metaData,
                         _ignoreMapping, _connection);
                 _statement = new SimplePreparedStatement(_operationData.getSql(),
                         _connection.getConnection());
@@ -237,7 +225,7 @@ public class RefreshOperation extends AbstractOperation {
                 ITableMetaData metaData)
                 throws DataSetException, SQLException {
             // setup update statement
-            _operationData = _updateOperation.getOperationData(
+            _operationData = updateOperation.getOperationData(
                     metaData, null, connection);
             _statement = new SimplePreparedStatement(_operationData.getSql(),
                     connection.getConnection());
@@ -249,12 +237,6 @@ public class RefreshOperation extends AbstractOperation {
      */
     private class RowExistOperation extends RowOperation
     {
-
-        /**
-         * Logger for this class
-         */
-        private final Logger logger = LoggerFactory.getLogger(RowExistOperation.class);
-
         PreparedStatement _countStatement;
 
         public RowExistOperation(IDatabaseConnection connection,
@@ -270,8 +252,6 @@ public class RefreshOperation extends AbstractOperation {
         private OperationData getSelectCountData(
                 ITableMetaData metaData, IDatabaseConnection connection) throws DataSetException
         {
-            logger.debug("getSelectCountData(metaData={}, connection={}) - start", metaData, connection);
-
             Column[] primaryKeys = metaData.getPrimaryKeys();
 
             // cannot construct where clause if no primary key
@@ -302,9 +282,6 @@ public class RefreshOperation extends AbstractOperation {
             return new OperationData(sqlBuffer.toString(), primaryKeys);
         }
 
-        ////////////////////////////////////////////////////////////////////////
-        // RowOperation class
-
         /**
          * Verify if the specified table row exists in the database.
          * @return <code>true</code> if row exists.
@@ -312,8 +289,6 @@ public class RefreshOperation extends AbstractOperation {
         public boolean execute(ITable table, int row)
                 throws DataSetException, SQLException
         {
-            logger.debug("execute(table={}, row={}) - start", table, String.valueOf(row));
-
             Column[] columns = _operationData.getColumns();
             for (int i = 0; i < columns.length; i++)
             {
@@ -332,7 +307,6 @@ public class RefreshOperation extends AbstractOperation {
         }
 
         public void close() throws SQLException {
-            logger.debug("close() - start");
             _countStatement.close();
         }
     }

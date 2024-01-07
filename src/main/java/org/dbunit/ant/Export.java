@@ -73,19 +73,16 @@ public class Export extends AbstractStep {
     @Getter
     private List tables = new ArrayList();
 
-    private String getAbsolutePath(File filename)
-    {
+    private String getAbsolutePath(File filename) {
         return filename != null ? filename.getAbsolutePath() : "null";
     }
 
-    public void addTable(Table table)
-    {
+    public void addTable(Table table) {
         log.debug("addTable(table={}) - start", table);
         tables.add(table);
     }
 
-    public void addQuery(Query query)
-    {
+    public void addQuery(Query query) {
         log.debug("addQuery(query={}) - start", query);
         tables.add(query);
     }
@@ -95,8 +92,7 @@ public class Export extends AbstractStep {
         tables.add(querySet);
 	}
 
-    public void execute(IDatabaseConnection connection) throws DatabaseUnitException
-    {
+    public void execute(IDatabaseConnection connection) throws DatabaseUnitException {
         log.debug("execute(connection={}) - start", connection);
 
         try

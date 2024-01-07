@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
 
+import lombok.NoArgsConstructor;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.csv.CsvURLDataSet;
@@ -36,10 +37,8 @@ import org.dbunit.dataset.csv.CsvURLDataSet;
  * @since <dbunit-version>
  * 
  */
+@NoArgsConstructor
 public class CsvDataFileLoader extends AbstractDataFileLoader {
-    /** Create new instance. */
-    public CsvDataFileLoader() {
-    }
 
     /**
      * Create new instance with replacement objects.

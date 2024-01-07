@@ -24,6 +24,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
@@ -34,12 +36,10 @@ import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
  * @version $Revision$ $Date$
  * @since 2.4.8
  */
+@NoArgsConstructor
+@Data
 public class FlatXmlDataFileLoader extends AbstractDataFileLoader {
     private FlatXmlDataSetBuilder builder = new FlatXmlDataSetBuilder();
-
-    /** Create new instance. */
-    public FlatXmlDataFileLoader() {
-    }
 
     /**
      * Create new instance with replacement objects.
@@ -105,28 +105,5 @@ public class FlatXmlDataFileLoader extends AbstractDataFileLoader {
         IDataSet ds = builder.build(url);
 
         return ds;
-    }
-
-    /**
-     * Get the builder.
-     * 
-     * @see {@link FlatXmlDataSetBuilder}.
-     * 
-     * @return The builder.
-     */
-    public FlatXmlDataSetBuilder getBuilder() {
-        return builder;
-    }
-
-    /**
-     * Set the builder.
-     * 
-     * @see {@link FlatXmlDataSetBuilder}.
-     * 
-     * @param builder
-     *            The builder to set.
-     */
-    public void setBuilder(FlatXmlDataSetBuilder builder) {
-        this.builder = builder;
     }
 }

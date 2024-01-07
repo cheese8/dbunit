@@ -21,6 +21,8 @@
 
 package org.dbunit.operation;
 
+import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,29 +44,15 @@ import java.util.BitSet;
  * @version $Revision$
  * @since Feb 18, 2002
  */
-public class InsertOperation extends AbstractBatchOperation
-{
-
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(InsertOperation.class);
-
-    InsertOperation()
-    {
-    }
-
-    ////////////////////////////////////////////////////////////////////////////
-    // AbstractBatchOperation class
+@Slf4j
+@NoArgsConstructor
+public class InsertOperation extends AbstractBatchOperation {
 
     public OperationData getOperationData(ITableMetaData metaData,
             BitSet ignoreMapping, IDatabaseConnection connection) throws DataSetException
     {
-    	if (logger.isDebugEnabled())
-    	{
-    		logger.debug("getOperationData(metaData={}, ignoreMapping={}, connection={}) - start",
+    		log.debug("getOperationData(metaData={}, ignoreMapping={}, connection={}) - start",
     				new Object[]{ metaData, ignoreMapping, connection });
-    	}
 
         Column[] columns = metaData.getColumns();
 
@@ -109,8 +97,7 @@ public class InsertOperation extends AbstractBatchOperation
 
     protected BitSet getIgnoreMapping(ITable table, int row) throws DataSetException
     {
-    	if(logger.isDebugEnabled())
-    		logger.debug("getIgnoreMapping(table={}, row={}) - start", table, String.valueOf(row));
+    		log.debug("getIgnoreMapping(table={}, row={}) - start", table, String.valueOf(row));
 
         Column[] columns = table.getTableMetaData().getColumns();
 
@@ -131,12 +118,8 @@ public class InsertOperation extends AbstractBatchOperation
     protected boolean equalsIgnoreMapping(BitSet ignoreMapping, ITable table,
             int row) throws DataSetException
     {
-    	if (logger.isDebugEnabled())
-    	{
-    		logger.debug("equalsIgnoreMapping(ignoreMapping={}, table={}, row={}) - start",
+            log.debug("equalsIgnoreMapping(ignoreMapping={}, table={}, row={}) - start",
     				new Object[]{ ignoreMapping, table, String.valueOf(row) });
-    	}
-
         Column[] columns = table.getTableMetaData().getColumns();
 
         for (int i = 0; i < columns.length; i++)

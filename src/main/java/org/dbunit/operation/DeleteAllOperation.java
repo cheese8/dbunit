@@ -20,8 +20,8 @@
  */
 package org.dbunit.operation;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConfig;
@@ -53,18 +53,9 @@ import java.util.Stack;
  * @see TruncateTableOperation
  * @since Feb 18, 2002
  */
-public class DeleteAllOperation extends AbstractOperation
-{
-
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(DeleteAllOperation.class);
-
-    DeleteAllOperation()
-    {
-    }
-
+@Slf4j
+@NoArgsConstructor
+public class DeleteAllOperation extends AbstractOperation {
     protected String getDeleteAllCommand()
     {
         return "delete from ";
@@ -76,7 +67,7 @@ public class DeleteAllOperation extends AbstractOperation
     public void execute(IDatabaseConnection connection, IDataSet dataSet)
             throws DatabaseUnitException, SQLException
     {
-        logger.debug("execute(connection={}, dataSet={}) - start", connection, dataSet);
+        log.debug("execute(connection={}, dataSet={}) - start", connection, dataSet);
 
         IDataSet databaseDataSet = connection.createDataSet();
 
@@ -115,8 +106,7 @@ public class DeleteAllOperation extends AbstractOperation
                 String sql = sqlBuffer.toString();
                 statement.addBatch(sql);
 
-                if(logger.isDebugEnabled())
-                    logger.debug("Added SQL: {}", sql);
+                    log.debug("Added SQL: {}", sql);
                 
                 count++;
             }

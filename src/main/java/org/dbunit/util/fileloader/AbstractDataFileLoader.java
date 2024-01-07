@@ -25,6 +25,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import lombok.extern.slf4j.Slf4j;
 import org.dbunit.DatabaseUnitRuntimeException;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.DefaultDataSet;
@@ -41,10 +42,8 @@ import org.slf4j.LoggerFactory;
  * @version $Revision$ $Date$
  * @since 2.4.8
  */
+@Slf4j
 public abstract class AbstractDataFileLoader implements DataFileLoader {
-    private final Logger LOG =
-            LoggerFactory.getLogger(AbstractDataFileLoader.class);
-
     private Map replacementObjects;
     private Map replacementSubstrings;
     private Map replacementFunctions;
@@ -102,13 +101,12 @@ public abstract class AbstractDataFileLoader implements DataFileLoader {
     public IDataSet load(String filename) throws DatabaseUnitRuntimeException {
         IDataSet ds = new DefaultDataSet();
 
-        LOG.debug("load: processing file={}", filename);
 
         if (filename == null || "".equals(filename)) {
             final String msg =
                     "load: filename is null or empty string,"
                             + " using DefaultDataSet()";
-            LOG.debug(msg);
+            log.debug(msg);
         } else {
             URL url = this.getClass().getResource(filename);
 

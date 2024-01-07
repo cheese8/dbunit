@@ -26,6 +26,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Map;
 
+import lombok.NoArgsConstructor;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.excel.XlsDataSet;
@@ -37,10 +38,8 @@ import org.dbunit.dataset.excel.XlsDataSet;
  * @since 2.4.8
  * 
  */
+@NoArgsConstructor
 public class XlsDataFileLoader extends AbstractDataFileLoader {
-    /** Create new instance. */
-    public XlsDataFileLoader() {
-    }
 
     /**
      * Create new instance with replacement objects.

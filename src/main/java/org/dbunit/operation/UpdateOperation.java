@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
 
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.Column;
@@ -32,9 +33,6 @@ import org.dbunit.dataset.Columns;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.ITableMetaData;
 import org.dbunit.dataset.NoPrimaryKeyException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * Updates the database from the dataset contents. This operation assumes that
  * table data already exists in the database and fails if this is not the case.
@@ -44,17 +42,11 @@ import org.slf4j.LoggerFactory;
  * @since Feb 19, 2002
  */
 @Slf4j
+@NoArgsConstructor
 public class UpdateOperation extends AbstractBatchOperation {
 
-    UpdateOperation() {}
-
-    ////////////////////////////////////////////////////////////////////////////
-    // AbstractBatchOperation class
-
     public OperationData getOperationData(ITableMetaData metaData, BitSet ignoreMapping, IDatabaseConnection connection) throws DataSetException {
-        if (log.isDebugEnabled()) {
-            log.debug("getOperationData(metaData={}, ignoreMapping={}, connection={}) - start", new Object[]{metaData, ignoreMapping, connection});
-        }
+        log.debug("getOperationData(metaData={}, ignoreMapping={}, connection={}) - start", metaData, ignoreMapping, connection);
         Column[] columns = metaData.getColumns();
         Column[] primaryKeys = metaData.getPrimaryKeys();
 

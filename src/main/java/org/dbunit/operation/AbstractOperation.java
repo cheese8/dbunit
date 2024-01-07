@@ -43,10 +43,10 @@ import org.dbunit.util.QualifiedTableName;
 public abstract class AbstractOperation extends DatabaseOperation {
 
     protected String getQualifiedName(String prefix, String name, IDatabaseConnection connection) {
-        log.debug("getQualifiedName(prefix={}, name={}, connection={}) - start", new Object[] {prefix, name, connection});
+        log.debug("getQualifiedName(prefix={}, name={}, connection={}) - start", prefix, name, connection);
         String escapePattern = (String)connection.getConfig().getProperty(DatabaseConfig.PROPERTY_ESCAPE_PATTERN);
-        QualifiedTableName qualifiedTbleName = new QualifiedTableName(name, prefix, escapePattern);
-        return qualifiedTbleName.getQualifiedName();
+        QualifiedTableName qualifiedTableName = new QualifiedTableName(name, prefix, escapePattern);
+        return qualifiedTableName.getQualifiedName();
     }
 
     /**

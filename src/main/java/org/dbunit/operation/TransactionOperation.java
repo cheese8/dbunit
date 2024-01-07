@@ -21,6 +21,7 @@
 
 package org.dbunit.operation;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.dbunit.DatabaseUnitException;
@@ -38,20 +39,10 @@ import java.sql.SQLException;
  * @since Feb 21, 2002
  */
 @Slf4j
+@AllArgsConstructor
 public class TransactionOperation extends DatabaseOperation {
 
-    private final DatabaseOperation _operation;
-
-    /**
-     * Creates a TransactionOperation that decorates the specified operation.
-     */
-    public TransactionOperation(DatabaseOperation operation)
-    {
-        _operation = operation;
-    }
-
-    ////////////////////////////////////////////////////////////////////////////
-    // DatabaseOperation class
+    private final DatabaseOperation operation;
 
     public void execute(IDatabaseConnection connection, IDataSet dataSet) throws DatabaseUnitException, SQLException {
         log.debug("execute(connection={}, dataSet={}) - start", connection, dataSet);
@@ -65,7 +56,7 @@ public class TransactionOperation extends DatabaseOperation {
 
         jdbcConnection.setAutoCommit(false);
         try {
-            _operation.execute(databaseConnection, dataSet);
+            operation.execute(databaseConnection, dataSet);
             jdbcConnection.commit();
         } catch (DatabaseUnitException | SQLException | RuntimeException e) {
             jdbcConnection.rollback();
