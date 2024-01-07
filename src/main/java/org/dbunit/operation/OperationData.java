@@ -23,6 +23,8 @@ package org.dbunit.operation;
 
 import java.util.Arrays;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.dbunit.dataset.Column;
 
 /**
@@ -30,29 +32,13 @@ import org.dbunit.dataset.Column;
  * @version $Revision$
  * @since Mar 16, 2002
  */
+
+@AllArgsConstructor
+@Getter
 public class OperationData {
     private final String sql;
     private final Column[] columns;
 
-    /**
-     * @param sql
-     * @param columns
-     */
-    public OperationData(String sql, Column[] columns) {
-        this.sql = sql;
-        this.columns = columns;
-    }
-
-    public String getSql()
-    {
-        return sql;
-    }
-
-    public Column[] getColumns()
-    {
-        return columns;
-    }
-    
     public String toString() {
     	StringBuffer sb = new StringBuffer();
     	sb.append(getClass().getName()).append("[");

@@ -16,9 +16,7 @@
 
 package org.dbunit.util.concurrent;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import lombok.extern.slf4j.Slf4j;
 /**
  * Efficient array-based bounded buffer class.
  * Adapted from CPJ, chapter 8, which describes design.
@@ -29,13 +27,8 @@ import org.slf4j.LoggerFactory;
  * @version $Revision$ $Date$
  * @since ? (pre 2.1)
  */
+@Slf4j
 public class BoundedBuffer implements BoundedChannel {
-
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(BoundedBuffer.class);
-
   protected final Object[]  array_;      // the elements
 
   protected int takePtr_ = 0;            // circular indices
@@ -93,7 +86,7 @@ public class BoundedBuffer implements BoundedChannel {
   }
 
   protected final void insert(Object x) {
-        logger.debug("insert(x={}) - start", x);
+        log.debug("insert(x={}) - start", x);
  // mechanics of put
     --emptySlots_;
     array_[putPtr_] = x;
@@ -101,7 +94,7 @@ public class BoundedBuffer implements BoundedChannel {
   }
 
   protected final Object extract() {
-        logger.debug("extract() - start");
+      log.debug("extract() - start");
  // mechanics of take
     --usedSlots_;
     Object old = array_[takePtr_];
@@ -111,7 +104,7 @@ public class BoundedBuffer implements BoundedChannel {
   }
 
   public Object peek() {
-        logger.debug("peek() - start");
+      log.debug("peek() - start");
 
     synchronized(this) {
       if (usedSlots_ > 0)
@@ -123,7 +116,7 @@ public class BoundedBuffer implements BoundedChannel {
 
 
   public void put(Object x) throws InterruptedException {
-        logger.debug("put(x={}) - start", x);
+      log.debug("put(x={}) - start", x);
 
     if (x == null) throw new IllegalArgumentException();
     if (Thread.interrupted()) throw new InterruptedException();
@@ -142,7 +135,7 @@ public class BoundedBuffer implements BoundedChannel {
   }
 
   public boolean offer(Object x, long msecs) throws InterruptedException {
-        logger.debug("offer(x={}, msecs={}) - start", x, new Long(msecs));
+      log.debug("offer(x={}, msecs={}) - start", x, new Long(msecs));
 
     if (x == null) throw new IllegalArgumentException();
     if (Thread.interrupted()) throw new InterruptedException();
@@ -168,7 +161,7 @@ public class BoundedBuffer implements BoundedChannel {
 
 
   public  Object take() throws InterruptedException {
-        logger.debug("take() - start");
+      log.debug("take() - start");
  
     if (Thread.interrupted()) throw new InterruptedException();
     Object old = null; 
@@ -187,7 +180,7 @@ public class BoundedBuffer implements BoundedChannel {
   }
 
   public  Object poll(long msecs) throws InterruptedException {
-        logger.debug("poll(msecs={}) - start", new Long(msecs));
+      log.debug("poll(msecs={}) - start", new Long(msecs));
  
     if (Thread.interrupted()) throw new InterruptedException();
     Object old = null; 
@@ -210,7 +203,4 @@ public class BoundedBuffer implements BoundedChannel {
     incEmptySlots();
     return old;
   }
-
 }
-
-
