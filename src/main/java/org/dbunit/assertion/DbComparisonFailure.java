@@ -40,17 +40,11 @@ public class DbComparisonFailure extends AssertionError {
     private String actual;
 
     public String getMessage() {
-        return buildMessage(this.reason, this.expected, this.actual);
+        return buildMessage(reason, expected, actual);
     }
 
     public String toString() {
-        StringBuffer sb = new StringBuffer();
-        sb.append(getClass().getName()).append("[");
-        sb.append(reason);
-        sb.append("expected:<").append(expected);
-        sb.append(">but was:<").append(actual).append(">");
-        sb.append("]");
-        return sb.toString();
+        return getClass().getName() + "[" + reason + "expected:<" + expected + ">but was:<" + actual + ">" + "]";
     }
     
     /**
@@ -60,11 +54,7 @@ public class DbComparisonFailure extends AssertionError {
      * @param actual The actual result
      * @return The formatted message
      */
-    public static final String buildMessage(String reason, String expected, String actual) {
-        StringBuffer sb = new StringBuffer();
-        sb.append(reason);
-        sb.append(" expected:<").append(expected).append(">");
-        sb.append(" but was:<").append(actual).append(">");
-        return sb.toString();
+    private static String buildMessage(String reason, String expected, String actual) {
+        return reason + " expected:<" + expected + ">" + " but was:<" + actual + ">";
     }
 }

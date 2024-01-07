@@ -20,8 +20,8 @@
  */
 package org.dbunit.assertion;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Dbunit's own small assertion utility, independent from the testing framework
@@ -32,31 +32,19 @@ import org.slf4j.LoggerFactory;
  * @version $Revision$ $Date$
  * @since 2.4.0
  */
-public class SimpleAssert 
+@Slf4j
+@AllArgsConstructor
+public class SimpleAssert
 {
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(SimpleAssert.class);
-
     private FailureHandler failureHandler;
-    
-    public SimpleAssert(FailureHandler failureHandler)
-    {
-        if (failureHandler == null) {
-            throw new NullPointerException(
-                    "The parameter 'failureHandler' must not be null");
-        }
-        this.failureHandler = failureHandler;
-    }
-    
+
     /**
      * Asserts that propertyName is not a null String and has a length greater
      * than zero.
      */
     protected void assertNotNullNorEmpty( String propertyName, String property )
     {
-        logger.debug("assertNotNullNorEmpty(propertyName={}, property={}) - start", propertyName, property);
+        log.debug("assertNotNullNorEmpty(propertyName={}, property={}) - start", propertyName, property);
 
         assertTrue( propertyName + " is null", property != null );
         assertTrue( "Invalid " + propertyName, property.trim()
