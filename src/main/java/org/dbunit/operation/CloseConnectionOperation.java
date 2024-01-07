@@ -21,6 +21,7 @@
 
 package org.dbunit.operation;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.dbunit.DatabaseUnitException;
@@ -37,17 +38,10 @@ import java.sql.SQLException;
  * @since Mar 6, 2002
  */
 @Slf4j
+@AllArgsConstructor
 public class CloseConnectionOperation extends DatabaseOperation {
 
     private final DatabaseOperation operation;
-
-    /**
-     * Creates a CloseConnectionOperation object that decorates the specified operation.
-     */
-    public CloseConnectionOperation(DatabaseOperation operation)
-    {
-        this.operation = operation;
-    }
 
     public void execute(IDatabaseConnection connection, IDataSet dataSet) throws DatabaseUnitException, SQLException {
         log.debug("execute(connection={}, dataSet={}) - start", connection, dataSet);

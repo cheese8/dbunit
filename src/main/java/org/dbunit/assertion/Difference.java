@@ -20,6 +20,8 @@
  */
 package org.dbunit.assertion;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.dbunit.dataset.ITable;
 
 /**
@@ -35,6 +37,8 @@ import org.dbunit.dataset.ITable;
  * @since 2.4.0
  * @since 2.6.0 added failMessage
  */
+@AllArgsConstructor
+@Getter
 public class Difference
 {
     private ITable expectedTable;
@@ -53,20 +57,6 @@ public class Difference
                 actualValue, "");
     }
 
-    public Difference(final ITable expectedTable, final ITable actualTable,
-            final int rowIndex, final String columnName,
-            final Object expectedValue, final Object actualValue,
-            final String failMessage)
-    {
-        this.expectedTable = expectedTable;
-        this.actualTable = actualTable;
-        this.rowIndex = rowIndex;
-        this.columnName = columnName;
-        this.expectedValue = expectedValue;
-        this.actualValue = actualValue;
-        this.failMessage = failMessage;
-    }
-
     @Override
     public String toString()
     {
@@ -81,45 +71,5 @@ public class Difference
         sb.append(", failMessage=").append(failMessage);
         sb.append("]");
         return sb.toString();
-    }
-
-    public ITable getExpectedTable()
-    {
-        return expectedTable;
-    }
-
-    public ITable getActualTable()
-    {
-        return actualTable;
-    }
-
-    public int getRowIndex()
-    {
-        return rowIndex;
-    }
-
-    public String getColumnName()
-    {
-        return columnName;
-    }
-
-    public Object getExpectedValue()
-    {
-        return expectedValue;
-    }
-
-    public Object getActualValue()
-    {
-        return actualValue;
-    }
-
-    public String getFailMessage()
-    {
-        return failMessage;
-    }
-
-    public void setFailMessage(final String failMessage)
-    {
-        this.failMessage = failMessage;
     }
 }

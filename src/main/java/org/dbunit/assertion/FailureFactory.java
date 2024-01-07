@@ -40,13 +40,13 @@ public interface FailureFactory
      * @return The comparison failure object for this handler (can be JUnit or some other)
      * which can be thrown on an assertion failure
      */
-    public Error createFailure(String message, String expected, String actual);
+    Error createFailure(String message, String expected, String actual);
 
     /**
      * @param message The reason for the failure
      * @return The assertion failure object for this handler (can be JUnit or some other)
      * which can be thrown on an assertion failure
      */
-    public Error createFailure(String message);
+    Error createFailure(String message);
 
 }

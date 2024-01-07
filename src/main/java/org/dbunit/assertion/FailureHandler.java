@@ -43,7 +43,7 @@ public interface FailureHandler extends DifferenceListener, FailureFactory
      * @param columnName The column for which the assertion failed
      * @return A string that is appended to the assertion failure message
      */
-    public String getAdditionalInfo(ITable expectedTable, ITable actualTable,
+    String getAdditionalInfo(ITable expectedTable, ITable actualTable,
             int row, String columnName);
 
 

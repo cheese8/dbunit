@@ -20,6 +20,8 @@
  */
 package org.dbunit.assertion;
 
+import lombok.Getter;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,31 +48,16 @@ import java.util.List;
  * @version $Revision$ $Date$
  * @since 2.4.0
  */
-public class DiffCollectingFailureHandler extends DefaultFailureHandler 
-{
-    private final List diffList = new ArrayList();
+@Getter
+public class DiffCollectingFailureHandler extends DefaultFailureHandler {
+    private final List<Difference> diffList = new ArrayList<>();
     
-    public void handle(Difference diff) 
-    {
+    public void handle(Difference diff) {
         // Simply collect the difference without throwing an exception
-        this.diffList.add(diff);
+        diffList.add(diff);
     }
 
-    /**
-     * @return The list of collected {@link Difference}s
-     */
-    public List getDiffList() 
-    {
-        return diffList;
-    }
-
-    public String toString()
-    {
-        StringBuffer sb = new StringBuffer();
-        sb.append(super.toString());
-        sb.append(DiffCollectingFailureHandler.class.getName()).append("[");
-        sb.append("diffList=").append(diffList);
-        sb.append("]");
-        return sb.toString();
+    public String toString() {
+        return super.toString() + DiffCollectingFailureHandler.class.getName() + "[diffList=" + diffList + "]";
     }
 }

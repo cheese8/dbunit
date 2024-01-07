@@ -20,6 +20,8 @@
  */
 package org.dbunit.assertion;
 
+import lombok.NoArgsConstructor;
+
 /**
  * Exception signaling a DbUnit assertion failure. Is used to avoid the direct
  * dependency to any other testing framework.
@@ -29,13 +31,9 @@ package org.dbunit.assertion;
  * @version $Revision$ $Date$
  * @since 2.2.0
  */
+@NoArgsConstructor
 public class DbAssertionFailedError extends Error {
-
-    private static final long serialVersionUID = 1L;
-
-    public DbAssertionFailedError () {}
-    
-    public DbAssertionFailedError (String message) {
-        super (message);
+    public DbAssertionFailedError(String message) {
+        super(message);
     }
 }

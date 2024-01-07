@@ -32,14 +32,13 @@ package org.dbunit.assertion;
  * @version $Revision$ $Date$
  * @since 2.4.0
  */
-public interface DifferenceListener 
-{
+public interface DifferenceListener {
 
     /**
      * Is invoked by the {@link DbUnitAssert} when a data cell difference
      * has been found.
      * @param diff The difference that has been found
      */
-    public void handle(Difference diff);
+    void handle(Difference diff);
     
 }

@@ -22,6 +22,8 @@ package org.dbunit.assertion;
 
 import java.util.Arrays;
 
+import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.dbunit.dataset.Column;
 import org.dbunit.dataset.ColumnFilterTable;
 import org.dbunit.dataset.Columns;
@@ -29,8 +31,6 @@ import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.ITableMetaData;
 import org.dbunit.dataset.NoSuchColumnException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Default implementation of the {@link FailureHandler}.
@@ -38,22 +38,13 @@ import org.slf4j.LoggerFactory;
  * @author gommma (gommma AT users.sourceforge.net)
  * @since 2.4.0
  */
+@Slf4j
+@NoArgsConstructor
 public class DefaultFailureHandler implements FailureHandler
 {
-    private static final Logger logger =
-            LoggerFactory.getLogger(DefaultFailureHandler.class);
-
     private String[] _additionalColumnInfo;
 
     private FailureFactory failureFactory = new DefaultFailureFactory();
-
-    /**
-     * Default constructor which does not provide any additional column
-     * information.
-     */
-    public DefaultFailureHandler()
-    {
-    }
 
     /**
      * Create a default failure handler
@@ -121,14 +112,11 @@ public class DefaultFailureHandler implements FailureHandler
     private String buildAdditionalColumnInfo(final ITable expectedTable,
             final ITable actualTable, final int rowIndex)
     {
-        if (logger.isDebugEnabled())
-        {
-            logger.debug(
+            log.debug(
                     "buildAdditionalColumnInfo(expectedTable={}, actualTable={}, rowIndex={}, "
                             + "additionalColumnInfo={}) - start",
                     new Object[] {expectedTable, actualTable,
                             new Integer(rowIndex), _additionalColumnInfo});
-        }
 
         // No columns specified
         if (_additionalColumnInfo == null || _additionalColumnInfo.length <= 0)
@@ -188,7 +176,7 @@ public class DefaultFailureHandler implements FailureHandler
         sb.append(e.getMessage());
         final String msg = sb.toString();
 
-        logger.warn(msg, e);
+        log.warn(msg, e);
 
         return " (!!!!! " + msg + ")";
     }

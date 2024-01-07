@@ -3,6 +3,7 @@ package org.dbunit.assertion;
 import java.util.Arrays;
 import java.util.Map;
 
+import lombok.extern.slf4j.Slf4j;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.assertion.DbUnitAssert.ComparisonColumn;
 import org.dbunit.assertion.comparer.value.DefaultValueComparerDefaults;
@@ -24,14 +25,11 @@ import org.slf4j.LoggerFactory;
  * @author Jeff Jensen
  * @since 2.6.0
  */
-public class DbUnitAssertBase
-{
-    private final Logger log = LoggerFactory.getLogger(DbUnitAssertBase.class);
-
+@Slf4j
+public class DbUnitAssertBase {
     private FailureFactory junitFailureFactory = getJUnitFailureFactory();
 
-    protected ValueComparerDefaults valueComparerDefaults =
-            new DefaultValueComparerDefaults();
+    protected ValueComparerDefaults valueComparerDefaults = new DefaultValueComparerDefaults();
 
     /**
      * @return The default failure handler
