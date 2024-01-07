@@ -21,6 +21,7 @@
 
 package org.dbunit.operation;
 
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,20 +50,13 @@ import java.sql.SQLException;
  * @see DeleteAllOperation
  */
 @Slf4j
+@NoArgsConstructor
 public class TruncateTableOperation extends DeleteAllOperation {
-
-    TruncateTableOperation() {}
-
-    ////////////////////////////////////////////////////////////////////////////
-    // DeleteAllOperation class
 
     protected String getDeleteAllCommand()
     {
         return "truncate table ";
     }
-
-    ////////////////////////////////////////////////////////////////////////////
-    // DatabaseOperation class
 
     public void execute(IDatabaseConnection connection, IDataSet dataSet) throws DatabaseUnitException, SQLException {
         log.debug("execute(connection={}, dataSet={}) - start", connection, dataSet);

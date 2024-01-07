@@ -56,20 +56,12 @@ import java.util.BitSet;
  */
 @Slf4j
 public class RefreshOperation extends AbstractOperation {
-    private final InsertOperation insertOperation;
-    private final UpdateOperation updateOperation;
-
-    RefreshOperation() {
-        insertOperation = (InsertOperation)DatabaseOperation.INSERT;
-        updateOperation = (UpdateOperation)DatabaseOperation.UPDATE;
-    }
+    private final InsertOperation insertOperation = (InsertOperation)DatabaseOperation.INSERT;
+    private final UpdateOperation updateOperation = (UpdateOperation)DatabaseOperation.UPDATE;
 
     private boolean isEmpty(ITable table) throws DataSetException {
         return AbstractBatchOperation.isEmpty(table);
     }
-
-    ////////////////////////////////////////////////////////////////////////////
-    // DatabaseOperation class
 
     public void execute(IDatabaseConnection connection, IDataSet dataSet)
             throws DatabaseUnitException, SQLException {
