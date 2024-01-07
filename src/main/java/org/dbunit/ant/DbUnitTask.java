@@ -20,6 +20,8 @@
  */
 package org.dbunit.ant;
 
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tools.ant.AntClassLoader;
 import org.apache.tools.ant.BuildException;
@@ -64,31 +66,37 @@ public class DbUnitTask extends Task {
     /**
      * DB driver.
      */
+    @Setter
     private String driver = null;
 
     /**
      * DB url.
      */
+    @Setter
     private String url = null;
 
     /**
      * User name.
      */
-    private String userId = null;
+    @Setter
+    private String userid = null;
 
     /**
      * Password
      */
+    @Setter
     private String password = null;
 
     /**
      * DB schema.
      */
+    @Setter
     private String schema = null;
 
     /**
      * Steps
      */
+    @Getter
     private List steps = new ArrayList();
 
     private Path classpath;
@@ -99,143 +107,64 @@ public class DbUnitTask extends Task {
      * DB configuration child element to configure {@link DatabaseConfig} properties
      * in a generic way.
      */
+    @Getter
     private DbConfig dbConfig;
 
     /**
      * Flag for using the qualified table names.
      * @deprecated since 2.4. Use {@link #dbConfig} instead. Only here because of backwards compatibility should be removed in the next major release.
      */
+    @Setter
     private Boolean useQualifiedTableNames = null;
 
     /**
      * Flag for using batched statements.
      * @deprecated since 2.4. Use {@link #dbConfig} instead. Only here because of backwards compatibility should be removed in the next major release.
      */
+    @Setter
     private Boolean supportBatchStatement = null;
 
     /**
      * Flag for datatype warning.
      * @deprecated since 2.4. Use {@link #dbConfig} instead. Only here because of backwards compatibility should be removed in the next major release.
      */
+    @Setter
     private Boolean datatypeWarning = null;
 
     /**
      * @deprecated since 2.4. Use {@link #dbConfig} instead. Only here because of backwards compatibility should be removed in the next major release.
      */
+    @Setter
     private String escapePattern = null;
 
     /**
      * @deprecated since 2.4. Use {@link #dbConfig} instead. Only here because of backwards compatibility should be removed in the next major release.
      */
+    @Setter
     private String dataTypeFactory = null;
 
     /**
      * @deprecated since 2.4. Use {@link #dbConfig} instead. Only here because of backwards compatibility should be removed in the next major release.
      */
+    @Getter @Setter
     private String batchSize = null;
     
     /**
      * @deprecated since 2.4. Use {@link #dbConfig} instead. Only here because of backwards compatibility should be removed in the next major release.
      */
+    @Getter @Setter
     private String fetchSize = null;
 
     /**
      * @deprecated since 2.4. Use {@link #dbConfig} instead. Only here because of backwards compatibility should be removed in the next major release.
      */
+    @Setter
     private Boolean skipOracleRecycleBinTables = null;
 
     /**
      * @deprecated since 2.5.1. Use {@link #dbConfig} instead. Only here because of backwards compatibility should be removed in the next major release.
      */
     private Boolean allowEmptyFields = null;
-
-    /**
-     * Set the JDBC driver to be used.
-     */
-    public void setDriver(String driver)
-    {
-        log.trace("setDriver(driver={}) - start", driver);
-        this.driver = driver;
-    }
-
-    /**
-     * Set the DB connection url.
-     */
-    public void setUrl(String url)
-    {
-        log.trace("setUrl(url={}) - start", url);
-        this.url = url;
-    }
-
-    /**
-     * Set the user name for the DB connection.
-     */
-    public void setUserid(String userId)
-    {
-        log.trace("setUserid(userId={}) - start", userId);
-        this.userId = userId;
-    }
-
-    /**
-     * Set the password for the DB connection.
-     */
-    public void setPassword(String password)
-    {
-        log.trace("setPassword(password=*****) - start");
-        this.password = password;
-    }
-
-    /**
-     * Set the schema for the DB connection.
-     */
-    public void setSchema(String schema)
-    {
-        log.trace("setSchema(schema={}) - start", schema);
-        this.schema = schema;
-    }
-
-    /**
-     * Set the flag for using the qualified table names.
-     */
-    public void setUseQualifiedTableNames(Boolean useQualifiedTableNames)
-    {
-        log.trace("setUseQualifiedTableNames(useQualifiedTableNames={}) - start", String.valueOf(useQualifiedTableNames));
-        this.useQualifiedTableNames = useQualifiedTableNames;
-    }
-
-    /**
-     * Set the flag for supporting batch statements.
-     * NOTE: This property cannot be used to force the usage of batch
-     *       statement if your database does not support it.
-     */
-    public void setSupportBatchStatement(Boolean supportBatchStatement)
-    {
-        log.trace("setSupportBatchStatement(supportBatchStatement={}) - start", String.valueOf(supportBatchStatement));
-        this.supportBatchStatement = supportBatchStatement;
-    }
-
-    public void setDatatypeWarning(Boolean datatypeWarning)
-    {
-        log.trace("setDatatypeWarning(datatypeWarning={}) - start", String.valueOf(datatypeWarning));
-        this.datatypeWarning = datatypeWarning;
-    }
-
-    public void setDatatypeFactory(String datatypeFactory)
-    {
-        log.trace("setDatatypeFactory(datatypeFactory={}) - start", datatypeFactory);
-        this.dataTypeFactory = datatypeFactory;
-    }
-
-    public void setEscapePattern(String escapePattern)
-    {
-        log.trace("setEscapePattern(escapePattern={}) - start", escapePattern);
-        this.escapePattern = escapePattern;
-    }
-
-    public DbConfig getDbConfig() 
-    {
-        return dbConfig;
-    }
 
     public void addDbConfig(DbConfig dbConfig)
     {
@@ -284,14 +213,6 @@ public class DbUnitTask extends Task {
     }
 
     /**
-     * Gets the Steps.
-     */
-    public List getSteps()
-    {
-        return steps;
-    }
-
-    /**
      * Adds an Operation.
      */
     public void addOperation(Operation operation)
@@ -320,37 +241,6 @@ public class DbUnitTask extends Task {
 
         steps.add(export);
     }
-    
-    
-    public String getBatchSize()
-	{
-		return batchSize;
-	}
-
-    /**
-     * sets the size of batch inserts.
-     * @param batchSize
-     */
-	public void setBatchSize(String batchSize)
-	{
-		this.batchSize = batchSize;
-	}
-	
-
-	public String getFetchSize() 
-	{
-		return fetchSize;
-	}
-
-	public void setFetchSize(String fetchSize) 
-	{
-		this.fetchSize = fetchSize;
-	}
-
-	public void setSkipOracleRecycleBinTables(Boolean skipOracleRecycleBinTables)
-	{
-		this.skipOracleRecycleBinTables = skipOracleRecycleBinTables;
-	}
 
 	/**
      * Load the step and then execute it
@@ -403,7 +293,7 @@ public class DbUnitTask extends Task {
         {
             throw new BuildException("Driver attribute must be set!", getLocation());
         }
-        if (userId == null)
+        if (userid == null)
         {
             throw new BuildException("User Id attribute must be set!", getLocation());
         }
@@ -458,7 +348,7 @@ public class DbUnitTask extends Task {
 
         log("connecting to " + url, Project.MSG_VERBOSE);
         Properties info = new Properties();
-        info.put("user", userId);
+        info.put("user", userid);
         info.put("password", password);
         conn = driverInstance.connect(url, info);
 

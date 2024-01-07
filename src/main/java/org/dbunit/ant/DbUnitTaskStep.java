@@ -33,8 +33,6 @@ import org.dbunit.database.IDatabaseConnection;
  * @since Jun 10, 2002
  */
 public interface DbUnitTaskStep {
-
     void execute(IDatabaseConnection connection) throws DatabaseUnitException;
-
     String getLogMessage();
 }
