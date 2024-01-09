@@ -21,7 +21,6 @@
 package org.dbunit.ant;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Properties;
 import java.util.Set;
 
@@ -43,56 +42,48 @@ import org.dbunit.database.DatabaseConfig;
 @Slf4j
 @NoArgsConstructor
 public class DbConfig extends ProjectComponent {
-    private Set properties = new HashSet();
-    private Set features = new HashSet();
+    private final Set<Property> properties = new HashSet<>();
+    private final Set<Feature> features = new HashSet<>();
 
     public void addProperty(Property property) {
         log.trace("addProperty(property={}) - start)", property);
-        this.properties.add(property);
+        properties.add(property);
     }
 
     public void addFeature(Feature feature) {
         log.trace("addFeature(feature={}) - start)", feature);
-        this.features.add(feature);
+        features.add(feature);
     }
 
     /**
      * Copies the parameters set in this configuration via ant into the given
      * {@link DatabaseConfig} that is used by the dbunit connection.
      * @param config The configuration object to be initialized/updated
-     * @throws DatabaseUnitException 
      */
-    public void copyTo(DatabaseConfig config) throws DatabaseUnitException 
-    {
+    public void copyTo(DatabaseConfig config) throws DatabaseUnitException {
         Properties javaProps = new Properties();
-        
-        for (Iterator iterator = this.features.iterator(); iterator.hasNext();) {
-            Feature feature = (Feature)iterator.next();
-            
+
+        for (Feature feature : this.features) {
             String propName = feature.getName();
             String propValue = String.valueOf(feature.isValue());
-
             log.debug("Setting property {}", feature);
             javaProps.setProperty(propName, propValue);
         }
         
         // Copy the properties into java.util.Properties
-        for (Iterator iterator = this.properties.iterator(); iterator.hasNext();) {
-            Property prop = (Property) iterator.next();
-            
+        for (Property prop : this.properties) {
             String propName = prop.getName();
             String propValue = prop.getValue();
 
-            if(propName==null)
+            if (propName == null) {
                 throw new NullPointerException("The propName must not be null");
-            
-            if(propValue==null)
+            }
+            if (propValue == null) {
                 throw new NullPointerException("The propValue must not be null");
-
+            }
             log.debug("Setting property {}", prop);
             javaProps.setProperty(propName, propValue);
         }
-        
         config.setPropertiesByString(javaProps);
     }
 }

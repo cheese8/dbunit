@@ -137,8 +137,6 @@ public class DatabaseConfig
     private static final Integer DEFAULT_BATCH_SIZE = new Integer(100);
     private static final Integer DEFAULT_FETCH_SIZE = new Integer(100);
 
-
-
     private Map _propertyMap = new HashMap();
     
     private final Configurator configurator;
@@ -181,11 +179,9 @@ public class DatabaseConfig
      * @param value the feature status
      * @deprecated since 2.4.7 Use the {@link #setProperty(String, Object)} also for features
      */
-    public void setFeature(String name, boolean value)
-    {
-        logger.trace("setFeature(name={}, value={}) - start", name, String.valueOf(value));
-
-        setProperty(name, Boolean.valueOf(value));
+    public void setFeature(String name, boolean value) {
+        logger.trace("setFeature(name={}, value={}) - start", name, value);
+        setProperty(name, value);
     }
 
     /**

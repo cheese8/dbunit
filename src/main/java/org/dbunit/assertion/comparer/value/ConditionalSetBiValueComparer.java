@@ -4,17 +4,16 @@ import static org.junit.Assert.assertNotNull;
 
 import java.util.Set;
 
+import lombok.extern.slf4j.Slf4j;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.datatype.DataType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Use one of two {@link ValueComparer}s based on a value present or not in a
  * set of values.
- *
+ * <p>
  * When the value returned by the
  * {@link ConditionalSetBiValueComparer#actualValueFactory} is in
  * {@link ConditionalSetBiValueComparer#values}, use the
@@ -29,10 +28,8 @@ import org.slf4j.LoggerFactory;
  * @author Jeff Jensen
  * @since 2.6.0
  */
-public class ConditionalSetBiValueComparer<T> extends ValueComparerBase
-{
-    private final Logger log = LoggerFactory.getLogger(getClass());
-
+@Slf4j
+public class ConditionalSetBiValueComparer<T> extends ValueComparerBase {
     private final ValueFactory<T> actualValueFactory;
     private final Set<T> values;
     private final ValueComparer inValuesValueComparer;
@@ -50,17 +47,11 @@ public class ConditionalSetBiValueComparer<T> extends ValueComparerBase
      *            The {@link ValueComparer} used when the value from the
      *            actualValueFactory is not in the values map.
      */
-    public ConditionalSetBiValueComparer(
-            final ValueFactory<T> actualValueFactory, final Set<T> values,
-            final ValueComparer inValuesValueComparer,
-            final ValueComparer notInValuesValueComparer)
-    {
+    public ConditionalSetBiValueComparer(final ValueFactory<T> actualValueFactory, final Set<T> values, final ValueComparer inValuesValueComparer, final ValueComparer notInValuesValueComparer) {
         assertNotNull("actualValueFactory is null.", actualValueFactory);
         assertNotNull("values is null.", values);
         assertNotNull("inValuesValueComparer is null.", inValuesValueComparer);
-        assertNotNull("notInValuesValueComparer is null.",
-                notInValuesValueComparer);
-
+        assertNotNull("notInValuesValueComparer is null.", notInValuesValueComparer);
         this.actualValueFactory = actualValueFactory;
         this.values = values;
         this.inValuesValueComparer = inValuesValueComparer;
@@ -68,55 +59,23 @@ public class ConditionalSetBiValueComparer<T> extends ValueComparerBase
     }
 
     @Override
-    public String doCompare(final ITable expectedTable,
-            final ITable actualTable, final int rowNum, final String columnName,
-            final DataType dataType, final Object expectedValue,
-            final Object actualValue) throws DatabaseUnitException
-    {
-        final String failMessage;
-
+    public String doCompare(final ITable expectedTable, final ITable actualTable, final int rowNum, final String columnName, final DataType dataType, final Object expectedValue, final Object actualValue) throws DatabaseUnitException {
         final boolean isInValues = isActualValueInValues(actualTable, rowNum);
-
-        if (isInValues)
-        {
-            failMessage = inValuesValueComparer.compare(expectedTable,
-                    actualTable, rowNum, columnName, dataType, expectedValue,
-                    actualValue);
-        } else
-        {
-            failMessage = notInValuesValueComparer.compare(expectedTable,
-                    actualTable, rowNum, columnName, dataType, expectedValue,
-                    actualValue);
+        if (isInValues) {
+            return inValuesValueComparer.compare(expectedTable, actualTable, rowNum, columnName, dataType, expectedValue, actualValue);
         }
-
-        return failMessage;
+        return notInValuesValueComparer.compare(expectedTable, actualTable, rowNum, columnName, dataType, expectedValue, actualValue);
     }
 
-    protected boolean isActualValueInValues(final ITable actualTable,
-            final int rowNum) throws DataSetException
-    {
+    protected boolean isActualValueInValues(final ITable actualTable, final int rowNum) throws DataSetException {
         final T actualValue = actualValueFactory.make(actualTable, rowNum);
         final boolean isListContains = values.contains(actualValue);
-
-        log.debug("isActualValueInValues: actualValue={}, isListContains={}",
-                actualValue, isListContains);
-
+        log.debug("isActualValueInValues: actualValue={}, isListContains={}", actualValue, isListContains);
         return isListContains;
     }
 
     @Override
-    public String toString()
-    {
-        final StringBuilder sb = new StringBuilder(400);
-        sb.append(super.toString());
-        sb.append(": [values=");
-        sb.append(values);
-        sb.append(", inValuesValueComparer=");
-        sb.append(inValuesValueComparer);
-        sb.append(", notInValuesValueComparer=");
-        sb.append(notInValuesValueComparer);
-        sb.append("]");
-
-        return sb.toString();
+    public String toString() {
+        return super.toString() + ": [values=" + values + ", inValuesValueComparer=" + inValuesValueComparer + ", notInValuesValueComparer=" + notInValuesValueComparer + "]";
     }
 }

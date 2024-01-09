@@ -38,7 +38,6 @@ public class DbComparisonFailure extends AssertionError {
     private String reason;
     private String expected;
     private String actual;
-
     public String getMessage() {
         return buildMessage(reason, expected, actual);
     }

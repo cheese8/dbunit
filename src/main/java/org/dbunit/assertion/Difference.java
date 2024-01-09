@@ -39,8 +39,7 @@ import org.dbunit.dataset.ITable;
  */
 @AllArgsConstructor
 @Getter
-public class Difference
-{
+public class Difference {
     private ITable expectedTable;
     private ITable actualTable;
     private int rowIndex;
@@ -49,27 +48,12 @@ public class Difference
     private Object actualValue;
     private String failMessage;
 
-    public Difference(final ITable expectedTable, final ITable actualTable,
-            final int rowIndex, final String columnName,
-            final Object expectedValue, final Object actualValue)
-    {
-        this(expectedTable, actualTable, rowIndex, columnName, expectedValue,
-                actualValue, "");
+    public Difference(final ITable expectedTable, final ITable actualTable, final int rowIndex, final String columnName, final Object expectedValue, final Object actualValue) {
+        this(expectedTable, actualTable, rowIndex, columnName, expectedValue, actualValue, "");
     }
 
     @Override
-    public String toString()
-    {
-        final StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getName()).append("[");
-        sb.append("expectedTable=").append(expectedTable);
-        sb.append(", actualTable=").append(actualTable);
-        sb.append(", rowIndex=").append(rowIndex);
-        sb.append(", columnName=").append(columnName);
-        sb.append(", expectedValue=").append(expectedValue);
-        sb.append(", actualValue=").append(actualValue);
-        sb.append(", failMessage=").append(failMessage);
-        sb.append("]");
-        return sb.toString();
+    public String toString() {
+        return getClass().getName() + "[" + "expectedTable=" + expectedTable + ", actualTable=" + actualTable + ", rowIndex=" + rowIndex + ", columnName=" + columnName + ", expectedValue=" + expectedValue + ", actualValue=" + actualValue + ", failMessage=" + failMessage + "]";
     }
 }

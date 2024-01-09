@@ -21,11 +21,10 @@
 
  package org.dbunit.ant;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.ProjectComponent;
@@ -33,8 +32,6 @@ import org.apache.tools.ant.types.FilterSet;
 import org.dbunit.database.AmbiguousTableNameException;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.database.QueryDataSet;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * This element is a container for Queries. It facilitates reuse
@@ -105,13 +102,14 @@ import org.slf4j.LoggerFactory;
  */
 @Slf4j
 public class QuerySet extends ProjectComponent {
+	@Getter
 	private String id;
+	@Getter
 	private String refid;
-	private List queries = new ArrayList();
-	private List filterSets = new ArrayList();
+	private final List<Query> queries = new ArrayList<>();
+	private final List<FilterSet> filterSets = new ArrayList<>();
 
-	private static String ERR_MSG =
-		"Cannot specify 'id' and 'refid' attributes together in queryset.";
+	private final static String ERR_MSG = "Cannot specify 'id' and 'refid' attributes together in queryset.";
 
 	public QuerySet() {
 		super();
@@ -124,87 +122,61 @@ public class QuerySet extends ProjectComponent {
 
 	public void addFilterSet(FilterSet filterSet) {
 		log.debug("addFilterSet(filterSet={}) - start", filterSet);
-
 		filterSets.add(filterSet);
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public String getRefid() {
-		return refid;
 	}
 
 	public void setId(String string) {
 		log.debug("setId(string={}) - start", string);
-
-		if(refid != null) throw new BuildException(ERR_MSG);
+		if (refid != null) {
+			throw new BuildException(ERR_MSG);
+		}
 		id = string;
 	}
 
 	public void setRefid(String string) {
 		log.debug("setRefid(string={}) - start", string);
-
-		if(id != null) throw new BuildException(ERR_MSG);
+		if (id != null) {
+			throw new BuildException(ERR_MSG);
+		}
 		refid = string;
 	}
 
-	public List getQueries() {
+	public List<Query> getQueries() {
 		log.debug("getQueries() - start");
-
-		Iterator i = queries.iterator();
-		while(i.hasNext()) {
-			Query query = (Query)i.next();
+		for (Query query : queries) {
 			replaceTokens(query);
 		}
-
 		return queries;
-
 	}
 
 	private void replaceTokens(Query query) {
 		log.debug("replaceTokens(query={}) - start", query);
-
-		Iterator i = filterSets.iterator();
-		while(i.hasNext()) {
-			FilterSet filterSet = (FilterSet)i.next();
+		for (FilterSet filterSet : filterSets) {
 			query.setSql(filterSet.replaceTokens(query.getSql()));
 		}
 	}
 
-
 	public void copyQueriesFrom(QuerySet referenced) {
 		log.debug("copyQueriesFrom(referenced={}) - start", referenced);
-
-		Iterator i = referenced.queries.iterator();
-		while(i.hasNext()) {
-			addQuery((Query)i.next());
+		for (Query query : referenced.queries) {
+			addQuery(query);
 		}
 	}
 	
-    public QueryDataSet getQueryDataSet(IDatabaseConnection connection) 
-    throws SQLException, AmbiguousTableNameException 
-    {
+    public QueryDataSet getQueryDataSet(IDatabaseConnection connection) throws AmbiguousTableNameException {
 		log.debug("getQueryDataSet(connection={}) - start", connection);
         
         //incorporate queries from referenced query-set
         String refid = getRefid();
-        if(refid != null) {
+        if (refid != null) {
             QuerySet referenced = (QuerySet)getProject().getReference(refid);
             copyQueriesFrom(referenced);
         }
         
         QueryDataSet partialDataSet = new QueryDataSet(connection);
-        
-        Iterator queriesIter = getQueries().iterator();
-        while(queriesIter.hasNext()) {
-            Query query = (Query)queriesIter.next();
-            partialDataSet.addTable(query.getName(), query.getSql());
-        }
-        
+		for (Query query : getQueries()) {
+			partialDataSet.addTable(query.getName(), query.getSql());
+		}
         return partialDataSet;
-        
     }
-
 }

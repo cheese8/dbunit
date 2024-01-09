@@ -22,9 +22,9 @@
 package org.dbunit.ant;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.file.Files;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -69,9 +69,9 @@ public class Export extends AbstractStep {
     @Getter @Setter
     private String doctype = null;
     @Getter @Setter
-    private String encoding = null; // if no encoding set by script than the default encoding (UTF-8) of the wrietr is used
+    private String encoding = null; // if no encoding set by script than the default encoding (UTF-8) of the writer is used
     @Getter
-    private List tables = new ArrayList();
+    private final List<Object> tables = new ArrayList<>();
 
     private String getAbsolutePath(File filename) {
         return filename != null ? filename.getAbsolutePath() : "null";
@@ -94,85 +94,48 @@ public class Export extends AbstractStep {
 
     public void execute(IDatabaseConnection connection) throws DatabaseUnitException {
         log.debug("execute(connection={}) - start", connection);
-
-        try
-        {
-            if (dest == null)
-            {
+        try {
+            if (dest == null) {
                 throw new DatabaseUnitException("'_dest' is a required attribute of the <export> step.");
             }
 
             IDataSet dataset = getExportDataSet(connection);
 			log("dataset tables: " + Arrays.asList(dataset.getTableNames()), Project.MSG_VERBOSE);
 
-			
             // Write the dataset
-            if (format.equals(FormatSupport.CSV.getFormat()))
-            {
+            if (format.equals(FormatSupport.CSV.getFormat())) {
                 CsvDataSetWriter.write(dataset, dest);
-            }
-            else
-            {
-                OutputStream out = new FileOutputStream(dest);
-                try
-                {
-                    if (format.equalsIgnoreCase(FormatSupport.FLAT.getFormat()))
-                    {
+            } else {
+                try (OutputStream out = Files.newOutputStream(dest.toPath())) {
+                    if (format.equalsIgnoreCase(FormatSupport.FLAT.getFormat())) {
                         FlatXmlWriter writer = new FlatXmlWriter(out, getEncoding());
                         writer.setDocType(doctype);
                         writer.write(dataset);
-                    }
-                    else if (format.equalsIgnoreCase(FormatSupport.XML.getFormat()))
-                    {
+                    } else if (format.equalsIgnoreCase(FormatSupport.XML.getFormat())) {
                         XmlDataSet.write(dataset, out, getEncoding());
-                    }
-                    else if (format.equalsIgnoreCase(FormatSupport.DTD.getFormat()))
-                    {
+                    } else if (format.equalsIgnoreCase(FormatSupport.DTD.getFormat())) {
                         //TODO Should DTD also support encoding? It is basically an XML file...
                         FlatDtdDataSet.write(dataset, out);//, getEncoding());
-                    }
-                    else if (format.equalsIgnoreCase(FormatSupport.XLS.getFormat()))
-                    {
+                    } else if (format.equalsIgnoreCase(FormatSupport.XLS.getFormat())) {
                         XlsDataSet.write(dataset, out);
+                    } else {
+                        throw new IllegalArgumentException("The given format '" + format + "' is not supported.");
                     }
-                    else
-                    {
-                        throw new IllegalArgumentException("The given format '"+format+"' is not supported.");
-                    }
-                    
-                }
-                finally
-                {
-                    out.close();
                 }
             }
-            
             log("Successfully wrote file '" + dest + "'", Project.MSG_INFO);
-            
-        }
-        catch (SQLException e)
-        {
+        } catch (SQLException | IOException e) {
         	throw new DatabaseUnitException(e);
-        }
-        catch (IOException e)
-        {
-            throw new DatabaseUnitException(e);
         }
     }
 
     /**
      * Creates the dataset that is finally used for the export
-     * @param connection
      * @return The final dataset used for the export
-     * @throws DatabaseUnitException
-     * @throws SQLException
      */
-    protected IDataSet getExportDataSet(IDatabaseConnection connection) 
-    throws DatabaseUnitException, SQLException 
-    {
+    protected IDataSet getExportDataSet(IDatabaseConnection connection) throws DatabaseUnitException, SQLException {
         IDataSet dataset = getDatabaseDataSet(connection, tables);
-        if (isOrdered()) 
-        {
+        if (isOrdered()) {
         	// Use topologically sorted database
         	ITableFilter filter = new DatabaseSequenceFilter(connection);  
         	dataset = new FilteredDataSet(filter, dataset);
@@ -180,23 +143,11 @@ public class Export extends AbstractStep {
         return dataset;
 	}
 
-	public String getLogMessage()
-    {
-        return "Executing export: "
-                + "\n      in format: " + format
-                + " to datafile: " + getAbsolutePath(dest);
+	public String getLogMessage() {
+        return "Executing export: in format: " + format + " to datafile: " + getAbsolutePath(dest);
     }
 
-
-    public String toString()
-    {
-        StringBuffer result = new StringBuffer();
-        result.append("Export: ");
-        result.append(" dest=" + getAbsolutePath(dest));
-        result.append(", format= " + format);
-        result.append(", doctype= " + doctype);
-        result.append(", tables= " + tables);
-
-        return result.toString();
+    public String toString() {
+        return "Export: " + " dest=" + getAbsolutePath(dest) + ", format= " + format + ", doctype= " + doctype + ", tables= " + tables;
     }
 }

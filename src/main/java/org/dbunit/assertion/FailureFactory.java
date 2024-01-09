@@ -29,8 +29,7 @@ package org.dbunit.assertion;
  * @version $Revision$ $Date$
  * @since 2.4.0
  */
-public interface FailureFactory 
-{
+public interface FailureFactory {
     /**
      * Creates a new failure object which can have different types, depending on
      * the testing framework you are currently using (e.g. JUnit, TestNG, ...)
@@ -48,5 +47,4 @@ public interface FailureFactory
      * which can be thrown on an assertion failure
      */
     Error createFailure(String message);
-
 }

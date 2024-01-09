@@ -40,5 +40,4 @@ public interface DifferenceListener {
      * @param diff The difference that has been found
      */
     void handle(Difference diff);
-    
 }

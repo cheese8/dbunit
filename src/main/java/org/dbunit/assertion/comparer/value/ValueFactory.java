@@ -23,7 +23,6 @@ public interface ValueFactory<T> {
      * @param rowNum
      *            The row number to make the value for.
      * @return The type.
-     * @throws DataSetException
      */
     T make(ITable table, int rowNum) throws DataSetException;
 }

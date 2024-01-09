@@ -14,8 +14,7 @@ import org.dbunit.dataset.datatype.DataType;
  */
 public class NeverFailsValueComparer extends ValueComparerTemplateBase {
     @Override
-    protected boolean isExpected(final ITable expectedTable, final ITable actualTable, final int rowNum, final String columnName,
-                                 final DataType dataType, final Object expectedValue, final Object actualValue) throws DatabaseUnitException {
+    protected boolean isExpected(final ITable expectedTable, final ITable actualTable, final int rowNum, final String columnName, final DataType dataType, final Object expectedValue, final Object actualValue) throws DatabaseUnitException {
         return true;
     }
 

@@ -23,9 +23,9 @@ package org.dbunit.ant;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.types.FileSet;
-import org.apache.tools.ant.types.Resource;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.database.DatabaseSequenceFilter;
@@ -36,14 +36,11 @@ import org.dbunit.dataset.FilteredDataSet;
 import org.dbunit.ext.mssql.InsertIdentityOperation;
 import org.dbunit.operation.DatabaseOperation;
 import org.dbunit.operation.TransactionOperation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -57,207 +54,148 @@ import java.util.List;
  * @since Jun 10, 2002
  * @see org.dbunit.ant.DbUnitTaskStep
  */
-public class Operation extends AbstractStep
-{
-
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(Operation.class);
-
-    protected String _type = "CLEAN_INSERT";
+@Slf4j
+public class Operation extends AbstractStep {
+    @Getter
+    protected String type = "CLEAN_INSERT";
     @Getter @Setter
     private String format = FormatSupport.FLAT.getFormat();
-    private List<File> _sources = new ArrayList<>();
-    private boolean _combine = false;
-    private boolean _transaction = false;
-    private DatabaseOperation _operation;
-    private boolean _forwardOperation = true;
-    private String _nullToken;
+    private final List<File> sources = new ArrayList<>();
+    @Getter @Setter
+    private boolean combine = false;
+    @Getter @Setter
+    private boolean transaction = false;
+    @Getter
+    private DatabaseOperation databaseOperation;
+    private boolean forwardOperation = true;
+    @Getter @Setter
+    private String nullToken;
 
-    public File[] getSrc()
-    {
-        return _sources.toArray(new File[_sources.size()]);
+    public File[] getSrc() {
+        return sources.toArray(new File[0]);
     }
 
-    public void setSrc(File[] sources)
-    {
-        _sources.clear();
-        _sources.addAll(Arrays.asList(sources));
+    public void setSrc(File[] sources) {
+        this.sources.clear();
+        this.sources.addAll(Arrays.asList(sources));
     }
 
-    public void setSrc(File src)
-    {
-        _sources.clear();
-        _sources.add(src);
+    public void setSrc(File src) {
+        sources.clear();
+        sources.add(src);
     }
 
-    public void addConfiguredFileset(FileSet fileSet)
-    {
+    public void addConfiguredFileset(FileSet fileSet) {
         DirectoryScanner scanner = fileSet.getDirectoryScanner(getProject());
         for (String file : scanner.getIncludedFiles()) {
-            _sources.add(new File(scanner.getBasedir(), file));
+            sources.add(new File(scanner.getBasedir(), file));
         }
     }
 
-    public boolean isCombine()
-    {
-        return _combine;
-    }
-
-    public void setCombine(boolean combine)
-    {
-        _combine = combine;
-    }
-
-    public boolean isTransaction()
-    {
-        return _transaction;
-    }
-
-    public void setTransaction(boolean transaction)
-    {
-        _transaction = transaction;
-    }
-
-    public String getNullToken() 
-    {
-        return _nullToken;
-    }
-
-    public void setNullToken(final String nullToken) 
-    {
-        this._nullToken = nullToken;
-    }
-
-    public DatabaseOperation getDbOperation()
-    {
-        return _operation;
-    }
-
-    public String getType()
-    {
-        return _type;
-    }
-
-    public void setType(String type) 
-    {
-        logger.debug("setType(type={}) - start", type);
-
+    public void setType(String type) {
+        log.debug("setType(type={}) - start", type);
         if ("UPDATE".equals(type)) {
-            _operation = DatabaseOperation.UPDATE;
-            _forwardOperation = true;
+            databaseOperation = DatabaseOperation.UPDATE;
+            forwardOperation = true;
         } else if ("INSERT".equals(type)) {
-            _operation = DatabaseOperation.INSERT;
-            _forwardOperation = true;
+            databaseOperation = DatabaseOperation.INSERT;
+            forwardOperation = true;
         } else if ("REFRESH".equals(type)) {
-            _operation = DatabaseOperation.REFRESH;
-            _forwardOperation = true;
+            databaseOperation = DatabaseOperation.REFRESH;
+            forwardOperation = true;
         } else if ("DELETE".equals(type)) {
-            _operation = DatabaseOperation.DELETE;
-            _forwardOperation = false;
+            databaseOperation = DatabaseOperation.DELETE;
+            forwardOperation = false;
         } else if ("DELETE_ALL".equals(type)) {
-            _operation = DatabaseOperation.DELETE_ALL;
-            _forwardOperation = false;
+            databaseOperation = DatabaseOperation.DELETE_ALL;
+            forwardOperation = false;
         } else if ("CLEAN_INSERT".equals(type)) {
-            _operation = DatabaseOperation.CLEAN_INSERT;
-            _forwardOperation = false;
+            databaseOperation = DatabaseOperation.CLEAN_INSERT;
+            forwardOperation = false;
         } else if ("NONE".equals(type)) {
-            _operation = DatabaseOperation.NONE;
-            _forwardOperation = true;
+            databaseOperation = DatabaseOperation.NONE;
+            forwardOperation = true;
         } else if ("MSSQL_CLEAN_INSERT".equals(type)) {
-            _operation = InsertIdentityOperation.CLEAN_INSERT;
-            _forwardOperation = false;
+            databaseOperation = InsertIdentityOperation.CLEAN_INSERT;
+            forwardOperation = false;
         } else if ("MSSQL_INSERT".equals(type)) {
-            _operation = InsertIdentityOperation.INSERT;
-            _forwardOperation = true;
+            databaseOperation = InsertIdentityOperation.INSERT;
+            forwardOperation = true;
         } else if ("MSSQL_REFRESH".equals(type)) {
-            _operation = InsertIdentityOperation.REFRESH;
-            _forwardOperation = true;
+            databaseOperation = InsertIdentityOperation.REFRESH;
+            forwardOperation = true;
         } else {
             throw new IllegalArgumentException("Type must be one of: UPDATE, INSERT,"
                     + " REFRESH, DELETE, DELETE_ALL, CLEAN_INSERT, MSSQL_INSERT, "
                     + " or MSSQL_REFRESH but was: " + type);
         }
-        _type = type;
+        this.type = type;
     }
 
-    public void execute(IDatabaseConnection connection) throws DatabaseUnitException
-    {
-        logger.debug("execute(connection={}) - start", connection);
-        if (_operation == null)
-        {
+    public void execute(IDatabaseConnection connection) throws DatabaseUnitException {
+        log.debug("execute(connection={}) - start", connection);
+        if (databaseOperation == null) {
             throw new DatabaseUnitException("Operation.execute(): setType(String) must be called before execute()!");
         }
-
-        if (_operation == DatabaseOperation.NONE)
-        {
+        if (databaseOperation == DatabaseOperation.NONE) {
             return;
         }
-
-        if (_sources.size() == 0)
-        {
+        if (sources.size() == 0) {
             throw new DatabaseUnitException("Operation.execute(): must call setSrc(File), addSrc(File), or setSources(File[]) before execute()!");
         }
 
         try {
-            DatabaseOperation operation = (_transaction ? new TransactionOperation(_operation) : _operation);
+            DatabaseOperation operation = (transaction ? new TransactionOperation(this.databaseOperation) : this.databaseOperation);
             // TODO This is not very nice and the design should be reviewed but it works for now (gommma)
-            boolean useForwardOnly = _forwardOperation && ! isOrdered();
+            boolean useForwardOnly = forwardOperation && ! isOrdered();
             IDataSet dataset;
-            if (_sources.size() > 1) {
-                IDataSet[] datasets = new IDataSet[_sources.size()];
-                for (int i = 0; i < _sources.size(); i++) {
-                    datasets[i] = getSrcDataSet(_sources.get(i), getFormat(), useForwardOnly);
+            if (sources.size() > 1) {
+                IDataSet[] datasets = new IDataSet[sources.size()];
+                for (int i = 0; i < sources.size(); i++) {
+                    datasets[i] = getSrcDataSet(sources.get(i), getFormat(), useForwardOnly);
                 }
-                dataset = new CompositeDataSet(datasets, _combine);
+                dataset = new CompositeDataSet(datasets, combine);
             } else {
-                dataset = getSrcDataSet(_sources.get(0), getFormat(), useForwardOnly);
+                dataset = getSrcDataSet(sources.get(0), getFormat(), useForwardOnly);
             }
-            if (_nullToken != null) {
+            if (nullToken != null) {
                 dataset = new ReplacementDataSet(dataset);
-                ((ReplacementDataSet)dataset).addReplacementObject(_nullToken, null);
+                ((ReplacementDataSet)dataset).addReplacementObject(nullToken, null);
             }
-            if(isOrdered()) 
-            {
+            if (isOrdered()) {
                 DatabaseSequenceFilter databaseSequenceFilter = new DatabaseSequenceFilter(connection);
                 dataset = new FilteredDataSet(databaseSequenceFilter, dataset);
             }
             operation.execute(connection, dataset);
-        }
-        catch (SQLException e)
-        {
+        } catch (SQLException e) {
             throw new DatabaseUnitException(e);
         }
     }
 
-    public String getLogMessage()
-    {
-        StringBuffer result = new StringBuffer();
-        result.append("Executing operation: " + _type);
-        result.append("\n          on   files: [ ");
-        for (File f : _sources) {
-            result.append(f.getAbsolutePath() + " ");
+    public String getLogMessage() {
+        StringBuilder result = new StringBuilder();
+        result.append("Executing operation: ").append(type);
+        result.append("on files: [ ");
+        for (File f : sources) {
+            result.append(f.getAbsolutePath()).append(" ");
         }
         result.append("]");
-        result.append("\n          with format: " + format);
+        result.append("with format: ").append(format);
         return result.toString();
     }
 
-
-    public String toString()
-    {
-        StringBuffer result = new StringBuffer();
+    public String toString() {
+        StringBuilder result = new StringBuilder();
         result.append("Operation: ");
-        result.append(" type=").append(_type);
+        result.append(" type=").append(type);
         result.append(", format=").append(format);
         result.append(", sources=[ ");
-        for (File f : _sources) {
-            result.append(f.getAbsolutePath() + " ");
+        for (File f : sources) {
+            result.append(f.getAbsolutePath()).append(" ");
         }
         result.append("]");
-        result.append(", operation=").append(_operation);
-        result.append(", nullToken=").append(_nullToken);
+        result.append(", operation=").append(databaseOperation);
+        result.append(", nullToken=").append(nullToken);
         result.append(", ordered=").append(super.isOrdered());
         return result.toString();
     }

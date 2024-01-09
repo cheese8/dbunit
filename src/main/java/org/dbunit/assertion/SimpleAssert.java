@@ -34,21 +34,17 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @AllArgsConstructor
-public class SimpleAssert
-{
+public class SimpleAssert {
     private FailureHandler failureHandler;
 
     /**
      * Asserts that propertyName is not a null String and has a length greater
      * than zero.
      */
-    protected void assertNotNullNorEmpty( String propertyName, String property )
-    {
+    protected void assertNotNullNorEmpty( String propertyName, String property ) {
         log.debug("assertNotNullNorEmpty(propertyName={}, property={}) - start", propertyName, property);
-
         assertTrue( propertyName + " is null", property != null );
-        assertTrue( "Invalid " + propertyName, property.trim()
-                .length() > 0 );
+        assertTrue( "Invalid " + propertyName, property.trim().length() > 0 );
     }
 
     public void assertTrue(boolean condition) {
