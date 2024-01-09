@@ -30,8 +30,7 @@ import org.dbunit.dataset.ITable;
  * @version $Revision$ $Date$
  * @since 2.4.0
  */
-public interface FailureHandler extends DifferenceListener, FailureFactory
-{
+public interface FailureHandler extends DifferenceListener, FailureFactory {
 
     /**
      * Returns a string to be appended to the assertion failure message. Is used to 
@@ -43,8 +42,5 @@ public interface FailureHandler extends DifferenceListener, FailureFactory
      * @param columnName The column for which the assertion failed
      * @return A string that is appended to the assertion failure message
      */
-    String getAdditionalInfo(ITable expectedTable, ITable actualTable,
-            int row, String columnName);
-
-
+    String getAdditionalInfo(ITable expectedTable, ITable actualTable, int row, String columnName);
 }

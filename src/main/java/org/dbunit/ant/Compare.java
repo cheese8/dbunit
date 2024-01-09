@@ -54,7 +54,7 @@ public class Compare extends AbstractStep {
     @Getter @Setter
     private File src;
     @Getter
-    private List tables = new ArrayList();
+    private final List<Object> tables = new ArrayList<>();
     @Setter
     private boolean sort = false;
 
@@ -63,58 +63,43 @@ public class Compare extends AbstractStep {
         tables.add(table);
     }
 
-    public void addQuery(Query query)
-    {
+    public void addQuery(Query query) {
         log.debug("addQuery(query={}) - start", query);
-
         tables.add(query);
     }
 
-    public void execute(IDatabaseConnection connection) throws DatabaseUnitException
-    {
+    public void execute(IDatabaseConnection connection) throws DatabaseUnitException {
         log.debug("execute(connection={}) - start", connection);
-
         IDataSet expectedDataset = getSrcDataSet(src, getFormat(), false);
         IDataSet actualDataset = getDatabaseDataSet(connection, tables);
 
-        String[] tableNames = null;
-        if (tables.size() == 0)
-        {
-            // No tables specified, assume must compare all tables from
-            // expected dataset
+        String[] tableNames;
+        if (tables.size() == 0) {
+            // No tables specified, assume must compare all tables from expected dataset
             tableNames = expectedDataset.getTableNames();
-        }
-        else
-        {
+        } else {
             tableNames = actualDataset.getTableNames();
         }
 
-        for (int i = 0; i < tableNames.length; i++)
-        {
-            String tableName = tableNames[i];
+        for (String tableName : tableNames) {
             ITable expectedTable;
-			try {
-				expectedTable = expectedDataset.getTable(tableName);
-			} catch (NoSuchTableException e) {
-				throw new DatabaseUnitException("Did not find table in source file '" +
-                        src + "' using format '" + getFormat() + "'", e);
-			}
+            try {
+                expectedTable = expectedDataset.getTable(tableName);
+            } catch (NoSuchTableException e) {
+                throw new DatabaseUnitException("Did not find table in source file '" + src + "' using format '" + getFormat() + "'", e);
+            }
             ITableMetaData expectedMetaData = expectedTable.getTableMetaData();
 
             ITable actualTable;
-			try {
-				actualTable = actualDataset.getTable(tableName);
-			} catch (NoSuchTableException e) {
-				throw new DatabaseUnitException("Did not find table in actual dataset '" + 
-						actualDataset + "' via db connection '" + connection + "'", e);
-			}
-            // Only compare columns present in expected table. Extra columns
-            // are filtered out from actual database table.
-            actualTable = DefaultColumnFilter.includedColumnsTable(
-                    actualTable, expectedMetaData.getColumns());
+            try {
+                actualTable = actualDataset.getTable(tableName);
+            } catch (NoSuchTableException e) {
+                throw new DatabaseUnitException("Did not find table in actual dataset '" + actualDataset + "' via db connection '" + connection + "'", e);
+            }
+            // Only compare columns present in expected table. Extra columns are filtered out from actual database table.
+            actualTable = DefaultColumnFilter.includedColumnsTable(actualTable, expectedMetaData.getColumns());
 
-            if (sort)
-            {
+            if (sort) {
                 expectedTable = new SortedTable(expectedTable);
                 actualTable = new SortedTable(actualTable);
             }
@@ -122,25 +107,11 @@ public class Compare extends AbstractStep {
         }
     }
 
-    public String getLogMessage()
-    {
-        return "Executing compare: "
-                + "\n          from file: " + ((src == null) ? null : src.getAbsolutePath())
-                + "\n          with format: " + format;
+    public String getLogMessage() {
+        return "Executing compare: from file: " + ((src == null) ? null : src.getAbsolutePath()) + " with format: " + format;
     }
 
-    public String toString()
-    {
-        StringBuffer result = new StringBuffer();
-        result.append("Compare: ");
-        result.append(" src=");
-        result.append((src == null ? "null" : src.getAbsolutePath()));
-        result.append(", format= ");
-        result.append(format);
-        result.append(", tables= ");
-        result.append(tables);
-
-        return result.toString();
+    public String toString() {
+        return "Compare: src=" + (src == null ? "null" : src.getAbsolutePath()) + ", format= " + format + ", tables= " + tables;
     }
 }
-

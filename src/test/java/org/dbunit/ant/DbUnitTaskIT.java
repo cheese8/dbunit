@@ -554,7 +554,7 @@ public class DbUnitTaskIT extends BuildFileTest
     protected void assertOperationType(String failMessage, String targetName, DatabaseOperation expected)
     {
         Operation oper = (Operation)getFirstStepFromTarget(targetName);
-        DatabaseOperation dbOper = oper.getDbOperation();
+        DatabaseOperation dbOper = oper.getDatabaseOperation();
         assertTrue(failMessage + ", but was: " + dbOper, expected.equals(dbOper));
     }
 

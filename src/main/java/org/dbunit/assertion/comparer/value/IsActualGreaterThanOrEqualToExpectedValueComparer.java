@@ -11,15 +11,9 @@ import org.dbunit.dataset.datatype.DataType;
  * @author Jeff Jensen
  * @since 2.6.0
  */
-public class IsActualGreaterThanOrEqualToExpectedValueComparer
-        extends ValueComparerTemplateBase
-{
+public class IsActualGreaterThanOrEqualToExpectedValueComparer extends ValueComparerTemplateBase {
     @Override
-    protected boolean isExpected(final ITable expectedTable,
-            final ITable actualTable, final int rowNum, final String columnName,
-            final DataType dataType, final Object expectedValue,
-            final Object actualValue) throws DatabaseUnitException
-    {
+    protected boolean isExpected(final ITable expectedTable, final ITable actualTable, final int rowNum, final String columnName, final DataType dataType, final Object expectedValue, final Object actualValue) throws DatabaseUnitException {
         return dataType.compare(actualValue, expectedValue) > -1;
     }
 

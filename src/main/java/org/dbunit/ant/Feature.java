@@ -1,19 +1,17 @@
 package org.dbunit.ant;
 
-public class Feature {
-        private String name;
-        private boolean value;
+import lombok.Getter;
+import lombok.Setter;
 
-        public String getName() {
-            return name;
-        }
-        public void setName(String name) {
-            this.name = name;
-        }
-        public boolean isValue() {
-            return value;
-        }
-        public void setValue(boolean value) {
-            this.value = value;
-        }
+public class Feature {
+    @Getter
+    @Setter
+    private String name;
+    private boolean value;
+    public boolean isValue() {
+        return value;
     }
+    public void setValue(boolean value) {
+        this.value = value;
+    }
+}

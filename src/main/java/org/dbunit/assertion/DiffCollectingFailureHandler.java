@@ -51,12 +51,10 @@ import java.util.List;
 @Getter
 public class DiffCollectingFailureHandler extends DefaultFailureHandler {
     private final List<Difference> diffList = new ArrayList<>();
-    
     public void handle(Difference diff) {
         // Simply collect the difference without throwing an exception
         diffList.add(diff);
     }
-
     public String toString() {
         return super.toString() + DiffCollectingFailureHandler.class.getName() + "[diffList=" + diffList + "]";
     }

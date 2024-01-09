@@ -15,22 +15,14 @@ import org.dbunit.dataset.datatype.DataType;
  * @author Jeff Jensen
  * @since 2.6.0
  */
-public class IsActualEqualToExpectedWithEmptyFailMessageValueComparer
-        extends ValueComparerTemplateBase
-{
+public class IsActualEqualToExpectedWithEmptyFailMessageValueComparer extends ValueComparerTemplateBase {
     @Override
-    protected boolean isExpected(final ITable expectedTable,
-            final ITable actualTable, final int rowNum, final String columnName,
-            final DataType dataType, final Object expectedValue,
-            final Object actualValue) throws DatabaseUnitException
-    {
+    protected boolean isExpected(final ITable expectedTable, final ITable actualTable, final int rowNum, final String columnName, final DataType dataType, final Object expectedValue, final Object actualValue) throws DatabaseUnitException {
         return dataType.compare(actualValue, expectedValue) == 0;
     }
 
     @Override
-    protected String makeFailMessage(final Object expectedValue,
-            final Object actualValue)
-    {
+    protected String makeFailMessage(final Object expectedValue, final Object actualValue) {
         return "";
     }
 
