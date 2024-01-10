@@ -24,10 +24,9 @@ import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import lombok.extern.slf4j.Slf4j;
 import org.dbunit.database.DefaultMetadataHandler;
 import org.dbunit.util.SQLHelper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Customized MetadataHandler for DB2 as match Columns of {@link DefaultMetadataHandler}
@@ -38,9 +37,8 @@ import org.slf4j.LoggerFactory;
  * @version $Revision$ $Date$
  * @since 2.4.7
  */
+@Slf4j
 public class Db2MetadataHandler extends DefaultMetadataHandler {
-
-    private static final Logger logger = LoggerFactory.getLogger(Db2MetadataHandler.class);
 
     public Db2MetadataHandler() {
         super();
@@ -55,43 +53,22 @@ public class Db2MetadataHandler extends DefaultMetadataHandler {
      * schema="BLA", schemaName="BLA"
      * </pre>
      * This problem is taken into account by this metadata handler.
-     * 
+     * <p>
      * {@inheritDoc}
      * @see org.dbunit.database.DefaultMetadataHandler#matches(java.sql.ResultSet, java.lang.String, java.lang.String, java.lang.String, java.lang.String, boolean)
      */
-    public boolean matches(ResultSet columnsResultSet, String catalog,
-            String schema, String table, String column, boolean caseSensitive)
-            throws SQLException {
-        if (logger.isTraceEnabled())
-            logger.trace("matches(columnsResultSet={}, catalog={}, schema={},"
-                    + " table={}, column={}, caseSensitive={}) - start",
-                    new Object[] { columnsResultSet, catalog, schema, table,
-                            column, Boolean.valueOf(caseSensitive) });
-
+    public boolean matches(ResultSet columnsResultSet, String catalog, String schema, String table, String column, boolean caseSensitive) throws SQLException {
+        log.trace("matches(columnsResultSet={}, catalog={}, schema={}, table={}, column={}, caseSensitive={}) - start", columnsResultSet, catalog, schema, table, column, caseSensitive);
         String catalogName = columnsResultSet.getString(1);
         String schemaName = columnsResultSet.getString(2);
         String tableName = columnsResultSet.getString(3);
         String columnName = columnsResultSet.getString(4);
-
-        if (logger.isDebugEnabled()) {
-            logger
-                    .debug(
-                            "Comparing the following values using caseSensitive={} (searched<=>actual): "
-                                    + "catalog: {}<=>{} schema: {}<=>{} table: {}<=>{} column: {}<=>{}",
-                            new Object[] { Boolean.valueOf(caseSensitive),
-                                    catalog, catalogName, schema, schemaName,
-                                    table, tableName, column, columnName });
-        }
-
-        boolean areEqual = areEqualIgnoreBothNull(catalog, catalogName, caseSensitive)
-                && areEqualIgnoreNull(schema, schemaName, caseSensitive)
-                && areEqualIgnoreNull(table, tableName, caseSensitive)
-                && areEqualIgnoreNull(column, columnName, caseSensitive);
-        return areEqual;
+        log.debug("Comparing the following values using caseSensitive={} (searched<=>actual): catalog: {}<=>{} schema: {}<=>{} table: {}<=>{} column: {}<=>{}", caseSensitive, catalog, catalogName, schema, schemaName, table, tableName, column, columnName);
+        return areEqualIgnoreBothNull(catalog, catalogName, caseSensitive) && areEqualIgnoreNull(schema, schemaName, caseSensitive)
+                && areEqualIgnoreNull(table, tableName, caseSensitive) && areEqualIgnoreNull(column, columnName, caseSensitive);
     }
 
-    private boolean areEqualIgnoreBothNull(String value1, String value2,
-            boolean caseSensitive) {
+    private boolean areEqualIgnoreBothNull(String value1, String value2, boolean caseSensitive) {
         boolean areEqual = true;
         if (value1 != null && value2 != null) {
             if (value1.equals("") && value2.equals("")) {
@@ -105,9 +82,7 @@ public class Db2MetadataHandler extends DefaultMetadataHandler {
         return areEqual;
     }
 
-    private boolean areEqualIgnoreNull(String value1, String value2,
-            boolean caseSensitive) {
+    private boolean areEqualIgnoreNull(String value1, String value2, boolean caseSensitive) {
         return SQLHelper.areEqualIgnoreNull(value1, value2, caseSensitive);
     }
-
 }

@@ -36,13 +36,10 @@ import java.sql.Connection;
  * @version $Revision$ $Date$
  * @since 2.4.8
  */
-public class MckoiConnection extends DatabaseConnection
-{
+public class MckoiConnection extends DatabaseConnection {
 
-    public MckoiConnection(Connection connection, String schema) throws DatabaseUnitException
-    {
+    public MckoiConnection(Connection connection, String schema) throws DatabaseUnitException {
         super(connection, schema);
-        getConfig().setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY,
-                new MckoiDataTypeFactory());
+        getConfig().setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new MckoiDataTypeFactory());
     }
 }

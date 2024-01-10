@@ -20,14 +20,13 @@
  */
 package org.dbunit.ext.hsqldb;
 
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 
+import lombok.extern.slf4j.Slf4j;
 import org.dbunit.dataset.datatype.DataType;
 import org.dbunit.dataset.datatype.DataTypeException;
 import org.dbunit.dataset.datatype.DefaultDataTypeFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Specialized factory that recognizes HSQLDB data types.
@@ -37,36 +36,25 @@ import org.slf4j.LoggerFactory;
  * @version $Revision$ $Date$
  * @since 2.2.0
  */
-public class HsqldbDataTypeFactory extends DefaultDataTypeFactory
-{
-
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(HsqldbDataTypeFactory.class);
+@Slf4j
+public class HsqldbDataTypeFactory extends DefaultDataTypeFactory {
     /**
      * Database product names supported.
      */
-    private static final Collection DATABASE_PRODUCTS = Arrays.asList(new String[] {"hsql"});
+    private static final Collection<String> DATABASE_PRODUCTS = Collections.singletonList("hsql");
 
     /**
      * @see org.dbunit.dataset.datatype.IDbProductRelatable#getValidDbProducts()
      */
-    public Collection getValidDbProducts()
-    {
+    public Collection<String> getValidDbProducts() {
       return DATABASE_PRODUCTS;
     }
 
-    public DataType createDataType(int sqlType, String sqlTypeName) throws DataTypeException
-    {
-    	if(logger.isDebugEnabled())
-    		logger.debug("createDataType(sqlType={}, sqlTypeName={}) - start", String.valueOf(sqlType), sqlTypeName);
-
-        if (sqlTypeName.equals("BOOLEAN"))
-        {
+    public DataType createDataType(int sqlType, String sqlTypeName) throws DataTypeException {
+        log.debug("createDataType(sqlType={}, sqlTypeName={}) - start", sqlType, sqlTypeName);
+        if (sqlTypeName.equals("BOOLEAN")) {
             return DataType.BOOLEAN;
         }
-
         return super.createDataType(sqlType, sqlTypeName);
     }
 }

@@ -20,15 +20,14 @@
  */
 package org.dbunit.ext.mckoi;
 
+import lombok.extern.slf4j.Slf4j;
 import org.dbunit.dataset.datatype.DataType;
 import org.dbunit.dataset.datatype.DataTypeException;
 import org.dbunit.dataset.datatype.DefaultDataTypeFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.sql.Types;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 
 /**
  * MckoiDataTypeFactory - This class is for the DBUnit data type factory for Mckoi database
@@ -38,23 +37,17 @@ import java.util.Collection;
  * @version $Revision$ $Date$
  * @since 2.4.8
  */
+@Slf4j
 public class MckoiDataTypeFactory extends DefaultDataTypeFactory {
-
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(MckoiDataTypeFactory.class);
-
-
     /**
      * Database product names supported.
      */
-    private static final Collection DATABASE_PRODUCTS = Arrays.asList(new String[] {"Mckoi"});
+    private static final Collection<String> DATABASE_PRODUCTS = Collections.singletonList("Mckoi");
 
     /**
      * @see org.dbunit.dataset.datatype.IDbProductRelatable#getValidDbProducts()
      */
-    public Collection getValidDbProducts()
+    public Collection<String> getValidDbProducts()
     {
       return DATABASE_PRODUCTS;
     }
@@ -62,11 +55,7 @@ public class MckoiDataTypeFactory extends DefaultDataTypeFactory {
 
     public DataType createDataType(int sqlType, String sqlTypeName) throws DataTypeException {
         DataType retValue = super.createDataType(sqlType, sqlTypeName);
-
-        if (logger.isDebugEnabled()) {
-            logger.debug("createDataType(sqlType={}, sqlTypeName={}) - start", String.valueOf(sqlType), sqlTypeName);
-        }
-
+        log.debug("createDataType(sqlType={}, sqlTypeName={}) - start", sqlType, sqlTypeName);
         retValue = (sqlTypeName.equals("BOOLEAN"))? DataType.BOOLEAN: retValue;
         retValue = (sqlTypeName.equals("CHAR"))? DataType.CHAR: retValue;
         retValue = (sqlTypeName.equals("CHARACTER"))? DataType.CHAR: retValue;
@@ -102,6 +91,3 @@ public class MckoiDataTypeFactory extends DefaultDataTypeFactory {
         return retValue;
     }
 }
-
-
- 	  	 
