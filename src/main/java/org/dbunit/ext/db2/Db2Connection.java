@@ -37,7 +37,6 @@ import java.sql.Connection;
  * @since 1.5.5 (Jul 17, 2003)
  */
 public class Db2Connection extends DatabaseConnection {
-
     public Db2Connection(Connection connection, String schema) throws DatabaseUnitException {
         super(connection, schema);
         getConfig().setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new Db2DataTypeFactory());
