@@ -50,7 +50,7 @@ import org.dbunit.dataset.datatype.TypeCastException;
 @Slf4j
 public abstract class AbstractBatchOperation extends AbstractOperation {
     private static final BitSet EMPTY_BITSET = new BitSet();
-    protected boolean _reverseRowOrder = false;
+    protected boolean reverseRowOrder = false;
 
     static boolean isEmpty(ITable table) throws DataSetException {
         log.debug("isEmpty(table={}) - start", table);
@@ -121,17 +121,16 @@ public abstract class AbstractBatchOperation extends AbstractOperation {
 
             try {
                 // For each row
-                int start = _reverseRowOrder ? table.getRowCount() - 1 : 0;
-                int increment = _reverseRowOrder ? -1 : 1;
+                int start = reverseRowOrder ? table.getRowCount() - 1 : 0;
+                int increment = reverseRowOrder ? -1 : 1;
 
                 try {
                     for (int i = start;; i = i + increment) {
-                        int row = i;
 
                         // If current row have a different ignore value mapping
                         // than
                         // previous one, we generate a new statement
-                        if (ignoreMapping == null || !equalsIgnoreMapping(ignoreMapping, table, row)) {
+                        if (ignoreMapping == null || !equalsIgnoreMapping(ignoreMapping, table, i)) {
                             // Execute and close previous statement
                             if (statement != null) {
                                 statement.executeBatch();
@@ -139,7 +138,7 @@ public abstract class AbstractBatchOperation extends AbstractOperation {
                                 statement.close();
                             }
 
-                            ignoreMapping = getIgnoreMapping(table, row);
+                            ignoreMapping = getIgnoreMapping(table, i);
                             operationData = getOperationData(metaData, ignoreMapping, connection);
                             statement = factory.createPreparedBatchStatement(operationData.getSql(), connection);
                         }
@@ -153,7 +152,7 @@ public abstract class AbstractBatchOperation extends AbstractOperation {
                                 String columnName = column.getColumnName();
                                 try {
                                     DataType dataType = column.getDataType();
-                                    Object value = table.getValue(row, columnName);
+                                    Object value = table.getValue(i, columnName);
 
                                     if ("".equals(value) && !allowEmptyFields) {
                                         handleColumnHasNoValue(tableName, columnName);
@@ -191,22 +190,13 @@ public abstract class AbstractBatchOperation extends AbstractOperation {
 
     protected void handleColumnHasNoValue(String tableName, String columnName) {
         final String tableColumnName = tableName + "." + columnName;
-        final String msg = "table.column=" + tableColumnName
-                + " value is empty but must contain a value"
-                + " (to disable this feature check,"
-                + " set DatabaseConfig.FEATURE_ALLOW_EMPTY_FIELDS to true)";
+        final String msg = "table.column=" + tableColumnName + " value is empty but must contain a value (to disable this feature check, set DatabaseConfig.FEATURE_ALLOW_EMPTY_FIELDS to true)";
         log.error("execute: {}", msg);
-
         throw new IllegalArgumentException(msg);
     }
 
     @Override
     public String toString() {
-        StringBuffer sb = new StringBuffer();
-        sb.append(getClass().getName()).append("[");
-        sb.append("_reverseRowOrder=").append(this._reverseRowOrder);
-        sb.append(", super=").append(super.toString());
-        sb.append("]");
-        return sb.toString();
+        return getClass().getName() + "[" + "reverseRowOrder=" + reverseRowOrder + ", super=" + super.toString() + "]";
     }
 }

@@ -40,11 +40,6 @@ public class OperationData {
     private final Column[] columns;
 
     public String toString() {
-    	StringBuffer sb = new StringBuffer();
-    	sb.append(getClass().getName()).append("[");
-    	sb.append("sql=").append(sql);
-    	sb.append(", columns=").append(columns==null ? "null" : Arrays.asList(columns).toString());
-    	sb.append("]");
-    	return sb.toString();
+		return getClass().getName() + "[" + "sql=" + sql + ", columns=" + (columns == null ? "null" : Arrays.asList(columns).toString()) + "]";
     }
 }

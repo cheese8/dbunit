@@ -47,16 +47,15 @@ public class TransactionOperation extends DatabaseOperation {
     public void execute(IDatabaseConnection connection, IDataSet dataSet) throws DatabaseUnitException, SQLException {
         log.debug("execute(connection={}, dataSet={}) - start", connection, dataSet);
 
-        IDatabaseConnection databaseConnection = connection;
-        Connection jdbcConnection = databaseConnection.getConnection();
+        Connection jdbcConnection = connection.getConnection();
 
-        if (jdbcConnection.getAutoCommit() == false) {
+        if (!jdbcConnection.getAutoCommit()) {
             throw new ExclusiveTransactionException();
         }
 
         jdbcConnection.setAutoCommit(false);
         try {
-            operation.execute(databaseConnection, dataSet);
+            operation.execute(connection, dataSet);
             jdbcConnection.commit();
         } catch (DatabaseUnitException | SQLException | RuntimeException e) {
             jdbcConnection.rollback();

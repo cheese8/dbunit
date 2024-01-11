@@ -22,8 +22,6 @@
 package org.dbunit.operation;
 
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.IDatabaseConnection;
@@ -63,8 +61,7 @@ public class RefreshOperation extends AbstractOperation {
         return AbstractBatchOperation.isEmpty(table);
     }
 
-    public void execute(IDatabaseConnection connection, IDataSet dataSet)
-            throws DatabaseUnitException, SQLException {
+    public void execute(IDatabaseConnection connection, IDataSet dataSet) throws DatabaseUnitException, SQLException {
         log.debug("execute(connection={}, dataSet) - start", connection);
         
         // for each table
@@ -108,8 +105,7 @@ public class RefreshOperation extends AbstractOperation {
 
     }
 
-    private RowOperation createUpdateOperation(IDatabaseConnection connection,
-            ITableMetaData metaData) throws DataSetException, SQLException {
+    private RowOperation createUpdateOperation(IDatabaseConnection connection, ITableMetaData metaData) throws DataSetException, SQLException {
         log.debug("createUpdateOperation(connection={}, metaData={}) - start", connection, metaData);
 
         // update only if columns are not all primary keys
@@ -126,34 +122,28 @@ public class RefreshOperation extends AbstractOperation {
      */
     class RowOperation {
 
-        /**
-         * Logger for this class
-         */
-        private final Logger logger = LoggerFactory.getLogger(RowOperation.class);
-
-        protected IPreparedBatchStatement _statement;
-        protected OperationData _operationData;
-        protected BitSet _ignoreMapping;
+        protected IPreparedBatchStatement statement;
+        protected OperationData operationData;
+        protected BitSet ignoreMapping;
 
         /**
          * Execute this operation on the sepcified table row.
          * @return <code>true</code> if operation have been executed on the row.
          */
-        public boolean execute(ITable table, int row)
-                throws DataSetException, SQLException {
-            logger.debug("execute(table={}, row={}) - start", table, String.valueOf(row));
+        public boolean execute(ITable table, int row) throws DataSetException, SQLException {
+            log.debug("execute(table={}, row={}) - start", table, row);
 
-            Column[] columns = _operationData.getColumns();
+            Column[] columns = operationData.getColumns();
             for (int i = 0; i < columns.length; i++) {
                 // Bind value only if not in ignore mapping
-                if (_ignoreMapping == null || !_ignoreMapping.get(i)) {
+                if (ignoreMapping == null || !ignoreMapping.get(i)) {
                     Object value = table.getValue(row, columns[i].getColumnName());
-                    _statement.addValue(value, columns[i].getDataType());
+                    statement.addValue(value, columns[i].getDataType());
                 }
             }
-            _statement.addBatch();
-            int result = _statement.executeBatch();
-            _statement.clearBatch();
+            statement.addBatch();
+            int result = statement.executeBatch();
+            statement.clearBatch();
 
             return result == 1;
         }
@@ -162,10 +152,10 @@ public class RefreshOperation extends AbstractOperation {
          * Cleanup this operation state.
          */
         public void close() throws SQLException {
-            logger.debug("close() - start");
+            log.debug("close() - start");
 
-            if (_statement != null) {
-                _statement.close();
+            if (statement != null) {
+                statement.close();
             }
         }
     }
@@ -175,39 +165,28 @@ public class RefreshOperation extends AbstractOperation {
      */
     private class InsertRowOperation extends RowOperation {
 
-        /**
-         * Logger for this class
-         */
-        private final Logger logger = LoggerFactory.getLogger(InsertRowOperation.class);
+        private final IDatabaseConnection connection;
+        private final ITableMetaData metaData;
 
-        private IDatabaseConnection _connection;
-        private ITableMetaData _metaData;
-
-        public InsertRowOperation(IDatabaseConnection connection,
-                ITableMetaData metaData)
-                throws DataSetException, SQLException {
-            _connection = connection;
-            _metaData = metaData;
+        public InsertRowOperation(IDatabaseConnection connection, ITableMetaData metaData) {
+            this.connection = connection;
+            this.metaData = metaData;
         }
 
-        public boolean execute(ITable table, int row)
-                throws DataSetException, SQLException {
-            logger.debug("execute(table={}, row={}) - start", table, String.valueOf(row));
+        public boolean execute(ITable table, int row) throws DataSetException, SQLException {
+            log.debug("execute(table={}, row={}) - start", table, row);
 
             // If current row has a different ignore value mapping than
             // previous one, we generate a new statement
-            if (_ignoreMapping == null ||
-                    !insertOperation.equalsIgnoreMapping(_ignoreMapping, table, row)) {
+            if (ignoreMapping == null || !insertOperation.equalsIgnoreMapping(ignoreMapping, table, row)) {
                 // Execute and close previous statement
-                if (_statement != null) {
-                    _statement.close();
+                if (statement != null) {
+                    statement.close();
                 }
 
-                _ignoreMapping = insertOperation.getIgnoreMapping(table, row);
-                _operationData = insertOperation.getOperationData(_metaData,
-                        _ignoreMapping, _connection);
-                _statement = new SimplePreparedStatement(_operationData.getSql(),
-                        _connection.getConnection());
+                ignoreMapping = insertOperation.getIgnoreMapping(table, row);
+                operationData = insertOperation.getOperationData(metaData, ignoreMapping, connection);
+                statement = new SimplePreparedStatement(operationData.getSql(), connection.getConnection());
             }
 
             return super.execute(table, row);
@@ -219,60 +198,44 @@ public class RefreshOperation extends AbstractOperation {
      * Update row operation.
      */
     private class UpdateRowOperation extends RowOperation {
-        PreparedStatement _countStatement;
-
-        public UpdateRowOperation(IDatabaseConnection connection,
-                ITableMetaData metaData)
-                throws DataSetException, SQLException {
+        public UpdateRowOperation(IDatabaseConnection connection, ITableMetaData metaData) throws DataSetException, SQLException {
             // setup update statement
-            _operationData = updateOperation.getOperationData(
-                    metaData, null, connection);
-            _statement = new SimplePreparedStatement(_operationData.getSql(),
-                    connection.getConnection());
+            operationData = updateOperation.getOperationData(metaData, null, connection);
+            statement = new SimplePreparedStatement(operationData.getSql(), connection.getConnection());
         }
     }
 
     /**
      * This operation verify if a row exists in the database.
      */
-    private class RowExistOperation extends RowOperation
-    {
-        PreparedStatement _countStatement;
+    private class RowExistOperation extends RowOperation {
+        PreparedStatement countStatement;
 
-        public RowExistOperation(IDatabaseConnection connection,
-                ITableMetaData metaData)
-                throws DataSetException, SQLException
-        {
+        public RowExistOperation(IDatabaseConnection connection, ITableMetaData metaData) throws DataSetException, SQLException {
             // setup select count statement
-            _operationData = getSelectCountData(metaData, connection);
-            _countStatement = connection.getConnection().prepareStatement(
-                    _operationData.getSql());
+            operationData = getSelectCountData(metaData, connection);
+            countStatement = connection.getConnection().prepareStatement(operationData.getSql());
         }
 
-        private OperationData getSelectCountData(
-                ITableMetaData metaData, IDatabaseConnection connection) throws DataSetException
-        {
+        private OperationData getSelectCountData(ITableMetaData metaData, IDatabaseConnection connection) throws DataSetException {
             Column[] primaryKeys = metaData.getPrimaryKeys();
 
             // cannot construct where clause if no primary key
-            if (primaryKeys.length == 0)
-            {
+            if (primaryKeys.length == 0) {
                 throw new NoPrimaryKeyException(metaData.getTableName());
             }
 
             // select count
-            StringBuffer sqlBuffer = new StringBuffer(128);
+            StringBuilder sqlBuffer = new StringBuilder(128);
             sqlBuffer.append("select COUNT(*) from ");
             sqlBuffer.append(getQualifiedName(connection.getSchema(), metaData.getTableName(), connection));
 
             // where
             sqlBuffer.append(" where ");
-            for (int i = 0; i < primaryKeys.length; i++)
-            {
+            for (int i = 0; i < primaryKeys.length; i++) {
                 Column column = primaryKeys[i];
 
-                if (i > 0)
-                {
+                if (i > 0) {
                     sqlBuffer.append(" and ");
                 }
                 sqlBuffer.append(getQualifiedName(null, column.getColumnName(), connection));
@@ -286,28 +249,22 @@ public class RefreshOperation extends AbstractOperation {
          * Verify if the specified table row exists in the database.
          * @return <code>true</code> if row exists.
          */
-        public boolean execute(ITable table, int row)
-                throws DataSetException, SQLException
-        {
-            Column[] columns = _operationData.getColumns();
-            for (int i = 0; i < columns.length; i++)
-            {
+        public boolean execute(ITable table, int row) throws DataSetException, SQLException {
+            Column[] columns = operationData.getColumns();
+            for (int i = 0; i < columns.length; i++) {
                 Object value = table.getValue(row, columns[i].getColumnName());
                 DataType dataType = columns[i].getDataType();
-                dataType.setSqlValue(value, i + 1, _countStatement);
+                dataType.setSqlValue(value, i + 1, countStatement);
             }
 
-            ResultSet resultSet = _countStatement.executeQuery();
-            try {
+            try (ResultSet resultSet = countStatement.executeQuery()) {
                 resultSet.next();
                 return resultSet.getInt(1) > 0;
-            } finally {
-                resultSet.close();
             }
         }
 
         public void close() throws SQLException {
-            _countStatement.close();
+            countStatement.close();
         }
     }
 }

@@ -23,8 +23,6 @@ package org.dbunit.operation;
 
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.Column;
@@ -48,30 +46,23 @@ import java.util.BitSet;
 @NoArgsConstructor
 public class InsertOperation extends AbstractBatchOperation {
 
-    public OperationData getOperationData(ITableMetaData metaData,
-            BitSet ignoreMapping, IDatabaseConnection connection) throws DataSetException
-    {
-    		log.debug("getOperationData(metaData={}, ignoreMapping={}, connection={}) - start",
-    				new Object[]{ metaData, ignoreMapping, connection });
+    public OperationData getOperationData(ITableMetaData metaData, BitSet ignoreMapping, IDatabaseConnection connection) throws DataSetException {
+        log.debug("getOperationData(metaData={}, ignoreMapping={}, connection={}) - start", metaData, ignoreMapping, connection);
 
         Column[] columns = metaData.getColumns();
 
         // insert
-        StringBuffer sqlBuffer = new StringBuffer(128);
+        StringBuilder sqlBuffer = new StringBuilder(128);
         sqlBuffer.append("insert into ");
-        sqlBuffer.append(getQualifiedName(connection.getSchema(),
-                metaData.getTableName(), connection));
+        sqlBuffer.append(getQualifiedName(connection.getSchema(), metaData.getTableName(), connection));
 
         // columns
         sqlBuffer.append(" (");
         String columnSeparator = "";
-        for (int i = 0; i < columns.length; i++)
-        {
-            if (!ignoreMapping.get(i))
-            {
+        for (int i = 0; i < columns.length; i++) {
+            if (!ignoreMapping.get(i)) {
                 // escape column name
-                String columnName = getQualifiedName(null,
-                        columns[i].getColumnName(), connection);
+                String columnName = getQualifiedName(null, columns[i].getColumnName(), connection);
                 sqlBuffer.append(columnSeparator);
                 sqlBuffer.append(columnName);
                 columnSeparator = ", ";
@@ -81,10 +72,8 @@ public class InsertOperation extends AbstractBatchOperation {
         // values
         sqlBuffer.append(") values (");
         String valueSeparator = "";
-        for (int i = 0; i < columns.length; i++)
-        {
-            if (!ignoreMapping.get(i))
-            {
+        for (int i = 0; i < columns.length; i++) {
+            if (!ignoreMapping.get(i)) {
                 sqlBuffer.append(valueSeparator);
                 sqlBuffer.append("?");
                 valueSeparator = ", ";
@@ -95,39 +84,30 @@ public class InsertOperation extends AbstractBatchOperation {
         return new OperationData(sqlBuffer.toString(), columns);
     }
 
-    protected BitSet getIgnoreMapping(ITable table, int row) throws DataSetException
-    {
-    		log.debug("getIgnoreMapping(table={}, row={}) - start", table, String.valueOf(row));
+    protected BitSet getIgnoreMapping(ITable table, int row) throws DataSetException {
+        log.debug("getIgnoreMapping(table={}, row={}) - start", table, row);
 
         Column[] columns = table.getTableMetaData().getColumns();
 
         BitSet ignoreMapping = new BitSet();
-        for (int i = 0; i < columns.length; i++)
-        {
+        for (int i = 0; i < columns.length; i++) {
             Column column = columns[i];
             Object value = table.getValue(row, column.getColumnName());
-            if (value == ITable.NO_VALUE
-                || (value == null && column.isNotNullable() && column.hasDefaultValue()))
-            {
+            if (value == ITable.NO_VALUE || (value == null && column.isNotNullable() && column.hasDefaultValue())) {
                 ignoreMapping.set(i);
             }
         }
         return ignoreMapping;
     }
 
-    protected boolean equalsIgnoreMapping(BitSet ignoreMapping, ITable table,
-            int row) throws DataSetException
-    {
-            log.debug("equalsIgnoreMapping(ignoreMapping={}, table={}, row={}) - start",
-    				new Object[]{ ignoreMapping, table, String.valueOf(row) });
+    protected boolean equalsIgnoreMapping(BitSet ignoreMapping, ITable table, int row) throws DataSetException {
+        log.debug("equalsIgnoreMapping(ignoreMapping={}, table={}, row={}) - start", ignoreMapping, table, row);
         Column[] columns = table.getTableMetaData().getColumns();
 
-        for (int i = 0; i < columns.length; i++)
-        {
+        for (int i = 0; i < columns.length; i++) {
             boolean bit = ignoreMapping.get(i);
             Object value = table.getValue(row, columns[i].getColumnName());
-            if ((bit && value != ITable.NO_VALUE) || (!bit && value == ITable.NO_VALUE))
-            {
+            if ((bit && value != ITable.NO_VALUE) || (!bit && value == ITable.NO_VALUE)) {
                 return false;
             }
         }

@@ -60,18 +60,12 @@ public class CompositeOperation extends DatabaseOperation {
 
     public void execute(IDatabaseConnection connection, IDataSet dataSet) throws DatabaseUnitException, SQLException {
         log.debug("execute(connection={}, , dataSet={}) - start", connection, dataSet);
-
-        for (int i = 0; i < actions.length; i++) {
-            DatabaseOperation action = actions[i];
+        for (DatabaseOperation action : actions) {
             action.execute(connection, dataSet);
         }
     }
     
     public String toString() {
-    	StringBuffer sb = new StringBuffer();
-    	sb.append(getClass().getName()).append("[");
-    	sb.append("actions=").append(this.actions==null ? "null" : Arrays.asList(this.actions).toString());
-    	sb.append("]");
-    	return sb.toString();
+        return getClass().getName() + "[" + "actions=" + (this.actions == null ? "null" : Arrays.asList(this.actions).toString()) + "]";
     }
 }

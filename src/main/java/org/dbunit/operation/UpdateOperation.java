@@ -57,17 +57,15 @@ public class UpdateOperation extends AbstractBatchOperation {
         }
 
         // update table
-        StringBuffer sqlBuffer = new StringBuffer(128);
+        StringBuilder sqlBuffer = new StringBuilder(128);
         sqlBuffer.append("update ");
         sqlBuffer.append(getQualifiedName(connection.getSchema(), metaData.getTableName(), connection));
 
         // set
         boolean firstSet = true;
-        List columnList = new ArrayList(columns.length);
+        List<Column> columnList = new ArrayList<>(columns.length);
         sqlBuffer.append(" set ");
-        for (int i = 0; i < columns.length; i++) {
-            Column column = columns[i];
-
+        for (Column column : columns) {
             // set if not primary key
             if (Columns.getColumn(column.getColumnName(), primaryKeys) == null) {
                 if (!firstSet) {
@@ -98,6 +96,6 @@ public class UpdateOperation extends AbstractBatchOperation {
             columnList.add(column);
         }
 
-        return new OperationData(sqlBuffer.toString(), (Column[])columnList.toArray(new Column[0]));
+        return new OperationData(sqlBuffer.toString(), columnList.toArray(new Column[0]));
     }
 }
