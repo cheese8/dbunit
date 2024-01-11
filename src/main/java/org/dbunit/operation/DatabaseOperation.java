@@ -57,12 +57,12 @@ public abstract class DatabaseOperation {
     public static final DatabaseOperation CLEAN_INSERT = new CompositeOperation(DELETE_ALL, INSERT);
 
     /** @see TransactionOperation */
-    public static final DatabaseOperation TRANSACTION(DatabaseOperation operation) {
+    public static DatabaseOperation TRANSACTION(DatabaseOperation operation) {
         return new TransactionOperation(operation);
     }
 
     /** @see CloseConnectionOperation */
-    public static final DatabaseOperation CLOSE_CONNECTION(DatabaseOperation operation) {
+    public static DatabaseOperation CLOSE_CONNECTION(DatabaseOperation operation) {
         return new CloseConnectionOperation(operation);
     }
 

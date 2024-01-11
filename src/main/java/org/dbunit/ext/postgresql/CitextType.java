@@ -29,10 +29,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 
+import lombok.extern.slf4j.Slf4j;
 import org.dbunit.dataset.datatype.AbstractDataType;
 import org.dbunit.dataset.datatype.TypeCastException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Adapter to handle conversion between Postgresql
@@ -42,13 +41,8 @@ import org.slf4j.LoggerFactory;
  * @author Last changed by: $Author$
  * @since Jul 29, 2015
  */
-public class CitextType
-        extends AbstractDataType {
-
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(CitextType.class);
+@Slf4j
+public class CitextType extends AbstractDataType {
 
     public CitextType() {
         super("citext", Types.OTHER, String.class, false);
@@ -58,8 +52,7 @@ public class CitextType
         return resultSet.getString(column);
     }
 
-    public void setSqlValue(Object uuid, int column,
-                            PreparedStatement statement) throws SQLException, TypeCastException {
+    public void setSqlValue(Object uuid, int column, PreparedStatement statement) throws SQLException, TypeCastException {
         statement.setObject(column, getCitext(uuid, statement.getConnection()));
     }
 
@@ -68,34 +61,22 @@ public class CitextType
     }
 
     private Object getCitext(Object value, Connection connection) throws TypeCastException {
-
-        logger.debug("getCitext(value={}, connection={}) - start", value, connection);
-
-        Object tempCitext = null;
-
+        log.debug("getCitext(value={}, connection={}) - start", value, connection);
+        Object tempCitext;
         try {
             Class aPGObjectClass = super.loadClass("org.postgresql.util.PGobject", connection);
             Constructor ct = aPGObjectClass.getConstructor(null);
             tempCitext = ct.newInstance(null);
 
-            Method setTypeMethod = aPGObjectClass.getMethod("setType", new Class[]{String.class});
-            setTypeMethod.invoke(tempCitext, new Object[]{"citext"});
+            Method setTypeMethod = aPGObjectClass.getMethod("setType", String.class);
+            setTypeMethod.invoke(tempCitext, "citext");
 
-            Method setValueMethod = aPGObjectClass.getMethod("setValue", new Class[]{String.class});
-            setValueMethod.invoke(tempCitext, new Object[]{value.toString()});
+            Method setValueMethod = aPGObjectClass.getMethod("setValue", String.class);
+            setValueMethod.invoke(tempCitext, value.toString());
 
-        } catch (ClassNotFoundException e) {
-            throw new TypeCastException(value, this, e);
-        } catch (InvocationTargetException e) {
-            throw new TypeCastException(value, this, e);
-        } catch (NoSuchMethodException e) {
-            throw new TypeCastException(value, this, e);
-        } catch (IllegalAccessException e) {
-            throw new TypeCastException(value, this, e);
-        } catch (InstantiationException e) {
+        } catch (ClassNotFoundException | InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
             throw new TypeCastException(value, this, e);
         }
-
         return tempCitext;
     }
 }

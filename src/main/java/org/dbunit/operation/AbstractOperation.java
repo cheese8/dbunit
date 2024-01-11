@@ -66,17 +66,16 @@ public abstract class AbstractOperation extends DatabaseOperation {
         ITableMetaData tableMetaData = databaseDataSet.getTableMetaData(tableName);
         Column[] columns = metaData.getColumns();
 
-        List columnList = new ArrayList();
-        for (int j = 0; j < columns.length; j++) {
-            String columnName = columns[j].getColumnName();
-        	// Check if column exists in database
+        List<Column> columnList = new ArrayList<>();
+        for (Column column : columns) {
+            String columnName = column.getColumnName();
+            // Check if column exists in database
             // method "getColumnIndex()" throws NoSuchColumnsException when columns have not been found
-        	int dbColIndex = tableMetaData.getColumnIndex(columnName);
-        	// If we get here the column exists in the database
-        	Column dbColumn = tableMetaData.getColumns()[dbColIndex];
+            int dbColIndex = tableMetaData.getColumnIndex(columnName);
+            // If we get here the column exists in the database
+            Column dbColumn = tableMetaData.getColumns()[dbColIndex];
             columnList.add(dbColumn);
         }
-
-        return new DefaultTableMetaData(tableMetaData.getTableName(), (Column[])columnList.toArray(new Column[0]), tableMetaData.getPrimaryKeys());
+        return new DefaultTableMetaData(tableMetaData.getTableName(), columnList.toArray(new Column[0]), tableMetaData.getPrimaryKeys());
     }
 }

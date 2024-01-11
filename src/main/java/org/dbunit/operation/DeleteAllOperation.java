@@ -61,12 +61,7 @@ public class DeleteAllOperation extends AbstractOperation {
         return "delete from ";
     }
 
-    ////////////////////////////////////////////////////////////////////////////
-    // DatabaseOperation class
-
-    public void execute(IDatabaseConnection connection, IDataSet dataSet)
-            throws DatabaseUnitException, SQLException
-    {
+    public void execute(IDatabaseConnection connection, IDataSet dataSet) throws DatabaseUnitException, SQLException {
         log.debug("execute(connection={}, dataSet={}) - start", connection, dataSet);
 
         IDataSet databaseDataSet = connection.createDataSet();
@@ -74,51 +69,41 @@ public class DeleteAllOperation extends AbstractOperation {
         DatabaseConfig databaseConfig = connection.getConfig();
         IStatementFactory statementFactory = (IStatementFactory)databaseConfig.getProperty(DatabaseConfig.PROPERTY_STATEMENT_FACTORY);
         IBatchStatement statement = statementFactory.createBatchStatement(connection);
-        try
-        {
+        try {
             int count = 0;
             
-            Stack tableNames = new Stack();
-            Set tablesSeen = new HashSet();
+            Stack<String> tableNames = new Stack<>();
+            Set<String> tablesSeen = new HashSet<>();
             ITableIterator iterator = dataSet.iterator();
-            while (iterator.next())
-            {
+            while (iterator.next()) {
                 String tableName = iterator.getTableMetaData().getTableName();
-                if (!tablesSeen.contains(tableName))
-                {
+                if (!tablesSeen.contains(tableName)) {
                     tableNames.push(tableName);
                     tablesSeen.add(tableName);
                 }
             }
 
             // delete tables once each in reverse order of seeing them.
-            while (!tableNames.isEmpty())
-            {
-                String tableName = (String)tableNames.pop();
+            while (!tableNames.isEmpty()) {
+                String tableName = tableNames.pop();
 
                 // Use database table name. Required to support case sensitive database.
                 ITableMetaData databaseMetaData = databaseDataSet.getTableMetaData(tableName);
                 tableName = databaseMetaData.getTableName();
 
-                StringBuffer sqlBuffer = new StringBuffer(128);
-                sqlBuffer.append(getDeleteAllCommand());
-                sqlBuffer.append(getQualifiedName(connection.getSchema(), tableName, connection));
-                String sql = sqlBuffer.toString();
+                String sql = getDeleteAllCommand() + getQualifiedName(connection.getSchema(), tableName, connection);
                 statement.addBatch(sql);
 
-                    log.debug("Added SQL: {}", sql);
+                log.debug("Added SQL: {}", sql);
                 
                 count++;
             }
 
-            if (count > 0)
-            {
+            if (count > 0) {
                 statement.executeBatch();
                 statement.clearBatch();
             }
-        }
-        finally
-        {
+        } finally {
             statement.close();
         }
     }
