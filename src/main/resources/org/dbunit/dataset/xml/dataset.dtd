@@ -12,6 +12,3 @@
 <!ELEMENT value (#PCDATA)>
 
 <!ELEMENT null EMPTY>
-
-
-

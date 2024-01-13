@@ -18,8 +18,8 @@ public class DefaultVerifyTableDefinitionVerifier implements VerifyTableDefiniti
     public void verify(final VerifyTableDefinition verifyTableDefinition) {
         final String tableName = verifyTableDefinition.getTableName();
         final String[] columnExclusionFilters = verifyTableDefinition.getColumnExclusionFilters();
-        final Map<String, ValueComparer> columnValueComparers = verifyTableDefinition.getColumnValueComparers();
-        verify(tableName, columnExclusionFilters, columnValueComparers);
+        final Map<String, ValueComparer> columnValueComparators = verifyTableDefinition.getColumnValueComparators();
+        verify(tableName, columnExclusionFilters, columnValueComparators);
     }
 
     public void verify(final String tableName, final String[] columnExclusionFilters, final Map<String, ValueComparer> columnValueComparers) {
