@@ -33,57 +33,31 @@ import java.sql.SQLException;
  * @version $Revision$
  * @since Feb 20, 2002
  */
-public class CachedResultSetTable extends CachedTable implements IResultSetTable
-{
+public class CachedResultSetTable extends CachedTable implements IResultSetTable {
     /**
-     * @param metaData
-     * @param resultSet
-     * @throws SQLException
-     * @throws DataSetException
      * @deprecated since 2.3.0 prefer direct usage of {@link ForwardOnlyResultSetTable#ForwardOnlyResultSetTable(ITableMetaData, ResultSet)} and then invoke {@link CachedResultSetTable#CachedResultSetTable(IResultSetTable)}
      */
-    public CachedResultSetTable(ITableMetaData metaData, ResultSet resultSet)
-            throws SQLException, DataSetException
-    {
+    public CachedResultSetTable(ITableMetaData metaData, ResultSet resultSet) throws SQLException, DataSetException {
         this(new ForwardOnlyResultSetTable(metaData, resultSet));
     }
 
     /**
-     * @param metaData
-     * @param connection
-     * @throws SQLException
-     * @throws DataSetException
-     * @deprecated since 2.4.4 prefer direct usage of {@link ForwardOnlyResultSetTable#ForwardOnlyResultSetTable(ITableMetaData, IDatabaseConnection)} and then invoke {@link CachedResultSetTable#CachedResultSetTable(IResultSetTable)} 
+     * @deprecated since 2.4.4 prefer direct usage of {@link ForwardOnlyResultSetTable#ForwardOnlyResultSetTable(ITableMetaData, IDatabaseConnection)} and then invoke {@link CachedResultSetTable#CachedResultSetTable(IResultSetTable)}
      */
-    public CachedResultSetTable(ITableMetaData metaData,
-            IDatabaseConnection connection) throws SQLException, DataSetException
-    {
+    public CachedResultSetTable(ITableMetaData metaData, IDatabaseConnection connection) throws SQLException, DataSetException {
         this(new ForwardOnlyResultSetTable(metaData, connection));
     }
 
-    public CachedResultSetTable(IResultSetTable table) throws DataSetException, SQLException
-    {
+    public CachedResultSetTable(IResultSetTable table) throws DataSetException {
         super(table.getTableMetaData());
-        try
-        {
+        try {
             addTableRows(table);
-        }
-        finally
-        {
+        } finally {
             table.close();
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////////
-    // IResultSetTable interface
-
-    public void close() throws DataSetException
-    {
+    public void close() throws DataSetException {
         // nothing to do, resultset already been closed
     }
 }
-
-
-
-
-

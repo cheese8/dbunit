@@ -21,9 +21,6 @@
 
 package org.dbunit.database;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
@@ -38,112 +35,67 @@ import java.sql.SQLException;
  * @version $Revision$
  * @since Mar 8, 2002
  */
-public class DatabaseDataSourceConnection extends AbstractDatabaseConnection
-        implements IDatabaseConnection
-{
+public class DatabaseDataSourceConnection extends AbstractDatabaseConnection implements IDatabaseConnection {
+    private final String schema;
+    private final DataSource dataSource;
+    private final String user;
+    private final String password;
+    private Connection connection;
 
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(DatabaseDataSourceConnection.class);
-
-    private final String _schema;
-    private final DataSource _dataSource;
-    private final String _user;
-    private final String _password;
-    private Connection _connection;
-
-    public DatabaseDataSourceConnection(InitialContext context, String jndiName,
-            String schema) throws NamingException, SQLException
-    {
+    public DatabaseDataSourceConnection(InitialContext context, String jndiName, String schema) throws NamingException {
         this((DataSource)context.lookup(jndiName), schema, null, null);
     }
 
-    public DatabaseDataSourceConnection(InitialContext context, String jndiName,
-            String schema, String user, String password)
-            throws NamingException, SQLException
-    {
+    public DatabaseDataSourceConnection(InitialContext context, String jndiName, String schema, String user, String password) throws NamingException {
         this((DataSource)context.lookup(jndiName), schema, user, password);
     }
 
-    public DatabaseDataSourceConnection(InitialContext context, String jndiName)
-            throws NamingException, SQLException
-    {
+    public DatabaseDataSourceConnection(InitialContext context, String jndiName) throws NamingException {
         this(context, jndiName, null);
     }
 
-    public DatabaseDataSourceConnection(InitialContext context, String jndiName,
-            String user, String password) throws NamingException, SQLException
-    {
+    public DatabaseDataSourceConnection(InitialContext context, String jndiName, String user, String password) throws NamingException {
         this(context, jndiName, null, user, password);
     }
 
-    public DatabaseDataSourceConnection(DataSource dataSource)
-            throws SQLException
-    {
+    public DatabaseDataSourceConnection(DataSource dataSource) {
         this(dataSource, null, null, null);
     }
 
-    public DatabaseDataSourceConnection(DataSource dataSource, String user,
-            String password) throws SQLException
-    {
+    public DatabaseDataSourceConnection(DataSource dataSource, String user, String password) {
         this(dataSource, null, user, password);
     }
 
-    public DatabaseDataSourceConnection(DataSource dataSource, String schema)
-            throws SQLException
-    {
+    public DatabaseDataSourceConnection(DataSource dataSource, String schema) {
         this(dataSource, schema, null, null);
     }
 
-    public DatabaseDataSourceConnection(DataSource dataSource, String schema,
-            String user, String password) throws SQLException
-    {
-        _dataSource = dataSource;
-        _schema = schema;
-        _user = user;
-        _password = password;
+    public DatabaseDataSourceConnection(DataSource dataSource, String schema, String user, String password) {
+        this.dataSource = dataSource;
+        this.schema = schema;
+        this.user = user;
+        this.password = password;
     }
 
-    ////////////////////////////////////////////////////////////////////////////
-    // IDatabaseConnection interface
-
-    public Connection getConnection() throws SQLException
-    {
-        logger.debug("getConnection() - start");
-
-        if (_connection == null)
-        {
-            try
-            {
-                if (_user != null) {
-                    _connection = _dataSource.getConnection(_user, _password);
-                } else {
-                    _connection = _dataSource.getConnection();
-                }
-            }
-            catch (SQLException e)
-            {
-                logger.error("getConnection(): ", e);
-                throw e;
+    public Connection getConnection() throws SQLException {
+        if (connection == null) {
+            if (user != null) {
+                connection = dataSource.getConnection(user, password);
+            } else {
+                connection = dataSource.getConnection();
             }
         }
-        return _connection;
+        return connection;
     }
 
-    public String getSchema()
-    {
-        return _schema;
+    public String getSchema() {
+        return schema;
     }
 
-    public void close() throws SQLException
-    {
-        logger.debug("close() - start");
-
-        if (_connection != null)
-        {
-            _connection.close();
-            _connection = null;
+    public void close() throws SQLException {
+        if (connection != null) {
+            connection.close();
+            connection = null;
         }
     }
 }

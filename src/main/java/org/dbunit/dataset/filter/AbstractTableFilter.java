@@ -28,8 +28,6 @@ import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.ITableIterator;
 import org.dbunit.dataset.ITableMetaData;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * This class provides a skeletal implementation of the {@link ITableFilter}
@@ -41,14 +39,7 @@ import org.slf4j.LoggerFactory;
  * @version $Revision$ $Date$
  * @since 2.2.0
  */
-public abstract class AbstractTableFilter implements ITableFilter
-{
-
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(AbstractTableFilter.class);
-
+public abstract class AbstractTableFilter implements ITableFilter {
     /**
      * Returns <code>true</code> if specified table is allowed by this filter.
      * This legacy method, now replaced by accept, still exist for compatibily
@@ -56,89 +47,47 @@ public abstract class AbstractTableFilter implements ITableFilter
      */
     public abstract boolean isValidName(String tableName) throws DataSetException;
 
-    ////////////////////////////////////////////////////////////////////////////
-    // ITableFilter interface
-
-    public boolean accept(String tableName) throws DataSetException
-    {
-        logger.debug("accept(tableName={}) - start", tableName);
-
+    public boolean accept(String tableName) throws DataSetException {
         return isValidName(tableName);
     }
 
-    public String[] getTableNames(IDataSet dataSet) throws DataSetException
-    {
-        logger.debug("getTableNames(dataSet={}) - start", dataSet);
-
+    public String[] getTableNames(IDataSet dataSet) throws DataSetException {
         String[] tableNames = dataSet.getTableNames();
-        List nameList = new ArrayList();
-        for (int i = 0; i < tableNames.length; i++)
-        {
-            String tableName = tableNames[i];
-            if (accept(tableName))
-            {
+        List<String> nameList = new ArrayList<>();
+        for (String tableName : tableNames) {
+            if (accept(tableName)) {
                 nameList.add(tableName);
             }
         }
-        return (String[])nameList.toArray(new String[0]);
+        return nameList.toArray(new String[0]);
     }
 
-    public ITableIterator iterator(IDataSet dataSet, boolean reversed)
-            throws DataSetException
-    {
-        logger.debug("iterator(dataSet={}, reversed={}) - start", dataSet, String.valueOf(reversed));
-
-        return new FilterIterator(reversed ?
-                dataSet.reverseIterator() : dataSet.iterator());
+    public ITableIterator iterator(IDataSet dataSet, boolean reversed) throws DataSetException {
+        return new FilterIterator(reversed ? dataSet.reverseIterator() : dataSet.iterator());
     }
 
-    ////////////////////////////////////////////////////////////////////////////
-    // FilterIterator class
+    private class FilterIterator implements ITableIterator {
+        private final ITableIterator iterator;
 
-    private class FilterIterator implements ITableIterator
-    {
-
-        /**
-         * Logger for this class
-         */
-        private final Logger logger = LoggerFactory.getLogger(FilterIterator.class);
-
-        private final ITableIterator _iterator;
-
-        public FilterIterator(ITableIterator iterator)
-        {
-            _iterator = iterator;
+        public FilterIterator(ITableIterator iterator) {
+            this.iterator = iterator;
         }
 
-        ////////////////////////////////////////////////////////////////////////////
-        // ITableIterator interface
-
-        public boolean next() throws DataSetException
-        {
-            logger.debug("next() - start");
-
-            while(_iterator.next())
-            {
-                if (accept(_iterator.getTableMetaData().getTableName()))
-                {
+        public boolean next() throws DataSetException {
+            while(iterator.next()) {
+                if (accept(iterator.getTableMetaData().getTableName())) {
                     return true;
                 }
             }
             return false;
         }
 
-        public ITableMetaData getTableMetaData() throws DataSetException
-        {
-            logger.debug("getTableMetaData() - start");
-
-            return _iterator.getTableMetaData();
+        public ITableMetaData getTableMetaData() throws DataSetException {
+            return iterator.getTableMetaData();
         }
 
-        public ITable getTable() throws DataSetException
-        {
-            logger.debug("getTable() - start");
-
-            return _iterator.getTable();
+        public ITable getTable() throws DataSetException {
+            return iterator.getTable();
         }
     }
 }

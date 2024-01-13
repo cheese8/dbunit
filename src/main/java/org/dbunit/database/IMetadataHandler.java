@@ -32,8 +32,7 @@ import java.sql.SQLException;
  * @version $Revision$ $Date$
  * @since 2.4.4
  */
-public interface IMetadataHandler 
-{
+public interface IMetadataHandler {
 
     /**
      * Returns the result set for an invocation of {@link DatabaseMetaData#getColumns(String, String, String, String)}.
@@ -44,8 +43,7 @@ public interface IMetadataHandler
      * @throws SQLException
      * @since 2.4.4
      */
-    ResultSet getColumns(DatabaseMetaData databaseMetaData, String schemaName, String tableName)
-    throws SQLException;
+    ResultSet getColumns(DatabaseMetaData databaseMetaData, String schemaName, String tableName) throws SQLException;
 
     /**
      * Checks if the given <code>resultSet</code> matches the given schema and table name.
@@ -60,8 +58,7 @@ public interface IMetadataHandler
      * @see #matches(ResultSet, String, String, String, String, boolean)
      * @since 2.4.4
      */
-    public boolean matches(ResultSet resultSet, String schema, String table, boolean caseSensitive) 
-    throws SQLException;
+    boolean matches(ResultSet resultSet, String schema, String table, boolean caseSensitive) throws SQLException;
 
     /**
      * Checks if the given <code>resultSet</code> matches the given schema and table name.
@@ -77,8 +74,7 @@ public interface IMetadataHandler
      * @throws SQLException
      * @since 2.4.4
      */
-    boolean matches(ResultSet resultSet, String catalog, String schema,
-            String table, String column, boolean caseSensitive) throws SQLException;
+    boolean matches(ResultSet resultSet, String catalog, String schema, String table, String column, boolean caseSensitive) throws SQLException;
 
     /**
      * Returns the schema name to which the table of the current result set index belongs.
@@ -100,8 +96,7 @@ public interface IMetadataHandler
      * @throws SQLException
      * @since 2.4.5
      */
-    boolean tableExists(DatabaseMetaData databaseMetaData, String schemaName, String tableName)
-    throws SQLException;
+    boolean tableExists(DatabaseMetaData databaseMetaData, String schemaName, String tableName) throws SQLException;
 
     /**
      * Returns the tables in the given schema that matches one of the given tableTypes.
@@ -112,8 +107,7 @@ public interface IMetadataHandler
      * @throws SQLException
      * @since 2.4.5
      */
-    ResultSet getTables(DatabaseMetaData databaseMetaData, String schemaName, String[] tableTypes)
-    throws SQLException;
+    ResultSet getTables(DatabaseMetaData databaseMetaData, String schemaName, String[] tableTypes) throws SQLException;
 
     /**
      * @param databaseMetaData The database meta data
@@ -123,8 +117,5 @@ public interface IMetadataHandler
      * @throws SQLException
      * @since 2.4.5
      */
-    public ResultSet getPrimaryKeys(DatabaseMetaData databaseMetaData, String schemaName, String tableName)
-    throws SQLException;
-
-
+    ResultSet getPrimaryKeys(DatabaseMetaData databaseMetaData, String schemaName, String tableName) throws SQLException;
 }
