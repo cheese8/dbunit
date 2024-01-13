@@ -28,8 +28,7 @@ import java.util.*;
  * @version $Revision$
  * @since Feb 20, 2002
  */
-public class DatabaseProfile
-{
+public class DatabaseProfile {
 	private static final String[] EMPTY_ARRAY = new String[0];
 	
     public static final String DATABASE_PROFILE = "dbunit.profile";
@@ -44,67 +43,53 @@ public class DatabaseProfile
 
     private final Properties _properties;
 
-    public DatabaseProfile(Properties properties)
-    {
+    public DatabaseProfile(Properties properties) {
         _properties = properties;
     }
 
-    public String getActiveProfile()
-    {
+    public String getActiveProfile() {
         return _properties.getProperty(DATABASE_PROFILE);
     }
 
-    public String getDriverClass()
-    {
+    public String getDriverClass() {
         return _properties.getProperty(PROFILE_DRIVER_CLASS);
     }
 
-    public String getConnectionUrl()
-    {
+    public String getConnectionUrl() {
         return _properties.getProperty(PROFILE_URL);
     }
 
-    public String getSchema()
-    {
+    public String getSchema() {
         return _properties.getProperty(PROFILE_SCHEMA, null);
     }
 
-    public String getUser()
-    {
+    public String getUser() {
         return _properties.getProperty(PROFILE_USER);
     }
 
-    public String getPassword()
-    {
+    public String getPassword() {
         return _properties.getProperty(PROFILE_PASSWORD);
     }
 
-    public String getProfileDdl()
-    {
+    public String getProfileDdl() {
         return _properties.getProperty(PROFILE_DDL);
     }
 
-    public boolean getProfileMultilineSupport()
-    {
+    public boolean getProfileMultilineSupport() {
         return Boolean.parseBoolean(_properties.getProperty(PROFILE_MULTILINE_SUPPORT));
     }
 
-    public String[] getUnsupportedFeatures()
-    {
+    public String[] getUnsupportedFeatures() {
         String property = _properties.getProperty(PROFILE_UNSUPPORTED_FEATURES);
-        
         // If property is not set return an empty array
-        if(property == null){
+        if (property == null) {
         	return EMPTY_ARRAY;
         }
-        
         List<String> stringList = new ArrayList<>();
         StringTokenizer tokenizer = new StringTokenizer(property, ",");
-        while(tokenizer.hasMoreTokens())
-        {
+        while (tokenizer.hasMoreTokens()) {
             stringList.add(tokenizer.nextToken().trim());
         }
         return stringList.toArray(new String[0]);
     }
-
 }

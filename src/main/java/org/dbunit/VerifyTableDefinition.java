@@ -86,16 +86,16 @@ public class VerifyTableDefinition {
     /**
      * Create a valid instance with all columns compared and use the specified
      * defaultValueComparer for all column comparisons not in the
-     * columnValueComparers {@link Map}.
+     * columnValueComparators {@link Map}.
      *
      * @param table
      *            The name of the table - required.
      * @param defaultValueComparator
      *            {@link ValueComparator} to use with column value comparisons
      *            when the column name for the table is not in the
-     *            columnValueComparers {@link Map}. Can be <code>null</code> and
+     *            columnValueComparators {@link Map}. Can be <code>null</code> and
      *            will default.
-     * @param columnValueComparers
+     * @param columnValueComparators
      *            {@link Map} of {@link ValueComparator}s to use for specific
      *            columns. Key is column name, value is {@link ValueComparator} to
      *            use for comparison of that column. Can be <code>null</code>
@@ -103,14 +103,14 @@ public class VerifyTableDefinition {
      *            all tables.
      * @since 2.6.0
      */
-    public VerifyTableDefinition(final String table, final ValueComparator defaultValueComparator, final Map<String, ValueComparator> columnValueComparers) {
-        this(table, null, null, defaultValueComparator, columnValueComparers);
+    public VerifyTableDefinition(final String table, final ValueComparator defaultValueComparator, final Map<String, ValueComparator> columnValueComparators) {
+        this(table, null, null, defaultValueComparator, columnValueComparators);
     }
 
     /**
      * Create a valid instance with all columns compared and exclude the
      * specified columns, and use the specified defaultValueComparer for all
-     * column comparisons not in the columnValueComparers {@link Map}.
+     * column comparisons not in the columnValueComparators {@link Map}.
      *
      * @param table
      *            The name of the table - required.
@@ -120,9 +120,9 @@ public class VerifyTableDefinition {
      * @param defaultValueComparator
      *            {@link ValueComparator} to use with column value comparisons
      *            when the column name for the table is not in the
-     *            columnValueComparers {@link Map}. Can be <code>null</code> and
+     *            columnValueComparators {@link Map}. Can be <code>null</code> and
      *            will default.
-     * @param columnValueComparers
+     * @param columnValueComparators
      *            {@link Map} of {@link ValueComparator}s to use for specific
      *            columns. Key is column name, value is {@link ValueComparator} to
      *            use for comparison of that column. Can be <code>null</code>
@@ -130,8 +130,8 @@ public class VerifyTableDefinition {
      *            all tables.
      * @since 2.6.0
      */
-    public VerifyTableDefinition(final String table, final String[] excludeColumns, final ValueComparator defaultValueComparator, final Map<String, ValueComparator> columnValueComparers) {
-        this(table, excludeColumns, null, defaultValueComparator, columnValueComparers);
+    public VerifyTableDefinition(final String table, final String[] excludeColumns, final ValueComparator defaultValueComparator, final Map<String, ValueComparator> columnValueComparators) {
+        this(table, excludeColumns, null, defaultValueComparator, columnValueComparators);
     }
 
     /**
@@ -154,7 +154,7 @@ public class VerifyTableDefinition {
     /**
      * Create a valid instance specifying exclude and include columns and use
      * the specified defaultValueComparer for all column comparisons not in the
-     * columnValueComparers {@link Map}.
+     * columnValueComparators {@link Map}.
      *
      * @param table
      *            The name of the table.
@@ -168,7 +168,7 @@ public class VerifyTableDefinition {
      * @param defaultValueComparator
      *            {@link ValueComparator} to use with column value comparisons
      *            when the column name for the table is not in the
-     *            columnValueComparers {@link Map}. Can be <code>null</code> and
+     *            columnValueComparators {@link Map}. Can be <code>null</code> and
      *            will default.
      * @param columnValueComparators
      *            {@link Map} of {@link ValueComparator}s to use for specific
@@ -195,7 +195,7 @@ public class VerifyTableDefinition {
     public String toString() {
         final String exclusionString = arrayToString(columnExclusionFilters);
         final String inclusionString = arrayToString(columnInclusionFilters);
-        return "tableName='" + tableName + "', columnExclusionFilters='" + exclusionString + "', columnInclusionFilters='" + inclusionString + "', defaultValueComparer='" + defaultValueComparator + "', columnValueComparators='" + columnValueComparators + "'";
+        return "tableName='" + tableName + "', columnExclusionFilters='" + exclusionString + "', columnInclusionFilters='" + inclusionString + "', defaultValueComparator='" + defaultValueComparator + "', columnValueComparators='" + columnValueComparators + "'";
     }
 
     protected String arrayToString(final String[] array) {

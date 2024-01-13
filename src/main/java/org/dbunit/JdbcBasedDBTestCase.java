@@ -21,9 +21,6 @@
 
 package org.dbunit;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * TestCase that uses a JdbcDatabaseTester.
  *
@@ -34,39 +31,28 @@ import org.slf4j.LoggerFactory;
  * @since 2.2.0
  */
 public abstract class JdbcBasedDBTestCase extends DBTestCase {
-
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(JdbcBasedDBTestCase.class);
-
-    public JdbcBasedDBTestCase()
-    {
+    public JdbcBasedDBTestCase() {
         super();
     }
 
-    public JdbcBasedDBTestCase( String name )
-    {
-        super( name );
+    public JdbcBasedDBTestCase(String name) {
+        super(name);
     }
 
     /**
      * Creates a new IDatabaseTester.<br>
      * Default implementation returns a {@link JdbcDatabaseTester} configured
      * with the values returned from {@link #getDriverClass},
-     * {@link #getConnectionUrl}, {@link #getUsername} and {@link #getPassword()}.
-     * @throws ClassNotFoundException when the driverClass was not found
+     * {@link #getUrl}, {@link #getUsername} and {@link #getPassword()}.
      */
-    protected IDatabaseTester newDatabaseTester() throws ClassNotFoundException {
-        logger.debug("newDatabaseTester() - start");
-        JdbcDatabaseTester databaseTester = new JdbcDatabaseTester(getDriverClass(), getConnectionUrl(), getUsername(), getPassword());
-        return databaseTester;
+    protected IDatabaseTester newDatabaseTester() {
+        return new JdbcDatabaseTester(getDriverClass(), getUrl(), getUsername(), getPassword());
     }
 
     /**
      * Returns the test connection url.
      */
-    protected abstract String getConnectionUrl();
+    protected abstract String getUrl();
 
     /**
      * Returns the JDBC driver classname.
@@ -78,8 +64,7 @@ public abstract class JdbcBasedDBTestCase extends DBTestCase {
      * Subclasses may override this method to provide a custom password.<br>
      * Default implementations returns null.
      */
-    protected String getPassword()
-    {
+    protected String getPassword() {
         return null;
     }
 
@@ -88,8 +73,7 @@ public abstract class JdbcBasedDBTestCase extends DBTestCase {
      * Subclasses may override this method to provide a custom username.<br>
      * Default implementations returns null.
      */
-    protected String getUsername()
-    {
+    protected String getUsername() {
         return null;
     }
 }

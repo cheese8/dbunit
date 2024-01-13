@@ -26,16 +26,16 @@ package org.dbunit;
  * This class defines a set of keys for system properties that need to be
  * present in the environment before using it. Example:
  * <xmp>
- * System.setProperty( PropertiesBasedJdbcDatabaseTester.DBUNIT_DRIVER_CLASS,
- *             "com.mycompany.myDriver" );
- * System.setProperty( PropertiesBasedJdbcDatabaseTester.DBUNIT_CONNECTION_URL,
- *             "jdbc:mydb://host/dbname" );
- * System.setProperty( PropertiesBasedJdbcDatabaseTester.DBUNIT_USERNAME,
- *             "myuser" );
- * System.setProperty( PropertiesBasedJdbcDatabaseTester.DBUNIT_PASSWORD,
- *             "mypasswd" );
- * System.setProperty( PropertiesBasedJdbcDatabaseTester.DBUNIT_SCHEMA,
- *             "myschema" );
+ * System.setProperty( PropertiesBasedJdbcDatabaseTester.DRIVER_CLASS,
+ *             "mysql.Driver" );
+ * System.setProperty( PropertiesBasedJdbcDatabaseTester.URL,
+ *             "jdbc:mysql://host/dbname" );
+ * System.setProperty( PropertiesBasedJdbcDatabaseTester.USERNAME,
+ *             "username" );
+ * System.setProperty( PropertiesBasedJdbcDatabaseTester.PASSWORD,
+ *             "password" );
+ * System.setProperty( PropertiesBasedJdbcDatabaseTester.SCHEMA,
+ *             "schema" );
  * </xmp>
  *
  * @author Andres Almiray(aalmiray@users.sourceforge.net)

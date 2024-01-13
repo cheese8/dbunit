@@ -22,8 +22,6 @@ package org.dbunit;
 
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Properties;
 
@@ -44,23 +42,19 @@ import org.dbunit.database.IDatabaseConnection;
  * @since 2.2.0
  */
 public class JndiDatabaseTester extends AbstractDatabaseTester {
-
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(JndiDatabaseTester.class);
-
     private DataSource dataSource;
-    private Properties environment;
+    private final Properties environment;
     private boolean initialized = false;
-    private String lookupName;
+    private final String lookupName;
 
     /**
      * Creates a JndiDatabaseTester with default JNDI properties.
      *
      * @param lookupName the name of the resource in the JNDI context
      */
-    public JndiDatabaseTester(String lookupName) {this(null, lookupName);}
+    public JndiDatabaseTester(String lookupName) {
+        this(null, lookupName);
+    }
 
     /**
      * Creates a JndiDatabaseTester with specific JNDI properties.
@@ -68,8 +62,7 @@ public class JndiDatabaseTester extends AbstractDatabaseTester {
      * @param environment A Properties object with JNDI properties. Can be null
      * @param lookupName the name of the resource in the JNDI context
      */
-    public JndiDatabaseTester(Properties environment, String lookupName)
-    {
+    public JndiDatabaseTester(Properties environment, String lookupName) {
         this(environment, lookupName, null);
     }
 
@@ -91,40 +84,30 @@ public class JndiDatabaseTester extends AbstractDatabaseTester {
     }
 
     public IDatabaseConnection getConnection() throws Exception {
-        logger.trace("getConnection() - start");
-        if(!initialized){
+        if (!initialized) {
             initialize();
         }
-        return new DatabaseConnection( dataSource.getConnection(), getSchema() );
+        return new DatabaseConnection(dataSource.getConnection(), getSchema());
     }
 
     /**
      * Verifies the configured properties and locates the Datasource through
      * JNDI.<br>
-     * This method is called by {@link getConnection} if the tester has not been
+     * This method is called by {@link JndiDatabaseTester#getConnection} if the tester has not been
      * initialized yet.
      */
     private void initialize() throws NamingException {
-        logger.trace("initialize() - start");
-        Context context = new InitialContext( environment );
-        Assert.assertTrue("lookupName was not specified.", StringUtils.isNotBlank(lookupName));
-        Object obj = context.lookup( lookupName );
-        assertTrue( "JNDI object with [" + lookupName + "] not found", obj!=null );
-        assertTrue( "Object [" + obj + "] at JNDI location [" + lookupName + "] is not of type [" + DataSource.class.getName() + "]", obj instanceof DataSource );
+        Context context = new InitialContext(environment);
+        Assert.assertTrue("lookupName was not set.", StringUtils.isNotBlank(lookupName));
+        Object obj = context.lookup(lookupName);
+        assertTrue("JNDI object with [" + lookupName + "] not found", obj != null);
+        assertTrue("Object [" + obj + "] at JNDI location [" + lookupName + "] is not of type [" + DataSource.class.getName() + "]", obj instanceof DataSource);
+        assert obj instanceof DataSource;
         dataSource = (DataSource) obj;
-        assertTrue( "DataSource is not set", dataSource!=null );
         initialized = true;
     }
 
     public String toString() {
-        StringBuffer sb = new StringBuffer();
-        sb.append(getClass().getName()).append("[");
-        sb.append("lookupName=").append(this.lookupName);
-        sb.append(", environment=").append(this.environment);
-        sb.append(", initialized=").append(this.initialized);
-        sb.append(", dataSource=").append(this.dataSource);
-        sb.append(", schema=").append(super.getSchema());
-        sb.append("]");
-        return sb.toString();
+        return getClass().getName() + "[" + "lookupName=" + this.lookupName + ", environment=" + this.environment + ", initialized=" + this.initialized + ", dataSource=" + this.dataSource + ", schema=" + getSchema() + "]";
     }
 }
