@@ -7,7 +7,7 @@ import org.dbunit.dataset.datatype.DataType;
 import org.dbunit.dataset.datatype.TypeCastException;
 
 /**
- * {@link ValueComparer} implementation that verifies actual value contains
+ * {@link ValueComparator} implementation that verifies actual value contains
  * expected value by converting to {@link String}s and using
  * {@link String#contains(CharSequence)}. Special case: if both are null, they
  * match.

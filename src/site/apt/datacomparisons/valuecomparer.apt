@@ -116,13 +116,13 @@ public void testExample() throws Exception
 {
     ITable expectedTable = ...; // declare the expected table
     ITable actualTable = ...;  // declare the actual table
-    ValueComparer defaultValueComparer = ValueComparers.isActualEqualToExpected;
+    ValueComparer defaultValueComparator = ValueComparers.isActualEqualToExpected;
     Map<String, ValueComparer> columnValueComparers =
             new ColumnValueComparerMapBuilder()
                     .add("COLUMN1", ValueComparers.isActualGreaterThanExpected)
                     .add("COLUMN2", ValueComparers.isActualLessOrEqualToThanExpected)
                     .build();
 
-    Assertion.assertWithValueComparer(expectedTable, actualTable, defaultValueComparer, columnValueComparers);
+    Assertion.assertWithValueComparer(expectedTable, actualTable, defaultValueComparator, columnValueComparers);
 }
 +--

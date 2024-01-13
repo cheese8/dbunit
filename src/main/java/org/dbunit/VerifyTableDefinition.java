@@ -25,14 +25,15 @@ import java.util.Map;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.dbunit.assertion.comparer.value.ValueComparer;
+import org.apache.commons.lang3.StringUtils;
+import org.dbunit.assertion.comparer.value.ValueComparator;
 import org.dbunit.assertion.comparer.value.verifier.DefaultVerifyTableDefinitionVerifier;
 import org.dbunit.assertion.comparer.value.verifier.VerifyTableDefinitionVerifier;
 import org.dbunit.util.Assert;
 
 /**
  * Defines a database table to verify (assert on data), specifying include and
- * exclude column filters and optional {@link ValueComparer}s.
+ * exclude column filters and optional {@link ValueComparator}s.
  *
  * @author Jeff Jensen jeffjensen AT users.sourceforge.net
  * @author Last changed by: $Author$
@@ -43,33 +44,28 @@ public class VerifyTableDefinition {
     /** The name of the table. */
     @Getter
     private final String tableName;
-
     /** The columns to exclude in table comparisons. */
     @Getter
     private final String[] columnExclusionFilters;
-
     /** The columns to include in table comparisons. */
     @Getter
     private final String[] columnInclusionFilters;
-
     /**
-     * {@link ValueComparer} to use with column value comparisons when the
+     * {@link ValueComparator} to use with column value comparisons when the
      * column name for the table is not in the {@link VerifyTableDefinition#columnValueComparators}
      * {@link Map}. Can be <code>null</code> and will default.
      *
      * @since 2.6.0
      */
     @Getter
-    private final ValueComparer defaultValueComparer;
-
+    private final ValueComparator defaultValueComparator;
     /**
-     * Map of column names to {@link ValueComparer}s to use for comparison.
+     * Map of column names to {@link ValueComparator}s to use for comparison.
      * 
      * @since 2.6.0
      */
     @Getter
-    private final Map<String, ValueComparer> columnValueComparators;
-
+    private final Map<String, ValueComparator> columnValueComparators;
     @Getter @Setter
     private VerifyTableDefinitionVerifier verifyTableDefinitionVerifier = new DefaultVerifyTableDefinitionVerifier();
 
@@ -94,21 +90,21 @@ public class VerifyTableDefinition {
      *
      * @param table
      *            The name of the table - required.
-     * @param defaultValueComparer
-     *            {@link ValueComparer} to use with column value comparisons
+     * @param defaultValueComparator
+     *            {@link ValueComparator} to use with column value comparisons
      *            when the column name for the table is not in the
      *            columnValueComparers {@link Map}. Can be <code>null</code> and
      *            will default.
      * @param columnValueComparers
-     *            {@link Map} of {@link ValueComparer}s to use for specific
-     *            columns. Key is column name, value is {@link ValueComparer} to
+     *            {@link Map} of {@link ValueComparator}s to use for specific
+     *            columns. Key is column name, value is {@link ValueComparator} to
      *            use for comparison of that column. Can be <code>null</code>
      *            and will default to defaultValueComparer for all columns in
      *            all tables.
      * @since 2.6.0
      */
-    public VerifyTableDefinition(final String table, final ValueComparer defaultValueComparer, final Map<String, ValueComparer> columnValueComparers) {
-        this(table, null, null, defaultValueComparer, columnValueComparers);
+    public VerifyTableDefinition(final String table, final ValueComparator defaultValueComparator, final Map<String, ValueComparator> columnValueComparers) {
+        this(table, null, null, defaultValueComparator, columnValueComparers);
     }
 
     /**
@@ -121,21 +117,21 @@ public class VerifyTableDefinition {
      * @param excludeColumns
      *            The columns in the table to ignore (filter out) in expected vs
      *            actual comparisons; null or empty array to exclude no columns.
-     * @param defaultValueComparer
-     *            {@link ValueComparer} to use with column value comparisons
+     * @param defaultValueComparator
+     *            {@link ValueComparator} to use with column value comparisons
      *            when the column name for the table is not in the
      *            columnValueComparers {@link Map}. Can be <code>null</code> and
      *            will default.
      * @param columnValueComparers
-     *            {@link Map} of {@link ValueComparer}s to use for specific
-     *            columns. Key is column name, value is {@link ValueComparer} to
+     *            {@link Map} of {@link ValueComparator}s to use for specific
+     *            columns. Key is column name, value is {@link ValueComparator} to
      *            use for comparison of that column. Can be <code>null</code>
      *            and will default to defaultValueComparer for all columns in
      *            all tables.
      * @since 2.6.0
      */
-    public VerifyTableDefinition(final String table, final String[] excludeColumns, final ValueComparer defaultValueComparer, final Map<String, ValueComparer> columnValueComparers) {
-        this(table, excludeColumns, null, defaultValueComparer, columnValueComparers);
+    public VerifyTableDefinition(final String table, final String[] excludeColumns, final ValueComparator defaultValueComparator, final Map<String, ValueComparator> columnValueComparers) {
+        this(table, excludeColumns, null, defaultValueComparator, columnValueComparers);
     }
 
     /**
@@ -169,26 +165,25 @@ public class VerifyTableDefinition {
      *            The columns in the table to include in expected vs actual
      *            comparisons; null to include all columns, empty array to
      *            include no columns.
-     * @param defaultValueComparer
-     *            {@link ValueComparer} to use with column value comparisons
+     * @param defaultValueComparator
+     *            {@link ValueComparator} to use with column value comparisons
      *            when the column name for the table is not in the
      *            columnValueComparers {@link Map}. Can be <code>null</code> and
      *            will default.
      * @param columnValueComparators
-     *            {@link Map} of {@link ValueComparer}s to use for specific
-     *            columns. Key is column name, value is {@link ValueComparer} to
+     *            {@link Map} of {@link ValueComparator}s to use for specific
+     *            columns. Key is column name, value is {@link ValueComparator} to
      *            use for comparison of that column. Can be <code>null</code>
      *            and will default to defaultValueComparer for all columns in
      *            all tables.
      * @since 2.6.0
      */
-    public VerifyTableDefinition(final String table, final String[] excludeColumns, final String[] includeColumns,
-                                 final ValueComparer defaultValueComparer, final Map<String, ValueComparer> columnValueComparators) {
-        Assert.assertThat(table != null, new IllegalArgumentException("table is null."));
+    public VerifyTableDefinition(final String table, final String[] excludeColumns, final String[] includeColumns, final ValueComparator defaultValueComparator, final Map<String, ValueComparator> columnValueComparators) {
+        Assert.assertThat(StringUtils.isNotBlank(table), new IllegalArgumentException("table is null."));
         tableName = table;
         columnExclusionFilters = excludeColumns;
         columnInclusionFilters = includeColumns;
-        this.defaultValueComparer = defaultValueComparer;
+        this.defaultValueComparator = defaultValueComparator;
         this.columnValueComparators = columnValueComparators;
         verifyTableDefinitionVerifier.verify(this);
     }
@@ -200,11 +195,10 @@ public class VerifyTableDefinition {
     public String toString() {
         final String exclusionString = arrayToString(columnExclusionFilters);
         final String inclusionString = arrayToString(columnInclusionFilters);
-        return "tableName='" + tableName + "', columnExclusionFilters='" + exclusionString + "', columnInclusionFilters='" + inclusionString + "', defaultValueComparer='" + defaultValueComparer + "', columnValueComparators='" + columnValueComparators + "'";
+        return "tableName='" + tableName + "', columnExclusionFilters='" + exclusionString + "', columnInclusionFilters='" + inclusionString + "', defaultValueComparer='" + defaultValueComparator + "', columnValueComparators='" + columnValueComparators + "'";
     }
 
-    protected String arrayToString(final String[] array)
-    {
+    protected String arrayToString(final String[] array) {
         return array == null ? "" : Arrays.toString(array);
     }
 }

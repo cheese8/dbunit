@@ -27,7 +27,7 @@ import org.dbunit.database.IDatabaseConnection;
 
 /**
  * Base testCase for database testing.<br>
- * Subclasses may override {@link #newDatabaseTester()} to plug-in a different implementation
+ * Subclasses may override {@link #newDatabaseTester()} to plug in a different implementation
  * of IDatabaseTester.<br> Default implementation uses a {@link PropertiesBasedJdbcDatabaseTester}.
  *
  * @author Felipe Leme (dbunit@felipeal.net)
@@ -47,7 +47,6 @@ public abstract class DBTestCase extends DatabaseTestCase {
   }
 
   protected final IDatabaseConnection getConnection() throws Exception {
-      log.debug("getConnection() - start");
       final IDatabaseTester databaseTester = getDatabaseTester();
       assertNotNull( "DatabaseTester is not set", databaseTester);
       IDatabaseConnection connection = databaseTester.getConnection();

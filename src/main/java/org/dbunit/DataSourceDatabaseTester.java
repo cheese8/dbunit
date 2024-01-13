@@ -20,9 +20,6 @@
  */
 package org.dbunit;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import javax.sql.DataSource;
 
 import org.dbunit.database.DatabaseConnection;
@@ -39,23 +36,16 @@ import org.dbunit.database.IDatabaseConnection;
  */
 public class DataSourceDatabaseTester extends AbstractDatabaseTester {
 
-	/**
-	 * Logger for this class
-	 */
-	private static final Logger logger = LoggerFactory.getLogger(DataSourceDatabaseTester.class);
-
-	private DataSource dataSource;
+	private final DataSource dataSource;
 
 	/**
 	 * Creates a new DataSourceDatabaseTester with the specified DataSource.
 	 *
 	 * @param dataSource the DataSource to pull connections from
 	 */
-	public DataSourceDatabaseTester( DataSource dataSource ) {
+	public DataSourceDatabaseTester(DataSource dataSource) {
 		super();
-        if (dataSource == null) {
-            throw new NullPointerException("The parameter 'dataSource' must not be null");
-        }
+		assert dataSource != null;
 		this.dataSource = dataSource;
 	}
 
@@ -67,15 +57,12 @@ public class DataSourceDatabaseTester extends AbstractDatabaseTester {
 	 */
 	public DataSourceDatabaseTester(DataSource dataSource, String schema) {
         super(schema);
-        if (dataSource == null) {
-            throw new NullPointerException("The parameter 'dataSource' must not be null");
-        }
+		assert dataSource != null;
         this.dataSource = dataSource;
     }
 
     public IDatabaseConnection getConnection() throws Exception {
-		logger.debug("getConnection() - start");
-		assertTrue( "DataSource is not set", dataSource!=null );
-		return new DatabaseConnection( dataSource.getConnection(), getSchema() );
+		assert dataSource != null;
+		return new DatabaseConnection(dataSource.getConnection(), getSchema());
 	}
 }

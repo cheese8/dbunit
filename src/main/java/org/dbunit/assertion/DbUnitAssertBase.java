@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.assertion.DbUnitAssert.ComparisonColumn;
 import org.dbunit.assertion.comparer.value.DefaultValueComparerDefaults;
-import org.dbunit.assertion.comparer.value.ValueComparer;
+import org.dbunit.assertion.comparer.value.ValueComparator;
 import org.dbunit.assertion.comparer.value.ValueComparerDefaults;
 import org.dbunit.dataset.Column;
 import org.dbunit.dataset.Columns;
@@ -203,23 +203,23 @@ public class DbUnitAssertBase {
      *            useful to quickly identify the rows for which the mismatch
      *            occurred (for example by printing an additional primary key
      *            column). Can be <code>null</code>.
-     * @param defaultValueComparer
-     *            {@link ValueComparer} to use with column value comparisons
+     * @param defaultValueComparator
+     *            {@link ValueComparator} to use with column value comparisons
      *            when the column name for the table is not in the
      *            tableColumnValueComparers {@link Map}. Can be
      *            <code>null</code> and will default to
      *            {@link ValueComparerDefaults#getDefaultValueComparer()}.
      * @param tableColumnValueComparers
-     *            {@link Map} of {@link ValueComparer}s to use for specific
+     *            {@link Map} of {@link ValueComparator}s to use for specific
      *            tables and columns. Key is table name, value is {@link Map} of
-     *            column name in the table to {@link ValueComparer}s. Can be
+     *            column name in the table to {@link ValueComparator}s. Can be
      *            <code>null</code> and will default to using
      *            {@link ValueComparerDefaults#getDefaultColumnValueComparerMapForTable(String)} or,
      *            if that is empty, defaultValueComparer for all columns in all
      *            tables.
      */
-    public void assertWithValueComparer(final IDataSet expectedDataSet, final IDataSet actualDataSet, final FailureHandler failureHandler, final ValueComparer defaultValueComparer, final Map<String, Map<String, ValueComparer>> tableColumnValueComparers) throws DatabaseUnitException {
-        log.debug("assertWithValueComparer(expectedDataSet={}, actualDataSet={}, failureHandler={}, defaultValueComparer={}, tableColumnValueComparers={}) - start", expectedDataSet, actualDataSet, failureHandler, defaultValueComparer, tableColumnValueComparers);
+    public void assertWithValueComparer(final IDataSet expectedDataSet, final IDataSet actualDataSet, final FailureHandler failureHandler, final ValueComparator defaultValueComparator, final Map<String, Map<String, ValueComparator>> tableColumnValueComparers) throws DatabaseUnitException {
+        log.debug("assertWithValueComparer(expectedDataSet={}, actualDataSet={}, failureHandler={}, defaultValueComparer={}, tableColumnValueComparers={}) - start", expectedDataSet, actualDataSet, failureHandler, defaultValueComparator, tableColumnValueComparers);
 
         // do not continue if same instance
         if (expectedDataSet == actualDataSet) {
@@ -237,18 +237,18 @@ public class DbUnitAssertBase {
         // table names in no specific order
         compareTableNames(expectedNames, actualNames, validFailureHandler);
 
-        compareTables(expectedDataSet, actualDataSet, expectedNames, validFailureHandler, defaultValueComparer, tableColumnValueComparers);
+        compareTables(expectedDataSet, actualDataSet, expectedNames, validFailureHandler, defaultValueComparator, tableColumnValueComparers);
     }
 
-    protected void compareTables(final IDataSet expectedDataSet, final IDataSet actualDataSet, final String[] expectedNames, final FailureHandler failureHandler, final ValueComparer defaultValueComparer, final Map<String, Map<String, ValueComparer>> tableColumnValueComparers) throws DatabaseUnitException {
-        final Map<String, Map<String, ValueComparer>> validTableColumnValueComparers = determineValidTableColumnValueComparers(tableColumnValueComparers);
+    protected void compareTables(final IDataSet expectedDataSet, final IDataSet actualDataSet, final String[] expectedNames, final FailureHandler failureHandler, final ValueComparator defaultValueComparator, final Map<String, Map<String, ValueComparator>> tableColumnValueComparers) throws DatabaseUnitException {
+        final Map<String, Map<String, ValueComparator>> validTableColumnValueComparers = determineValidTableColumnValueComparers(tableColumnValueComparers);
 
         for (final String tableName : expectedNames) {
             final ITable expectedTable = expectedDataSet.getTable(tableName);
             final ITable actualTable = actualDataSet.getTable(tableName);
-            final Map<String, ValueComparer> columnValueComparers = validTableColumnValueComparers.get(tableName);
+            final Map<String, ValueComparator> columnValueComparers = validTableColumnValueComparers.get(tableName);
 
-            assertWithValueComparer(expectedTable, actualTable, failureHandler, defaultValueComparer, columnValueComparers);
+            assertWithValueComparer(expectedTable, actualTable, failureHandler, defaultValueComparator, columnValueComparers);
         }
     }
 
@@ -269,27 +269,27 @@ public class DbUnitAssertBase {
      *            useful to quickly identify the rows for which the mismatch
      *            occurred (for example by printing an additional primary key
      *            column). Can be <code>null</code>.
-     * @param defaultValueComparer
-     *            {@link ValueComparer} to use with column value comparisons
+     * @param defaultValueComparator
+     *            {@link ValueComparator} to use with column value comparisons
      *            when the column name for the table is not in the
      *            columnValueComparers {@link Map}. Can be <code>null</code> and
      *            will default to {@link ValueComparerDefaults#getDefaultValueComparer()}.
      * @param columnValueComparers
-     *            {@link Map} of {@link ValueComparer}s to use for specific
+     *            {@link Map} of {@link ValueComparator}s to use for specific
      *            columns. Key is column name in the table, value is
-     *            {@link ValueComparer} to use in comparing expected to actual
+     *            {@link ValueComparator} to use in comparing expected to actual
      *            column values. Can be <code>null</code> and will default to
      *            using
      *            {@link ValueComparerDefaults#getDefaultColumnValueComparerMapForTable(String)} or,
      *            if that is empty, defaultValueComparer for all columns in the
      *            table.
      */
-    public void assertWithValueComparer(final ITable expectedTable, final ITable actualTable, final FailureHandler failureHandler, final ValueComparer defaultValueComparer, final Map<String, ValueComparer> columnValueComparers) throws DatabaseUnitException {
+    public void assertWithValueComparer(final ITable expectedTable, final ITable actualTable, final FailureHandler failureHandler, final ValueComparator defaultValueComparator, final Map<String, ValueComparator> columnValueComparers) throws DatabaseUnitException {
         log.trace("assertWithValueComparer(expectedTable, actualTable, failureHandler, defaultValueComparer, columnValueComparers) - start");
         log.debug("assertWithValueComparer: expectedTable={}", expectedTable);
         log.debug("assertWithValueComparer: actualTable={}", actualTable);
         log.debug("assertWithValueComparer: failureHandler={}", failureHandler);
-        log.debug("assertWithValueComparer: defaultValueComparer={}", defaultValueComparer);
+        log.debug("assertWithValueComparer: defaultValueComparer={}", defaultValueComparator);
         log.debug("assertWithValueComparer: columnValueComparers={}", columnValueComparers);
 
         // Do not continue if same instance
@@ -318,7 +318,7 @@ public class DbUnitAssertBase {
         final ComparisonColumn[] comparisonCols = getComparisonColumns(expectedTableName, expectedColumns, actualColumns, validFailureHandler);
 
         // Finally compare the data
-        compareData(expectedTable, actualTable, comparisonCols, validFailureHandler, defaultValueComparer, columnValueComparers);
+        compareData(expectedTable, actualTable, comparisonCols, validFailureHandler, defaultValueComparator, columnValueComparers);
     }
 
     /**
@@ -338,10 +338,10 @@ public class DbUnitAssertBase {
      * @since 2.4
      */
     protected void compareData(final ITable expectedTable, final ITable actualTable, final ComparisonColumn[] comparisonCols, final FailureHandler failureHandler) throws DataSetException {
-        final ValueComparer defaultValueComparer = null;
-        final Map<String, ValueComparer> columnValueComparers = null;
+        final ValueComparator defaultValueComparator = null;
+        final Map<String, ValueComparator> columnValueComparers = null;
         try {
-            compareData(expectedTable, actualTable, comparisonCols, failureHandler, defaultValueComparer, columnValueComparers);
+            compareData(expectedTable, actualTable, comparisonCols, failureHandler, defaultValueComparator, columnValueComparers);
         } catch (final DatabaseUnitException e) {
             // not-private method, signature change breaks compatability
             throw new DataSetException(e);
@@ -362,15 +362,15 @@ public class DbUnitAssertBase {
      *            useful to quickly identify the rows for which the mismatch
      *            occurred (for example by printing an additional primary key
      *            column). Must not be <code>null</code> at this stage.
-     * @param defaultValueComparer
-     *            {@link ValueComparer} to use with column value comparisons
+     * @param defaultValueComparator
+     *            {@link ValueComparator} to use with column value comparisons
      *            when the column name for the table is not in the
      *            columnValueComparers {@link Map}. Can be <code>null</code> and
      *            will default to {@link ValueComparerDefaults#getDefaultValueComparer()}.
      * @param columnValueComparers
-     *            {@link Map} of {@link ValueComparer}s to use for specific
+     *            {@link Map} of {@link ValueComparator}s to use for specific
      *            columns. Key is column name in the table, value is
-     *            {@link ValueComparer} to use in comparing expected to actual
+     *            {@link ValueComparator} to use in comparing expected to actual
      *            column values. Can be <code>null</code> and will default to
      *            using
      *            {@link ValueComparerDefaults#getDefaultColumnValueComparerMapForTable(String)} or,
@@ -379,8 +379,8 @@ public class DbUnitAssertBase {
      * @since 2.4
      * @since 2.6.0
      */
-    protected void compareData(final ITable expectedTable, final ITable actualTable, final ComparisonColumn[] comparisonCols, final FailureHandler failureHandler, final ValueComparer defaultValueComparer, final Map<String, ValueComparer> columnValueComparers) throws DatabaseUnitException {
-        log.debug("compareData(expectedTable={}, actualTable={}, comparisonCols={}, failureHandler={}, defaultValueComparer={}, columnValueComparers={}) - start", expectedTable, actualTable, comparisonCols, failureHandler, defaultValueComparer, columnValueComparers);
+    protected void compareData(final ITable expectedTable, final ITable actualTable, final ComparisonColumn[] comparisonCols, final FailureHandler failureHandler, final ValueComparator defaultValueComparator, final Map<String, ValueComparator> columnValueComparers) throws DatabaseUnitException {
+        log.debug("compareData(expectedTable={}, actualTable={}, comparisonCols={}, failureHandler={}, defaultValueComparer={}, columnValueComparers={}) - start", expectedTable, actualTable, comparisonCols, failureHandler, defaultValueComparator, columnValueComparers);
 
         if (expectedTable == null) {
             throw new IllegalArgumentException("The parameter 'expectedTable' is null");
@@ -395,21 +395,21 @@ public class DbUnitAssertBase {
             throw new IllegalArgumentException("The parameter 'failureHandler' is null");
         }
 
-        final ValueComparer validDefaultValueComparer = determineValidDefaultValueComparer(defaultValueComparer);
+        final ValueComparator validDefaultValueComparator = determineValidDefaultValueComparer(defaultValueComparator);
         final String expectedTableName = expectedTable.getTableMetaData().getTableName();
-        final Map<String, ValueComparer> validColumnValueComparers = determineValidColumnValueComparers(columnValueComparers, expectedTableName);
+        final Map<String, ValueComparator> validColumnValueComparers = determineValidColumnValueComparers(columnValueComparers, expectedTableName);
 
         // iterate over all rows
         for (int rowNum = 0; rowNum < expectedTable.getRowCount(); rowNum++) {
             // iterate over all columns of the current row
             final int columnCount = comparisonCols.length;
             for (int columnNum = 0; columnNum < columnCount; columnNum++) {
-                compareData(expectedTable, actualTable, comparisonCols, failureHandler, validDefaultValueComparer, validColumnValueComparers, rowNum, columnNum);
+                compareData(expectedTable, actualTable, comparisonCols, failureHandler, validDefaultValueComparator, validColumnValueComparers, rowNum, columnNum);
             }
         }
     }
 
-    protected void compareData(final ITable expectedTable, final ITable actualTable, final ComparisonColumn[] comparisonCols, final FailureHandler failureHandler, final ValueComparer defaultValueComparer, final Map<String, ValueComparer> columnValueComparers, final int rowNum, final int columnNum) throws DatabaseUnitException {
+    protected void compareData(final ITable expectedTable, final ITable actualTable, final ComparisonColumn[] comparisonCols, final FailureHandler failureHandler, final ValueComparator defaultValueComparator, final Map<String, ValueComparator> columnValueComparers, final int rowNum, final int columnNum) throws DatabaseUnitException {
         final ComparisonColumn compareColumn = comparisonCols[columnNum];
 
         final String columnName = compareColumn.getColumnName();
@@ -422,10 +422,10 @@ public class DbUnitAssertBase {
         if (skipCompare(columnName, expectedValue, actualValue)) {
             log.trace("skipCompare: ignoring comparison" + " {}={} on column={}", expectedValue, actualValue, columnName);
         } else {
-            final ValueComparer valueComparer = determineValueComparer(columnName, defaultValueComparer, columnValueComparers);
+            final ValueComparator valueComparator = determineValueComparer(columnName, defaultValueComparator, columnValueComparers);
 
-            log.debug("compareData: comparing actualValue={} to expectedValue={} with valueComparer={}", actualValue, expectedValue, valueComparer);
-            final String failMessage = valueComparer.compare(expectedTable, actualTable, rowNum, columnName, dataType, expectedValue, actualValue);
+            log.debug("compareData: comparing actualValue={} to expectedValue={} with valueComparer={}", actualValue, expectedValue, valueComparator);
+            final String failMessage = valueComparator.compare(expectedTable, actualTable, rowNum, columnName, dataType, expectedValue, actualValue);
 
             failIfNecessary(expectedTable, actualTable, failureHandler, rowNum, columnName, expectedValue, actualValue, failMessage);
         }
@@ -438,31 +438,31 @@ public class DbUnitAssertBase {
         }
     }
 
-    protected ValueComparer determineValueComparer(final String columnName, final ValueComparer defaultValueComparer, final Map<String, ValueComparer> columnValueComparers) {
-        ValueComparer valueComparer = columnValueComparers.get(columnName);
-        if (valueComparer == null) {
-            log.debug("determineValueComparer: using defaultValueComparer='{}' as columnName='{}' not found in columnValueComparers='{}'", defaultValueComparer, columnName, columnValueComparers);
-            valueComparer = defaultValueComparer;
+    protected ValueComparator determineValueComparer(final String columnName, final ValueComparator defaultValueComparator, final Map<String, ValueComparator> columnValueComparers) {
+        ValueComparator valueComparator = columnValueComparers.get(columnName);
+        if (valueComparator == null) {
+            log.debug("determineValueComparer: using defaultValueComparer='{}' as columnName='{}' not found in columnValueComparers='{}'", defaultValueComparator, columnName, columnValueComparers);
+            valueComparator = defaultValueComparator;
         }
 
-        return valueComparer;
+        return valueComparator;
     }
 
-    protected ValueComparer determineValidDefaultValueComparer(final ValueComparer defaultValueComparer) {
-        final ValueComparer validValueComparer;
+    protected ValueComparator determineValidDefaultValueComparer(final ValueComparator defaultValueComparator) {
+        final ValueComparator validValueComparator;
 
-        if (defaultValueComparer == null) {
-            validValueComparer = valueComparerDefaults.getDefaultValueComparer();
-            log.debug("determineValidDefaultValueComparer: using getDefaultValueComparer()={} as defaultValueComparer={}", validValueComparer, defaultValueComparer);
+        if (defaultValueComparator == null) {
+            validValueComparator = valueComparerDefaults.getDefaultValueComparer();
+            log.debug("determineValidDefaultValueComparer: using getDefaultValueComparer()={} as defaultValueComparer={}", validValueComparator, defaultValueComparator);
         } else {
-            validValueComparer = defaultValueComparer;
+            validValueComparator = defaultValueComparator;
         }
 
-        return validValueComparer;
+        return validValueComparator;
     }
 
-    protected Map<String, Map<String, ValueComparer>> determineValidTableColumnValueComparers(final Map<String, Map<String, ValueComparer>> tableColumnValueComparers) {
-        final Map<String, Map<String, ValueComparer>> validMap;
+    protected Map<String, Map<String, ValueComparator>> determineValidTableColumnValueComparers(final Map<String, Map<String, ValueComparator>> tableColumnValueComparers) {
+        final Map<String, Map<String, ValueComparator>> validMap;
 
         if (tableColumnValueComparers == null) {
             validMap = valueComparerDefaults.getDefaultTableColumnValueComparerMap();
@@ -474,8 +474,8 @@ public class DbUnitAssertBase {
         return validMap;
     }
 
-    protected Map<String, ValueComparer> determineValidColumnValueComparers(final Map<String, ValueComparer> columnValueComparers, final String tableName) {
-        final Map<String, ValueComparer> validMap;
+    protected Map<String, ValueComparator> determineValidColumnValueComparers(final Map<String, ValueComparator> columnValueComparers, final String tableName) {
+        final Map<String, ValueComparator> validMap;
 
         if (columnValueComparers == null) {
             validMap = valueComparerDefaults.getDefaultColumnValueComparerMapForTable(tableName);

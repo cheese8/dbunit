@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.dbunit.assertion.comparer.value.ValueComparer;
+import org.dbunit.assertion.comparer.value.ValueComparator;
 import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.Column;
@@ -58,8 +58,7 @@ import org.slf4j.LoggerFactory;
  * @version $Revision$ $Date$
  * @since 2.4.8
  */
-public class DefaultPrepAndExpectedTestCase extends DBTestCase
-        implements PrepAndExpectedTestCase
+public class DefaultPrepAndExpectedTestCase extends DBTestCase implements PrepAndExpectedTestCase
 {
     private final Logger log =
             LoggerFactory.getLogger(DefaultPrepAndExpectedTestCase.class);
@@ -400,17 +399,17 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
                 verifyTableDefinition.getColumnExclusionFilters();
         final String[] includeColumns =
                 verifyTableDefinition.getColumnInclusionFilters();
-        final Map<String, ValueComparer> columnValueComparers =
+        final Map<String, ValueComparator> columnValueComparers =
                 verifyTableDefinition.getColumnValueComparators();
-        final ValueComparer defaultValueComparer =
-                verifyTableDefinition.getDefaultValueComparer();
+        final ValueComparator defaultValueComparator =
+                verifyTableDefinition.getDefaultValueComparator();
 
         final ITable expectedTable = loadTableDataFromDataSet(tableName);
         final ITable actualTable =
                 loadTableDataFromDatabase(tableName, connection);
 
         verifyData(expectedTable, actualTable, excludeColumns, includeColumns,
-                defaultValueComparer, columnValueComparers);
+                defaultValueComparator, columnValueComparers);
     }
 
     public ITable loadTableDataFromDataSet(final String tableName)
@@ -472,23 +471,23 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
      *            The column names to only include in comparison. See
      *            {@link org.dbunit.dataset.filter.DefaultColumnFilter#includeColumn(String)}
      *            .
-     * @param defaultValueComparer
-     *            {@link ValueComparer} to use with column value comparisons
+     * @param defaultValueComparator
+     *            {@link ValueComparator} to use with column value comparisons
      *            when the column name for the table is not in the
      *            columnValueComparers {@link Map}. Can be <code>null</code> and
      *            will default.
      * @param columnValueComparers
-     *            {@link Map} of {@link ValueComparer}s to use for specific
+     *            {@link Map} of {@link ValueComparator}s to use for specific
      *            columns. Key is column name, value is the
-     *            {@link ValueComparer}. Can be <code>null</code> and will
+     *            {@link ValueComparator}. Can be <code>null</code> and will
      *            default to defaultValueComparer for all columns in all tables.
      * @throws DatabaseUnitException
      */
     protected void verifyData(final ITable expectedTable,
             final ITable actualTable, final String[] excludeColumns,
             final String[] includeColumns,
-            final ValueComparer defaultValueComparer,
-            final Map<String, ValueComparer> columnValueComparers)
+            final ValueComparator defaultValueComparator,
+            final Map<String, ValueComparator> columnValueComparers)
             throws DatabaseUnitException
     {
         final String methodName = "verifyData";
@@ -538,7 +537,7 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
 
         log.debug("{}: Comparing expected table to actual table", methodName);
         compareData(expectedFilteredTable, actualFilteredTable,
-                additionalColumnInfo, defaultValueComparer,
+                additionalColumnInfo, defaultValueComparator,
                 columnValueComparers);
     }
 
@@ -628,12 +627,12 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
     /** Compare the tables, enables easy overriding. */
     protected void compareData(final ITable expectedTable,
             final ITable actualTable, final Column[] additionalColumnInfo,
-            final ValueComparer defaultValueComparer,
-            final Map<String, ValueComparer> columnValueComparers)
+            final ValueComparator defaultValueComparator,
+            final Map<String, ValueComparator> columnValueComparers)
             throws DatabaseUnitException
     {
         Assertion.assertWithValueComparer(expectedTable, actualTable,
-                additionalColumnInfo, defaultValueComparer,
+                additionalColumnInfo, defaultValueComparator,
                 columnValueComparers);
     }
 
@@ -790,8 +789,7 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
         {
             log.debug("applyColumnFilters: excluding columns='{}'",
                     new Object[] {excludeColumns});
-            filteredTable = DefaultColumnFilter
-                    .excludedColumnsTable(filteredTable, excludeColumns);
+            filteredTable = DefaultColumnFilter.excludedColumnsTable(filteredTable, excludeColumns);
         }
 
         return filteredTable;
@@ -801,8 +799,7 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
      * {@inheritDoc}
      */
     @Override
-    public IDataSet getPrepDataset()
-    {
+    public IDataSet getPrepDataset() {
         return prepDataSet;
     }
 
@@ -810,8 +807,7 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
      * {@inheritDoc}
      */
     @Override
-    public IDataSet getExpectedDataset()
-    {
+    public IDataSet getExpectedDataset() {
         return expectedDataSet;
     }
 
@@ -823,8 +819,7 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
      * @return The databaseTester.
      */
     @Override
-    public IDatabaseTester getDatabaseTester()
-    {
+    public IDatabaseTester getDatabaseTester() {
         return databaseTester;
     }
 

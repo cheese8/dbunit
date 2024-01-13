@@ -21,31 +21,18 @@
 package org.dbunit.assertion;
 
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 /**
- * Dbunit's own small assertion utility, independent from the testing framework
- * that is used.
+ * Dbunit's own small assertion utility, independent of the testing framework that is used.
  * 
  * @author gommma (gommma AT users.sourceforge.net)
  * @author Last changed by: $Author$
  * @version $Revision$ $Date$
  * @since 2.4.0
  */
-@Slf4j
 @AllArgsConstructor
 public class SimpleAssert {
     private FailureHandler failureHandler;
-
-    /**
-     * Asserts that propertyName is not a null String and has a length greater
-     * than zero.
-     */
-    protected void assertNotNullNorEmpty( String propertyName, String property ) {
-        log.debug("assertNotNullNorEmpty(propertyName={}, property={}) - start", propertyName, property);
-        assertTrue( propertyName + " is null", property != null );
-        assertTrue( "Invalid " + propertyName, property.trim().length() > 0 );
-    }
 
     public void assertTrue(boolean condition) {
         assertTrue(null, condition);
@@ -58,7 +45,7 @@ public class SimpleAssert {
      */
     public void assertTrue(String message, boolean condition) {
         if (!condition) {
-            fail( message );
+            fail(message);
         }
     }
 
@@ -73,5 +60,4 @@ public class SimpleAssert {
     public void fail(String message) {
         throw failureHandler.createFailure(message);
     }
-
 }

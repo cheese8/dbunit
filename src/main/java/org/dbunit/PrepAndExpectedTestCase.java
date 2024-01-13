@@ -42,15 +42,11 @@ public interface PrepAndExpectedTestCase {
      * @param expectedDataFiles
      *            The expected data files (as classpath resources) to load as
      *            expected data and verify actual data matches at test end.
-     * @throws Exception
      */
     void configureTest(VerifyTableDefinition[] verifyTableDefinitions, String[] prepDataFiles, String[] expectedDataFiles) throws Exception;
 
     /**
-     * Execute pre-test steps. Call this method before performing the test
-     * steps.
-     *
-     * @throws Exception
+     * Execute pre-test steps. Call this method before performing the test steps.
      */
     void preTest() throws Exception;
 
@@ -65,7 +61,6 @@ public interface PrepAndExpectedTestCase {
      * @param expectedDataFiles
      *            The expected data files (as classpath resources) to load as
      *            expected data and verify actual data matches at test end.
-     * @throws Exception
      */
     void preTest(VerifyTableDefinition[] verifyTables, String[] prepDataFiles, String[] expectedDataFiles) throws Exception;
 
@@ -83,17 +78,14 @@ public interface PrepAndExpectedTestCase {
      * @param testSteps
      *            The test steps to run.
      * @return User defined object from running the test steps.
-     * @throws Exception
      * @since 2.5.2
      */
-    Object runTest(VerifyTableDefinition[] verifyTables, String[] prepDataFiles, String[] expectedDataFiles,
-                   PrepAndExpectedTestCaseSteps testSteps) throws Exception;
+    Object runTest(VerifyTableDefinition[] verifyTables, String[] prepDataFiles, String[] expectedDataFiles, PrepAndExpectedTestCaseSteps testSteps) throws Exception;
 
     /**
      * Execute all post-test steps. Call this method after performing the test
      * steps.
      *
-     * @throws Exception
      */
     void postTest() throws Exception;
 
@@ -106,7 +98,6 @@ public interface PrepAndExpectedTestCase {
      *            Useful to specify false when test has failure in progress
      *            (e.g. an exception) and verifying data would fail, masking
      *            original test failure.
-     * @throws Exception
      */
     void postTest(boolean verifyData) throws Exception;
 
@@ -114,7 +105,6 @@ public interface PrepAndExpectedTestCase {
      * For the provided VerifyTableDefinitions, verify each table's actual
      * results are as expected.
      *
-     * @throws Exception
      */
     void verifyData() throws Exception;
 
@@ -123,7 +113,6 @@ public interface PrepAndExpectedTestCase {
      * provided databaseTester. See
      * {@link org.dbunit.IDatabaseTester#onTearDown()}.
      *
-     * @throws Exception
      */
     void cleanupData() throws Exception;
 

@@ -5,7 +5,7 @@ import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.datatype.DataType;
 
 /**
- * {@link ValueComparer} implementation that verifies actual value is equal to
+ * {@link ValueComparator} implementation that verifies actual value is equal to
  * expected value and sets fail message to empty String.
  *
  * This is primarily for the original assertEquals(*) on

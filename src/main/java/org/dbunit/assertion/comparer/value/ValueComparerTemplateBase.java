@@ -5,7 +5,7 @@ import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.datatype.DataType;
 
 /**
- * Base class for {@link ValueComparer}s, providing template methods and common
+ * Base class for {@link ValueComparator}s, providing template methods and common
  * elements.
  *
  * @author Jeff Jensen
@@ -18,7 +18,7 @@ public abstract class ValueComparerTemplateBase extends ValueComparerBase {
      * This implementation calls
      * {@link #isExpected(ITable, ITable, int, String, DataType, Object, Object)}.
      *
-     * @see ValueComparer#compare(ITable, ITable, int, String, DataType, Object,
+     * @see ValueComparator#compare(ITable, ITable, int, String, DataType, Object,
      *      Object)
      */
     @Override

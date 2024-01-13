@@ -11,7 +11,7 @@ import org.dbunit.dataset.datatype.DataType;
  * @since 2.6.0
  */
 @FunctionalInterface
-public interface ValueComparer {
+public interface ValueComparator {
     /**
      * Compare expected and actual values.
      *
