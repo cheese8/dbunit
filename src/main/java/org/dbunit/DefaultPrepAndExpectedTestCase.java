@@ -27,6 +27,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.dbunit.assertion.comparer.value.ValueComparer;
 import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.IDatabaseConnection;
@@ -51,9 +53,6 @@ import org.slf4j.LoggerFactory;
  * data needed for the test to run. Expected data is the data needed to compare
  * if the test ran successfully.
  *
- * @see org.dbunit.DefaultPrepAndExpectedTestCaseDiIT
- * @see org.dbunit.DefaultPrepAndExpectedTestCaseExtIT
- *
  * @author Jeff Jensen jeffjensen AT users.sourceforge.net
  * @author Last changed by: $Author$
  * @version $Revision$ $Date$
@@ -76,8 +75,11 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
     // per test data
     private IDataSet prepDataSet = new DefaultDataSet();
     private IDataSet expectedDataSet = new DefaultDataSet();
+
+    @Getter @Setter
     private VerifyTableDefinition[] verifyTableDefs = {};
 
+    @Getter @Setter
     private ExpectedDataSetAndVerifyTableDefinitionVerifier expectedDataSetAndVerifyTableDefinitionVerifier =
             new DefaultExpectedDataSetAndVerifyTableDefinitionVerifier();
 
@@ -119,8 +121,7 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
      * test.
      */
     @Override
-    public IDatabaseTester newDatabaseTester() throws Exception
-    {
+    public IDatabaseTester newDatabaseTester() {
         // questionable, but there is not a "setter" for any parent...
         return databaseTester;
     }
@@ -334,15 +335,13 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
     }
 
     @Override
-    protected DatabaseOperation getSetUpOperation() throws Exception
-    {
+    protected DatabaseOperation getSetUpOperation() {
         assertNotNull(DATABASE_TESTER_IS_NULL_MSG, databaseTester);
         return databaseTester.getSetUpOperation();
     }
 
     @Override
-    protected DatabaseOperation getTearDownOperation() throws Exception
-    {
+    protected DatabaseOperation getTearDownOperation() {
         assertNotNull(DATABASE_TESTER_IS_NULL_MSG, databaseTester);
         return databaseTester.getTearDownOperation();
     }
@@ -377,9 +376,7 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
                         + " no VerifyTableDefinitions specified");
             }
 
-            for (int i = 0; i < tableDefsCount; i++)
-            {
-                final VerifyTableDefinition td = verifyTableDefs[i];
+            for (final VerifyTableDefinition td : verifyTableDefs) {
                 verifyData(connection, td);
             }
         } catch (final Exception e)
@@ -404,7 +401,7 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
         final String[] includeColumns =
                 verifyTableDefinition.getColumnInclusionFilters();
         final Map<String, ValueComparer> columnValueComparers =
-                verifyTableDefinition.getColumnValueComparers();
+                verifyTableDefinition.getColumnValueComparators();
         final ValueComparer defaultValueComparer =
                 verifyTableDefinition.getDefaultValueComparer();
 
@@ -419,7 +416,7 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
     public ITable loadTableDataFromDataSet(final String tableName)
             throws DataSetException
     {
-        ITable table = null;
+        ITable table;
 
         final String methodName = "loadTableDataFromDataSet";
 
@@ -441,7 +438,7 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
     public ITable loadTableDataFromDatabase(final String tableName,
             final IDatabaseConnection connection) throws Exception
     {
-        ITable table = null;
+        ITable table;
 
         final String methodName = "loadTableDataFromDatabase";
 
@@ -546,7 +543,7 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
     }
 
     /**
-     * If expected column definitions exist and are {@link DataType.UNKNOWN},
+     * If expected column definitions exist and are {@link DataType#UNKNOWN},
      * make them from actual table column definitions.
      *
      * @throws DataSetException
@@ -596,8 +593,7 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
                 .filter(col -> expectedColumnNames
                         .contains(col.getColumnName().toLowerCase()))
                 .collect(Collectors.toList());
-        return expectedColumnsList
-                .toArray(new Column[expectedColumnsList.size()]);
+        return expectedColumnsList.toArray(new Column[0]);
     }
 
     private void logSortedTables(final SortedTable expectedSortedTable,
@@ -664,9 +660,9 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
      * Don't add excluded columns to additionalColumnInfo as they are not found
      * and generate a not found message in the fail message.
      *
-     * @param expectedTable
-     *            Not null.
      * @param excludeColumns
+     *            Not null.
+     * @param allColumns
      *            Not null.
      */
     protected Column[] makeAdditionalColumnInfo(final String[] excludeColumns,
@@ -684,7 +680,7 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
             }
         }
 
-        return keepColumnsList.toArray(new Column[keepColumnsList.size()]);
+        return keepColumnsList.toArray(new Column[0]);
     }
 
     /**
@@ -737,14 +733,13 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
                     dataFilesName);
         }
 
-        final List list = new ArrayList();
-        for (int i = 0; i < count; i++)
-        {
-            final IDataSet ds = dataFileLoader.load(dataFiles[i]);
+        final List<IDataSet> list = new ArrayList<>();
+        for (String dataFile : dataFiles) {
+            final IDataSet ds = dataFileLoader.load(dataFile);
             list.add(ds);
         }
 
-        final IDataSet[] dataSet = (IDataSet[]) list.toArray(new IDataSet[] {});
+        final IDataSet[] dataSet = list.toArray(new IDataSet[] {});
         final IDataSet compositeDS =
                 new CompositeDataSet(dataSet, true, isCaseSensitiveTableNames);
         return compositeDS;
@@ -895,43 +890,5 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase
     public void setExpectedDs(final IDataSet expectedDataSet)
     {
         this.expectedDataSet = expectedDataSet;
-    }
-
-    /**
-     * Get the tableDefs.
-     *
-     * @see {@link #verifyTableDefs}.
-     *
-     * @return The tableDefs.
-     */
-    public VerifyTableDefinition[] getVerifyTableDefs()
-    {
-        return verifyTableDefs;
-    }
-
-    /**
-     * Set the tableDefs.
-     *
-     * @see {@link #verifyTableDefs}.
-     *
-     * @param verifyTableDefs
-     *            The tableDefs to set.
-     */
-    public void setVerifyTableDefs(
-            final VerifyTableDefinition[] verifyTableDefs)
-    {
-        this.verifyTableDefs = verifyTableDefs;
-    }
-
-    public ExpectedDataSetAndVerifyTableDefinitionVerifier getExpectedDataSetAndVerifyTableDefinitionVerifier()
-    {
-        return expectedDataSetAndVerifyTableDefinitionVerifier;
-    }
-
-    public void setExpectedDataSetAndVerifyTableDefinitionVerifier(
-            final ExpectedDataSetAndVerifyTableDefinitionVerifier expectedDataSetAndVerifyTableDefinitionVerifier)
-    {
-        this.expectedDataSetAndVerifyTableDefinitionVerifier =
-                expectedDataSetAndVerifyTableDefinitionVerifier;
     }
 }
