@@ -47,11 +47,6 @@ public class DatabaseProfile
     public DatabaseProfile(Properties properties)
     {
         _properties = properties;
-//        ArrayList keys = new ArrayList(properties.keySet());
-//        for (int i = 0; i < keys.size(); i++) {
-//            System.out.println("key = " + keys.get(i) + ", value = " + properties.get(keys.get(i)));
-//        }
-
     }
 
     public String getActiveProfile()
@@ -91,7 +86,7 @@ public class DatabaseProfile
 
     public boolean getProfileMultilineSupport()
     {
-        return Boolean.valueOf(_properties.getProperty(PROFILE_MULTILINE_SUPPORT));
+        return Boolean.parseBoolean(_properties.getProperty(PROFILE_MULTILINE_SUPPORT));
     }
 
     public String[] getUnsupportedFeatures()
@@ -103,13 +98,13 @@ public class DatabaseProfile
         	return EMPTY_ARRAY;
         }
         
-        List<String> stringList = new ArrayList<String>();
+        List<String> stringList = new ArrayList<>();
         StringTokenizer tokenizer = new StringTokenizer(property, ",");
         while(tokenizer.hasMoreTokens())
         {
             stringList.add(tokenizer.nextToken().trim());
         }
-        return stringList.toArray(new String[stringList.size()]);
+        return stringList.toArray(new String[0]);
     }
 
 }

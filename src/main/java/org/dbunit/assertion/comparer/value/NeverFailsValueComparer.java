@@ -5,7 +5,7 @@ import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.datatype.DataType;
 
 /**
- * {@link ValueComparer} implementation that verifies nothing and never fails;
+ * {@link ValueComparator} implementation that verifies nothing and never fails;
  * {@link #isExpected(ITable, ITable, int, String, DataType, Object, Object)}
  * always returns true.
  *

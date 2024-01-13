@@ -5,7 +5,7 @@ import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.datatype.DataType;
 
 /**
- * {@link ValueComparer} implementation that verifies actual value is not equal
+ * {@link ValueComparator} implementation that verifies actual value is not equal
  * to expected value.
  *
  * @author Jeff Jensen

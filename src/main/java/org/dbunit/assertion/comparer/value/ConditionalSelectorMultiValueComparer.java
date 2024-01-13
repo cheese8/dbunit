@@ -9,7 +9,7 @@ import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.datatype.DataType;
 
 /**
- * Use a {@link ValueComparerSelector} to select a {@link ValueComparer} for the
+ * Use a {@link ValueComparerSelector} to select a {@link ValueComparator} for the
  * column from a {@link Map} of them.
  *
  * @author Jeff Jensen
@@ -17,8 +17,8 @@ import org.dbunit.dataset.datatype.DataType;
  */
 public class ConditionalSelectorMultiValueComparer extends ValueComparerBase {
     private final ValueComparerSelector valueComparerSelector;
-    private final Map<Object, ValueComparer> valueComparers;
-    public ConditionalSelectorMultiValueComparer(final Map<Object, ValueComparer> valueComparers, final ValueComparerSelector valueComparerSelector) {
+    private final Map<Object, ValueComparator> valueComparers;
+    public ConditionalSelectorMultiValueComparer(final Map<Object, ValueComparator> valueComparers, final ValueComparerSelector valueComparerSelector) {
         assertNotNull("valueComparerSelector is null.", valueComparerSelector);
         assertNotNull("valueComparers is null.", valueComparers);
         this.valueComparerSelector = valueComparerSelector;
@@ -27,12 +27,12 @@ public class ConditionalSelectorMultiValueComparer extends ValueComparerBase {
 
     @Override
     public String doCompare(final ITable expectedTable, final ITable actualTable, final int rowNum, final String columnName, final DataType dataType, final Object expectedValue, final Object actualValue) throws DatabaseUnitException {
-        final ValueComparer valueComparer = valueComparerSelector.select(expectedTable, actualTable, rowNum, columnName, dataType, expectedValue, actualValue, valueComparers);
-        if (valueComparer == null) {
+        final ValueComparator valueComparator = valueComparerSelector.select(expectedTable, actualTable, rowNum, columnName, dataType, expectedValue, actualValue, valueComparers);
+        if (valueComparator == null) {
             final String msg = "No ValueComparer found by valueComparerSelector=" + valueComparerSelector + " in map=" + valueComparers;
             throw new IllegalStateException(msg);
         }
-        return valueComparer.compare(expectedTable, actualTable, rowNum, columnName, dataType, expectedValue, actualValue);
+        return valueComparator.compare(expectedTable, actualTable, rowNum, columnName, dataType, expectedValue, actualValue);
     }
 
     @Override

@@ -12,7 +12,7 @@ import org.dbunit.dataset.datatype.DataType;
 import org.dbunit.dataset.datatype.TypeCastException;
 
 /**
- * {@link ValueComparer} implementation for {@link Timestamp}s that verifies
+ * {@link ValueComparator} implementation for {@link Timestamp}s that verifies
  * actual value is within a low and high milliseconds tolerance range of
  * expected value.
  * <p>

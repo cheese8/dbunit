@@ -34,14 +34,14 @@ public class ConditionalSetBiValueComparerTest
     {
         final ValueFactory<Long> actualValueFactory = valueFactory1;
         final Set<Long> values = values1;
-        final ValueComparer inValuesValueComparer =
+        final ValueComparator inValuesValueComparator =
                 ValueComparers.isActualEqualToExpected;
-        final ValueComparer notInValuesValueComparer =
+        final ValueComparator notInValuesValueComparator =
                 ValueComparers.isActualNotEqualToExpected;
         final ConditionalSetBiValueComparer<Long> sut =
                 new ConditionalSetBiValueComparer<Long>(actualValueFactory,
-                        values, inValuesValueComparer,
-                        notInValuesValueComparer);
+                        values, inValuesValueComparator,
+                        notInValuesValueComparator);
 
         final ITable expectedTable = null;
         final ITable actualTable = null;
@@ -63,14 +63,14 @@ public class ConditionalSetBiValueComparerTest
     {
         final ValueFactory<Long> actualValueFactory = valueFactory1;
         final Set<Long> values = values1;
-        final ValueComparer inValuesValueComparer =
+        final ValueComparator inValuesValueComparator =
                 ValueComparers.isActualEqualToExpected;
-        final ValueComparer notInValuesValueComparer =
+        final ValueComparator notInValuesValueComparator =
                 ValueComparers.isActualNotEqualToExpected;
         final ConditionalSetBiValueComparer<Long> sut =
                 new ConditionalSetBiValueComparer<Long>(actualValueFactory,
-                        values, inValuesValueComparer,
-                        notInValuesValueComparer);
+                        values, inValuesValueComparator,
+                        notInValuesValueComparator);
 
         final ITable expectedTable = null;
         final ITable actualTable = null;
@@ -93,14 +93,14 @@ public class ConditionalSetBiValueComparerTest
     {
         final ValueFactory<Long> actualValueFactory = valueFactory1;
         final Set<Long> values = values1;
-        final ValueComparer inValuesValueComparer =
+        final ValueComparator inValuesValueComparator =
                 ValueComparers.isActualEqualToExpected;
-        final ValueComparer notInValuesValueComparer =
+        final ValueComparator notInValuesValueComparator =
                 ValueComparers.isActualNotEqualToExpected;
         final ConditionalSetBiValueComparer<Long> sut =
                 new ConditionalSetBiValueComparer<Long>(actualValueFactory,
-                        values, inValuesValueComparer,
-                        notInValuesValueComparer);
+                        values, inValuesValueComparator,
+                        notInValuesValueComparator);
 
         final ITable expectedTable = null;
         final ITable actualTable = null;
@@ -123,14 +123,14 @@ public class ConditionalSetBiValueComparerTest
     {
         final ValueFactory<Long> actualValueFactory = valueFactory1;
         final Set<Long> values = values1;
-        final ValueComparer inValuesValueComparer =
+        final ValueComparator inValuesValueComparator =
                 ValueComparers.isActualEqualToExpected;
-        final ValueComparer notInValuesValueComparer =
+        final ValueComparator notInValuesValueComparator =
                 ValueComparers.isActualNotEqualToExpected;
         final ConditionalSetBiValueComparer<Long> sut =
                 new ConditionalSetBiValueComparer<Long>(actualValueFactory,
-                        values, inValuesValueComparer,
-                        notInValuesValueComparer);
+                        values, inValuesValueComparator,
+                        notInValuesValueComparator);
 
         final ITable expectedTable = null;
         final ITable actualTable = null;
@@ -153,14 +153,14 @@ public class ConditionalSetBiValueComparerTest
     {
         final ValueFactory<Long> actualValueFactory = valueFactory1;
         final Set<Long> values = values2;
-        final ValueComparer inValuesValueComparer =
+        final ValueComparator inValuesValueComparator =
                 ValueComparers.isActualEqualToExpected;
-        final ValueComparer notInValuesValueComparer =
+        final ValueComparator notInValuesValueComparator =
                 ValueComparers.isActualNotEqualToExpected;
         final ConditionalSetBiValueComparer<Long> sut =
                 new ConditionalSetBiValueComparer<Long>(actualValueFactory,
-                        values, inValuesValueComparer,
-                        notInValuesValueComparer);
+                        values, inValuesValueComparator,
+                        notInValuesValueComparator);
 
         final ITable expectedTable = null;
         final ITable actualTable = null;

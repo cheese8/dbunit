@@ -11,18 +11,18 @@ import java.util.Map;
  */
 public class DefaultValueComparerDefaults implements ValueComparerDefaults {
     @Override
-    public ValueComparer getDefaultValueComparer()
+    public ValueComparator getDefaultValueComparer()
     {
         return ValueComparers.isActualEqualToExpected;
     }
 
     @Override
-    public Map<String, Map<String, ValueComparer>> getDefaultTableColumnValueComparerMap() {
+    public Map<String, Map<String, ValueComparator>> getDefaultTableColumnValueComparerMap() {
         return Collections.emptyMap();
     }
 
     @Override
-    public Map<String, ValueComparer> getDefaultColumnValueComparerMapForTable(final String tableName) {
+    public Map<String, ValueComparator> getDefaultColumnValueComparerMapForTable(final String tableName) {
         return Collections.emptyMap();
     }
 }

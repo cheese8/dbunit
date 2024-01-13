@@ -45,25 +45,26 @@ package org.dbunit;
  * @since 2.2.0
  */
 public class PropertiesBasedJdbcDatabaseTester extends JdbcDatabaseTester {
-
-    /** A key for property that defines the connection url */
-    public static final String DBUNIT_CONNECTION_URL = "dbunit.connectionUrl";
     /** A key for property that defines the driver classname */
-    public static final String DBUNIT_DRIVER_CLASS = "dbunit.driverClass";
-    /** A key for property that defines the user's password */
-    public static final String DBUNIT_PASSWORD = "dbunit.password";
+    public static final String DRIVER_CLASS = "dbunit.driverClass";
+    /** A key for property that defines the connection url */
+    public static final String URL = "dbunit.connectionUrl";
     /** A key for property that defines the username */
-    public static final String DBUNIT_USERNAME = "dbunit.username";
+    public static final String USERNAME = "dbunit.username";
+    /** A key for property that defines the user's password */
+    public static final String PASSWORD = "dbunit.password";
     /** A key for property that defines the database schema */
-    public static final String DBUNIT_SCHEMA = "dbunit.schema";
+    public static final String SCHEMA = "dbunit.schema";
 
     /**
      * Creates a new {@link JdbcDatabaseTester} using specific {@link System#getProperty(String)}
      * values as initialization parameters
-     * @throws Exception
      */
     public PropertiesBasedJdbcDatabaseTester() throws Exception {
-        super(System.getProperty(DBUNIT_DRIVER_CLASS), System.getProperty(DBUNIT_CONNECTION_URL),
-                System.getProperty(DBUNIT_USERNAME), System.getProperty(DBUNIT_PASSWORD), System.getProperty(DBUNIT_SCHEMA));
+        super(system(DRIVER_CLASS), system(URL), system(USERNAME), system(PASSWORD), system(SCHEMA));
+    }
+
+    private static String system(String property) {
+        return System.getProperty(property);
     }
 }

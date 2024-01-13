@@ -3,7 +3,7 @@ package org.dbunit.assertion;
 import java.io.FileNotFoundException;
 import java.util.Map;
 
-import org.dbunit.assertion.comparer.value.ValueComparer;
+import org.dbunit.assertion.comparer.value.ValueComparator;
 import org.dbunit.assertion.comparer.value.ValueComparers;
 import org.dbunit.assertion.comparer.value.builder.ColumnValueComparerMapBuilder;
 import org.dbunit.dataset.DataSetException;
@@ -35,10 +35,10 @@ public class DbUnitValueComparerAssertIT
         final ITable expectedTable = dataSet.getTable("TEST_TABLE");
         final ITable actualTable =
                 dataSet.getTable("TEST_TABLE_WITH_SAME_VALUE");
-        final ValueComparer defaultValueComparer =
+        final ValueComparator defaultValueComparator =
                 ValueComparers.isActualEqualToExpected;
         sut.assertWithValueComparer(expectedTable, actualTable,
-                defaultValueComparer);
+                defaultValueComparator);
     }
 
     @Test
@@ -50,14 +50,14 @@ public class DbUnitValueComparerAssertIT
         final ITable expectedTable = dataSet.getTable("TEST_TABLE");
         final ITable actualTable =
                 dataSet.getTable("TEST_TABLE_WITH_WRONG_VALUE_ALL_ROWS");
-        final ValueComparer defaultValueComparer =
+        final ValueComparator defaultValueComparator =
                 ValueComparers.isActualEqualToExpected;
-        final ValueComparer valueComparer =
+        final ValueComparator valueComparator =
                 ValueComparers.isActualNotEqualToExpected;
-        final Map<String, ValueComparer> columnValueComparers =
+        final Map<String, ValueComparator> columnValueComparers =
                 new ColumnValueComparerMapBuilder()
-                        .add("COLUMN2", valueComparer).build();
+                        .add("COLUMN2", valueComparator).build();
         sut.assertWithValueComparer(expectedTable, actualTable,
-                defaultValueComparer, columnValueComparers);
+                defaultValueComparator, columnValueComparers);
     }
 }

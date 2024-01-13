@@ -288,9 +288,9 @@ public class SampleTest
     public static void assertEquals(ITable expected, ITable actual)
     public static void assertEquals(IDataSet expected, IDataSet actual)
     public static void assertWithValueComparer(IDataSet expectedDataSet, IDataSet actualDataSet,
-        ValueComparer defaultValueComparer, Map&lt;String, Map&lt;String, ValueComparer&gt;&gt; tableColumnValueComparers)
+        ValueComparer defaultValueComparator, Map&lt;String, Map&lt;String, ValueComparer&gt;&gt; tableColumnValueComparers)
     public static void assertWithValueComparer(ITable expectedTable, ITable actualTable,
-        ValueComparer defaultValueComparer, Map&lt;String, ValueComparer&gt; columnValueComparers)
+        ValueComparer defaultValueComparator, Map&lt;String, ValueComparer&gt; columnValueComparers)
 }</source></p>
       <subsection name="Sample">
       <p>The following sample shows how to compare a database table snapshot

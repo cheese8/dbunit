@@ -20,6 +20,8 @@
  */
 package org.dbunit;
 
+import org.apache.commons.lang3.StringUtils;
+import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -105,7 +107,7 @@ public class JndiDatabaseTester extends AbstractDatabaseTester {
     private void initialize() throws NamingException {
         logger.trace("initialize() - start");
         Context context = new InitialContext( environment );
-        assertNotNullNorEmpty( "lookupName", lookupName );
+        Assert.assertTrue("lookupName was not specified.", StringUtils.isNotBlank(lookupName));
         Object obj = context.lookup( lookupName );
         assertTrue( "JNDI object with [" + lookupName + "] not found", obj!=null );
         assertTrue( "Object [" + obj + "] at JNDI location [" + lookupName + "] is not of type [" + DataSource.class.getName() + "]", obj instanceof DataSource );

@@ -45,11 +45,11 @@ public class DefaultDatabaseTesterConnectionIT extends AbstractDatabaseTesterCon
    {
       if( databaseTester == null ){
          DatabaseProfile profile = getEnvironment().getProfile();
-         System.setProperty( PropertiesBasedJdbcDatabaseTester.DBUNIT_DRIVER_CLASS, profile.getDriverClass() );
-         System.setProperty( PropertiesBasedJdbcDatabaseTester.DBUNIT_CONNECTION_URL, profile.getConnectionUrl() );
-         System.setProperty( PropertiesBasedJdbcDatabaseTester.DBUNIT_USERNAME, profile.getUser() );
-         System.setProperty( PropertiesBasedJdbcDatabaseTester.DBUNIT_PASSWORD, profile.getPassword() );
-         System.setProperty( PropertiesBasedJdbcDatabaseTester.DBUNIT_SCHEMA, profile.getSchema() );
+         System.setProperty( PropertiesBasedJdbcDatabaseTester.DRIVER_CLASS, profile.getDriverClass() );
+         System.setProperty( PropertiesBasedJdbcDatabaseTester.URL, profile.getConnectionUrl() );
+         System.setProperty( PropertiesBasedJdbcDatabaseTester.USERNAME, profile.getUser() );
+         System.setProperty( PropertiesBasedJdbcDatabaseTester.PASSWORD, profile.getPassword() );
+         System.setProperty( PropertiesBasedJdbcDatabaseTester.SCHEMA, profile.getSchema() );
          databaseTester = new PropertiesBasedJdbcDatabaseTester();
       }
       return databaseTester;

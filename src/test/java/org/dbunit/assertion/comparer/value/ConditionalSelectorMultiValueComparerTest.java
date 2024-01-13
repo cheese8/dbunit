@@ -23,9 +23,9 @@ public class ConditionalSelectorMultiValueComparerTest
                     expectedValue, actualValue,
                     valueComparers) -> valueComparers.get(VALUE_COMPARER_KEY);
 
-    private final Map<Object, ValueComparer> valueComparersEmpty =
+    private final Map<Object, ValueComparator> valueComparersEmpty =
             new HashMap<>();
-    private final Map<Object, ValueComparer> valueComparers1 = new HashMap<>();
+    private final Map<Object, ValueComparator> valueComparers1 = new HashMap<>();
 
     @Before
     public void setupValueComparerMap()
@@ -38,7 +38,7 @@ public class ConditionalSelectorMultiValueComparerTest
     public void testDoCompare_NoValueComparers_IllegalState()
             throws DatabaseUnitException
     {
-        final Map<Object, ValueComparer> valueComparers = valueComparersEmpty;
+        final Map<Object, ValueComparator> valueComparers = valueComparersEmpty;
         final ValueComparerSelector valueComparerSelector =
                 valueComparerSelector1;
         final ConditionalSelectorMultiValueComparer sut =
@@ -61,7 +61,7 @@ public class ConditionalSelectorMultiValueComparerTest
     public void testDoCompare_AllNull_NoFailMessage()
             throws DatabaseUnitException
     {
-        final Map<Object, ValueComparer> valueComparers = valueComparers1;
+        final Map<Object, ValueComparator> valueComparers = valueComparers1;
         final ValueComparerSelector valueComparerSelector =
                 valueComparerSelector1;
         final ConditionalSelectorMultiValueComparer sut =
@@ -86,7 +86,7 @@ public class ConditionalSelectorMultiValueComparerTest
     public void testDoCompare_ActualAndExpectedNotEqual_FailMessage()
             throws DatabaseUnitException
     {
-        final Map<Object, ValueComparer> valueComparers = valueComparers1;
+        final Map<Object, ValueComparator> valueComparers = valueComparers1;
         final ValueComparerSelector valueComparerSelector =
                 valueComparerSelector1;
         final ConditionalSelectorMultiValueComparer sut =

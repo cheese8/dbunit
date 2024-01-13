@@ -21,6 +21,7 @@
 
 package org.dbunit;
 
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import junit.framework.TestCase;
@@ -41,11 +42,10 @@ import org.dbunit.operation.DatabaseOperation;
  * @since 1.0 (Feb 17, 2002)
  */
 @Slf4j
+@NoArgsConstructor
 public abstract class DatabaseTestCase extends TestCase {
     private IDatabaseTester tester;
     private IOperationListener operationListener;
-
-    public DatabaseTestCase() {}
 
     public DatabaseTestCase(String name)
     {
@@ -66,14 +66,11 @@ public abstract class DatabaseTestCase extends TestCase {
      * Creates a IDatabaseTester for this testCase.<br>
      *
      * A {@link DefaultDatabaseTester} is used by default.
-     * @throws Exception
      */
     protected IDatabaseTester newDatabaseTester() throws Exception {
-        log.debug("newDatabaseTester() - start");
         final IDatabaseConnection connection = getConnection();
         getOperationListener().connectionRetrieved(connection);
-        final IDatabaseTester tester = new DefaultDatabaseTester(connection);
-        return tester;
+        return new DefaultDatabaseTester(connection);
     }
 
     /**
@@ -89,7 +86,6 @@ public abstract class DatabaseTestCase extends TestCase {
      * Gets the IDatabaseTester for this testCase.<br>
      * If the IDatabaseTester is not set yet, this method calls
      * newDatabaseTester() to obtain a new instance.
-     * @throws Exception
      */
     protected IDatabaseTester getDatabaseTester() throws Exception {
       if (this.tester == null) {
@@ -104,7 +100,6 @@ public abstract class DatabaseTestCase extends TestCase {
      * @deprecated since 2.4.4 define a user defined {@link #getOperationListener()} in advance
      */
     protected void closeConnection(IDatabaseConnection connection) throws Exception {
-        log.debug("closeConnection(connection={}) - start", connection);
         assertNotNull("DatabaseTester is not set", getDatabaseTester());
         getDatabaseTester().closeConnection(connection);
     }
@@ -123,11 +118,7 @@ public abstract class DatabaseTestCase extends TestCase {
         return DatabaseOperation.NONE;
     }
 
-    ////////////////////////////////////////////////////////////////////////////
-    // TestCase class
-
     protected void setUp() throws Exception {
-        log.debug("setUp() - start");
         super.setUp();
         final IDatabaseTester databaseTester = getDatabaseTester();
         assertNotNull("DatabaseTester is not set", databaseTester );
@@ -138,7 +129,6 @@ public abstract class DatabaseTestCase extends TestCase {
     }
 
     protected void tearDown() throws Exception {
-        log.debug("tearDown() - start");
         try {
             final IDatabaseTester databaseTester = getDatabaseTester();
             assertNotNull("DatabaseTester is not set", databaseTester);
@@ -157,14 +147,13 @@ public abstract class DatabaseTestCase extends TestCase {
      * @since 2.4.4
      */
     protected IOperationListener getOperationListener() {
-        log.debug("getOperationListener() - start");
         if (this.operationListener == null) {
             this.operationListener = new DefaultOperationListener() {
                 public void connectionRetrieved(IDatabaseConnection connection) {
-                    super.connectionRetrieved(connection);
-                    // When a new connection has been created then invoke the setUp method
-                    // so that user defined DatabaseConfig parameters can be set.
-                    setUpDatabaseConfig(connection.getConfig());
+                super.connectionRetrieved(connection);
+                // When a new connection has been created then invoke the setUp method
+                // so that user defined DatabaseConfig parameters can be set.
+                setUpDatabaseConfig(connection.getConfig());
                 }
             };
         }

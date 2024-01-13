@@ -20,6 +20,8 @@
  */
 package org.dbunit;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.dbunit.database.IDatabaseConnection;
 
 /**
@@ -30,19 +32,8 @@ import org.dbunit.database.IDatabaseConnection;
  * @version $Revision$
  * @since 2.2
  */
-
+@AllArgsConstructor
+@Getter
 public class DefaultDatabaseTester extends AbstractDatabaseTester {
-
   final IDatabaseConnection connection;
-
-  /**
-   * Creates a new DefaultDatabaseTester with the supplied connection.
-   */
-  public DefaultDatabaseTester(final IDatabaseConnection connection) {
-    this.connection = connection;
-  }
-
-  public IDatabaseConnection getConnection() throws Exception {
-    return this.connection;
-  }
 }

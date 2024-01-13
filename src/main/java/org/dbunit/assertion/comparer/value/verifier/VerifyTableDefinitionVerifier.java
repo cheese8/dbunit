@@ -1,11 +1,11 @@
 package org.dbunit.assertion.comparer.value.verifier;
 
 import org.dbunit.VerifyTableDefinition;
-import org.dbunit.assertion.comparer.value.ValueComparer;
+import org.dbunit.assertion.comparer.value.ValueComparator;
 
 /**
  * Strategy pattern for verifying a correctly configured
- * {@link VerifyTableDefinition}, e.g. a {@link ValueComparer} does not exist
+ * {@link VerifyTableDefinition}, e.g. a {@link ValueComparator} does not exist
  * for a column with an excluded column definition.
  *
  * @author Jeff Jensen

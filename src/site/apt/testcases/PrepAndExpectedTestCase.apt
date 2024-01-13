@@ -375,9 +375,9 @@ public abstract class VerifyTableDefinitions
         return new VerifyTableDefinition(tableName, null, columnValueComparers);
     }
 
-    private static VerifyTableDefinition make(final String tableName, final ValueComparer defaultValueComparer, final Map<String, ValueComparer> columnValueComparers)
+    private static VerifyTableDefinition make(final String tableName, final ValueComparer defaultValueComparator, final Map<String, ValueComparer> columnValueComparers)
     {
-        return new VerifyTableDefinition(tableName, defaultValueComparer, columnValueComparers);
+        return new VerifyTableDefinition(tableName, defaultValueComparator, columnValueComparers);
     }
 }
 +--
@@ -418,12 +418,12 @@ public abstract class VerifyTableDefinitions
  * COLUMN2 uses the specified "ConditionalSetBiValueComparer",
 
   * Table rows with an ID in the specified list
- will use the "inValuesValueComparer" for it,
+ will use the "inValuesValueComparator" for it,
  which is "isActualGreaterThanExpected",
  verifying the value changed and increased.
 
   * Table rows without an ID in the specified list
- will use the "notInValuesValueComparer" for it,
+ will use the "notInValuesValueComparator" for it,
  which is "isActualEqualToExpected",
  verifying the value did not change.
 
@@ -448,13 +448,13 @@ public abstract class ValueComparerMapFactory
     public static Map<String, ValueComparer> makeTableName_updated(Long[] ids)
     {
         Set<Long> values = new HashSet<>(Arrays.asList(ids));
-        ValueComparer inValuesValueComparer = ValueComparers.isActualGreaterThanExpected;
-        ValueComparer notInValuesValueComparer = ValueComparers.isActualEqualToExpected;
+        ValueComparer inValuesValueComparator = ValueComparers.isActualGreaterThanExpected;
+        ValueComparer notInValuesValueComparator = ValueComparers.isActualEqualToExpected;
         ValueFactory<Long> valueFactory = (table, rowNum) -> {
             Number id = (Number) table.getValue(rowNum, ColumnName.COLUMN1);
             return id.longValue();
         };
-        ValueComparer conditionalSetBiValueComparer = new ConditionalSetBiValueComparer<Long>(valueFactory, values, inValuesValueComparer, notInValuesValueComparer);
+        ValueComparer conditionalSetBiValueComparer = new ConditionalSetBiValueComparer<Long>(valueFactory, values, inValuesValueComparator, notInValuesValueComparator);
 
         return new ColumnValueComparerMapBuilder()
                 .add(ColumnName.COLUMN1, ValueComparers.isActualGreaterThanOrEqualToExpected)
