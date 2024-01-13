@@ -32,18 +32,16 @@ import org.dbunit.IDatabaseTester;
  * @version $Revision$ $Date$
  * @since 2.2.0
  */
-public class DefaultDatabaseTesterConnectionIT extends AbstractDatabaseTesterConnectionIT
-{
+public class DefaultDatabaseTesterConnectionIT extends AbstractDatabaseTesterConnectionIT {
    private PropertiesBasedJdbcDatabaseTester databaseTester;
 
-   public DefaultDatabaseTesterConnectionIT( String s )
+   public DefaultDatabaseTesterConnectionIT(String s)
    {
-      super( s );
+      super(s);
    }
 
-   protected IDatabaseTester getDatabaseTester() throws Exception
-   {
-      if( databaseTester == null ){
+   protected IDatabaseTester getDatabaseTester() throws Exception {
+      if (databaseTester == null) {
          DatabaseProfile profile = getEnvironment().getProfile();
          System.setProperty( PropertiesBasedJdbcDatabaseTester.DRIVER_CLASS, profile.getDriverClass() );
          System.setProperty( PropertiesBasedJdbcDatabaseTester.URL, profile.getConnectionUrl() );

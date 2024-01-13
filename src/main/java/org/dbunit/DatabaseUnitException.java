@@ -26,13 +26,6 @@ package org.dbunit;
  * @version $Revision$
  */
 public class DatabaseUnitException extends Exception {
-
-    /**
-	 * 
-	 */
-	private static final long	serialVersionUID	= 7597982895850877156L;
-
-
     /**
      * Constructs an <code>DatabaseUnitException</code> with no detail
      * message and no encapsulated exception.
@@ -72,5 +65,4 @@ public class DatabaseUnitException extends Exception {
     public Throwable getException() {
         return super.getCause();
     }
-
 }

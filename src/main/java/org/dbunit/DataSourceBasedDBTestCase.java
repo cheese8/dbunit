@@ -20,6 +20,7 @@
  */
 package org.dbunit;
 
+import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,18 +35,10 @@ import javax.sql.DataSource;
  * @version $Revision$ $Date$
  * @since 2.2.0
  */
+@NoArgsConstructor
 public abstract class DataSourceBasedDBTestCase extends DBTestCase {
-
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(DataSourceBasedDBTestCase.class);
-
-   public DataSourceBasedDBTestCase() {}
-
-   public DataSourceBasedDBTestCase( String name )
-   {
-      super( name );
+   public DataSourceBasedDBTestCase(String name) {
+      super(name);
    }
 
    /**
@@ -54,8 +47,7 @@ public abstract class DataSourceBasedDBTestCase extends DBTestCase {
     * configured with the value returned from {@link #getDataSource()}.
     */
    protected IDatabaseTester newDatabaseTester() {
-        logger.debug("newDatabaseTester() - start");
-      return new DataSourceDatabaseTester( getDataSource() );
+      return new DataSourceDatabaseTester(getDataSource());
    }
 
    /**

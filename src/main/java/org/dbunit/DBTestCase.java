@@ -37,7 +37,6 @@ import org.dbunit.database.IDatabaseConnection;
  */
 @Slf4j
 public abstract class DBTestCase extends DatabaseTestCase {
-
   public DBTestCase() {
     super();
   }

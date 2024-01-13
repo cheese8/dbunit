@@ -20,8 +20,7 @@
  */
 package org.dbunit;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.NoArgsConstructor;
 
 import java.util.Properties;
 
@@ -33,18 +32,10 @@ import java.util.Properties;
  * @version $Revision$ $Date$
  * @since 2.2.0
  */
+@NoArgsConstructor
 public abstract class JndiBasedDBTestCase extends DBTestCase {
-
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(JndiBasedDBTestCase.class);
-
-   public JndiBasedDBTestCase() {}
-
-   public JndiBasedDBTestCase( String name )
-   {
-      super( name );
+   public JndiBasedDBTestCase(String name) {
+      super(name);
    }
 
    /**
@@ -54,8 +45,7 @@ public abstract class JndiBasedDBTestCase extends DBTestCase {
     * {@link #getLookupName()}.
     */
    protected IDatabaseTester newDatabaseTester() {
-        logger.debug("newDatabaseTester() - start");
-      return new JndiDatabaseTester( getJNDIProperties(), getLookupName() );
+      return new JndiDatabaseTester(getJNDIProperties(), getLookupName());
    }
 
    /**
@@ -68,8 +58,7 @@ public abstract class JndiBasedDBTestCase extends DBTestCase {
     * Subclasses must override this method to provide customized JNDI
     * properties. Default implementation returns an empty Properties object.
     */
-   protected Properties getJNDIProperties()
-   {
+   protected Properties getJNDIProperties() {
       return new Properties();
    }
 }

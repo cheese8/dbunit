@@ -28,13 +28,6 @@ package org.dbunit;
  * @since 1.0
  */
 public class DatabaseUnitRuntimeException extends RuntimeException {
-
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = -3238403495229458202L;
-
-
     /**
      * Constructs an <code>DatabaseUnitRuntimeException</code> with no specified
      * detail message and no encapsulated exception.
@@ -83,5 +76,4 @@ public class DatabaseUnitRuntimeException extends RuntimeException {
     {
         return super.getCause();
     }
-
 }

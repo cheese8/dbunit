@@ -72,12 +72,12 @@ public class JdbcDatabaseTester extends AbstractDatabaseTester {
         this.url = url;
         this.username = username;
         this.password = password;
-        Assert.assertTrue("driverClass was not specified.", StringUtils.isNotBlank(driverClass));
+        Assert.assertTrue("driverClass was not set.", StringUtils.isNotBlank(driverClass));
         Class.forName(driverClass);
     }
 
     public IDatabaseConnection getConnection() throws Exception {
-        Assert.assertTrue("url was not specified.", StringUtils.isNotBlank(url));
+        Assert.assertTrue("url was not set.", StringUtils.isNotBlank(url));
         Connection conn;
         if (StringUtils.isAllBlank(username, password)) {
             conn = DriverManager.getConnection(url);
@@ -88,6 +88,6 @@ public class JdbcDatabaseTester extends AbstractDatabaseTester {
     }
 
     public String toString() {
-        return getClass().getName() + "[" + "url=" + this.url + ", driverClass=" + this.driverClass + ", username=" + this.username + ", password=**********" + ", schema=" + getSchema() + "]";
+        return getClass().getName() + "[" + "url=" + this.url + ", driverClass=" + this.driverClass + ", username=" + this.username + ", password=***" + ", schema=" + getSchema() + "]";
     }
 }
