@@ -37,27 +37,26 @@ import java.sql.SQLException;
  * @version $Revision$
  * @since Mar 6, 2002
  */
-public interface IDatabaseConnection
-{
+public interface IDatabaseConnection {
     /**
      * Returns a JDBC database connection.
      */
-    public Connection getConnection() throws SQLException;
+    Connection getConnection() throws SQLException;
 
     /**
      * Returns the database schema name.
      */
-    public String getSchema();
+    String getSchema();
 
     /**
      * Close this connection.
      */
-    public void close() throws SQLException;
+    void close() throws SQLException;
 
     /**
      * Creates a dataset corresponding to the entire database.
      */
-    public IDataSet createDataSet() throws SQLException;
+    IDataSet createDataSet() throws SQLException;
 
     /**
      * Creates a dataset containing only the specified tables from
@@ -67,8 +66,7 @@ public interface IDatabaseConnection
      * @throws SQLException
      * @throws DataSetException
      */
-    public IDataSet createDataSet(String[] tableNames) 
-            throws SQLException, DataSetException;
+    IDataSet createDataSet(String[] tableNames) throws SQLException, DataSetException;
 
     /**
      * Creates a table with the result of the specified SQL statement. The
@@ -80,8 +78,7 @@ public interface IDatabaseConnection
      * @throws DataSetException
      * @throws SQLException
      */
-    public ITable createQueryTable(String tableName, String sql)
-            throws DataSetException, SQLException;
+    ITable createQueryTable(String tableName, String sql) throws DataSetException, SQLException;
 
     /**
      * Creates a table using the given PreparedStatement to retrieve a ResultSet.
@@ -93,8 +90,7 @@ public interface IDatabaseConnection
      * @throws SQLException
      * @since 2.4.4
      */
-    public ITable createTable(String tableName, PreparedStatement preparedStatement)
-            throws DataSetException, SQLException;
+    ITable createTable(String tableName, PreparedStatement preparedStatement) throws DataSetException, SQLException;
 
     /**
      * Creates a table with the result of a <code>select * from <i>tableName</i></code> SQL statement. 
@@ -102,8 +98,7 @@ public interface IDatabaseConnection
      * @param tableName The name of the database table to be queried which is also returned by 
      * {@link org.dbunit.dataset.ITableMetaData#getTableName}.
      */
-    public ITable createTable(String tableName)
-            throws DataSetException, SQLException;
+    ITable createTable(String tableName) throws DataSetException, SQLException;
     
     /**
      * Returns the specified table row count.
@@ -111,7 +106,7 @@ public interface IDatabaseConnection
      * @param tableName the table name
      * @return the row count
      */
-    public int getRowCount(String tableName) throws SQLException;
+    int getRowCount(String tableName) throws SQLException;
 
     /**
      * Returns the specified table row count according specified where clause.
@@ -120,23 +115,15 @@ public interface IDatabaseConnection
      * @param whereClause the where clause
      * @return the row count
      */
-    public int getRowCount(String tableName, String whereClause) throws SQLException;
+    int getRowCount(String tableName, String whereClause) throws SQLException;
 
     /**
      * Returns this connection database configuration
      */
-    public DatabaseConfig getConfig();
+    DatabaseConfig getConfig();
 
     /**
      * @deprecated Use {@link #getConfig}
      */
-    public IStatementFactory getStatementFactory();
+    IStatementFactory getStatementFactory();
 }
-
-
-
-
-
-
-
-

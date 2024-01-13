@@ -20,9 +20,6 @@
  */
 package org.dbunit.database;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.dbunit.dataset.Column;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.ITableMetaData;
@@ -36,75 +33,46 @@ import java.sql.SQLException;
  * @since Apr 10, 2003
  * @version $Revision$
  */
-public class ForwardOnlyResultSetTable extends AbstractResultSetTable
-{
+public class ForwardOnlyResultSetTable extends AbstractResultSetTable {
+    private int lastRow = -1;
+    private boolean eot = false; // End of table flag
 
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(ForwardOnlyResultSetTable.class);
-
-    private int _lastRow = -1;
-    private boolean _eot = false; // End of table flag
-
-    public ForwardOnlyResultSetTable(ITableMetaData metaData,
-            ResultSet resultSet) throws SQLException, DataSetException
-    {
+    public ForwardOnlyResultSetTable(ITableMetaData metaData, ResultSet resultSet) throws SQLException, DataSetException {
         super(metaData, resultSet);
     }
 
-    public ForwardOnlyResultSetTable(ITableMetaData metaData,
-            IDatabaseConnection connection) throws DataSetException, SQLException
-    {
+    public ForwardOnlyResultSetTable(ITableMetaData metaData, IDatabaseConnection connection) throws DataSetException, SQLException {
         super(metaData, connection);
     }
 
-    public ForwardOnlyResultSetTable(String tableName, String selectStatement,
-            IDatabaseConnection connection) throws DataSetException, SQLException
-    {
+    public ForwardOnlyResultSetTable(String tableName, String selectStatement, IDatabaseConnection connection) throws DataSetException, SQLException {
         super(tableName, selectStatement, connection);
     }
-
-    // //////////////////////////////////////////////////////////////////////////
-    // ITable interface
 
     public int getRowCount()
     {
         throw new UnsupportedOperationException();
     }
 
-    public Object getValue(int row, String columnName) throws DataSetException
-    {
-        if(logger.isDebugEnabled())
-            logger.debug("getValue(row={}, columnName={}) - start", Integer.toString(row), columnName);
-
-        try
-        {
+    public Object getValue(int row, String columnName) throws DataSetException {
+        try {
             // Move cursor forward up to specified row
-            while (!_eot && row > _lastRow)
-            {
-                _eot = !_resultSet.next();
-                _lastRow++;
+            while (!eot && row > lastRow) {
+                eot = !this.resultSet.next();
+                lastRow++;
             }
-
-            if (row < _lastRow)
-            {
+            if (row < lastRow) {
                 throw new UnsupportedOperationException("Cannot go backward!");
             }
-
-            if (_eot || row > _lastRow)
-            {
+            if (eot || row > lastRow) {
                 // Proactively close the resultset
                 close();
-                throw new RowOutOfBoundsException(row + " > " + _lastRow);
+                throw new RowOutOfBoundsException(row + " > " + lastRow);
             }
-
             int columnIndex = getColumnIndex(columnName);
-            Column column = _metaData.getColumns()[columnIndex];
-            return column.getDataType().getSqlValue(columnIndex + 1, _resultSet);
-        }
-        catch (SQLException e)
-        {
+            Column column = this.metaData.getColumns()[columnIndex];
+            return column.getDataType().getSqlValue(columnIndex + 1, this.resultSet);
+        } catch (SQLException e) {
             throw new DataSetException(e);
         }
     }
@@ -112,17 +80,7 @@ public class ForwardOnlyResultSetTable extends AbstractResultSetTable
     /**
      * {@inheritDoc}
      */
-    public String toString()
-    {
-        StringBuilder sb = new StringBuilder(2000);
-
-        sb.append(super.toString());
-        sb.append(", ");
-        sb.append(getClass().getName()).append("[");
-        sb.append("_eot=[").append(_eot).append("], ");
-        sb.append("_lastRow=[").append(_lastRow).append("]");
-        sb.append("]");
-
-        return sb.toString();
+    public String toString() {
+        return super.toString() + ", " + getClass().getName() + "[" + "eot=[" + eot + "], " + "lastRow=[" + lastRow + "]" + "]";
     }
 }

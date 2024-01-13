@@ -47,26 +47,19 @@ import org.dbunit.dataset.DataSetException;
  * @version $Revision$ $Date$
  * @since 1.0  May 1, 2002
  */
-public class AmbiguousTableNameException extends DataSetException
-{
-    public AmbiguousTableNameException()
-    {
+public class AmbiguousTableNameException extends DataSetException {
+    public AmbiguousTableNameException() {
     }
 
-    public AmbiguousTableNameException(String msg)
-    {
+    public AmbiguousTableNameException(String msg) {
         super(msg);
     }
 
-    public AmbiguousTableNameException(String msg, Throwable e)
-    {
+    public AmbiguousTableNameException(String msg, Throwable e) {
         super(msg, e);
     }
 
-    public AmbiguousTableNameException(Throwable e)
-    {
+    public AmbiguousTableNameException(Throwable e) {
         super(e);
     }
 }
-
-

@@ -26,6 +26,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import lombok.extern.slf4j.Slf4j;
 import org.dbunit.DatabaseUnitRuntimeException;
 import org.dbunit.database.statement.IStatementFactory;
 import org.dbunit.dataset.DataSetException;
@@ -34,192 +35,116 @@ import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ITable;
 import org.dbunit.util.QualifiedTableName;
 import org.dbunit.util.SQLHelper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author Manuel Laflamme
  * @version $Revision$
  * @since Mar 6, 2002
  */
-public abstract class AbstractDatabaseConnection implements IDatabaseConnection
-{
-
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger =
-            LoggerFactory.getLogger(AbstractDatabaseConnection.class);
-
-    private IDataSet _dataSet = null;
-    private final DatabaseConfig _databaseConfig;
+@Slf4j
+public abstract class AbstractDatabaseConnection implements IDatabaseConnection {
+    private IDataSet dataSet = null;
+    private final DatabaseConfig databaseConfig;
 
     public AbstractDatabaseConnection()
     {
-        _databaseConfig = new DatabaseConfig();
+        databaseConfig = new DatabaseConfig();
     }
 
-    ////////////////////////////////////////////////////////////////////////////
-    // IDatabaseConnection interface
-
-    public IDataSet createDataSet() throws SQLException
-    {
-        logger.debug("createDataSet() - start");
-
-        if (_dataSet == null)
-        {
-            _dataSet = new DatabaseDataSet(this);
+    public IDataSet createDataSet() throws SQLException {
+        if (dataSet == null) {
+            dataSet = new DatabaseDataSet(this);
         }
-
-        return _dataSet;
+        return dataSet;
     }
 
-    public IDataSet createDataSet(String[] tableNames)
-            throws DataSetException, SQLException
-    {
-        logger.debug("createDataSet(tableNames={}) - start", tableNames);
-
+    public IDataSet createDataSet(String[] tableNames) throws DataSetException, SQLException {
         return new FilteredDataSet(tableNames, createDataSet());
     }
 
-    public ITable createQueryTable(String resultName, String sql)
-            throws DataSetException, SQLException
-    {
-        logger.debug("createQueryTable(resultName={}, sql={}) - start",
-                resultName, sql);
-
+    public ITable createQueryTable(String resultName, String sql) throws DataSetException, SQLException {
         IResultSetTableFactory tableFactory = getResultSetTableFactory();
-        IResultSetTable rsTable =
-                tableFactory.createTable(resultName, sql, this);
-        if (logger.isDebugEnabled())
-        {
-            String rowCount = null;
-            try
-            {
+        IResultSetTable rsTable = tableFactory.createTable(resultName, sql, this);
+        if (log.isDebugEnabled()) {
+            String rowCount;
+            try {
                 int rowCountInt = rsTable.getRowCount();
                 rowCount = String.valueOf(rowCountInt);
-            } catch (Exception e)
-            {
-                rowCount = "Unable to determine row count due to Exception: "
-                        + e.getLocalizedMessage();
+            } catch (Exception e) {
+                rowCount = "Unable to determine row count due to Exception: " + e.getLocalizedMessage();
             }
-            logger.debug("createQueryTable: rowCount={}", rowCount);
+            log.debug("createQueryTable: rowCount={}", rowCount);
         }
         return rsTable;
     }
 
-    public ITable createTable(String resultName,
-            PreparedStatement preparedStatement)
-            throws DataSetException, SQLException
-    {
-        logger.debug(
-                "createQueryTable(resultName={}, preparedStatement={}) - start",
-                resultName, preparedStatement);
-
+    public ITable createTable(String resultName, PreparedStatement preparedStatement) throws DataSetException, SQLException {
         IResultSetTableFactory tableFactory = getResultSetTableFactory();
-        IResultSetTable rsTable =
-                tableFactory.createTable(resultName, preparedStatement, this);
-        return rsTable;
+        return tableFactory.createTable(resultName, preparedStatement, this);
     }
 
-    public ITable createTable(String tableName)
-            throws DataSetException, SQLException
-    {
-        logger.debug("createTable(tableName={}) - start", tableName);
-
-        if (tableName == null)
-        {
-            throw new NullPointerException(
-                    "The parameter 'tableName' must not be null");
+    public ITable createTable(String tableName) throws DataSetException, SQLException {
+        if (tableName == null) {
+            throw new NullPointerException("The parameter 'tableName' must not be null");
         }
-
-        String escapePattern = (String) getConfig()
-                .getProperty(DatabaseConfig.PROPERTY_ESCAPE_PATTERN);
-
+        String escapePattern = (String) getConfig().getProperty(DatabaseConfig.PROPERTY_ESCAPE_PATTERN);
         // qualify with schema if configured
-        QualifiedTableName qualifiedTableName = new QualifiedTableName(
-                tableName, this.getSchema(), escapePattern);
+        QualifiedTableName qualifiedTableName = new QualifiedTableName(tableName, this.getSchema(), escapePattern);
         String qualifiedName = qualifiedTableName.getQualifiedName();
         String sql = "select * from " + qualifiedName;
         return this.createQueryTable(tableName, sql);
     }
 
-    public int getRowCount(String tableName) throws SQLException
-    {
-        logger.debug("getRowCount(tableName={}) - start", tableName);
-
+    public int getRowCount(String tableName) throws SQLException {
         return getRowCount(tableName, null);
     }
 
-    public int getRowCount(String tableName, String whereClause)
-            throws SQLException
-    {
-        logger.debug("getRowCount(tableName={}, whereClause={}) - start",
-                tableName, whereClause);
-
-        StringBuffer sqlBuffer = new StringBuffer(128);
+    public int getRowCount(String tableName, String whereClause) throws SQLException {
+        StringBuilder sqlBuffer = new StringBuilder(128);
         sqlBuffer.append("select count(*) from ");
 
         // add table name and schema (schema only if available)
-        QualifiedTableName qualifiedTableName =
-                new QualifiedTableName(tableName, this.getSchema());
+        QualifiedTableName qualifiedTableName = new QualifiedTableName(tableName, this.getSchema());
         String qualifiedName = qualifiedTableName.getQualifiedName();
         sqlBuffer.append(qualifiedName);
-        if (whereClause != null)
-        {
+        if (whereClause != null) {
             sqlBuffer.append(" ");
             sqlBuffer.append(whereClause);
         }
 
         Statement statement = getConnection().createStatement();
         ResultSet resultSet = null;
-        try
-        {
+        try {
             resultSet = statement.executeQuery(sqlBuffer.toString());
-            if (resultSet.next())
-            {
+            if (resultSet.next()) {
                 return resultSet.getInt(1);
-            } else
-            {
-                throw new DatabaseUnitRuntimeException(
-                        "Select count did not return any results for table '"
-                                + tableName + "'. Statement: "
-                                + sqlBuffer.toString());
+            } else {
+                throw new DatabaseUnitRuntimeException("Select count did not return any results for table '" + tableName + "'. Statement: " + sqlBuffer);
             }
-        } finally
-        {
+        } finally {
             SQLHelper.close(resultSet, statement);
         }
     }
 
-    public DatabaseConfig getConfig()
-    {
-        return _databaseConfig;
+    public DatabaseConfig getConfig() {
+        return databaseConfig;
     }
 
     /**
      * @deprecated Use {@link #getConfig}
      */
     @Deprecated
-    public IStatementFactory getStatementFactory()
-    {
-        return (IStatementFactory) _databaseConfig
-                .getProperty(DatabaseConfig.PROPERTY_STATEMENT_FACTORY);
+    public IStatementFactory getStatementFactory() {
+        return (IStatementFactory) databaseConfig.getProperty(DatabaseConfig.PROPERTY_STATEMENT_FACTORY);
     }
 
-    private IResultSetTableFactory getResultSetTableFactory()
-    {
-        return (IResultSetTableFactory) _databaseConfig
-                .getProperty(DatabaseConfig.PROPERTY_RESULTSET_TABLE_FACTORY);
+    private IResultSetTableFactory getResultSetTableFactory() {
+        return (IResultSetTableFactory) databaseConfig.getProperty(DatabaseConfig.PROPERTY_RESULTSET_TABLE_FACTORY);
 
     }
 
     @Override
-    public String toString()
-    {
-        StringBuffer sb = new StringBuffer();
-        sb.append("_databaseConfig=").append(_databaseConfig);
-        sb.append(", _dataSet=").append(_dataSet);
-        return sb.toString();
+    public String toString() {
+        return "databaseConfig=" + databaseConfig + ", dataSet=" + dataSet;
     }
 }

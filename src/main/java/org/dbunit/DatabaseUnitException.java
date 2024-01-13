@@ -37,8 +37,7 @@ public class DatabaseUnitException extends Exception {
      * Constructs an <code>DatabaseUnitException</code> with no detail
      * message and no encapsulated exception.
      */
-    public DatabaseUnitException()
-    {
+    public DatabaseUnitException() {
         super();
     }
 
@@ -46,8 +45,7 @@ public class DatabaseUnitException extends Exception {
      * Constructs an <code>DatabaseUnitException</code> with the specified detail
      * message and no encapsulated exception.
      */
-    public DatabaseUnitException(String msg)
-    {
+    public DatabaseUnitException(String msg) {
         super(msg);
     }
 
@@ -55,8 +53,7 @@ public class DatabaseUnitException extends Exception {
      * Constructs an <code>DatabaseUnitException</code> with the specified detail
      * message and encapsulated exception.
      */
-    public DatabaseUnitException(String msg, Throwable e)
-    {
+    public DatabaseUnitException(String msg, Throwable e) {
         super(msg, e);
     }
 
@@ -64,8 +61,7 @@ public class DatabaseUnitException extends Exception {
      * Constructs an <code>DatabaseUnitException</code> with the encapsulated
      * exception and use string representation as detail message.
      */
-    public DatabaseUnitException(Throwable e)
-    {
+    public DatabaseUnitException(Throwable e) {
         super(e);
     }
 
@@ -73,8 +69,7 @@ public class DatabaseUnitException extends Exception {
      * Returns the nested exception or <code>null</code> if none.
      * @deprecated Use {@link #getCause()} to retrieve the nested exception
      */
-    public Throwable getException()
-    {
+    public Throwable getException() {
         return super.getCause();
     }
 
