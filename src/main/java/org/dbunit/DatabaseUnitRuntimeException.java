@@ -32,8 +32,7 @@ public class DatabaseUnitRuntimeException extends RuntimeException {
      * Constructs an <code>DatabaseUnitRuntimeException</code> with no specified
      * detail message and no encapsulated exception.
      */
-    public DatabaseUnitRuntimeException()
-    {
+    public DatabaseUnitRuntimeException() {
         super();
     }
 
@@ -42,8 +41,7 @@ public class DatabaseUnitRuntimeException extends RuntimeException {
      * detail message and no encapsulated exception.
      * @param msg Exception message
      */
-    public DatabaseUnitRuntimeException(String msg)
-    {
+    public DatabaseUnitRuntimeException(String msg) {
         super(msg);
     }
 
@@ -53,8 +51,7 @@ public class DatabaseUnitRuntimeException extends RuntimeException {
      * @param msg
      * @param cause The cause of this exception
      */
-    public DatabaseUnitRuntimeException(String msg, Throwable cause)
-    {
+    public DatabaseUnitRuntimeException(String msg, Throwable cause) {
         super(msg, cause);
     }
 
@@ -63,8 +60,7 @@ public class DatabaseUnitRuntimeException extends RuntimeException {
      * exception and use its message as detail message.
      * @param cause The cause of this exception
      */
-    public DatabaseUnitRuntimeException(Throwable cause)
-    {
+    public DatabaseUnitRuntimeException(Throwable cause) {
         super(cause.toString(), cause);
     }
 
@@ -72,8 +68,7 @@ public class DatabaseUnitRuntimeException extends RuntimeException {
      * Returns the encapsulated exception or <code>null</code> if none.
      * @deprecated Use {@link Exception#getCause()} instead
      */
-    public Throwable getException()
-    {
-        return super.getCause();
+    public Throwable getException() {
+        return getCause();
     }
 }

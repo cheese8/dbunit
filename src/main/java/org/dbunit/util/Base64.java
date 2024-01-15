@@ -22,6 +22,7 @@ package org.dbunit.util;
 
 import java.io.FileInputStream;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,33 +40,23 @@ import org.slf4j.LoggerFactory;
  * @version $Revision$ $Date$
  * @since 1.3
  */
-public class Base64
-{
 
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(Base64.class);
-
+@Slf4j
+public class Base64 {
     /** Specify encoding (value is <tt>true</tt>). */
     public final static boolean ENCODE = true;
-
 
     /** Specify decoding (value is <tt>false</tt>). */
     public final static boolean DECODE = false;
 
-
     /** Maximum line length (76) of Base64 output. */
     private final static int MAX_LINE_LENGTH = 76;
-
 
     /** The equals sign (=) as a byte. */
     private final static byte EQUALS_SIGN = (byte)'=';
 
-
     /** The new line character (\n) as a byte. */
     private final static byte NEW_LINE = (byte)'\n';
-
 
     /** The 64 valid Base64 values. */
     private final static byte[] ALPHABET =
@@ -127,16 +118,12 @@ public class Base64
 
 
     /** Defeats instantiation. */
-    private Base64()
-    {
+    private Base64() {
     }
 
 
     /** Testing. */
-    public static void main(String[] args)
-    {
-        logger.debug("main(args=" + args + ") - start");
-
+    public static void main(String[] args) {
         String s = "Hello, world";
         s = "abcd";
         //s = System.getProperties().toString();
@@ -156,10 +143,7 @@ public class Base64
             {   //System.out.print( new String( ""+(char)ib ) );
             }
         }   // end try
-        catch (Exception e)
-        {
-            logger.error("main()", e);
-
+        catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -178,8 +162,6 @@ public class Base64
      */
     private static byte[] encode3to4(byte[] threeBytes)
     {
-        logger.debug("encode3to4(threeBytes=" + threeBytes + ") - start");
-
         return encode3to4(threeBytes, 3);
     }   // end encodeToBytes
 
@@ -199,7 +181,7 @@ public class Base64
      */
     private static byte[] encode3to4(byte[] threeBytes, int numSigBytes)
     {
-        logger.debug("encode3to4(threeBytes=" + threeBytes + ", numSigBytes=" + numSigBytes + ") - start");
+        log.debug("encode3to4(threeBytes=" + threeBytes + ", numSigBytes=" + numSigBytes + ") - start");
 
         byte[] dest = new byte[4];
         encode3to4(threeBytes, 0, numSigBytes, dest, 0);
@@ -232,8 +214,7 @@ public class Base64
             byte[] source, int srcOffset, int numSigBytes,
             byte[] destination, int destOffset)
     {
-    	if(logger.isDebugEnabled())
-    		logger.debug("encode3to4(source=" + source + ", srcOffset=" + srcOffset + ", numSigBytes=" + numSigBytes
+            log.debug("encode3to4(source=" + source + ", srcOffset=" + srcOffset + ", numSigBytes=" + numSigBytes
                 + ", destination=" + destination + ", destOffset=" + destOffset + ") - start");
 
         //           1         2         3
@@ -292,8 +273,7 @@ public class Base64
      */
     public static String encodeObject(java.io.Serializable serializableObject)
     {
-    	if(logger.isDebugEnabled())
-    		logger.debug("encodeObject(serializableObject=" + serializableObject + ") - start");
+            log.debug("encodeObject(serializableObject=" + serializableObject + ") - start");
 
         java.io.ByteArrayOutputStream baos = null;
         java.io.OutputStream b64os = null;
@@ -309,7 +289,7 @@ public class Base64
         }   // end try
         catch (java.io.IOException e)
         {
-            logger.error("encodeObject()", e);
+            log.error("encodeObject()", e);
 
             e.printStackTrace();
             return null;
@@ -322,7 +302,7 @@ public class Base64
             }
             catch (Exception e)
             {
-                logger.error("encodeObject()", e);
+                log.error("encodeObject()", e);
             }
             try
             {
@@ -330,7 +310,7 @@ public class Base64
             }
             catch (Exception e)
             {
-                logger.error("encodeObject()", e);
+                log.error("encodeObject()", e);
             }
             try
             {
@@ -338,7 +318,7 @@ public class Base64
             }
             catch (Exception e)
             {
-                logger.error("encodeObject()", e);
+                log.error("encodeObject()", e);
             }
         }   // end finally
 
@@ -356,8 +336,7 @@ public class Base64
      */
     public static String encodeBytes(byte[] source)
     {
-    	if(logger.isDebugEnabled())
-    		logger.debug("encodeBytes(source=" + source + ") - start");
+            log.debug("encodeBytes(source=" + source + ") - start");
 
         return encodeBytes(source, 0, source.length);
     }   // end encodeBytes
@@ -373,8 +352,7 @@ public class Base64
      */
     public static String encodeBytes(byte[] source, int off, int len)
     {
-    	if(logger.isDebugEnabled())
-    		logger.debug("encodeBytes(source=" + source + ", off=" + off + ", len=" + len + ") - start");
+            log.debug("encodeBytes(source=" + source + ", off=" + off + ", len=" + len + ") - start");
 
         int len43 = len * 4 / 3;
         byte[] outBuff = new byte[(len43)                      // Main 4:3
@@ -417,7 +395,7 @@ public class Base64
      */
     public static String encodeString(String s)
     {
-        logger.debug("encodeString(s={}) - start", s);
+        log.debug("encodeString(s={}) - start", s);
 
         return encodeBytes(s.getBytes());
     }   // end encodeString
@@ -439,8 +417,7 @@ public class Base64
      */
     private static byte[] decode4to3(byte[] fourBytes)
     {
-    	if(logger.isDebugEnabled())
-    		logger.debug("decode4to3(fourBytes=" + fourBytes + ") - start");
+            log.debug("decode4to3(fourBytes=" + fourBytes + ") - start");
 
         byte[] outBuff1 = new byte[3];
         int count = decode4to3(fourBytes, 0, outBuff1, 0);
@@ -477,8 +454,7 @@ public class Base64
      */
     private static int decode4to3(byte[] source, int srcOffset, byte[] destination, int destOffset)
     {
-    	if(logger.isDebugEnabled())
-    		logger.debug("decode4to3(source=" + source + ", srcOffset=" + srcOffset + ", destination=" + destination
+            log.debug("decode4to3(source=" + source + ", srcOffset=" + srcOffset + ", destination=" + destination
                 + ", destOffset=" + destOffset + ") - start");
 
         // Example: Dk==
@@ -528,7 +504,7 @@ public class Base64
      */
     public static byte[] decode(String s)
     {
-        logger.debug("decode(s={}) - start", s);
+        log.debug("decode(s={}) - start", s);
 
         byte[] bytes = s.getBytes();
         return decode(bytes, 0, bytes.length);
@@ -547,7 +523,7 @@ public class Base64
      */
     public static String decodeToString(String s)
     {
-        logger.debug("decodeToString(s={}) - start", s);
+        log.debug("decodeToString(s={}) - start", s);
 
         return new String(decode(s));
     }   // end decodeToString
@@ -563,7 +539,7 @@ public class Base64
      */
     public static Object decodeToObject(String encodedObject)
     {
-        logger.debug("decodeToObject(encodedObject={} - start", encodedObject);
+        log.debug("decodeToObject(encodedObject={} - start", encodedObject);
 
         byte[] objBytes = decode(encodedObject);
 
@@ -579,14 +555,14 @@ public class Base64
         }   // end try
         catch (java.io.IOException e)
         {
-            logger.error("decodeToObject()", e);
+            log.error("decodeToObject()", e);
 
             e.printStackTrace();
             return null;
         }   // end catch
         catch (ClassNotFoundException e)
         {
-            logger.error("decodeToObject()", e);
+            log.error("decodeToObject()", e);
 
             e.printStackTrace();
             return null;
@@ -599,7 +575,7 @@ public class Base64
             }
             catch (Exception e)
             {
-                logger.error("decodeToObject()", e);
+                log.error("decodeToObject()", e);
             }
             try
             {
@@ -607,7 +583,7 @@ public class Base64
             }
             catch (Exception e)
             {
-                logger.error("decodeToObject()", e);
+                log.error("decodeToObject()", e);
             }
         }   // end finally
     }   // end decodeObject
@@ -625,8 +601,7 @@ public class Base64
      */
     public static byte[] decode(byte[] source, int off, int len)
     {
-    	if(logger.isDebugEnabled())
-    		logger.debug("decode(source=" + source + ", off=" + off + ", len=" + len + ") - start");
+        log.debug("decode(source=" + source + ", off=" + off + ", len=" + len + ") - start");
 
         int len34 = len * 3 / 4;
         byte[] outBuff = new byte[len34]; // Upper limit on size of output
@@ -788,10 +763,10 @@ public class Base64
                 else
                 {
                     byte[] b4 = new byte[4];
-                    int i = 0;
+                    int i;
                     for (i = 0; i < 4; i++)
                     {
-                        int b = 0;
+                        int b;
                         do
                         {
                             b = in.read();

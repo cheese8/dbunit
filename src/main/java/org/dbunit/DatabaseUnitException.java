@@ -63,6 +63,6 @@ public class DatabaseUnitException extends Exception {
      * @deprecated Use {@link #getCause()} to retrieve the nested exception
      */
     public Throwable getException() {
-        return super.getCause();
+        return getCause();
     }
 }

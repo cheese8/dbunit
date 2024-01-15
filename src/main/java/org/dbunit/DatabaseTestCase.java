@@ -47,8 +47,7 @@ public abstract class DatabaseTestCase extends TestCase {
     private IDatabaseTester tester;
     private IOperationListener operationListener;
 
-    public DatabaseTestCase(String name)
-    {
+    public DatabaseTestCase(String name) {
         super(name);
     }
 

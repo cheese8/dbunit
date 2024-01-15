@@ -85,8 +85,7 @@ public class MySqlMetadataHandler implements IMetadataHandler {
         return areEqual;
     }
 
-    private boolean areEqualIgnoreNull(String value1, String value2,
-            boolean caseSensitive) {
+    private boolean areEqualIgnoreNull(String value1, String value2, boolean caseSensitive) {
         return SQLHelper.areEqualIgnoreNull(value1, value2, caseSensitive);
     }
 

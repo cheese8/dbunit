@@ -20,10 +20,13 @@
  */
 package org.dbunit.util;
 
+import lombok.NoArgsConstructor;
 import org.dbunit.dataset.Column;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.ITableMetaData;
+
+import java.util.Arrays;
 
 /**
  * Simple formatter to print out {@link ITable} objects in a beautiful way,
@@ -34,19 +37,16 @@ import org.dbunit.dataset.ITableMetaData;
  * @version $Revision$ $Date$
  * @since 2.4.1
  */
+@NoArgsConstructor
 public class TableFormatter {
-    
-    public TableFormatter() {}
-    
     /**
      * Formats a table with all data in a beautiful way.
      * Can be useful to print out the table data on a console.
      * @param table The table to be formatted in a beautiful way
      * @return The table data as a formatted String
-     * @throws DataSetException
      */
     public String format(ITable table) throws DataSetException {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         ITableMetaData tableMetaData = table.getTableMetaData();
         // Title line
         sb.append("******");
@@ -59,8 +59,8 @@ public class TableFormatter {
         // Column headers
         int width = 20;
         Column[] cols = tableMetaData.getColumns();
-        for (int i = 0; i < cols.length; i++) {
-            sb.append(padRight(cols[i].getColumnName(), width, ' '));
+        for (Column col : cols) {
+            sb.append(padRight(col.getColumnName(), width, ' '));
             sb.append("|");
         }
         sb.append("\n");
@@ -74,8 +74,8 @@ public class TableFormatter {
         
         // Values
         for (int i = 0; i < table.getRowCount(); i++) {
-            for (int j = 0; j < cols.length; j++) {
-                Object value = table.getValue(i, cols[j].getColumnName());
+            for (Column col : cols) {
+                Object value = table.getValue(i, col.getColumnName());
                 String stringValue = String.valueOf(value);
                 sb.append(padRight(stringValue, 20, ' '));
                 sb.append("|");
@@ -86,33 +86,13 @@ public class TableFormatter {
         
         return sb.toString();
     }
-    
+
     /**
      * Pads the given String with the given <code>padChar</code>
      * up to the given <code>length</code>.
-     * @param s
-     * @param length
-     * @param padChar
      * @return The padded string
      */
-    public static final String padLeft(String s, int length, char padChar) {
-        String result = s;
-        char[] padCharArray = getPadCharArray(s, length, padChar);
-        if (padCharArray != null) {
-            result = pad(s, padCharArray, true);
-        }
-        return result;
-    }
-    
-    /**
-     * Pads the given String with the given <code>padChar</code>
-     * up to the given <code>length</code>.
-     * @param s
-     * @param length
-     * @param padChar
-     * @return The padded string
-     */
-    public static final String padRight(String s, int length, char padChar) {
+    public static String padRight(String s, int length, char padChar) {
         String result = s;
         char[] padCharArray = getPadCharArray(s, length, padChar);
         if (padCharArray != null) {
@@ -121,21 +101,19 @@ public class TableFormatter {
         return result;
     }
 
-    private static final char[] getPadCharArray(String s, int length, char padChar) {
+    private static char[] getPadCharArray(String s, int length, char padChar) {
         if (length > 0 && length > s.length()) {
             int padCount = length - s.length();
             char[] padArray = new char[padCount];
-            for (int i=0; i<padArray.length; i++) {
-                padArray[i] = padChar;
-            }
+            Arrays.fill(padArray, padChar);
             return padArray;
         } else {
             return null;
         }
     }
 
-    private static final String pad(String s, char[] padArray, boolean padLeft) {
-        StringBuffer sb = new StringBuffer(s);
+    private static String pad(String s, char[] padArray, boolean padLeft) {
+        StringBuilder sb = new StringBuilder(s);
         if (padLeft) {
             sb.insert(0, padArray);
         } else {

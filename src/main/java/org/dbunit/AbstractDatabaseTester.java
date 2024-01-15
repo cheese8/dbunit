@@ -72,8 +72,7 @@ public abstract class AbstractDatabaseTester extends SimpleAssert implements IDa
     @Setter
     private IOperationListener operationListener;
 
-    public AbstractDatabaseTester()
-    {
+    public AbstractDatabaseTester() {
         this(null);
     }
 

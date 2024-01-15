@@ -35,7 +35,7 @@ import org.dbunit.dataset.ITable;
 
 /**
  * Provides static methods for the most common DbUnit assertion needs.
- *
+ * <p>
  * Although the methods are static, they rely on a {@link DbUnitAssert} instance
  * to do the work. So, if you need to customize this class behavior, you can
  * create your own {@link DbUnitAssert} extension.
@@ -136,8 +136,8 @@ public class Assertion {
      * @since 2.6.0
      */
     public static void assertWithValueComparer(final IDataSet expectedDataSet, final IDataSet actualDataSet, final ValueComparator defaultValueComparator,
-                                               final Map<String, Map<String, ValueComparator>> tableColumnValueComparers) throws DatabaseUnitException {
-        VALUE_COMPARE_INSTANCE.assertWithValueComparer(expectedDataSet, actualDataSet, defaultValueComparator, tableColumnValueComparers);
+                                               final Map<String, Map<String, ValueComparator>> tableColumnValueComparators) throws DatabaseUnitException {
+        VALUE_COMPARE_INSTANCE.assertWithValueComparer(expectedDataSet, actualDataSet, defaultValueComparator, tableColumnValueComparators);
     }
 
     /**
@@ -146,8 +146,8 @@ public class Assertion {
      * @since 2.6.0
      */
     public static void assertWithValueComparer(final ITable expectedTable, final ITable actualTable, final ValueComparator defaultValueComparator,
-                                               final Map<String, ValueComparator> columnValueComparers) throws DatabaseUnitException {
-        VALUE_COMPARE_INSTANCE.assertWithValueComparer(expectedTable, actualTable, defaultValueComparator, columnValueComparers);
+                                               final Map<String, ValueComparator> columnValueComparators) throws DatabaseUnitException {
+        VALUE_COMPARE_INSTANCE.assertWithValueComparer(expectedTable, actualTable, defaultValueComparator, columnValueComparators);
     }
 
     /**
@@ -156,8 +156,8 @@ public class Assertion {
      * @since 2.6.0
      */
     public static void assertWithValueComparer(final IDataSet expectedDataSet, final IDataSet actualDataSet, final FailureHandler failureHandler,
-                                               final ValueComparator defaultValueComparator, final Map<String, Map<String, ValueComparator>> tableColumnValueComparers) throws DatabaseUnitException {
-        VALUE_COMPARE_INSTANCE.assertWithValueComparer(expectedDataSet, actualDataSet, failureHandler, defaultValueComparator, tableColumnValueComparers);
+                                               final ValueComparator defaultValueComparator, final Map<String, Map<String, ValueComparator>> tableColumnValueComparators) throws DatabaseUnitException {
+        VALUE_COMPARE_INSTANCE.assertWithValueComparer(expectedDataSet, actualDataSet, failureHandler, defaultValueComparator, tableColumnValueComparators);
     }
 
     /**
@@ -166,8 +166,8 @@ public class Assertion {
      * @since 2.6.0
      */
     public static void assertWithValueComparer(final ITable expectedTable, final ITable actualTable, final Column[] additionalColumnInfo,
-                                               final ValueComparator defaultValueComparator, final Map<String, ValueComparator> columnValueComparers) throws DatabaseUnitException {
-        VALUE_COMPARE_INSTANCE.assertWithValueComparer(expectedTable, actualTable, additionalColumnInfo, defaultValueComparator, columnValueComparers);
+                                               final ValueComparator defaultValueComparator, final Map<String, ValueComparator> columnValueComparators) throws DatabaseUnitException {
+        VALUE_COMPARE_INSTANCE.assertWithValueComparer(expectedTable, actualTable, additionalColumnInfo, defaultValueComparator, columnValueComparators);
     }
 
     /**
@@ -176,17 +176,7 @@ public class Assertion {
      * @since 2.6.0
      */
     public static void assertWithValueComparer(final ITable expectedTable, final ITable actualTable, final FailureHandler failureHandler,
-                                               final ValueComparator defaultValueComparator, final Map<String, ValueComparator> columnValueComparers) throws DatabaseUnitException {
-        VALUE_COMPARE_INSTANCE.assertWithValueComparer(expectedTable, actualTable, failureHandler, defaultValueComparator, columnValueComparers);
-    }
-
-    public static DbUnitAssert getEqualsInstance()
-    {
-        return EQUALS_INSTANCE;
-    }
-
-    public static DbUnitValueComparerAssert getValueCompareInstance()
-    {
-        return VALUE_COMPARE_INSTANCE;
+                                               final ValueComparator defaultValueComparator, final Map<String, ValueComparator> columnValueComparators) throws DatabaseUnitException {
+        VALUE_COMPARE_INSTANCE.assertWithValueComparer(expectedTable, actualTable, failureHandler, defaultValueComparator, columnValueComparators);
     }
 }
