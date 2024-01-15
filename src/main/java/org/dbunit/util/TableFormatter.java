@@ -96,7 +96,7 @@ public class TableFormatter {
         String result = s;
         char[] padCharArray = getPadCharArray(s, length, padChar);
         if (padCharArray != null) {
-            result = pad(s, padCharArray, false);
+            result = pad(s, padCharArray);
         }
         return result;
     }
@@ -112,13 +112,7 @@ public class TableFormatter {
         }
     }
 
-    private static String pad(String s, char[] padArray, boolean padLeft) {
-        StringBuilder sb = new StringBuilder(s);
-        if (padLeft) {
-            sb.insert(0, padArray);
-        } else {
-            sb.append(padArray);
-        }
-        return sb.toString();
+    private static String pad(String s, char[] padArray) {
+        return s + String.valueOf(padArray);
     }
 }
