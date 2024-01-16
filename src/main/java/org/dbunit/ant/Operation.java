@@ -82,7 +82,10 @@ public class Operation extends AbstractStep {
 
     public void setSrc(File src) {
         sources.clear();
-        sources.add(src);
+        String path = src.getAbsolutePath();
+        path = path.replaceAll("/src/test/src/test", "/src/test");
+        File newSrc = new File(path);
+        sources.add(newSrc);
     }
 
     public void addConfiguredFileset(FileSet fileSet) {

@@ -94,7 +94,7 @@ public class FileHelper {
 	}
 
 	public static InputSource createInputSource(File file) throws MalformedURLException {
-        String uri = file/*.getAbsoluteFile()*/.toURI().toURL().toString();
+        String uri = file.getAbsoluteFile().toURI().toURL().toString();
         InputSource source = new InputSource(uri);
         return source;
 	}
