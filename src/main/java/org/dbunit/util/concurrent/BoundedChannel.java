@@ -19,19 +19,19 @@ package org.dbunit.util.concurrent;
  * capacity is reached. Various implementations may have
  * intrinsically hard-wired capacities, capacities that are fixed upon
  * construction, or dynamically adjustable capacities.
- * @see DefaultChannelCapacity
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>] <p>
- * 
+ *
  * @author Doug Lea
  * @author Last changed by: $Author$
  * @version $Revision$ $Date$
+ * @see DefaultChannelCapacity
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>] <p>
  * @since ? (pre 2.1)
- * 
  */
 public interface BoundedChannel extends Channel {
-  /** 
-   * Return the maximum number of elements that can be held.
-   * @return the capacity of this channel.
-   **/
-  int capacity();
+    /**
+     * Return the maximum number of elements that can be held.
+     *
+     * @return the capacity of this channel.
+     **/
+    int capacity();
 }

@@ -14,9 +14,9 @@
 package org.dbunit.util.concurrent;
 
 /**
- * Interface for objects that execute Runnables,
+ * Interface for objects that execute Runnable,
  * as well as various objects that can be wrapped
- * as Runnables.
+ * as Runnable.
  * The main reason to use Executor throughout a program or
  * subsystem is to provide flexibility: You can easily
  * change from using thread-per-task to using pools or
@@ -66,6 +66,6 @@ public interface Executor {
    * suppress, or abort execution if interruption is detected
    * in any controllable context surrounding execution.
    **/
-  public void execute(Runnable command) throws InterruptedException;
+  void execute(Runnable command) throws InterruptedException;
 
 }
