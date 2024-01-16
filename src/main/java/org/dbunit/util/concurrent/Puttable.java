@@ -47,7 +47,7 @@ public interface Puttable {
    * to be inserted. Otherwise, on normal return, the element is guaranteed
    * to have been inserted.
   **/
-  public void put(Object item) throws InterruptedException;
+  void put(Object item) throws InterruptedException;
 
 
   /** 
@@ -66,5 +66,5 @@ public interface Puttable {
    * is detected, in which case the element is guaranteed not
    * to be inserted (i.e., is equivalent to a false return).
   **/
-  public boolean offer(Object item, long msecs) throws InterruptedException;
+  boolean offer(Object item, long msecs) throws InterruptedException;
 }

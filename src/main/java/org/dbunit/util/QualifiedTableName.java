@@ -78,23 +78,20 @@ public class QualifiedTableName {
 	 * (i.e. it is not like "SCHEMA.TABLE"). Can be null
 	 */
 	private void parseFullTableName(String fullTableName, String defaultSchema) {
-		if (fullTableName == null) {
-			throw new NullPointerException("The parameter 'fullTableName' must not be null");
-		}
-        // check if a schema is in front
+		assert fullTableName != null;
 		int firstDotIndex = fullTableName.indexOf(".");
         if (firstDotIndex != -1) {
             // set schema
-        	this.schema = fullTableName.substring(0, firstDotIndex);
+        	schema = fullTableName.substring(0, firstDotIndex);
             // set table name without schema
-        	this.table = fullTableName.substring(firstDotIndex + 1);
+        	table = fullTableName.substring(firstDotIndex + 1);
         } else {
         	// No schema name found in table
-        	this.table = fullTableName;
+        	table = fullTableName;
         	// If the schema has not been found in the given table name 
         	// (that means there is no "SCHEMA.TABLE" but only a "TABLE")
         	// then set the schema to the given default schema
-    		this.schema = defaultSchema;
+    		schema = defaultSchema;
         }
 	}
 
@@ -102,7 +99,6 @@ public class QualifiedTableName {
 	 * @return The qualified table name with the prepended schema if a schema is available
 	 */
 	public String getQualifiedName() {
-		log.debug("getQualifiedName() - start");
 		return getQualifiedName(this.schema, this.table, this.escapePattern);
 	}
 
@@ -116,24 +112,16 @@ public class QualifiedTableName {
 	 * {@link DatabaseConfig#FEATURE_QUALIFIED_TABLE_NAMES} is set in the given <code>config</code>.
 	 */
 	public String getQualifiedNameIfEnabled(DatabaseConfig config) {
-		log.debug("getQualifiedNameIfEnabled(config={}) - start", config);
-
         boolean feature = (boolean) config.getProperty(DatabaseConfig.FEATURE_QUALIFIED_TABLE_NAMES);
         if (feature) {
-        	log.debug("Qualified table names feature is enabled. Returning qualified table name");
-            return getQualifiedName(this.schema, this.table, this.escapePattern);
+            return getQualifiedName(schema, table, escapePattern);
         } else {
-			log.debug("Qualified table names feature is disabled. Returning plain table name");
-//        	return this.table;
-        	return getQualifiedName(null, this.table, this.escapePattern);
+        	return getQualifiedName(null, table, escapePattern);
         }
 	}
 
 	public String toString() {
-		return getClass().getName() + "[" +
-				"schema=" + schema +
-				", table=" + table +
-				"]";
+		return getClass().getName() + "[" + "schema=" + schema + ", table=" + table + "]";
 	}
 
     /**
@@ -154,18 +142,14 @@ public class QualifiedTableName {
      * @return The qualified name
      */
     private String getQualifiedName(String prefix, String name, String escapePattern) {
-        if (log.isDebugEnabled())
-            log.debug("getQualifiedName(prefix={}, name={}, escapePattern={}) - start", prefix, name, escapePattern);
-
+		log.debug("getQualifiedName(prefix={}, name={}, escapePattern={}) - start", prefix, name, escapePattern);
         if (escapePattern != null) {
             prefix = getEscapedName(prefix, escapePattern);
             name = getEscapedName(name, escapePattern);
         }
-
         if (prefix == null || prefix.equals("") || Objects.requireNonNull(name).contains(".")) {
             return name;
         }
-
         return prefix + "." + name;
     }
 	
@@ -173,18 +157,15 @@ public class QualifiedTableName {
 	 */
     private String getEscapedName(String name, String escapePattern) {
         log.debug("getEscapedName(name={}, escapePattern={}) - start", name, escapePattern);
-
         if (name == null) {
             return null;
         }
-
         if (escapePattern == null) {
             throw new NullPointerException("The parameter 'escapePattern' must not be null");
         }
         if(escapePattern.trim().equals("")) {
             throw new DatabaseUnitRuntimeException("Empty string is an invalid escape pattern!");
         }
-    
         int split = name.indexOf(".");
         if (split > 1) {
         	return getEscapedName(name.substring(0, split), escapePattern) + "." + getEscapedName(name.substring(split + 1), escapePattern);
@@ -194,7 +175,6 @@ public class QualifiedTableName {
         if (index >=0 ) {
             String prefix = escapePattern.substring(0, index);
             String suffix = escapePattern.substring(index + 1);
-
             return prefix + name + suffix;
         } else if(escapePattern.length() == 1) {
             // No "?" in the escape pattern and only one character.

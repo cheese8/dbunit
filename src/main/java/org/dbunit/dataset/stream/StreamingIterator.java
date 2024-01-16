@@ -20,6 +20,7 @@
  */
 package org.dbunit.dataset.stream;
 
+import lombok.extern.slf4j.Slf4j;
 import org.dbunit.dataset.AbstractTable;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.ITable;
@@ -33,6 +34,8 @@ import org.dbunit.util.concurrent.Takable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
+
 /**
  * Asynchronous table iterator that uses a new Thread for asynchronous processing.
  * 
@@ -41,19 +44,13 @@ import org.slf4j.LoggerFactory;
  * @version $Revision$ $Date$
  * @since Apr 17, 2003
  */
-public class StreamingIterator implements ITableIterator
-{
-
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(StreamingIterator.class);
-
+@Slf4j
+public class StreamingIterator implements ITableIterator {
     private static final Object EOD = new Object(); // end of dataset marker
 
     private final Takable _channel;
     private StreamingTable _activeTable;
-    private Object _taken = null;
+    private Object _taken;
     private boolean _eod = false;
     /**
      * Variable to store an exception that might occur in the asynchronous consumer
@@ -63,13 +60,11 @@ public class StreamingIterator implements ITableIterator
 	
     /**
      * Iterator that creates a table iterator by reading the input from
-     * the given source in an asynchronous way. Therefore a Thread is
+     * the given source in an asynchronous way. Therefore, a Thread is
      * created.
      * @param source The source of the data
-     * @throws DataSetException
      */
-    public StreamingIterator(IDataSetProducer source) throws DataSetException
-    {
+    public StreamingIterator(IDataSetProducer source) throws DataSetException {
         Channel channel = new BoundedBuffer(30);
         _channel = channel;
 
@@ -79,37 +74,24 @@ public class StreamingIterator implements ITableIterator
         thread.start();
 
         // Take first element from asynchronous handler
-        try
-        {
+        try {
             _taken = _channel.take();
-        }
-        catch (InterruptedException e)
-        {
-        	logger.debug("Thread '" + Thread.currentThread() + "' was interrupted");
+        } catch (InterruptedException e) {
+        	log.debug("Thread '" + Thread.currentThread() + "' was interrupted");
         	throw resolveException(e);
         }
     }
 
-    private DataSetException resolveException(InterruptedException cause) throws DataSetException 
-    {
+    private DataSetException resolveException(InterruptedException cause) {
     	String msg = "Current thread was interrupted (Thread=" + Thread.currentThread() + ")";
-    	if(this._asyncException != null)
-    	{
+    	if(this._asyncException != null) {
             return new DataSetException(msg, this._asyncException);
-    	}
-    	else 
-    	{
+    	} else {
     		return new DataSetException(msg, cause);
     	}
 	}
 
-	////////////////////////////////////////////////////////////////////////////
-    // ITableIterator interface
-
-    public boolean next() throws DataSetException
-    {
-        logger.debug("next() - start");
-
+    public boolean next() throws DataSetException {
         // End of dataset has previously been reach
         if (_eod)
         {
@@ -117,16 +99,13 @@ public class StreamingIterator implements ITableIterator
         }
 
         // Iterate to the end of current table.
-        while (_activeTable != null && _activeTable.next())
-            ;
+        while (_activeTable != null && _activeTable.next()) { /* NO-OP */ }
 
         // End of dataset is reach
         if (_taken == EOD)
         {
             _eod = true;
             _activeTable = null;
-
-            logger.debug("End of iterator.");
             return false;
         }
 
@@ -138,20 +117,16 @@ public class StreamingIterator implements ITableIterator
         }
 
         throw new IllegalStateException(
-                "Unexpected object taken from asyncronous handler: " + _taken);
+                "Unexpected object taken from asynchronous handler: " + _taken);
     }
 
     public ITableMetaData getTableMetaData() throws DataSetException
     {
-        logger.debug("getTableMetaData() - start");
-
         return _activeTable.getTableMetaData();
     }
 
     public ITable getTable() throws DataSetException
     {
-        logger.debug("getTable() - start");
-
         return _activeTable;
     }
 
@@ -172,7 +147,7 @@ public class StreamingIterator implements ITableIterator
          */
         private final Logger logger = LoggerFactory.getLogger(StreamingTable.class);
 
-        private ITableMetaData _metaData;
+        private final ITableMetaData _metaData;
         private int _lastRow = -1;
         private boolean _eot = false;
         private Object[] _rowValues;
@@ -231,7 +206,7 @@ public class StreamingIterator implements ITableIterator
         public Object getValue(int row, String columnName) throws DataSetException
         {
             if(logger.isDebugEnabled())
-                logger.debug("getValue(row={}, columnName={}) - start", Integer.toString(row), columnName);
+                logger.debug("getValue(row={}, columnName={}) - start", row, columnName);
 
             // Iterate up to specified row
             while (!_eot && row > _lastRow)
@@ -254,18 +229,15 @@ public class StreamingIterator implements ITableIterator
 
         public String toString()
         {
-            StringBuilder sb = new StringBuilder();
-            sb.append(getClass().getName()).append("[");
-            sb.append("_metaData=")
-                    .append(this._metaData == null ? "null" : this._metaData
-                            .toString());
-            sb.append(", _eot=").append(this._eot);
-            sb.append(", _lastRow=").append(this._lastRow);
-            sb.append(", _rowValues=").append(
-                    this._rowValues == null ? "null" : this._rowValues
-                            .toString());
-            sb.append("]");
-            return sb.toString();
+            return getClass().getName() + "[" +
+                    "_metaData=" +
+                    (this._metaData == null ? "null" : this._metaData
+                            .toString()) +
+                    ", _eot=" + this._eot +
+                    ", _lastRow=" + this._lastRow +
+                    ", _rowValues=" +
+                    (this._rowValues == null ? "null" : Arrays.toString(this._rowValues)) +
+                    "]";
         }
     }
 
