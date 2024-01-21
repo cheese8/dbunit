@@ -66,7 +66,7 @@ public class DBTestCaseIT extends TestCase
              */
             protected void setUpDatabaseConfig(DatabaseConfig config) {
                 config.setProperty(DatabaseConfig.PROPERTY_BATCH_SIZE, new Integer(97));
-                config.setFeature(DatabaseConfig.FEATURE_BATCHED_STATEMENTS, true);
+                config.setProperty(DatabaseConfig.FEATURE_BATCHED_STATEMENTS, true);
             }
 
             protected IDatabaseTester newDatabaseTester() throws Exception {

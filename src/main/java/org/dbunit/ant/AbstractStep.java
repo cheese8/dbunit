@@ -30,6 +30,7 @@ import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.tools.ant.ProjectComponent;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConfig;
@@ -60,16 +61,14 @@ import org.xml.sax.InputSource;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public abstract class AbstractStep extends ProjectComponent implements DbUnitTaskStep {
-
     private boolean ordered = false;
 
-    protected IDataSet getDatabaseDataSet(IDatabaseConnection connection, List<?> tables) throws DatabaseUnitException {
+    protected IDataSet getDatabaseDataSet(IDatabaseConnection connection, List<Object> tables) throws DatabaseUnitException {
         log.debug("getDatabaseDataSet(connection={}, tables={}) - start", connection, tables);
         try {
             DatabaseConfig config = connection.getConfig();
-            // Retrieve the complete database if no tables or queries specified.
-            if (tables.size() == 0) {
-            	log.debug("Retrieving the whole database because tables or queries have not been specified");
+            if (CollectionUtils.isEmpty(tables)) {
+                log.debug("Retrieving the whole database because tables or queries have not been specified");
                 return connection.createDataSet();
             }
             return getCompositeDataSet(config, createQueryDataSet(tables, connection));
@@ -78,7 +77,7 @@ public abstract class AbstractStep extends ProjectComponent implements DbUnitTas
         }
     }
 
-    private CompositeDataSet getCompositeDataSet(DatabaseConfig config, List<QueryDataSet> queryDataSets) throws SQLException, DataSetException {
+    private CompositeDataSet getCompositeDataSet(DatabaseConfig config, List<QueryDataSet> queryDataSets) throws DataSetException {
         String clazzName = "org.dbunit.database.ForwardOnlyResultSetTableFactory";
         if (clazzName.equals(config.getProperty(DatabaseConfig.PROPERTY_RESULTSET_TABLE_FACTORY).getClass().getName())) {
             IDataSet[] dataSetsArray = createForwardOnlyDataSetArray(queryDataSets);
@@ -95,18 +94,16 @@ public abstract class AbstractStep extends ProjectComponent implements DbUnitTas
         }
         return forwardOnlyDataSets;
     }
-   
-	private List<QueryDataSet> createQueryDataSet(List<?> tables, IDatabaseConnection connection) throws DataSetException, SQLException {
-		log.debug("createQueryDataSet(tables={}, connection={})", tables, connection);
-		List<QueryDataSet> queryDataSets = new ArrayList<>();
+
+    private List<QueryDataSet> createQueryDataSet(List<Object> tables, IDatabaseConnection connection) throws DataSetException {
+        log.debug("createQueryDataSet(tables={}, connection={})", tables, connection);
+        List<QueryDataSet> queryDataSets = new ArrayList<>();
         QueryDataSet queryDataSet = new QueryDataSet(connection);
         for (Object item : tables) {
             if (item instanceof QuerySet) {
-                if (queryDataSet.getTableNames().length > 0) {
-                    queryDataSets.add(queryDataSet);
-                }
-                QueryDataSet newQueryDataSet = (((QuerySet) item).getQueryDataSet(connection));
-                queryDataSets.add(newQueryDataSet);
+                QuerySet querySetItem = (QuerySet) item;
+                addQueryDataSet(queryDataSets, queryDataSet);
+                queryDataSets.add(querySetItem.getQueryDataSet(connection));
                 queryDataSet = new QueryDataSet(connection);
             } else if (item instanceof Query) {
                 Query queryItem = (Query) item;
@@ -115,16 +112,20 @@ public abstract class AbstractStep extends ProjectComponent implements DbUnitTas
                 Table tableItem = (Table) item;
                 queryDataSet.addTable(tableItem.getName());
             } else {
-                throw new IllegalArgumentException("Unsupported element type " + item.getClass().getName() + ".");
+                throw new IllegalArgumentException("Unsupported element type " + item.getClass().getName());
             }
         }
+        addQueryDataSet(queryDataSets, queryDataSet);
+        return queryDataSets;
+    }
+
+    private void addQueryDataSet(List<QueryDataSet> queryDataSets, QueryDataSet queryDataSet) throws DataSetException {
         if (queryDataSet.getTableNames().length > 0) {
             queryDataSets.add(queryDataSet);
         }
-        return queryDataSets;
-	}
+    }
 
-	protected IDataSet getSrcDataSet(File src, String format, boolean forwardOnly) throws DatabaseUnitException {
+    protected IDataSet getSrcDataSet(File src, String format, boolean forwardOnly) throws DatabaseUnitException {
         log.debug("getSrcDataSet(src={}, format={}, forwardOnly={}) - start", src, format, forwardOnly);
         try {
             IDataSetProducer producer;
@@ -150,14 +151,15 @@ public abstract class AbstractStep extends ProjectComponent implements DbUnitTas
         }
     }
 
-	/**
-	 * Creates and returns an {@link InputSource}
-	 * @param file The file for which an {@link InputSource} should be created
-	 * @return The input source for the given file
+    /**
+     * Creates and returns an {@link InputSource}
+     *
+     * @param file The file for which an {@link InputSource} should be created
+     * @return The input source for the given file
      */
-	public static InputSource getInputSource(File file) throws MalformedURLException {
+    public static InputSource getInputSource(File file) throws MalformedURLException {
         return FileHelper.createInputSource(file);
-	}
+    }
 
     public String toString() {
         return "AbstractStep: ordered=" + ordered;

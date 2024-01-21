@@ -44,16 +44,16 @@ import java.util.List;
  *
  * @author Manuel Laflamme
  * @version $Revision$
- * @since Apr 3, 2004
  * @see DbUnitTaskStep
+ * @since Apr 3, 2004
  */
 @Slf4j
+@Getter
 public class Compare extends AbstractStep {
-    @Getter @Setter
+    @Setter
     private String format = FormatSupport.FLAT.getFormat();
-    @Getter @Setter
+    @Setter
     private File src;
-    @Getter
     private final List<Object> tables = new ArrayList<>();
     @Setter
     private boolean sort = false;

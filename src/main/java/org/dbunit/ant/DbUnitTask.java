@@ -34,6 +34,8 @@ import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.datatype.IDataTypeFactory;
+import org.dbunit.util.Assert;
+import org.dbunit.util.ResourceUtil;
 
 import java.sql.Connection;
 import java.sql.Driver;
@@ -51,12 +53,11 @@ import java.util.Properties;
  * @author Timothy Ruppert
  * @author Ben Cox
  * @version $Revision$
- * @since Jun 10, 2002
  * @see org.apache.tools.ant.Task
+ * @since Jun 10, 2002
  */
 @Slf4j
 public class DbUnitTask extends Task {
-
     /**
      * Database connection
      */
@@ -109,6 +110,7 @@ public class DbUnitTask extends Task {
 
     /**
      * Flag for using the qualified table names.
+     *
      * @deprecated since 2.4. Use {@link #dbConfig} instead. Only here because of backwards compatibility should be removed in the next major release.
      */
     @Setter
@@ -116,6 +118,7 @@ public class DbUnitTask extends Task {
 
     /**
      * Flag for using batched statements.
+     *
      * @deprecated since 2.4. Use {@link #dbConfig} instead. Only here because of backwards compatibility should be removed in the next major release.
      */
     @Setter
@@ -123,6 +126,7 @@ public class DbUnitTask extends Task {
 
     /**
      * Flag for datatype warning.
+     *
      * @deprecated since 2.4. Use {@link #dbConfig} instead. Only here because of backwards compatibility should be removed in the next major release.
      */
     @Setter
@@ -145,7 +149,7 @@ public class DbUnitTask extends Task {
      */
     @Getter @Setter
     private String batchSize = null;
-    
+
     /**
      * @deprecated since 2.4. Use {@link #dbConfig} instead. Only here because of backwards compatibility should be removed in the next major release.
      */
@@ -159,15 +163,13 @@ public class DbUnitTask extends Task {
     private Boolean skipOracleRecycleBinTables = null;
 
     public void addDbConfig(DbConfig dbConfig) {
-        log.trace("addDbConfig(dbConfig={}) - start", dbConfig);
         this.dbConfig = dbConfig;
     }
-    
+
     /**
      * Set the classpath for loading the driver.
      */
     public void setClasspath(Path classpath) {
-        log.trace("setClasspath(classpath={}) - start", classpath);
         if (this.classpath == null) {
             this.classpath = classpath;
         } else {
@@ -179,7 +181,6 @@ public class DbUnitTask extends Task {
      * Create the classpath for loading the driver.
      */
     public Path createClasspath() {
-        log.trace("createClasspath() - start");
         if (classpath == null) {
             classpath = new Path(getProject());
         }
@@ -190,7 +191,6 @@ public class DbUnitTask extends Task {
      * Set the classpath for loading the driver using the classpath reference.
      */
     public void setClasspathRef(Reference r) {
-        log.trace("setClasspathRef(r={}) - start", r);
         createClasspath().setRefid(r);
     }
 
@@ -198,7 +198,6 @@ public class DbUnitTask extends Task {
      * Adds an Operation.
      */
     public void addOperation(Operation operation) {
-        log.trace("addOperation({}) - start", operation);
         steps.add(operation);
     }
 
@@ -206,7 +205,6 @@ public class DbUnitTask extends Task {
      * Adds a Compare to the steps List.
      */
     public void addCompare(Compare compare) {
-        log.trace("addCompare({}) - start", compare);
         steps.add(compare);
     }
 
@@ -214,15 +212,13 @@ public class DbUnitTask extends Task {
      * Adds an Export to the steps List.
      */
     public void addExport(Export export) {
-        log.trace("addExport(export={}) - start", export);
         steps.add(export);
     }
 
-	/**
+    /**
      * Load the step and then execute it
      */
     public void execute() throws BuildException {
-        log.trace("execute() - start");
         try {
             IDatabaseConnection connection = createConnection();
             for (Object o : steps) {
@@ -233,35 +229,32 @@ public class DbUnitTask extends Task {
         } catch (DatabaseUnitException | SQLException e) {
             throw new BuildException(e, getLocation());
         } finally {
-            try {
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException e) {
-                log.error("execute()", e);
-            }
+            ResourceUtil.releaseSilently(conn);
         }
     }
 
     protected IDatabaseConnection createConnection() throws SQLException {
-        log.trace("createConnection() - start");
-        if (driver == null) {
-            throw new BuildException("Driver attribute must be set!", getLocation());
-        }
-        if (userid == null) {
-            throw new BuildException("User Id attribute must be set!", getLocation());
-        }
-        if (password == null) {
-            throw new BuildException("Password attribute must be set!", getLocation());
-        }
-        if (url == null) {
-            throw new BuildException("Url attribute must be set!", getLocation());
-        }
-        if (steps.size() == 0) {
-            throw new BuildException("Must declare at least one step in a <dbunit> task!", getLocation());
-        }
+        Assert.assertThat(driver != null, new BuildException("Driver must be set!", getLocation()));
+        Assert.assertThat(userid != null, new BuildException("UserId must be set!", getLocation()));
+        Assert.assertThat(password != null, new BuildException("Password must be set!", getLocation()));
+        Assert.assertThat(url != null, new BuildException("Url must be set!", getLocation()));
+        Assert.assertThat(steps.size() > 0, new BuildException("Must declare at least one step in a <dbunit> task!", getLocation()));
 
-        // Instantiate JDBC driver
+        Driver driverInstance = getDriver();
+        log("connecting to " + url, Project.MSG_VERBOSE);
+
+        Properties info = new Properties();
+        info.put("user", userid);
+        info.put("password", password);
+        conn = driverInstance.connect(url, info);
+        if (conn == null) {
+            throw new SQLException("No suitable Driver for " + url);
+        }
+        conn.setAutoCommit(true);
+        return createDatabaseConnection(conn, schema);
+    }
+
+    private Driver getDriver() {
         Driver driverInstance;
         try {
             Class<?> dc;
@@ -273,7 +266,7 @@ public class DbUnitTask extends Task {
                 log("Loading " + driver + " using system loader.", Project.MSG_VERBOSE);
                 dc = Class.forName(driver);
             }
-            driverInstance = (Driver)dc.newInstance();
+            driverInstance = (Driver) dc.newInstance();
         } catch (ClassNotFoundException e) {
             throw new BuildException("Class Not Found: JDBC driver " + driver + " could not be loaded", e, getLocation());
         } catch (IllegalAccessException e) {
@@ -281,26 +274,13 @@ public class DbUnitTask extends Task {
         } catch (InstantiationException e) {
             throw new BuildException("Instantiation Exception: JDBC driver " + driver + " could not be loaded", e, getLocation());
         }
-
-        log("connecting to " + url, Project.MSG_VERBOSE);
-        Properties info = new Properties();
-        info.put("user", userid);
-        info.put("password", password);
-        conn = driverInstance.connect(url, info);
-
-        if (conn == null) {
-            // Driver doesn't understand the URL
-            throw new SQLException("No suitable Driver for " + url);
-        }
-        conn.setAutoCommit(true);
-
-        return createDatabaseConnection(conn, schema);
+        return driverInstance;
     }
 
     /**
      * Creates the dbunit connection using the two given arguments. The configuration
      * properties of the dbunit connection are initialized using the fields of this class.
-     * 
+     *
      * @return The dbunit connection
      */
     protected IDatabaseConnection createDatabaseConnection(Connection jdbcConnection, String dbSchema) {
@@ -309,15 +289,15 @@ public class DbUnitTask extends Task {
         IDatabaseConnection connection;
         try {
             connection = new DatabaseConnection(jdbcConnection, dbSchema);
-        } catch(DatabaseUnitException e) {
+        } catch (DatabaseUnitException e) {
             throw new BuildException("Could not create dbunit connection object", e);
         }
+
         DatabaseConfig config = connection.getConfig();
-        
-        if(dbConfig != null){
+        if (dbConfig != null) {
             try {
                 this.dbConfig.copyTo(config);
-            } catch(DatabaseUnitException e) {
+            } catch (DatabaseUnitException e) {
                 throw new BuildException("Could not populate dbunit config object", e, getLocation());
             }
         }
@@ -358,7 +338,7 @@ public class DbUnitTask extends Task {
         // Setup data type factory
         if (dataTypeFactory != null) {
             try {
-                IDataTypeFactory dataTypeFactory = (IDataTypeFactory)Class.forName(this.dataTypeFactory).newInstance();
+                IDataTypeFactory dataTypeFactory = (IDataTypeFactory) Class.forName(this.dataTypeFactory).newInstance();
                 config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, dataTypeFactory);
             } catch (ClassNotFoundException e) {
                 throw new BuildException("Class Not Found: DataType factory " + driver + " could not be loaded", e, getLocation());
