@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
 
-<testcases jdbc-config="jdbcConfig/hsqldb-dbunit.properties" base-dir="classpath:/xml/">
-    <testcase id="" type="CLEAN_INSERT" src="flatXmlDataSetTest.xml"/>
+<testcases jdbc-config="jdbcConfig/hsqldb-dbunit.properties" base-dir="dataset/">
+    <testcase id="test_operation_CLEAN_INSERT" type="CLEAN_INSERT" src="flatXmlDataSetTest.xml"/>
 </testcases>
