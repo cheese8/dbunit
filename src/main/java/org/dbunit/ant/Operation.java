@@ -71,6 +71,9 @@ public class Operation extends AbstractStep {
     @Getter @Setter
     private String nullToken;
 
+    @Setter @Getter
+    private FileSet fileset;
+
     public File[] getSrc() {
         return sources.toArray(new File[0]);
     }

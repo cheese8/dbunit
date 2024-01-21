@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+
+<dbunit-testcases jdbc-config="" base-dir="classpath:/xml/">
+    <dbunit-testcase jdbc-config="" base-dir="">
+        <testcase id="" clazz="org.dbunit.ant.Operation" type="CLEAN_INSERT" src="${testDataSet}"/>
+    </dbunit-testcase>
+
+</dbunit-testcases>

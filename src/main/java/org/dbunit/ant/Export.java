@@ -78,25 +78,21 @@ public class Export extends AbstractStep {
     }
 
     public void addTable(Table table) {
-        log.debug("addTable(table={}) - start", table);
         tables.add(table);
     }
 
     public void addQuery(Query query) {
-        log.debug("addQuery(query={}) - start", query);
         tables.add(query);
     }
 
 	public void addQuerySet(QuerySet querySet) {
-        log.debug("addQuerySet(querySet={}) - start", querySet);
         tables.add(querySet);
 	}
 
     public void execute(IDatabaseConnection connection) throws DatabaseUnitException {
-        log.debug("execute(connection={}) - start", connection);
         try {
             if (dest == null) {
-                throw new DatabaseUnitException("'_dest' is a required attribute of the <export> step.");
+                throw new DatabaseUnitException("'dest' is a required attribute of the <export> step");
             }
 
             IDataSet dataset = getExportDataSet(connection);
@@ -119,7 +115,7 @@ public class Export extends AbstractStep {
                     } else if (format.equalsIgnoreCase(FormatSupport.XLS.getFormat())) {
                         XlsDataSet.write(dataset, out);
                     } else {
-                        throw new IllegalArgumentException("The given format '" + format + "' is not supported.");
+                        throw new IllegalArgumentException("The given format '" + format + "' is not supported");
                     }
                 }
             }

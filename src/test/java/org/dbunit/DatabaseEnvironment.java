@@ -60,22 +60,22 @@ public class DatabaseEnvironment
     private IDatabaseTester _databaseTester = null;
 
     /**
-     * Optional "dbunit.properties" is loaded (if present and the
+     * Optional "hsqldb-dbunit.properties" is loaded (if present and the
      * "dbunit.profile" property is null) and merged with System properties and
      * the whole set is returned.
      * <p>
      * If absent (which is the normal scenario), only System properties are
      * returned.
      * <p>
-     * "dbunit.properties" is useful for environment which make it difficult if
+     * "hsqldb-dbunit.properties" is useful for environment which make it difficult if
      * not impossible to use Maven's profiles. Example is IntelliJ IDEA which
      * when calling Junit tests, bypass Maven completely. Since profiles are not
      * used, database configuration is not properly set and tests fail.
-     * "dbunit.properties" contains the missing properties which a profile would
+     * "hsqldb-dbunit.properties" contains the missing properties which a profile would
      * set.
      * <p>
      * Following is a few properties as an example of the content of
-     * "dbunit.properties":
+     * "hsqldb-dbunit.properties":
      * <p>
      *
      * <pre>
@@ -84,12 +84,12 @@ public class DatabaseEnvironment
      * dbunit.profile.url=jdbc:hsqldb:mem:.
      * </pre>
      * <p>
-     * Simply create "dbunit.properties" under "src/test/resources".
+     * Simply create "hsqldb-dbunit.properties" under "src/test/resources".
      *
      * @return Merged DbUnit and System properties.
      * @throws IOException
      *             Thrown if an error occurs when attempting to read
-     *             "dbunit.properties".
+     *             "hsqldb-dbunit.properties".
      */
     protected static Properties getProperties() throws IOException
     {

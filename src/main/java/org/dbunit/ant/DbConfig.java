@@ -30,10 +30,11 @@ import org.apache.tools.ant.ProjectComponent;
 import org.apache.tools.ant.taskdefs.Property;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConfig;
+import org.dbunit.util.Assert;
 
 /**
  * The database configuration for the ant task.
- * 
+ *
  * @author gommma (gommma AT users.sourceforge.net)
  * @author Last changed by: $Author$
  * @version $Revision$ $Date$
@@ -46,41 +47,33 @@ public class DbConfig extends ProjectComponent {
     private final Set<Feature> features = new HashSet<>();
 
     public void addProperty(Property property) {
-        log.trace("addProperty(property={}) - start)", property);
         properties.add(property);
     }
 
     public void addFeature(Feature feature) {
-        log.trace("addFeature(feature={}) - start)", feature);
         features.add(feature);
     }
 
     /**
      * Copies the parameters set in this configuration via ant into the given
      * {@link DatabaseConfig} that is used by the dbunit connection.
+     *
      * @param config The configuration object to be initialized/updated
      */
     public void copyTo(DatabaseConfig config) throws DatabaseUnitException {
         Properties javaProps = new Properties();
-
         for (Feature feature : this.features) {
             String propName = feature.getName();
             String propValue = String.valueOf(feature.isValue());
             log.debug("Setting property {}", feature);
             javaProps.setProperty(propName, propValue);
         }
-        
-        // Copy the properties into java.util.Properties
+
         for (Property prop : this.properties) {
             String propName = prop.getName();
             String propValue = prop.getValue();
-
-            if (propName == null) {
-                throw new NullPointerException("The propName must not be null");
-            }
-            if (propValue == null) {
-                throw new NullPointerException("The propValue must not be null");
-            }
+            Assert.assertThat(propName != null, new NullPointerException("The propName must not be null"));
+            Assert.assertThat(propValue != null, new NullPointerException("The propValue must not be null"));
             log.debug("Setting property {}", prop);
             javaProps.setProperty(propName, propValue);
         }

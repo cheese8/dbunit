@@ -60,8 +60,7 @@ import org.dbunit.util.FileHelper;
  * @since Jun 10, 2002
  * @see org.dbunit.ant.AllTests
  */
-public class DbUnitTaskIT extends BuildFileTest
-{
+public class DbUnitTaskIT extends BuildFileTest {
     static protected Class classUnderTest = DbUnitTaskIT.class;
 
     private static final String BUILD_FILE_DIR = "xml";
@@ -75,13 +74,12 @@ public class DbUnitTaskIT extends BuildFileTest
     }
 
     @Override
-    public void setUp() throws Exception
-    {
-        // This line ensure test database is initialized
+    public void setUp() throws Exception {
+        // ensure test database is initialized
         DatabaseEnvironment.getInstance();
 
         String filePath = BUILD_FILE_DIR + "/antTestBuildFile.xml";
-        assertTrue("Buildfile not found", TestUtils.getFile(filePath).isFile());
+        assertTrue("Build file not found", TestUtils.getFile(filePath).isFile());
         configureProject(TestUtils.getFileName(filePath));
 
         outputDir = new File(getProjectDir(), OUTPUT_DIR);
@@ -89,73 +87,54 @@ public class DbUnitTaskIT extends BuildFileTest
     }
 
     @Override
-    protected void tearDown() throws Exception
-    {
+    protected void tearDown() throws Exception {
         super.tearDown();
 
         outputDir = new File(getProjectDir(), OUTPUT_DIR);
         FileHelper.deleteDirectory(outputDir);
     }
 
-    public void testNoDriver()
-    {
+    public void testNoDriver() {
         expectBuildException("no-driver", "Should have required a driver attribute.");
     }
 
-    public void testNoDbUrl()
-    {
+    public void testNoDbUrl() {
         expectBuildException("no-db-url", "Should have required a url attribute.");
     }
 
-    public void testNoUserid()
-    {
+    public void testNoUserid() {
         expectBuildException("no-userid", "Should have required a userid attribute.");
     }
 
-    public void testNoPassword()
-    {
+    public void testNoPassword() {
         expectBuildException("no-password", "Should have required a password attribute.");
     }
 
-    public void testInvalidDatabaseInformation()
-    {
+    public void testInvalidDatabaseInformation() {
         Throwable sql = null;
-        try
-        {
+        try {
             executeTarget("invalid-db-info");
-        }
-        catch (BuildException e)
-        {
+        } catch (BuildException e) {
             sql = e.getException();
-        }
-        finally
-        {
+        } finally {
             assertNotNull("Should have thrown a SQLException.", sql);
             assertTrue("Should have thrown a SQLException.", (sql instanceof SQLException));
         }
     }
 
-    public void testInvalidOperationType()
-    {
+    public void testInvalidOperationType() {
         Throwable iae = null;
-        try
-        {
+        try {
             executeTarget("invalid-type");
-        }
-        catch (BuildException e)
-        {
+        } catch (BuildException e) {
             iae = e.getException();
-        }
-        finally
-        {
+        } finally {
             assertNotNull("Should have thrown an IllegalArgumentException.", iae);
-            assertTrue("Should have thrown an IllegalArgumentException.",
-                    (iae instanceof IllegalArgumentException));
+            assertTrue("Should have thrown an IllegalArgumentException.", (iae instanceof IllegalArgumentException));
         }
     }
 
-    public void testSetFlatFalse()
-    {
+    public void testSetFlatFalse() {
         String targetName = "set-format-xml";
         Operation operation = (Operation)getFirstStepFromTarget(targetName);
         assertTrue("Operation attribute format should have been 'xml', but was: "
@@ -551,8 +530,7 @@ public class DbUnitTaskIT extends BuildFileTest
         assertEquals("row 1",table.getValue(1,"NORMAL0"));
     }
 
-    protected void assertOperationType(String failMessage, String targetName, DatabaseOperation expected)
-    {
+    protected void assertOperationType(String failMessage, String targetName, DatabaseOperation expected) {
         Operation oper = (Operation)getFirstStepFromTarget(targetName);
         DatabaseOperation dbOper = oper.getDatabaseOperation();
         assertTrue(failMessage + ", but was: " + dbOper, expected.equals(dbOper));
@@ -631,21 +609,16 @@ public class DbUnitTaskIT extends BuildFileTest
         return task;
     }
 
-    public static Test suite()
-    {
+    public static Test suite() {
         TestSuite suite = new TestSuite(classUnderTest);
         return suite;
     }
 
-    public static void main(String args[])
-    {
-        if (args.length > 0 && args[0].equals("-gui"))
-        {
+    public static void main(String args[]) {
+        if (args.length > 0 && args[0].equals("-gui")) {
             System.err.println("JUnit Swing-GUI is no longer supported.");
             System.err.println("Starting textversion.");
         }
-
         junit.textui.TestRunner.run(suite());
     }
-
 }
