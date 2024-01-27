@@ -29,11 +29,8 @@ import junit.framework.TestCase;
  * @version $Revision$
  * @since 2.3.0
  */
-public class DatabaseProfileTest extends TestCase 
-{
-
-	public void testPropertyUnsupportedFeaturesIsMissing() throws Exception
-	{
+public class DatabaseProfileTest extends TestCase {
+	public void testPropertyUnsupportedFeaturesIsMissing() {
 		Properties props = new Properties();
 		DatabaseProfile profile = new DatabaseProfile(props);
 		String[] unsupported = profile.getUnsupportedFeatures();

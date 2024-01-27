@@ -29,13 +29,12 @@ package org.dbunit.dataset;
  * @version $Revision$
  * @since Feb 17, 2002
  */
-public interface ITableMetaData
-{
+public interface ITableMetaData {
     /**
      * Returns this table name.
      * @return this table name
      */
-    public String getTableName();
+	String getTableName();
 
     /**
      * Returns this table columns as recognized by dbunit. In cases where columns are resolved 
@@ -47,14 +46,14 @@ public interface ITableMetaData
      * @return The columns for this table
      * @throws DataSetException
      */
-    public Column[] getColumns() throws DataSetException;
+	Column[] getColumns() throws DataSetException;
 
     /**
      * Returns this table primary key columns.
      * @return this table primary key columns.
      * @throws DataSetException
      */
-    public Column[] getPrimaryKeys() throws DataSetException;
+	Column[] getPrimaryKeys() throws DataSetException;
 
 	/**
 	 * Returns the column's array index of the column with the given name within this table metadata.
@@ -64,5 +63,5 @@ public interface ITableMetaData
 	 * @throws DataSetException if something goes wrong when trying to retrieve the columns
 	 * @since 2.3.0
 	 */
-	public int getColumnIndex(String columnName) throws DataSetException;
+	int getColumnIndex(String columnName) throws DataSetException;
 }

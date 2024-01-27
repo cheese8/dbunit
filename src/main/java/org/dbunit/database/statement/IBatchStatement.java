@@ -28,8 +28,7 @@ import java.sql.SQLException;
  * @version $Revision$
  * @since Mar 15, 2002 
  */
-public interface IBatchStatement
-{
+public interface IBatchStatement {
     void addBatch(String sql) throws SQLException;
 
     int executeBatch() throws SQLException;
@@ -38,7 +37,3 @@ public interface IBatchStatement
 
     void close() throws SQLException;
 }
-
-
-
-

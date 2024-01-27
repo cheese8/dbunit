@@ -23,7 +23,6 @@ package org.dbunit.dataset.stream;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.ITableMetaData;
 
-
 /**
  * Receive notification of the content of a dataset.
  *
@@ -31,19 +30,18 @@ import org.dbunit.dataset.ITableMetaData;
  * @since Apr 17, 2003
  * @version $Revision$
  */
-public interface IDataSetConsumer
-{
+public interface IDataSetConsumer {
     /**
      * Receive notification of the beginning of a dataset. This method is
      * invoked only once, before any other methods in this interface.
      */
-    public void startDataSet() throws DataSetException;
+    void startDataSet() throws DataSetException;
 
     /**
      * Receive notification of the end of a dataset. This method is invoked only
      * once, and it will be the last method invoked in this interface.
      */
-    public void endDataSet() throws DataSetException;
+    void endDataSet() throws DataSetException;
 
     /**
      * Receive notification of the beginning of a table. This method is invoked
@@ -52,17 +50,17 @@ public interface IDataSetConsumer
      * event (even when the table is empty).
      * @param metaData the table metadata
      */
-    public void startTable(ITableMetaData metaData) throws DataSetException;
+    void startTable(ITableMetaData metaData) throws DataSetException;
 
     /**
      * Receive notification of the end of a table.
      */
-    public void endTable() throws DataSetException;
+    void endTable() throws DataSetException;
 
     /**
      * Receive notification of a table row. This method is invoked to report
      * each row of a table.
      * @param values The row values.
      */
-    public void row(Object[] values) throws DataSetException;
+    void row(Object[] values) throws DataSetException;
 }
