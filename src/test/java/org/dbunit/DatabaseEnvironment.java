@@ -44,20 +44,17 @@ import org.slf4j.LoggerFactory;
  * @version $Revision$
  * @since Feb 18, 2002
  */
-public class DatabaseEnvironment
-{
-    private static final String DBUNIT_PROPERTIES_FILENAME =
-            "dbunit.properties";
+public class DatabaseEnvironment {
+    private static final String DBUNIT_PROPERTIES_FILENAME = "dbunit.properties";
 
-    private static final Logger logger =
-            LoggerFactory.getLogger(DatabaseEnvironment.class);
+    private static final Logger logger = LoggerFactory.getLogger(DatabaseEnvironment.class);
 
     private static DatabaseEnvironment INSTANCE = null;
 
-    private DatabaseProfile _profile = null;
+    private final DatabaseProfile _profile;
     private IDatabaseConnection _connection = null;
-    private IDataSet _dataSet = null;
-    private IDatabaseTester _databaseTester = null;
+    private final IDataSet _dataSet;
+    private final IDatabaseTester _databaseTester;
 
     /**
      * Optional "hsqldb-dbunit.properties" is loaded (if present and the
@@ -95,12 +92,10 @@ public class DatabaseEnvironment
     {
         final Properties properties = System.getProperties();
 
-        final String profileName =
-                properties.getProperty(DatabaseProfile.DATABASE_PROFILE);
+        final String profileName = properties.getProperty(DatabaseProfile.DATABASE_PROFILE);
 
         // only load from file if not already set
-        if (profileName == null)
-        {
+        if (profileName == null) {
             loadDbunitPropertiesFromFile(properties);
         }
 
@@ -126,55 +121,50 @@ public class DatabaseEnvironment
     {
         if (INSTANCE == null)
         {
-            final DatabaseProfile profile =
-                    new DatabaseProfile(getProperties());
+            final DatabaseProfile profile = new DatabaseProfile(getProperties());
 
             final String activeProfile = profile.getActiveProfile();
-            final String profileName =
-                    (activeProfile == null) ? "hsqldb" : activeProfile;
+            final String profileName = (activeProfile == null) ? "hsqldb" : activeProfile;
 
             logger.info("getInstance: activeProfile={}", profileName);
 
-            if (profileName.equals("hsqldb"))
-            {
-                INSTANCE = new HypersonicEnvironment(profile);
-            } else if (profileName.equals("oracle"))
-            {
-                INSTANCE = new OracleEnvironment(profile);
-            } else if (profileName.equals("oracle10"))
-            {
-                INSTANCE = new Oracle10Environment(profile);
-            } else if (profileName.equals("postgresql"))
-            {
-                INSTANCE = new PostgresqlEnvironment(profile);
-            } else if (profileName.equals("mysql"))
-            {
-                INSTANCE = new MySqlEnvironment(profile);
-            } else if (profileName.equals("derby"))
-            {
-                INSTANCE = new DerbyEnvironment(profile);
-            } else if (profileName.equals("h2"))
-            {
-                INSTANCE = new H2Environment(profile);
-            } else if (profileName.equals("mssql"))
-            {
-                INSTANCE = new MsSqlEnvironment(profile);
-            } else
-            {
-                logger.warn("getInstance: activeProfile={} not known,"
-                        + " using generic profile", profileName);
-                INSTANCE = new DatabaseEnvironment(profile);
+            switch (profileName) {
+                case "hsqldb":
+                    INSTANCE = new HypersonicEnvironment(profile);
+                    break;
+                case "oracle":
+                    INSTANCE = new OracleEnvironment(profile);
+                    break;
+                case "oracle10":
+                    INSTANCE = new Oracle10Environment(profile);
+                    break;
+                case "postgresql":
+                    INSTANCE = new PostgresqlEnvironment(profile);
+                    break;
+                case "mysql":
+                    INSTANCE = new MySqlEnvironment(profile);
+                    break;
+                case "derby":
+                    INSTANCE = new DerbyEnvironment(profile);
+                    break;
+                case "h2":
+                    INSTANCE = new H2Environment(profile);
+                    break;
+                case "mssql":
+                    INSTANCE = new MsSqlEnvironment(profile);
+                    break;
+                default:
+                    logger.warn("getInstance: activeProfile={} not known, using generic profile", profileName);
+                    INSTANCE = new DatabaseEnvironment(profile);
+                    break;
             }
         }
 
         return INSTANCE;
     }
 
-    public DatabaseEnvironment(final DatabaseProfile profile,
-            final Callable<Void> preDdlFunction) throws Exception
-    {
-        if (null != preDdlFunction)
-        {
+    public DatabaseEnvironment(final DatabaseProfile profile, final Callable<Void> preDdlFunction) throws Exception {
+        if (null != preDdlFunction) {
             preDdlFunction.call();
         }
 
@@ -242,19 +232,15 @@ public class DatabaseEnvironment
         return _dataSet;
     }
 
-    public DatabaseProfile getProfile() throws Exception
-    {
+    public DatabaseProfile getProfile() {
         return _profile;
     }
 
     public boolean support(final TestFeature feature)
     {
         final String[] unsupportedFeatures = _profile.getUnsupportedFeatures();
-        for (int i = 0; i < unsupportedFeatures.length; i++)
-        {
-            final String unsupportedFeature = unsupportedFeatures[i];
-            if (feature.toString().equals(unsupportedFeature))
-            {
+        for (final String unsupportedFeature : unsupportedFeatures) {
+            if (feature.toString().equals(unsupportedFeature)) {
                 return false;
             }
         }
@@ -280,13 +266,11 @@ public class DatabaseEnvironment
     @Override
     public String toString()
     {
-        final StringBuffer sb = new StringBuffer();
-        sb.append(getClass().getName()).append("[");
-        sb.append("_profile=").append(_profile);
-        sb.append(", _connection=").append(_connection);
-        sb.append(", _dataSet=").append(_dataSet);
-        sb.append(", _databaseTester=").append(_databaseTester);
-        sb.append("]");
-        return sb.toString();
+        return getClass().getName() + "[" +
+                "_profile=" + _profile +
+                ", _connection=" + _connection +
+                ", _dataSet=" + _dataSet +
+                ", _databaseTester=" + _databaseTester +
+                "]";
     }
 }

@@ -21,6 +21,8 @@
 
 package org.dbunit;
 
+import lombok.AllArgsConstructor;
+
 import java.util.*;
 
 /**
@@ -28,9 +30,8 @@ import java.util.*;
  * @version $Revision$
  * @since Feb 20, 2002
  */
+@AllArgsConstructor
 public class DatabaseProfile {
-	private static final String[] EMPTY_ARRAY = new String[0];
-	
     public static final String DATABASE_PROFILE = "dbunit.profile";
     private static final String PROFILE_DRIVER_CLASS = "dbunit.profile.driverClass";
     private static final String PROFILE_URL = "dbunit.profile.url";
@@ -41,49 +42,44 @@ public class DatabaseProfile {
     private static final String PROFILE_DDL = "dbunit.profile.ddl";
     private static final String PROFILE_MULTILINE_SUPPORT = "dbunit.profile.multiLineSupport";
 
-    private final Properties _properties;
-
-    public DatabaseProfile(Properties properties) {
-        _properties = properties;
-    }
+    private final Properties properties;
 
     public String getActiveProfile() {
-        return _properties.getProperty(DATABASE_PROFILE);
+        return properties.getProperty(DATABASE_PROFILE);
     }
 
     public String getDriverClass() {
-        return _properties.getProperty(PROFILE_DRIVER_CLASS);
+        return properties.getProperty(PROFILE_DRIVER_CLASS);
     }
 
     public String getConnectionUrl() {
-        return _properties.getProperty(PROFILE_URL);
+        return properties.getProperty(PROFILE_URL);
     }
 
     public String getSchema() {
-        return _properties.getProperty(PROFILE_SCHEMA, null);
+        return properties.getProperty(PROFILE_SCHEMA, null);
     }
 
     public String getUser() {
-        return _properties.getProperty(PROFILE_USER);
+        return properties.getProperty(PROFILE_USER);
     }
 
     public String getPassword() {
-        return _properties.getProperty(PROFILE_PASSWORD);
+        return properties.getProperty(PROFILE_PASSWORD);
     }
 
     public String getProfileDdl() {
-        return _properties.getProperty(PROFILE_DDL);
+        return properties.getProperty(PROFILE_DDL);
     }
 
     public boolean getProfileMultilineSupport() {
-        return Boolean.parseBoolean(_properties.getProperty(PROFILE_MULTILINE_SUPPORT));
+        return Boolean.parseBoolean(properties.getProperty(PROFILE_MULTILINE_SUPPORT));
     }
 
     public String[] getUnsupportedFeatures() {
-        String property = _properties.getProperty(PROFILE_UNSUPPORTED_FEATURES);
-        // If property is not set return an empty array
+        String property = properties.getProperty(PROFILE_UNSUPPORTED_FEATURES);
         if (property == null) {
-        	return EMPTY_ARRAY;
+        	return new String[0];
         }
         List<String> stringList = new ArrayList<>();
         StringTokenizer tokenizer = new StringTokenizer(property, ",");

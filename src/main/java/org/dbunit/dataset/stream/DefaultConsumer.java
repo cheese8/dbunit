@@ -24,37 +24,31 @@ import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.ITableMetaData;
 
 /**
- * This class provides no op implementations for all of the callbacks in the
+ * This class provides no op implementations for all the callbacks in the
  * {@link org.dbunit.dataset.stream.IDataSetConsumer} interface.
  *
  * @author Manuel Laflamme
  * @since Apr 29, 2003
  * @version $Revision$
  */
-public class DefaultConsumer implements IDataSetConsumer
-{
-    public void startDataSet() throws DataSetException
-    {
+public class DefaultConsumer implements IDataSetConsumer {
+    public void startDataSet() throws DataSetException {
         // no op
     }
 
-    public void endDataSet() throws DataSetException
-    {
+    public void endDataSet() throws DataSetException {
         // no op
     }
 
-    public void startTable(ITableMetaData metaData) throws DataSetException
-    {
+    public void startTable(ITableMetaData metaData) throws DataSetException {
         // no op
     }
 
-    public void endTable() throws DataSetException
-    {
+    public void endTable() throws DataSetException {
         // no op
     }
 
-    public void row(Object[] values) throws DataSetException
-    {
+    public void row(Object[] values) throws DataSetException {
         // no op
     }
 }

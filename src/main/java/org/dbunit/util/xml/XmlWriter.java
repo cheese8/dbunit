@@ -64,7 +64,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Makes writing XML much much easier. Improved from <a href=
+ * Makes writing XML much, much easier. Improved from <a href=
  * "http://builder.com.com/article.jhtml?id=u00220020318yan01.htm&page=1&vf=tt">
  * article</a>
  *

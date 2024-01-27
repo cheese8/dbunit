@@ -20,9 +20,8 @@
  */
 package org.dbunit;
 
+import lombok.extern.slf4j.Slf4j;
 import org.dbunit.testutil.TestUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -41,13 +40,10 @@ import java.util.StringTokenizer;
  * @version $Revision$
  * @since DbUnit 2.6.0
  */
-public final class DdlExecutor
-{
-    private static final Logger LOG =
-            LoggerFactory.getLogger(DdlExecutor.class);
 
-    private DdlExecutor()
-    {
+@Slf4j
+public final class DdlExecutor {
+    private DdlExecutor() {
         // no instances
     }
 
@@ -64,10 +60,7 @@ public final class DdlExecutor
      *            or if it needs to separate on ';'.
      * @throws Exception
      */
-    public static void execute(final String ddlFileName,
-            final Connection connection, final boolean multiLineSupport)
-            throws Exception
-    {
+    public static void execute(final String ddlFileName, final Connection connection, final boolean multiLineSupport) throws Exception {
         execute(ddlFileName, connection, multiLineSupport, false);
     }
 
@@ -86,10 +79,7 @@ public final class DdlExecutor
      *            Set this to true if you want syntax errors to be ignored.
      * @throws Exception
      */
-    public static void execute(final String ddlFileName,
-            final Connection connection, final boolean multiLineSupport,
-            final boolean ignoreErrors) throws Exception
-    {
+    public static void execute(final String ddlFileName, final Connection connection, final boolean multiLineSupport, final boolean ignoreErrors) throws Exception {
         final File ddlFile = TestUtils.getFile(ddlFileName);
         executeDdlFile(ddlFile, connection, multiLineSupport, ignoreErrors);
     }
@@ -104,15 +94,9 @@ public final class DdlExecutor
      *            The {@link Connection} to execute the DDL against.
      * @throws Exception
      */
-    public static void executeDdlFile(final File ddlFile,
-            final Connection connection) throws Exception
-    {
-        final boolean multiLineSupport = DatabaseEnvironment.getInstance()
-                .getProfile().getProfileMultilineSupport();
-
-        LOG.debug("Executing DDL from file={}, multiLineSupport={}", ddlFile,
-                multiLineSupport);
-
+    public static void executeDdlFile(final File ddlFile, final Connection connection) throws Exception {
+        final boolean multiLineSupport = DatabaseEnvironment.getInstance().getProfile().getProfileMultilineSupport();
+        log.debug("Executing DDL from file={}, multiLineSupport={}", ddlFile, multiLineSupport);
         executeDdlFile(ddlFile, connection, multiLineSupport);
     }
 
@@ -130,10 +114,7 @@ public final class DdlExecutor
      *            or if it needs to separate on ';'.
      * @throws Exception
      */
-    public static void executeDdlFile(final File ddlFile,
-            final Connection connection, final boolean multiLineSupport)
-            throws Exception
-    {
+    public static void executeDdlFile(final File ddlFile, final Connection connection, final boolean multiLineSupport) throws Exception {
         executeDdlFile(ddlFile, connection, multiLineSupport, false);
     }
 
@@ -151,27 +132,19 @@ public final class DdlExecutor
      *            Set this to true if you want syntax errors to be ignored.
      * @throws Exception
      */
-    public static void executeDdlFile(final File ddlFile,
-            final Connection connection, final boolean multiLineSupport,
-            final boolean ignoreErrors) throws Exception
-    {
+    public static void executeDdlFile(final File ddlFile, final Connection connection, final boolean multiLineSupport, final boolean ignoreErrors) throws Exception {
         final String sql = readSqlFromFile(ddlFile);
-
-        if (!multiLineSupport)
-        {
-            StringTokenizer tokenizer = new StringTokenizer(sql, ";");
-            while (tokenizer.hasMoreTokens())
-            {
-                String token = tokenizer.nextToken();
-                token = token.trim();
-                if (token.length() > 0)
-                {
-                    executeSql(connection, token, ignoreErrors);
-                }
-            }
-        } else
-        {
+        if (multiLineSupport) {
             executeSql(connection, sql, ignoreErrors);
+            return;
+        }
+        StringTokenizer tokenizer = new StringTokenizer(sql, ";");
+        while (tokenizer.hasMoreTokens()) {
+            String token = tokenizer.nextToken();
+            token = token.trim();
+            if (token.length() > 0) {
+                executeSql(connection, token, ignoreErrors);
+            }
         }
     }
 
@@ -185,9 +158,7 @@ public final class DdlExecutor
      *            The SQL {@link String} to execute
      * @throws SQLException
      */
-    public static void executeSql(final Connection connection, final String sql)
-            throws SQLException
-    {
+    public static void executeSql(final Connection connection, final String sql) throws SQLException {
         executeSql(connection, sql, false);
     }
 
@@ -203,46 +174,27 @@ public final class DdlExecutor
      *            Set this to true if you want syntax errors to be ignored.
      * @throws SQLException
      */
-    public static void executeSql(final Connection connection, final String sql,
-            final boolean ignoreErrors) throws SQLException
-    {
-        final Statement statement = connection.createStatement();
-        try
-        {
-            LOG.debug("Executing SQL={}", sql);
+    public static void executeSql(final Connection connection, final String sql, final boolean ignoreErrors) throws SQLException {
+        try (Statement statement = connection.createStatement()) {
             statement.execute(sql);
-        } catch (SQLSyntaxErrorException exception)
-        {
-            if (!ignoreErrors)
-            {
+        } catch (SQLSyntaxErrorException exception) {
+            if (!ignoreErrors) {
                 throw exception;
             }
-            LOG.debug("Ignoring error executing DDL={}",
-                    exception.getMessage());
-        } finally
-        {
-            statement.close();
+            log.debug("Ignoring error executing DDL={}", exception.getMessage());
         }
     }
 
-    private static String readSqlFromFile(final File ddlFile) throws IOException
-    {
-        final BufferedReader sqlReader =
-                new BufferedReader(new FileReader(ddlFile));
+    private static String readSqlFromFile(final File ddlFile) throws IOException {
+        final BufferedReader sqlReader = new BufferedReader(new FileReader(ddlFile));
         final StringBuilder sqlBuffer = new StringBuilder();
-        while (sqlReader.ready())
-        {
+        while (sqlReader.ready()) {
             String line = sqlReader.readLine();
-            if (!line.startsWith("-"))
-            {
+            if (!line.startsWith("-")) {
                 sqlBuffer.append(line);
             }
         }
-
         sqlReader.close();
-
-        final String sql = sqlBuffer.toString();
-        return sql;
+        return sqlBuffer.toString();
     }
-
 }

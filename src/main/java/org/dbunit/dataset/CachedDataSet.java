@@ -60,7 +60,7 @@ public class CachedDataSet extends AbstractDataSet implements IDataSetConsumer
         while (iterator.next())
          {
             final ITable table = iterator.getTable();
-            _orderedTableNameMap.add(table.getTableMetaData().getTableName(),
+            orderedTableNameMap.add(table.getTableMetaData().getTableName(),
                     new CachedTable(table));
         }
     }
@@ -97,7 +97,7 @@ public class CachedDataSet extends AbstractDataSet implements IDataSetConsumer
         if(logger.isDebugEnabled())
             logger.debug("createIterator(reversed={}) - start", String.valueOf(reversed));
 
-        ITable[] tables = (ITable[])_orderedTableNameMap.orderedValues().toArray(new ITable[0]);
+        ITable[] tables = (ITable[])orderedTableNameMap.orderedValues().toArray(new ITable[0]);
         return new DefaultTableIterator(tables, reversed);
     }
 
@@ -107,13 +107,13 @@ public class CachedDataSet extends AbstractDataSet implements IDataSetConsumer
     public void startDataSet() throws DataSetException
     {
         logger.debug("startDataSet() - start");
-        _orderedTableNameMap = super.createTableNameMap();
+        orderedTableNameMap = super.createTableNameMap();
     }
 
     public void endDataSet() throws DataSetException
     {
         logger.debug("endDataSet() - start");
-        logger.debug("endDataSet() - the final tableMap is: " + _orderedTableNameMap);
+        logger.debug("endDataSet() - the final tableMap is: " + orderedTableNameMap);
     }
 
     public void startTable(ITableMetaData metaData) throws DataSetException
@@ -127,15 +127,15 @@ public class CachedDataSet extends AbstractDataSet implements IDataSetConsumer
         logger.debug("endTable() - start");
         String tableName = _activeTable.getTableMetaData().getTableName();
         // Check whether the table appeared once before
-        if(_orderedTableNameMap.containsTable(tableName))
+        if(orderedTableNameMap.containsTable(tableName))
         {
-            DefaultTable existingTable = (DefaultTable)_orderedTableNameMap.get(tableName);
+            DefaultTable existingTable = (DefaultTable)orderedTableNameMap.get(tableName);
             // Add all newly collected rows to the existing table
             existingTable.addTableRows(_activeTable);
         }
         else
         {
-            _orderedTableNameMap.add(tableName, _activeTable);
+            orderedTableNameMap.add(tableName, _activeTable);
         }
         _activeTable = null;
     }

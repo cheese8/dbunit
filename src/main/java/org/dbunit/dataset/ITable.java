@@ -29,19 +29,18 @@ package org.dbunit.dataset;
  * @version $Revision$
  * @since Feb 17, 2002
  */
-public interface ITable
-{
-    public static final Object NO_VALUE = new Object();
+public interface ITable {
+    Object NO_VALUE = new Object();
 
     /**
      * Returns this table metadata.
      */
-    public ITableMetaData getTableMetaData();
+    ITableMetaData getTableMetaData();
 
     /**
      * Returns this table row count.
      */
-    public int getRowCount();
+    int getRowCount();
 
     /**
      * Returns this table value for the specified row and column.
@@ -54,11 +53,5 @@ public interface ITable
      * @throws RowOutOfBoundsException if specified row is less than zero or
      * equals or greater than <code>getRowCount</code>
      */
-    public Object getValue(int row, String column) throws DataSetException;
+    Object getValue(int row, String column) throws DataSetException;
 }
-
-
-
-
-
-
