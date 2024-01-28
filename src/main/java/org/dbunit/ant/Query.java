@@ -37,6 +37,7 @@ import lombok.NoArgsConstructor;
 public class Query {
     private String name;
     private String sql;
+
     public String toString() {
         return "Query: name=" + name + " sql=" + sql;
     }

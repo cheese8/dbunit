@@ -106,10 +106,14 @@ public class SQLHelper {
     /**
      * Closes the given result set in a null-safe way
      */
-    public static void close(ResultSet resultSet) throws SQLException {
+    public static void close(ResultSet resultSet) {
         logger.debug("close(resultSet={}) - start", resultSet);
         if (resultSet != null) {
-            resultSet.close();
+            try {
+                resultSet.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 

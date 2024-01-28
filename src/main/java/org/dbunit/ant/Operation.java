@@ -51,27 +51,32 @@ import java.util.List;
  * @author Timothy Ruppert
  * @author Ben Cox
  * @version $Revision$
- * @since Jun 10, 2002
  * @see org.dbunit.ant.DbUnitTaskStep
+ * @since Jun 10, 2002
  */
 @Slf4j
 public class Operation extends AbstractStep {
     @Getter
     protected String type = "CLEAN_INSERT";
-    @Getter @Setter
+    @Getter
+    @Setter
     private String format = FormatSupport.FLAT.getFormat();
     private final List<File> sources = new ArrayList<>();
-    @Getter @Setter
+    @Getter
+    @Setter
     private boolean combine = false;
-    @Getter @Setter
+    @Getter
+    @Setter
     private boolean transaction = false;
     @Getter
     private DatabaseOperation databaseOperation;
     private boolean forwardOperation = true;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String nullToken;
 
-    @Setter @Getter
+    @Setter
+    @Getter
     private FileSet fileset;
 
     public File[] getSrc() {
@@ -153,7 +158,7 @@ public class Operation extends AbstractStep {
         try {
             DatabaseOperation operation = (transaction ? new TransactionOperation(this.databaseOperation) : this.databaseOperation);
             // TODO This is not very nice and the design should be reviewed but it works for now (gommma)
-            boolean useForwardOnly = forwardOperation && ! isOrdered();
+            boolean useForwardOnly = forwardOperation && !isOrdered();
             IDataSet dataset;
             if (sources.size() > 1) {
                 IDataSet[] datasets = new IDataSet[sources.size()];
@@ -166,7 +171,7 @@ public class Operation extends AbstractStep {
             }
             if (nullToken != null) {
                 dataset = new ReplacementDataSet(dataset);
-                ((ReplacementDataSet)dataset).addReplacementObject(nullToken, null);
+                ((ReplacementDataSet) dataset).addReplacementObject(nullToken, null);
             }
             if (isOrdered()) {
                 DatabaseSequenceFilter databaseSequenceFilter = new DatabaseSequenceFilter(connection);

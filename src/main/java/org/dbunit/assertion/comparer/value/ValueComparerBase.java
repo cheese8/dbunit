@@ -22,7 +22,7 @@ public abstract class ValueComparerBase implements ValueComparator {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * This implementation calls
      * {@link #doCompare(ITable, ITable, int, String, DataType, Object, Object)}.
      */
@@ -37,13 +37,12 @@ public abstract class ValueComparerBase implements ValueComparator {
      * Do the comparison and return a fail message or null if comparison passes.
      *
      * @see ValueComparator#compare(ITable, ITable, int, String, DataType, Object,
-     *      Object)
+     * Object)
      */
     protected abstract String doCompare(final ITable expectedTable, final ITable actualTable, final int rowNum, final String columnName, final DataType dataType, final Object expectedValue, final Object actualValue) throws DatabaseUnitException;
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return getClass().getName();
     }
 }

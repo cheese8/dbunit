@@ -18,8 +18,7 @@ public class IsActualGreaterThanOrEqualToExpectedValueComparer extends ValueComp
     }
 
     @Override
-    protected String getFailPhrase()
-    {
+    protected String getFailPhrase() {
         return "not greater than or equal to";
     }
 }

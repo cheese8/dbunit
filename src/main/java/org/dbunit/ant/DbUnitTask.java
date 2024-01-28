@@ -147,13 +147,15 @@ public class DbUnitTask extends Task {
     /**
      * @deprecated since 2.4. Use {@link #dbConfig} instead. Only here because of backwards compatibility should be removed in the next major release.
      */
-    @Getter @Setter
+    @Getter
+    @Setter
     private String batchSize = null;
 
     /**
      * @deprecated since 2.4. Use {@link #dbConfig} instead. Only here because of backwards compatibility should be removed in the next major release.
      */
-    @Getter @Setter
+    @Getter
+    @Setter
     private String fetchSize = null;
 
     /**

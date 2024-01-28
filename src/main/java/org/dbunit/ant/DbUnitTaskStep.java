@@ -27,12 +27,13 @@ import org.dbunit.database.IDatabaseConnection;
  * The <code>DbUnitTaskStep</code> interface allows the execute method
  * to be called on all elements nested under <code>DbUnitTask</code>.
  *
- * @author Timothy Ruppert 
+ * @author Timothy Ruppert
  * @author Ben Cox
  * @version $Revision$
  * @since Jun 10, 2002
  */
 public interface DbUnitTaskStep {
     void execute(IDatabaseConnection connection) throws DatabaseUnitException;
+
     String getLogMessage();
 }

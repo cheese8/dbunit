@@ -28,7 +28,7 @@ import lombok.NoArgsConstructor;
  * The <code>Table</code> class is just a step placeholder for a table name
  * within an <code>Export</code>.
  *
- * @author Timothy Ruppert 
+ * @author Timothy Ruppert
  * @author Ben Cox
  * @version $Revision$
  * @since Jun 10, 2002
@@ -37,6 +37,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Table {
     private String name;
+
     public String toString() {
         return "Table: name=" + name;
     }

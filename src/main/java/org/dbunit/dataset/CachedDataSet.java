@@ -21,10 +21,9 @@
 
 package org.dbunit.dataset;
 
+import lombok.extern.slf4j.Slf4j;
 import org.dbunit.dataset.stream.IDataSetConsumer;
 import org.dbunit.dataset.stream.IDataSetProducer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Hold copy of another dataset or a consumed provider content.
@@ -34,11 +33,9 @@ import org.slf4j.LoggerFactory;
  * @version $Revision$ $Date$
  * @since 1.x (Apr 18, 2003)
  */
-public class CachedDataSet extends AbstractDataSet implements IDataSetConsumer
-{
-    private static final Logger logger = LoggerFactory.getLogger(CachedDataSet.class);
-
-    private DefaultTable _activeTable;
+@Slf4j
+public class CachedDataSet extends AbstractDataSet implements IDataSetConsumer {
+    private DefaultTable activeTable;
 
     /**
      * Default constructor.
@@ -51,36 +48,29 @@ public class CachedDataSet extends AbstractDataSet implements IDataSetConsumer
     /**
      * Creates a copy of the specified dataset.
      */
-    public CachedDataSet(IDataSet dataSet) throws DataSetException
-    {
+    public CachedDataSet(IDataSet dataSet) throws DataSetException {
         super(dataSet.isCaseSensitiveTableNames());
         initialize();
 
         final ITableIterator iterator = dataSet.iterator();
-        while (iterator.next())
-         {
+        while (iterator.next()) {
             final ITable table = iterator.getTable();
-            orderedTableNameMap.add(table.getTableMetaData().getTableName(),
-                    new CachedTable(table));
+            orderedTableNameMap.add(table.getTableMetaData().getTableName(), new CachedTable(table));
         }
     }
 
     /**
      * Creates a CachedDataSet that synchronously consume the specified producer.
      */
-    public CachedDataSet(IDataSetProducer producer) throws DataSetException
-    {
+    public CachedDataSet(IDataSetProducer producer) throws DataSetException {
         this(producer, false);
     }
 
     /**
      * Creates a CachedDataSet that synchronously consume the specified producer.
-     * @param producer
-     * @param caseSensitiveTableNames Whether or not case sensitive table names should be used
-     * @throws DataSetException
+     * @param caseSensitiveTableNames Whether case-sensitive table names should be used
      */
-    public CachedDataSet(IDataSetProducer producer, boolean caseSensitiveTableNames) throws DataSetException
-    {
+    public CachedDataSet(IDataSetProducer producer, boolean caseSensitiveTableNames) throws DataSetException {
         super(caseSensitiveTableNames);
         initialize();
 
@@ -88,61 +78,43 @@ public class CachedDataSet extends AbstractDataSet implements IDataSetConsumer
         producer.produce();
     }
 
-    ////////////////////////////////////////////////////////////////////////////
-    // AbstractDataSet class
-
-    protected ITableIterator createIterator(boolean reversed)
-            throws DataSetException
-    {
-        if(logger.isDebugEnabled())
-            logger.debug("createIterator(reversed={}) - start", String.valueOf(reversed));
-
-        ITable[] tables = (ITable[])orderedTableNameMap.orderedValues().toArray(new ITable[0]);
+    protected ITableIterator createIterator(boolean reversed) throws DataSetException {
+        log.debug("createIterator(reversed={}) - start", reversed);
+        ITable[] tables = orderedTableNameMap.orderedValues().toArray(new ITable[0]);
         return new DefaultTableIterator(tables, reversed);
     }
 
-    ////////////////////////////////////////////////////////////////////////
-    // IDataSetConsumer interface
-
-    public void startDataSet() throws DataSetException
-    {
-        logger.debug("startDataSet() - start");
+    public void startDataSet() throws DataSetException {
+        log.debug("startDataSet() - start");
         orderedTableNameMap = super.createTableNameMap();
     }
 
-    public void endDataSet() throws DataSetException
-    {
-        logger.debug("endDataSet() - start");
-        logger.debug("endDataSet() - the final tableMap is: " + orderedTableNameMap);
+    public void endDataSet() throws DataSetException {
+        log.debug("endDataSet() - start");
+        log.debug("endDataSet() - the final tableMap is: " + orderedTableNameMap);
     }
 
-    public void startTable(ITableMetaData metaData) throws DataSetException
-    {
-        logger.debug("startTable(metaData={}) - start", metaData);
-        _activeTable = new DefaultTable(metaData);
+    public void startTable(ITableMetaData metaData) throws DataSetException {
+        log.debug("startTable(metaData={}) - start", metaData);
+        activeTable = new DefaultTable(metaData);
     }
 
-    public void endTable() throws DataSetException
-    {
-        logger.debug("endTable() - start");
-        String tableName = _activeTable.getTableMetaData().getTableName();
+    public void endTable() throws DataSetException {
+        log.debug("endTable() - start");
+        String tableName = activeTable.getTableMetaData().getTableName();
         // Check whether the table appeared once before
-        if(orderedTableNameMap.containsTable(tableName))
-        {
+        if(orderedTableNameMap.containsTable(tableName)) {
             DefaultTable existingTable = (DefaultTable)orderedTableNameMap.get(tableName);
             // Add all newly collected rows to the existing table
-            existingTable.addTableRows(_activeTable);
+            existingTable.addTableRows(activeTable);
+        } else {
+            orderedTableNameMap.add(tableName, activeTable);
         }
-        else
-        {
-            orderedTableNameMap.add(tableName, _activeTable);
-        }
-        _activeTable = null;
+        activeTable = null;
     }
 
-    public void row(Object[] values) throws DataSetException
-    {
-        logger.debug("row(values={}) - start", values);
-        _activeTable.addRow(values);
+    public void row(Object[] values) throws DataSetException {
+        log.debug("row(values={}) - start", values);
+        activeTable.addRow(values);
     }
 }

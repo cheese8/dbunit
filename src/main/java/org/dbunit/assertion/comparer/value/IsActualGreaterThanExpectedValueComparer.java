@@ -18,8 +18,7 @@ public class IsActualGreaterThanExpectedValueComparer extends ValueComparerTempl
     }
 
     @Override
-    protected String getFailPhrase()
-    {
+    protected String getFailPhrase() {
         return "not greater than";
     }
 }

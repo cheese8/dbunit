@@ -39,14 +39,18 @@ public class IsActualWithinToleranceOfExpectedTimestampValueComparer extends Val
         return isExpectedWithoutNull(expectedValue, actualValue, dataType);
     }
 
-    /** Since one is a known null, isExpected=true when they equal. */
+    /**
+     * Since one is a known null, isExpected=true when they equal.
+     */
     protected boolean isExpectedWithNull(final Object expectedValue, final Object actualValue) {
         final boolean isExpected = expectedValue == actualValue;
         log.debug("isExpectedWithNull: {}, actualValue={}, expectedValue={}", isExpected, actualValue, expectedValue);
         return isExpected;
     }
 
-    /** Neither is null so compare values with tolerance. */
+    /**
+     * Neither is null so compare values with tolerance.
+     */
     protected boolean isExpectedWithoutNull(final Object expectedValue, final Object actualValue, final DataType dataType) throws TypeCastException {
         assertNotNull("expectedValue is null.", expectedValue);
         assertNotNull("actualValue is null.", actualValue);

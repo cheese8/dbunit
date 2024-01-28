@@ -21,8 +21,7 @@
 
 package org.dbunit.database.statement;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.datatype.DataType;
@@ -36,81 +35,52 @@ import java.sql.SQLException;
  * @version $Revision$
  * @since Mar 16, 2002
  */
-public class SimplePreparedStatement extends AbstractPreparedBatchStatement
-{
+@Slf4j
+public class SimplePreparedStatement extends AbstractPreparedBatchStatement {
+    private int index;
+    private int result;
 
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(SimplePreparedStatement.class);
-
-    private int _index;
-    private int _result;
-
-    public SimplePreparedStatement(String sql, Connection connection)
-            throws SQLException
-    {
+    public SimplePreparedStatement(String sql, Connection connection) throws SQLException {
         super(sql, connection);
-        _index = 0;
-        _result = 0;
+        index = 0;
+        result = 0;
     }
 
-    ////////////////////////////////////////////////////////////////////////////
-    // IPreparedBatchStatement interface
-
-    public void addValue(Object value, DataType dataType)
-            throws TypeCastException, SQLException
-    {
-    	logger.debug("addValue(value={}, dataType={}) - start", value, dataType);
+    public void addValue(Object value, DataType dataType) throws TypeCastException, SQLException {
+        log.debug("addValue(value={}, dataType={}) - start", value, dataType);
 
         // Special NULL handling
-        if (value == null || value == ITable.NO_VALUE)
-        {
-            String sqlTypeName = dataType .getSqlTypeName();
+        if (value == null || value == ITable.NO_VALUE) {
+            String sqlTypeName = dataType.getSqlTypeName();
             if (sqlTypeName == null) {
-                _statement.setNull(++_index, dataType.getSqlType());
+                statement.setNull(++index, dataType.getSqlType());
             } else {
-                _statement.setNull(++_index, dataType.getSqlType(), sqlTypeName);
+                statement.setNull(++index, dataType.getSqlType(), sqlTypeName);
             }
             return;
         }
-
-        dataType.setSqlValue(value, ++_index, _statement);
+        dataType.setSqlValue(value, ++index, statement);
     }
 
-    public void addBatch() throws SQLException
-    {
-        logger.debug("addBatch() - start");
-
-        boolean result = _statement.execute();
-        if (!result)
-        {
-            _result += _statement.getUpdateCount();
+    public void addBatch() throws SQLException {
+        log.debug("addBatch() - start");
+        boolean result = statement.execute();
+        if (!result) {
+            this.result += statement.getUpdateCount();
         }
-        _index = 0;
+        index = 0;
     }
 
-    public int executeBatch() throws SQLException
-    {
-        logger.debug("executeBatch() - start");
-
-        int result = _result;
+    public int executeBatch() throws SQLException {
+        log.debug("executeBatch() - start");
+        int result = this.result;
         clearBatch();
         return result;
     }
 
-    public void clearBatch() throws SQLException
-    {
-        logger.debug("clearBatch() - start");
-
-        _index = 0;
-        _result = 0;
+    public void clearBatch() throws SQLException {
+        log.debug("clearBatch() - start");
+        index = 0;
+        result = 0;
     }
-
 }
-
-
-
-
-
-

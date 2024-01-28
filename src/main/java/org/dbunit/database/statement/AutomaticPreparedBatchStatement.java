@@ -20,8 +20,7 @@
  */
 package org.dbunit.database.statement;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import org.dbunit.dataset.datatype.DataType;
 import org.dbunit.dataset.datatype.TypeCastException;
@@ -30,72 +29,49 @@ import java.sql.SQLException;
 
 /**
  * @author Manuel Laflamme
- * @since Jun 12, 2003
  * @version $Revision$
+ * @since Jun 12, 2003
  */
-public class AutomaticPreparedBatchStatement implements IPreparedBatchStatement
-{
+@Slf4j
+public class AutomaticPreparedBatchStatement implements IPreparedBatchStatement {
+    private final IPreparedBatchStatement statement;
+    private int batchCount = 0;
+    private final int threshold;
+    private int result = 0;
 
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(AutomaticPreparedBatchStatement.class);
-
-    private final IPreparedBatchStatement _statement;
-    private int _batchCount = 0;
-    private int _threshold;
-    private int _result = 0;
-
-    public AutomaticPreparedBatchStatement(IPreparedBatchStatement statement, int threshold)
-    {
-        _statement = statement;
-        _threshold = threshold;
+    public AutomaticPreparedBatchStatement(IPreparedBatchStatement statement, int threshold) {
+        this.statement = statement;
+        this.threshold = threshold;
     }
 
-    ////////////////////////////////////////////////////////////////////////////
-    // IPreparedBatchStatement interface
-
-    public void addValue(Object value, DataType dataType) throws TypeCastException,
-            SQLException
-    {
-        logger.debug("addValue(value={}, dataType={}) - start", value, dataType);
-
-        _statement.addValue(value, dataType);
+    public void addValue(Object value, DataType dataType) throws TypeCastException, SQLException {
+        log.debug("addValue(value={}, dataType={}) - start", value, dataType);
+        statement.addValue(value, dataType);
     }
 
-    public void addBatch() throws SQLException
-    {
-        logger.debug("addBatch() - start");
-
-        _statement.addBatch();
-        _batchCount++;
-
-        if (_batchCount % _threshold == 0)
-        {
-            _result += _statement.executeBatch();
+    public void addBatch() throws SQLException {
+        log.debug("addBatch() - start");
+        statement.addBatch();
+        batchCount++;
+        if (batchCount % threshold == 0) {
+            result += statement.executeBatch();
         }
     }
 
-    public int executeBatch() throws SQLException
-    {
-        logger.debug("executeBatch() - start");
-
-        _result += _statement.executeBatch();
-        return _result;
+    public int executeBatch() throws SQLException {
+        log.debug("executeBatch() - start");
+        result += statement.executeBatch();
+        return result;
     }
 
-    public void clearBatch() throws SQLException
-    {
-        logger.debug("clearBatch() - start");
-
-        _statement.clearBatch();
-        _batchCount = 0;
+    public void clearBatch() throws SQLException {
+        log.debug("clearBatch() - start");
+        statement.clearBatch();
+        batchCount = 0;
     }
 
-    public void close() throws SQLException
-    {
-        logger.debug("close() - start");
-
-        _statement.close();
+    public void close() throws SQLException {
+        log.debug("close() - start");
+        statement.close();
     }
 }

@@ -23,7 +23,7 @@ package org.dbunit.assertion;
 /**
  * Factory to create exceptions for the testing framework to be used,
  * for example JUnit, TestNG or dbunit exceptions.
- * 
+ *
  * @author gommma (gommma AT users.sourceforge.net)
  * @author Last changed by: $Author$
  * @version $Revision$ $Date$
@@ -33,9 +33,10 @@ public interface FailureFactory {
     /**
      * Creates a new failure object which can have different types, depending on
      * the testing framework you are currently using (e.g. JUnit, TestNG, ...)
-     * @param message The reason for the failure
+     *
+     * @param message  The reason for the failure
      * @param expected The expected result
-     * @param actual The actual result
+     * @param actual   The actual result
      * @return The comparison failure object for this handler (can be JUnit or some other)
      * which can be thrown on an assertion failure
      */

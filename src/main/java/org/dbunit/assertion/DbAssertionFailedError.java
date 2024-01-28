@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 /**
  * Exception signaling a DbUnit assertion failure. Is used to avoid the direct
  * dependency to any other testing framework.
- * 
+ *
  * @author Felipe Leme
  * @author Last changed by: $Author$
  * @version $Revision$ $Date$

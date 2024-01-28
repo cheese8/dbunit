@@ -49,14 +49,14 @@ public class BatchStatement extends AbstractBatchStatement
     {
         logger.debug("addBatch(sql={}) - start", sql);
 
-        _statement.addBatch(sql);
+        statement.addBatch(sql);
     }
 
     public int executeBatch() throws SQLException
     {
         logger.debug("executeBatch() - start");
 
-        int[] results = _statement.executeBatch();
+        int[] results = statement.executeBatch();
         int result = 0;
         for (int i = 0; i < results.length; i++)
         {
@@ -69,7 +69,7 @@ public class BatchStatement extends AbstractBatchStatement
     {
         logger.debug("clearBatch() - start");
 
-        _statement.clearBatch();
+        statement.clearBatch();
     }
 
 }

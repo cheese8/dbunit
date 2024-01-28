@@ -18,6 +18,7 @@ import org.dbunit.dataset.datatype.DataType;
 public class ConditionalSelectorMultiValueComparer extends ValueComparerBase {
     private final ValueComparerSelector valueComparerSelector;
     private final Map<Object, ValueComparator> valueComparers;
+
     public ConditionalSelectorMultiValueComparer(final Map<Object, ValueComparator> valueComparers, final ValueComparerSelector valueComparerSelector) {
         assertNotNull("valueComparerSelector is null.", valueComparerSelector);
         assertNotNull("valueComparers is null.", valueComparers);

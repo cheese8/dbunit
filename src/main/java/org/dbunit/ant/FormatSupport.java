@@ -15,6 +15,7 @@ public enum FormatSupport {
             map.put(format.getFormat(), format);
         }
     }
+
     public static FormatSupport of(String format) {
         return map.get(format);
     }

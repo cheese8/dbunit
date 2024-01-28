@@ -25,7 +25,7 @@ import junit.framework.ComparisonFailure;
 
 /**
  * Adapter that lets dbunit create JUnit failure objects.
- * 
+ *
  * @author gommma (gommma AT users.sourceforge.net)
  * @author Last changed by: $Author$
  * @version $Revision$ $Date$

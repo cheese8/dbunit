@@ -14,12 +14,12 @@ import org.dbunit.dataset.datatype.DataType;
 public abstract class ValueComparerTemplateBase extends ValueComparerBase {
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * This implementation calls
      * {@link #isExpected(ITable, ITable, int, String, DataType, Object, Object)}.
      *
      * @see ValueComparator#compare(ITable, ITable, int, String, DataType, Object,
-     *      Object)
+     * Object)
      */
     @Override
     protected String doCompare(final ITable expectedTable, final ITable actualTable, final int rowNum, final String columnName, final DataType dataType, final Object expectedValue, final Object actualValue) throws DatabaseUnitException {
@@ -40,9 +40,13 @@ public abstract class ValueComparerTemplateBase extends ValueComparerBase {
         return String.format(BASE_FAIL_MSG, actualValue, failPhrase, expectedValue);
     }
 
-    /** @return true if comparing actual to expected is as expected. */
+    /**
+     * @return true if comparing actual to expected is as expected.
+     */
     protected abstract boolean isExpected(final ITable expectedTable, final ITable actualTable, final int rowNum, final String columnName, final DataType dataType, final Object expectedValue, final Object actualValue) throws DatabaseUnitException;
 
-    /** @return The text snippet for substitution in {@link #BASE_FAIL_MSG}. */
+    /**
+     * @return The text snippet for substitution in {@link #BASE_FAIL_MSG}.
+     */
     protected abstract String getFailPhrase();
 }

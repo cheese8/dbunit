@@ -25,22 +25,19 @@ import java.util.Set;
 
 /**
  * Interface representing an algorithm that searches a graph.
- * 
+ *
  * @author Felipe Leme (dbunit@felipeal.net)
  * @version $Revision$
  * @since Aug 25, 2005
- * 
  */
 public interface ISearchAlgorithm {
 
-  /**
-   * Search all nodes that originates from a set of nodes.
-   * 
-   * @param nodesFrom input nodes
-   * @param callback helper callback
-   * @return all nodes, in the right dependent order (like a LinkedHashSet)
-   * @throws Exception exception wrapper
-   */
-    Set search(Set nodesFrom, ISearchCallback callback) throws SearchException;
-
+    /**
+     * Search all nodes that originates from a set of nodes.
+     *
+     * @param nodesFrom input nodes
+     * @param callback  helper callback
+     * @return all nodes, in the right dependent order (like a LinkedHashSet)
+     */
+    Set<Object> search(Set<Object> nodesFrom, ISearchCallback callback) throws SearchException;
 }

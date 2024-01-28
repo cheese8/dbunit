@@ -21,8 +21,7 @@
 
 package org.dbunit.database.statement;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.IDatabaseConnection;
@@ -34,28 +33,17 @@ import java.sql.SQLException;
  * @version $Revision$
  * @since Apr 10, 2002
  */
-public abstract class AbstractStatementFactory implements IStatementFactory
-{
-
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(AbstractStatementFactory.class);
-
+@Slf4j
+public abstract class AbstractStatementFactory implements IStatementFactory {
     /**
      * Returns <code>true</code> if target database supports batch statement.
      */
-    protected boolean supportBatchStatement(IDatabaseConnection connection)
-            throws SQLException
-    {
-        logger.debug("supportBatchStatement(connection={}) - start", connection);
-
-        if (connection.getConfig().getFeature(DatabaseConfig.FEATURE_BATCHED_STATEMENTS))
-        {
+    protected boolean supportBatchStatement(IDatabaseConnection connection) throws SQLException {
+        log.debug("supportBatchStatement(connection={}) - start", connection);
+        Object batchedStatements = connection.getConfig().getProperty(DatabaseConfig.FEATURE_BATCHED_STATEMENTS);
+        if ((Boolean) batchedStatements) {
             return connection.getConnection().getMetaData().supportsBatchUpdates();
         }
-
         return false;
     }
 }
-

@@ -21,8 +21,7 @@
 
 package org.dbunit.dataset;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import org.dbunit.database.AmbiguousTableNameException;
 import org.dbunit.dataset.filter.ITableFilter;
@@ -32,38 +31,31 @@ import org.dbunit.dataset.filter.SequenceTableFilter;
  * Decorates a dataset and exposes only some tables from it. Can be used with
  * different filtering strategies.
  *
- * @see ITableFilter
- * @see SequenceTableFilter
- * @see org.dbunit.dataset.filter.DefaultTableFilter
- *
  * @author Manuel Laflamme
  * @author Last changed by: Luke Cann
  * @version $Revision$
+ * @see ITableFilter
+ * @see SequenceTableFilter
+ * @see org.dbunit.dataset.filter.DefaultTableFilter
  * @since Feb 22, 2002
  */
-public class FilteredDataSet extends AbstractDataSet
-{
+@Slf4j
+public class FilteredDataSet extends AbstractDataSet {
 
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(FilteredDataSet.class);
-
-    private final IDataSet _dataSet;
-    private final ITableFilter _filter;
+    private final IDataSet dataSet;
+    private final ITableFilter filter;
 
     /**
      * Creates a FilteredDataSet that decorates the specified dataset and
      * exposes only the specified tables using {@link SequenceTableFilter} as
      * filtering strategy.
+     *
      * @throws AmbiguousTableNameException If the given tableNames array contains ambiguous names
      */
-    public FilteredDataSet(String[] tableNames, IDataSet dataSet) 
-    throws AmbiguousTableNameException
-    {
+    public FilteredDataSet(String[] tableNames, IDataSet dataSet) throws AmbiguousTableNameException {
         super(dataSet.isCaseSensitiveTableNames());
-        _filter = new SequenceTableFilter(tableNames, dataSet.isCaseSensitiveTableNames());
-        _dataSet = dataSet;
+        filter = new SequenceTableFilter(tableNames, dataSet.isCaseSensitiveTableNames());
+        this.dataSet = dataSet;
     }
 
     /**
@@ -71,62 +63,35 @@ public class FilteredDataSet extends AbstractDataSet
      * exposes only the tables allowed by the specified filter.
      *
      * @param dataSet the filtered dataset
-     * @param filter the filtering strategy
+     * @param filter  the filtering strategy
      */
-    public FilteredDataSet(ITableFilter filter, IDataSet dataSet)
-    {
+    public FilteredDataSet(ITableFilter filter, IDataSet dataSet) {
         super(dataSet.isCaseSensitiveTableNames());
-        _dataSet = dataSet;
-        _filter = filter;
+        this.dataSet = dataSet;
+        this.filter = filter;
     }
 
-    ////////////////////////////////////////////////////////////////////////////
-    // AbstractDataSet class
-
-    protected ITableIterator createIterator(boolean reversed)
-            throws DataSetException
-    {
-    	if(logger.isDebugEnabled())
-    		logger.debug("createIterator(reversed={}) - start", String.valueOf(reversed));
-    	
-        return _filter.iterator(_dataSet, reversed);
+    protected ITableIterator createIterator(boolean reversed) throws DataSetException {
+        log.debug("createIterator(reversed={}) - start", reversed);
+        return filter.iterator(dataSet, reversed);
     }
 
-    ////////////////////////////////////////////////////////////////////////////
-    // IDataSet interface
-
-    public String[] getTableNames() throws DataSetException
-    {
-        return _filter.getTableNames(_dataSet);
+    public String[] getTableNames() throws DataSetException {
+        return filter.getTableNames(dataSet);
     }
 
-    public ITableMetaData getTableMetaData(String tableName)
-            throws DataSetException
-    {
-        if (!_filter.accept(tableName))
-        {
+    public ITableMetaData getTableMetaData(String tableName) throws DataSetException {
+        if (!filter.accept(tableName)) {
             throw new NoSuchTableException(tableName);
         }
-
-        return _dataSet.getTableMetaData(tableName);
+        return dataSet.getTableMetaData(tableName);
     }
 
-    public ITable getTable(String tableName) throws DataSetException
-    {
-        logger.debug("getTable(tableName={}) - start", tableName);
-
-        if (!_filter.accept(tableName))
-        {
+    public ITable getTable(String tableName) throws DataSetException {
+        log.debug("getTable(tableName={}) - start", tableName);
+        if (!filter.accept(tableName)) {
             throw new NoSuchTableException(tableName);
         }
-
-        return _dataSet.getTable(tableName);
+        return dataSet.getTable(tableName);
     }
 }
-
-
-
-
-
-
-
