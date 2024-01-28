@@ -29,8 +29,7 @@ import org.dbunit.DatabaseUnitRuntimeException;
  * @version $Revision$ $Date$
  * @since 2.2 (Sep 12, 2004)
  */
-public class IllegalInputCharacterException extends DatabaseUnitRuntimeException 
-{
+public class IllegalInputCharacterException extends DatabaseUnitRuntimeException {
     public IllegalInputCharacterException(String message) {
         super(message);
     }

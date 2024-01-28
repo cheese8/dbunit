@@ -21,8 +21,7 @@
 
 package org.dbunit.dataset.common.handlers;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author fede
@@ -30,37 +29,27 @@ import org.slf4j.LoggerFactory;
  * @version $Revision$ $Date$
  * @since 2.2 (Sep 12, 2004)
  */
+@Slf4j
 public class EnforceHandler extends AbstractPipelineComponent {
-
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(EnforceHandler.class);
-
-    private PipelineComponent [] enforcedComponents;
+    private PipelineComponent[] enforcedComponents;
     private PipelineComponent theHandlerComponent;
 
-    private EnforceHandler(PipelineComponent [] components) {
+    private EnforceHandler(PipelineComponent[] components) {
         setEnforcedComponents(components);
     }
 
-
-    public static final PipelineComponent ENFORCE(PipelineComponent component) {
-        logger.debug("ENFORCE(component={}) - start", component);
-
-        return EnforceHandler.ENFORCE(new PipelineComponent [] {component});
+    public static PipelineComponent ENFORCE(PipelineComponent component) {
+        log.debug("ENFORCE(component={}) - start", component);
+        return EnforceHandler.ENFORCE(new PipelineComponent[]{component});
     }
 
-    public static final PipelineComponent ENFORCE(PipelineComponent [] components) {
-        logger.debug("ENFORCE(components={}) - start", components);
-
+    public static PipelineComponent ENFORCE(PipelineComponent[] components) {
+        log.debug("ENFORCE(components={}) - start", components);
         return createPipelineComponent(new EnforceHandler(components), new ENFORCE());
     }
 
     public boolean canHandle(char c) throws IllegalInputCharacterException {
-        if(logger.isDebugEnabled())
-            logger.debug("canHandle(c={}) - start", String.valueOf(c));
-
+        log.debug("canHandle(c={}) - start", c);
         for (int i = 0; i < getEnforcedComponents().length; i++) {
             if (getEnforcedComponents()[i].canHandle(c)) {
                 setTheHandlerComponent(getEnforcedComponents()[i]);
@@ -72,8 +61,7 @@ public class EnforceHandler extends AbstractPipelineComponent {
     }
 
     public void setPipeline(Pipeline pipeline) {
-        logger.debug("setPipeline(pipeline={}) - start", pipeline);
-
+        log.debug("setPipeline(pipeline={}) - start", pipeline);
         for (int i = 0; i < getEnforcedComponents().length; i++) {
             getEnforcedComponents()[i].setPipeline(pipeline);
         }
@@ -81,48 +69,33 @@ public class EnforceHandler extends AbstractPipelineComponent {
     }
 
     protected PipelineComponent[] getEnforcedComponents() {
-        logger.debug("getEnforcedComponents() - start");
-
+        log.debug("getEnforcedComponents() - start");
         return enforcedComponents;
     }
 
     protected void setEnforcedComponents(PipelineComponent[] enforcedComponents) {
-        logger.debug("setEnforcedComponents(enforcedComponents={}) - start", enforcedComponents);
-
+        log.debug("setEnforcedComponents(enforcedComponents={}) - start", enforcedComponents);
         this.enforcedComponents = enforcedComponents;
     }
 
     PipelineComponent getTheHandlerComponent() {
-        logger.debug("getTheHandlerComponent() - start");
-
+        log.debug("getTheHandlerComponent() - start");
         return theHandlerComponent;
     }
 
     void setTheHandlerComponent(PipelineComponent theHandlerComponent) {
-        logger.debug("setTheHandlerComponent(theHandlerComponent={}) - start",
-                theHandlerComponent);
-
+        log.debug("setTheHandlerComponent(theHandlerComponent={}) - start", theHandlerComponent);
         this.theHandlerComponent = theHandlerComponent;
     }
 
     static private class ENFORCE extends Helper {
-
-        /**
-         * Logger for this class
-         */
-        private static final Logger logger = LoggerFactory.getLogger(ENFORCE.class);
-
         public void helpWith(char c) {
-            if(logger.isDebugEnabled())
-                logger.debug("helpWith(c={}) - start", String.valueOf(c));
-
+            log.debug("helpWith(c={}) - start", c);
             try {
                 EnforceHandler handler = (EnforceHandler) getHandler();
                 handler.getTheHandlerComponent().handle(c);
                 getHandler().getPipeline().removeFront();
-            } catch (PipelineException e) {
-                throw new RuntimeException(e.getMessage());
-            } catch (IllegalInputCharacterException e) {
+            } catch (PipelineException | IllegalInputCharacterException e) {
                 throw new RuntimeException(e.getMessage());
             }
             // ignore the char

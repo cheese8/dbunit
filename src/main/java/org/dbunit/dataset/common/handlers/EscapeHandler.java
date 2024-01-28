@@ -21,8 +21,7 @@
 
 package org.dbunit.dataset.common.handlers;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author fede
@@ -30,63 +29,44 @@ import org.slf4j.LoggerFactory;
  * @version $Revision$ $Date$
  * @since 2.2 (Sep 12, 2004)
  */
+@Slf4j
 public class EscapeHandler extends AbstractPipelineComponent {
-
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(EscapeHandler.class);
-
     public static final char DEFAULT_ESCAPE_CHAR = '\\';
 
     private EscapeHandler() {
     }
 
-    public static final PipelineComponent ACCEPT() {
-        logger.debug("ACCEPT() - start");
+    public static PipelineComponent ACCEPT() {
+        log.debug("ACCEPT() - start");
         return createPipelineComponent(new EscapeHandler(), new ACCEPT());
     }
 
     // @todo: make sense?
-    public static final PipelineComponent IGNORE() {
-        logger.debug("IGNORE() - start");
+    public static PipelineComponent IGNORE() {
+        log.debug("IGNORE() - start");
         return createPipelineComponent(new EscapeHandler(), new IGNORE());
     }
 
-    public static final PipelineComponent ESCAPE() {
-        logger.debug("ESCAPE() - start");
+    public static PipelineComponent ESCAPE() {
+        log.debug("ESCAPE() - start");
         return createPipelineComponent(new EscapeHandler(), new ESCAPE());
     }
 
     public boolean canHandle(char c) throws IllegalInputCharacterException {
-        if(logger.isDebugEnabled())
-            logger.debug("canHandle(c={}) - start", String.valueOf(c));
-
+        log.debug("canHandle(c={}) - start", c);
         PipelineConfig pipelineConfig = this.getPipelineConfig();
-        if (c == pipelineConfig.getEscapeChar()) {
-            return true;
-        }
-        return false;
+        return c == pipelineConfig.getEscapeChar();
     }
 
     static private class ESCAPE extends Helper {
-
-        /**
-         * Logger for this class
-         */
-        private static final Logger logger = LoggerFactory.getLogger(ESCAPE.class);
-
         public void helpWith(char c) {
-            if(logger.isDebugEnabled())
-                logger.debug("helpWith(c={}) - start", String.valueOf(c));
-
+            log.debug("helpWith(c={}) - start", c);
             getHandler().getPipeline().putFront(EnforceHandler.ENFORCE(
-                    new PipelineComponent [] {
-                        QuoteHandler.ACCEPT(), EscapeHandler.ACCEPT()
+                    new PipelineComponent[]{
+                            QuoteHandler.ACCEPT(), EscapeHandler.ACCEPT()
                     }
             ));
             // ignore the char
         }
     }
-
 }
