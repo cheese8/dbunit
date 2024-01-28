@@ -26,7 +26,9 @@ public class ColumnValueComparerMapBuilder {
         return this;
     }
 
-    /** @return The assembled map. */
+    /**
+     * @return The assembled map.
+     */
     public Map<String, ValueComparator> build() {
         return Collections.unmodifiableMap(comparators);
     }

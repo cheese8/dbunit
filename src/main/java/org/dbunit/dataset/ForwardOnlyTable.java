@@ -20,54 +20,37 @@
  */
 package org.dbunit.dataset;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Manuel Laflamme
- * @since Apr 9, 2003
  * @version $Revision$
+ * @since Apr 9, 2003
  */
-public class ForwardOnlyTable implements ITable
-{
+@Slf4j
+public class ForwardOnlyTable implements ITable {
 
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(ForwardOnlyTable.class);
+    private final ITable table;
+    private int lastRow = -1;
 
-    private final ITable _table;
-    private int _lastRow = -1;
-
-    public ForwardOnlyTable(ITable table)
-    {
-        _table = table;
+    public ForwardOnlyTable(ITable table) {
+        this.table = table;
     }
 
-    ////////////////////////////////////////////////////////////////////////////
-    // ITable interface
-
-    public ITableMetaData getTableMetaData()
-    {
-        return _table.getTableMetaData();
+    public ITableMetaData getTableMetaData() {
+        return table.getTableMetaData();
     }
 
-    public int getRowCount()
-    {
+    public int getRowCount() {
         throw new UnsupportedOperationException();
     }
 
-    public Object getValue(int row, String column) throws DataSetException
-    {
-        if(logger.isDebugEnabled())
-            logger.debug("getValue(row={}, columnName={}) - start", Integer.toString(row), column);
-
-        if (row < _lastRow)
-        {
+    public Object getValue(int row, String column) throws DataSetException {
+        log.debug("getValue(row={}, columnName={}) - start", row, column);
+        if (row < lastRow) {
             throw new UnsupportedOperationException("Cannot go backward!");
         }
-
-        _lastRow = row;
-        return _table.getValue(row, column);
+        lastRow = row;
+        return table.getValue(row, column);
     }
 }

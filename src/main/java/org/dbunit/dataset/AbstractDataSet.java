@@ -23,8 +23,6 @@ package org.dbunit.dataset;
 
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * This abstract class provides the basic implementation of the IDataSet
@@ -44,14 +42,14 @@ public abstract class AbstractDataSet implements IDataSet {
     protected OrderedTableNameMap orderedTableNameMap;
 
     /**
-     * Whether or not table names of this dataset are case sensitive.
-     * By default case-sensitivity is set to false for datasets
+     * Whether table names of this dataset are case-sensitive.
+     * By default, case-sensitivity is set to false for datasets
      */
     private boolean caseSensitiveTableNames = false;
 
     /**
      * Constructor
-     * @param caseSensitiveTableNames Whether or not table names should be case sensitive
+     * @param caseSensitiveTableNames Whether table names should be case-sensitive
      * @since 2.4
      */
     public AbstractDataSet(boolean caseSensitiveTableNames)
@@ -81,7 +79,6 @@ public abstract class AbstractDataSet implements IDataSet {
 
     /**
      * Initializes the tables of this dataset
-     * @throws DataSetException
      * @since 2.4
      */
     protected void initialize() throws DataSetException {
@@ -103,7 +100,6 @@ public abstract class AbstractDataSet implements IDataSet {
      * Creates an iterator which provides access to all tables of this dataset
      * @param reversed Whether the created iterator should be a reversed one or not
      * @return The created {@link ITableIterator}
-     * @throws DataSetException
      */
     protected abstract ITableIterator createIterator(boolean reversed) throws DataSetException;
 
@@ -127,7 +123,7 @@ public abstract class AbstractDataSet implements IDataSet {
 
     public ITable[] getTables() throws DataSetException {
         initialize();
-        return (ITable[]) orderedTableNameMap.orderedValues().toArray(new ITable[0]);
+        return orderedTableNameMap.orderedValues().toArray(new ITable[0]);
     }
 
     public ITableIterator iterator() throws DataSetException {

@@ -42,7 +42,7 @@ import java.util.List;
  * Difference diff = (Difference)diffList.get(0);
  * ...
  * </pre></code>
- * 
+ *
  * @author gommma (gommma AT users.sourceforge.net)
  * @author Last changed by: $Author$
  * @version $Revision$ $Date$
@@ -51,10 +51,12 @@ import java.util.List;
 @Getter
 public class DiffCollectingFailureHandler extends DefaultFailureHandler {
     private final List<Difference> diffList = new ArrayList<>();
+
     public void handle(Difference diff) {
         // Simply collect the difference without throwing an exception
         diffList.add(diff);
     }
+
     public String toString() {
         return super.toString() + DiffCollectingFailureHandler.class.getName() + "[diffList=" + diffList + "]";
     }

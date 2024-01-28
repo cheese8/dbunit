@@ -21,8 +21,7 @@
 
 package org.dbunit.database.statement;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.IDatabaseConnection;
@@ -34,53 +33,26 @@ import java.sql.SQLException;
  * @version $Revision$
  * @since Mar 20, 2002
  */
-public class PreparedStatementFactory extends AbstractStatementFactory
-{
-
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(PreparedStatementFactory.class);
-
-    public IBatchStatement createBatchStatement(IDatabaseConnection connection)
-            throws SQLException
-    {
-
-    	logger.debug("createBatchStatement(connection={}) - start", connection);
-
-        if (supportBatchStatement(connection))
-        {
+@Slf4j
+public class PreparedStatementFactory extends AbstractStatementFactory {
+    public IBatchStatement createBatchStatement(IDatabaseConnection connection) throws SQLException {
+        log.debug("createBatchStatement(connection={}) - start", connection);
+        if (supportBatchStatement(connection)) {
             return new BatchStatement(connection.getConnection());
-        }
-        else
-        {
+        } else {
             return new SimpleStatement(connection.getConnection());
         }
     }
 
-    public IPreparedBatchStatement createPreparedBatchStatement(String sql,
-            IDatabaseConnection connection) throws SQLException
-    {
-    	if (logger.isDebugEnabled())
-    	{
-    		logger.debug("createPreparedBatchStatement(sql={}, connection={}) - start", sql, connection);
-    	}
-    	
-    	Integer batchSize = (Integer)connection.getConfig().getProperty(DatabaseConfig.PROPERTY_BATCH_SIZE);
-
-        IPreparedBatchStatement statement = null;
-        if (supportBatchStatement(connection))
-        {
+    public IPreparedBatchStatement createPreparedBatchStatement(String sql, IDatabaseConnection connection) throws SQLException {
+        log.debug("createPreparedBatchStatement(sql={}, connection={}) - start", sql, connection);
+        Integer batchSize = (Integer) connection.getConfig().getProperty(DatabaseConfig.PROPERTY_BATCH_SIZE);
+        IPreparedBatchStatement statement;
+        if (supportBatchStatement(connection)) {
             statement = new PreparedBatchStatement(sql, connection.getConnection());
-        }
-        else
-        {
+        } else {
             statement = new SimplePreparedStatement(sql, connection.getConnection());
         }
-        return new AutomaticPreparedBatchStatement(statement, batchSize.intValue());
+        return new AutomaticPreparedBatchStatement(statement, batchSize);
     }
 }
-
-
-
-

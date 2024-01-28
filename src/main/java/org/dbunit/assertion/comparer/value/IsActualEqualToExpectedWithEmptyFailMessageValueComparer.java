@@ -7,7 +7,7 @@ import org.dbunit.dataset.datatype.DataType;
 /**
  * {@link ValueComparator} implementation that verifies actual value is equal to
  * expected value and sets fail message to empty String.
- *
+ * <p>
  * This is primarily for the original assertEquals(*) on
  * {@link org.dbunit.assertion.DbUnitAssert} so the
  * {@link org.dbunit.assertion.Difference} message stays the same.
@@ -27,8 +27,7 @@ public class IsActualEqualToExpectedWithEmptyFailMessageValueComparer extends Va
     }
 
     @Override
-    protected String getFailPhrase()
-    {
+    protected String getFailPhrase() {
         return null;
     }
 }

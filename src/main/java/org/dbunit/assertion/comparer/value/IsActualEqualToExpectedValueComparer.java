@@ -18,8 +18,7 @@ public class IsActualEqualToExpectedValueComparer extends ValueComparerTemplateB
     }
 
     @Override
-    protected String getFailPhrase()
-    {
+    protected String getFailPhrase() {
         return "not equal to";
     }
 }

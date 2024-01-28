@@ -244,8 +244,7 @@ public class StreamingIterator implements ITableIterator {
     ////////////////////////////////////////////////////////////////////////////
     // AsynchronousConsumer class
 
-    private static class AsynchronousConsumer implements Runnable, IDataSetConsumer
-    {
+    private static class AsynchronousConsumer implements Runnable, IDataSetConsumer {
 
         /**
          * Logger for this class

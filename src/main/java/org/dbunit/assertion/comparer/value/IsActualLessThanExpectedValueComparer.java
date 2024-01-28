@@ -18,8 +18,7 @@ public class IsActualLessThanExpectedValueComparer extends ValueComparerTemplate
     }
 
     @Override
-    protected String getFailPhrase()
-    {
+    protected String getFailPhrase() {
         return "not less than";
     }
 }

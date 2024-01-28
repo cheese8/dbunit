@@ -30,7 +30,9 @@ public class DefaultVerifyTableDefinitionVerifier implements VerifyTableDefiniti
         }
     }
 
-    /** Verify the columnExclusionFilters and columnValueComparers agree. */
+    /**
+     * Verify the columnExclusionFilters and columnValueComparers agree.
+     */
     protected void doVerify(final String tableName, final String[] columnExclusionFilters, final Map<String, ValueComparator> columnValueComparers) {
         for (final String columnName : columnExclusionFilters) {
             log.trace("doVerify: columnName={}", columnName);

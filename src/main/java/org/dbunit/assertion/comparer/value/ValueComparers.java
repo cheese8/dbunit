@@ -10,9 +10,12 @@ import static org.dbunit.assertion.comparer.value.IsActualWithinToleranceOfExpec
  * @since 2.6.0
  */
 public abstract class ValueComparers {
-    protected ValueComparers() {}
+    protected ValueComparers() {
+    }
 
-    /** @see IsActualEqualToExpectedValueComparer */
+    /**
+     * @see IsActualEqualToExpectedValueComparer
+     */
     public static final ValueComparator isActualEqualToExpected = new IsActualEqualToExpectedValueComparer();
 
     /**
@@ -33,31 +36,49 @@ public abstract class ValueComparers {
      */
     public static final ValueComparator isActualEqualToExpectedTimestampWithIgnoreMillis = new IsActualWithinToleranceOfExpectedTimestampValueComparer(0, ONE_SECOND_IN_MILLIS);
 
-    /** @see IsActualNotEqualToExpectedValueComparer */
+    /**
+     * @see IsActualNotEqualToExpectedValueComparer
+     */
     public static final ValueComparator isActualNotEqualToExpected = new IsActualNotEqualToExpectedValueComparer();
 
-    /** @see IsActualGreaterThanExpectedValueComparer */
+    /**
+     * @see IsActualGreaterThanExpectedValueComparer
+     */
     public static final ValueComparator isActualGreaterThanExpected = new IsActualGreaterThanExpectedValueComparer();
 
-    /** @see IsActualGreaterThanOrEqualToExpectedValueComparer */
+    /**
+     * @see IsActualGreaterThanOrEqualToExpectedValueComparer
+     */
     public static final ValueComparator isActualGreaterThanOrEqualToExpected = new IsActualGreaterThanOrEqualToExpectedValueComparer();
 
-    /** @see IsActualLessThanOrEqualToExpectedValueComparer */
+    /**
+     * @see IsActualLessThanOrEqualToExpectedValueComparer
+     */
     public static final ValueComparator isActualLessOrEqualToThanExpected = new IsActualLessThanOrEqualToExpectedValueComparer();
 
-    /** @see IsActualLessThanExpectedValueComparer */
+    /**
+     * @see IsActualLessThanExpectedValueComparer
+     */
     public static final ValueComparator isActualLessThanExpected = new IsActualLessThanExpectedValueComparer();
 
-    /** @see IsActualWithinToleranceOfExpectedTimestampValueComparer */
+    /**
+     * @see IsActualWithinToleranceOfExpectedTimestampValueComparer
+     */
     public static final ValueComparator isActualWithinOneSecondNewerOfExpectedTimestamp = new IsActualWithinToleranceOfExpectedTimestampValueComparer(0, ONE_SECOND_IN_MILLIS);
 
-    /** @see IsActualWithinToleranceOfExpectedTimestampValueComparer */
+    /**
+     * @see IsActualWithinToleranceOfExpectedTimestampValueComparer
+     */
     public static final ValueComparator isActualWithinOneSecondOlderOfExpectedTimestamp = new IsActualWithinToleranceOfExpectedTimestampValueComparer(ONE_SECOND_IN_MILLIS, 0);
 
-    /** @see IsActualWithinToleranceOfExpectedTimestampValueComparer */
+    /**
+     * @see IsActualWithinToleranceOfExpectedTimestampValueComparer
+     */
     public static final ValueComparator isActualWithinOneMinuteNewerOfExpectedTimestamp = new IsActualWithinToleranceOfExpectedTimestampValueComparer(0, ONE_MINUTE_IN_MILLIS);
 
-    /** @see IsActualWithinToleranceOfExpectedTimestampValueComparer */
+    /**
+     * @see IsActualWithinToleranceOfExpectedTimestampValueComparer
+     */
     public static final ValueComparator isActualWithinOneMinuteOlderOfExpectedTimestamp = new IsActualWithinToleranceOfExpectedTimestampValueComparer(ONE_MINUTE_IN_MILLIS, 0);
 
     /**
@@ -66,6 +87,8 @@ public abstract class ValueComparers {
      */
     public static final ValueComparator IS_ACTUAL_CONTAINING_EXPECTED_STRING_VALUE_COMPARATOR = new IsActualContainingExpectedStringValueComparer();
 
-    /** @see NeverFailsValueComparer */
+    /**
+     * @see NeverFailsValueComparer
+     */
     public static final ValueComparator neverFails = new NeverFailsValueComparer();
 }

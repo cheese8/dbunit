@@ -21,8 +21,7 @@
 
 package org.dbunit.database.statement;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import org.dbunit.dataset.DataSetUtils;
 import org.dbunit.dataset.datatype.DataType;
@@ -36,92 +35,60 @@ import java.util.StringTokenizer;
 /**
  * @author Manuel Laflamme
  * @version $Revision$
- * @since Mar 16, 2002 
+ * @since Mar 16, 2002
  */
-public class BatchStatementDecorator implements IPreparedBatchStatement
-{
+@Slf4j
+public class BatchStatementDecorator implements IPreparedBatchStatement {
+    private final IBatchStatement statement;
+    private final String[] sqlTemplate;
+    private StringBuffer sqlBuffer;
+    private int index;
 
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(BatchStatementDecorator.class);
-
-    private final IBatchStatement _statement;
-    private final String[] _sqlTemplate;
-    private StringBuffer _sqlBuffer;
-    private int _index;
-
-    BatchStatementDecorator(String sql, IBatchStatement statement)
-    {
-        List list = new ArrayList();
+    BatchStatementDecorator(String sql, IBatchStatement statement) {
+        List<String> list = new ArrayList<>();
         StringTokenizer tokenizer = new StringTokenizer(sql, "?");
-        while (tokenizer.hasMoreTokens())
-        {
+        while (tokenizer.hasMoreTokens()) {
             list.add(tokenizer.nextToken());
         }
-
-        if (sql.endsWith("?"))
-        {
+        if (sql.endsWith("?")) {
             list.add("");
         }
-
-        _sqlTemplate = (String[])list.toArray(new String[0]);
-        _statement = statement;
-
+        sqlTemplate = list.toArray(new String[0]);
+        this.statement = statement;
         // reset sql buffer
-        _index = 0;
-        _sqlBuffer = new StringBuffer(_sqlTemplate[_index++]);
+        index = 0;
+        sqlBuffer = new StringBuffer(sqlTemplate[index++]);
     }
 
-    ////////////////////////////////////////////////////////////////////////////
-    // IPreparedBatchStatement interface
-
-    public void addValue(Object value, DataType dataType)
-            throws TypeCastException, SQLException
-    {
-        logger.debug("addValue(value={}, dataType={}) - start", value, dataType);
-
-        _sqlBuffer.append(DataSetUtils.getSqlValueString(value, dataType));
-        _sqlBuffer.append(_sqlTemplate[_index++]);
+    public void addValue(Object value, DataType dataType) throws TypeCastException {
+        log.debug("addValue(value={}, dataType={}) - start", value, dataType);
+        sqlBuffer.append(DataSetUtils.getSqlValueString(value, dataType));
+        sqlBuffer.append(sqlTemplate[index++]);
     }
 
-    public void addBatch() throws SQLException
-    {
-        logger.debug("addBatch() - start");
-
-        _statement.addBatch(_sqlBuffer.toString());
-
+    public void addBatch() throws SQLException {
+        log.debug("addBatch() - start");
+        statement.addBatch(sqlBuffer.toString());
         // reset sql buffer
-        _index = 0;
-        _sqlBuffer = new StringBuffer(_sqlTemplate[_index++]);
+        index = 0;
+        sqlBuffer = new StringBuffer(sqlTemplate[index++]);
     }
 
-    public int executeBatch() throws SQLException
-    {
-        logger.debug("executeBatch() - start");
-
-        return _statement.executeBatch();
+    public int executeBatch() throws SQLException {
+        log.debug("executeBatch() - start");
+        return statement.executeBatch();
     }
 
-    public void clearBatch() throws SQLException
-    {
-        logger.debug("clearBatch() - start");
-
-        _statement.clearBatch();
-
+    public void clearBatch() throws SQLException {
+        log.debug("clearBatch() - start");
+        statement.clearBatch();
         // reset sql buffer
-        _index = 0;
-        _sqlBuffer = new StringBuffer(_sqlTemplate[_index++]);
+        index = 0;
+        sqlBuffer = new StringBuffer(sqlTemplate[index++]);
     }
 
-    public void close() throws SQLException
-    {
-        logger.debug("close() - start");
-
-        _statement.close();
+    public void close() throws SQLException {
+        log.debug("close() - start");
+        statement.close();
     }
 }
-
-
-
-

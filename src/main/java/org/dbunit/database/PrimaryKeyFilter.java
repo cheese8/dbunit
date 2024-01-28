@@ -229,7 +229,7 @@ public class PrimaryKeyFilter extends AbstractTableFilter {
         for(Iterator iterator = fkEdges.iterator(); iterator.hasNext(); ) {
             ForeignKeyRelationshipEdge edge = (ForeignKeyRelationshipEdge) iterator.next();
             fkTables.add( edge.getTo() );
-            colsBuffer.append( edge.getFKColumn() );
+            colsBuffer.append( edge.getFkColumn() );
             if ( iterator.hasNext() ) {
                 colsBuffer.append( ", " );
             }
@@ -304,7 +304,7 @@ public class PrimaryKeyFilter extends AbstractTableFilter {
         logger.debug("addReverseEdge(edge={}, idsToScan=) - start", edge, idsToScan);
 
         String fkTable = (String) edge.getFrom();
-        String fkColumn = edge.getFKColumn();
+        String fkColumn = edge.getFkColumn();
         String pkColumn = getPKColumn( fkTable );
         // NOTE: make sure the query below is compatible standard SQL
         String sql = "SELECT " + pkColumn + " FROM " + fkTable + " WHERE " + fkColumn + " = ? ";
@@ -338,7 +338,7 @@ public class PrimaryKeyFilter extends AbstractTableFilter {
 
         Object pkTo = this.pkColumnPerTable.get(table);
         if ( pkTo == null ) {
-            String pkColumn = edge.getPKColumn();
+            String pkColumn = edge.getPkColumn();
             this.pkColumnPerTable.put( table, pkColumn );
         }
     }

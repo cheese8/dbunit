@@ -56,19 +56,23 @@ import org.dbunit.dataset.xml.XmlDataSet;
  * @author Timothy Ruppert
  * @author Ben Cox
  * @version $Revision$
- * @since Jun 10, 2002
  * @see DbUnitTaskStep
+ * @since Jun 10, 2002
  */
 @Slf4j
 @NoArgsConstructor
 public class Export extends AbstractStep {
-    @Getter @Setter
+    @Getter
+    @Setter
     private File dest;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String format = FormatSupport.FLAT.getFormat();
-    @Getter @Setter
+    @Getter
+    @Setter
     private String doctype = null;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String encoding = null; // if no encoding set by script than the default encoding (UTF-8) of the writer is used
     @Getter
     private final List<Object> tables = new ArrayList<>();
@@ -85,9 +89,9 @@ public class Export extends AbstractStep {
         tables.add(query);
     }
 
-	public void addQuerySet(QuerySet querySet) {
+    public void addQuerySet(QuerySet querySet) {
         tables.add(querySet);
-	}
+    }
 
     public void execute(IDatabaseConnection connection) throws DatabaseUnitException {
         try {
@@ -96,7 +100,7 @@ public class Export extends AbstractStep {
             }
 
             IDataSet dataset = getExportDataSet(connection);
-			log("dataset tables: " + Arrays.asList(dataset.getTableNames()), Project.MSG_VERBOSE);
+            log("dataset tables: " + Arrays.asList(dataset.getTableNames()), Project.MSG_VERBOSE);
 
             // Write the dataset
             if (format.equals(FormatSupport.CSV.getFormat())) {
@@ -105,7 +109,7 @@ public class Export extends AbstractStep {
                 try (OutputStream out = Files.newOutputStream(dest.toPath())) {
                     if (format.equalsIgnoreCase(FormatSupport.FLAT.getFormat())) {
                         FlatXmlWriter writer = new FlatXmlWriter(out, getEncoding());
-                        writer.setDocType(doctype);
+                        writer.setSystemId(doctype);
                         writer.write(dataset);
                     } else if (format.equalsIgnoreCase(FormatSupport.XML.getFormat())) {
                         XmlDataSet.write(dataset, out, getEncoding());
@@ -121,25 +125,26 @@ public class Export extends AbstractStep {
             }
             log("Successfully wrote file '" + dest + "'", Project.MSG_INFO);
         } catch (SQLException | IOException e) {
-        	throw new DatabaseUnitException(e);
+            throw new DatabaseUnitException(e);
         }
     }
 
     /**
      * Creates the dataset that is finally used for the export
+     *
      * @return The final dataset used for the export
      */
     protected IDataSet getExportDataSet(IDatabaseConnection connection) throws DatabaseUnitException, SQLException {
         IDataSet dataset = getDatabaseDataSet(connection, tables);
         if (isOrdered()) {
-        	// Use topologically sorted database
-        	ITableFilter filter = new DatabaseSequenceFilter(connection);  
-        	dataset = new FilteredDataSet(filter, dataset);
+            // Use topologically sorted database
+            ITableFilter filter = new DatabaseSequenceFilter(connection);
+            dataset = new FilteredDataSet(filter, dataset);
         }
         return dataset;
-	}
+    }
 
-	public String getLogMessage() {
+    public String getLogMessage() {
         return "Executing export: in format: " + format + " to datafile: " + getAbsolutePath(dest);
     }
 

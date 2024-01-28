@@ -24,7 +24,7 @@ import lombok.AllArgsConstructor;
 
 /**
  * Dbunit's own small assertion utility, independent of the testing framework that is used.
- * 
+ *
  * @author gommma (gommma AT users.sourceforge.net)
  * @author Last changed by: $Author$
  * @version $Revision$ $Date$
@@ -37,10 +37,11 @@ public class SimpleAssert {
     public void assertTrue(boolean condition) {
         assertTrue(null, condition);
     }
-    
+
     /**
      * Evaluate if the given condition is <code>true</code> or not.
-     * @param message message displayed if assertion is false
+     *
+     * @param message   message displayed if assertion is false
      * @param condition condition to be tested
      */
     public void assertTrue(String message, boolean condition) {
@@ -50,13 +51,13 @@ public class SimpleAssert {
     }
 
     public void assertNotNull(Object object) {
-        assertTrue(null, object!=null);
+        assertTrue(null, object != null);
     }
 
     public void assertNotNull(String message, Object object) {
-        assertTrue(message, object!=null);
+        assertTrue(message, object != null);
     }
-    
+
     public void fail(String message) {
         throw failureHandler.createFailure(message);
     }

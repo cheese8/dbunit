@@ -24,9 +24,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * Exception signaling a DbUnit assertion failure while comparing values. 
+ * Exception signaling a DbUnit assertion failure while comparing values.
  * Is used to avoid the direct dependency to any other testing framework.
- * 
+ *
  * @author gommma (gommma AT users.sourceforge.net)
  * @author Last changed by: $Author$
  * @version $Revision$ $Date$
@@ -38,6 +38,7 @@ public class DbComparisonFailure extends AssertionError {
     private String reason;
     private String expected;
     private String actual;
+
     public String getMessage() {
         return buildMessage(reason, expected, actual);
     }
@@ -45,12 +46,13 @@ public class DbComparisonFailure extends AssertionError {
     public String toString() {
         return getClass().getName() + "[" + reason + "expected:<" + expected + ">but was:<" + actual + ">" + "]";
     }
-    
+
     /**
      * Creates a formatted message string from the given parameters
-     * @param reason The reason for an assertion or comparison failure
+     *
+     * @param reason   The reason for an assertion or comparison failure
      * @param expected The expected result
-     * @param actual The actual result
+     * @param actual   The actual result
      * @return The formatted message
      */
     private static String buildMessage(String reason, String expected, String actual) {

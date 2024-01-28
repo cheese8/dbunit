@@ -21,10 +21,8 @@ import org.dbunit.dataset.datatype.DataType;
  * otherwise, use the
  * {@link ConditionalSetBiValueComparer#notInValuesValueComparator} on the row.
  *
- * @param <T>
- *            The type of the value used to determine which
+ * @param <T> The type of the value used to determine which
  *            {@link ValueComparator} to use.
- *
  * @author Jeff Jensen
  * @since 2.6.0
  */
@@ -36,16 +34,12 @@ public class ConditionalSetBiValueComparer<T> extends ValueComparerBase {
     private final ValueComparator notInValuesValueComparator;
 
     /**
-     * @param actualValueFactory
-     *            Factory to make the value to lookup in the values list.
-     * @param values
-     *            List of values that mean to use the inValuesValueComparer.
-     * @param inValuesValueComparator
-     *            The {@link ValueComparator} used when the value from the
-     *            actualValueFactory is in the values map.
-     * @param notInValuesValueComparator
-     *            The {@link ValueComparator} used when the value from the
-     *            actualValueFactory is not in the values map.
+     * @param actualValueFactory         Factory to make the value to lookup in the values list.
+     * @param values                     List of values that mean to use the inValuesValueComparer.
+     * @param inValuesValueComparator    The {@link ValueComparator} used when the value from the
+     *                                   actualValueFactory is in the values map.
+     * @param notInValuesValueComparator The {@link ValueComparator} used when the value from the
+     *                                   actualValueFactory is not in the values map.
      */
     public ConditionalSetBiValueComparer(final ValueFactory<T> actualValueFactory, final Set<T> values, final ValueComparator inValuesValueComparator, final ValueComparator notInValuesValueComparator) {
         assertNotNull("actualValueFactory is null.", actualValueFactory);

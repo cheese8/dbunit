@@ -23,77 +23,57 @@ package org.dbunit.database.search;
 
 import java.sql.ResultSet;
 
+import lombok.extern.slf4j.Slf4j;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.database.PrimaryKeyFilter;
 import org.dbunit.database.PrimaryKeyFilter.PkTableMap;
 import org.dbunit.dataset.filter.ITableFilter;
 import org.dbunit.util.search.IEdge;
-import org.dbunit.util.search.SearchException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
- * Extension of the ImportedAndExportedKeysSearchCallback, where each new edge is 
+ * Extension of the ImportedAndExportedKeysSearchCallback, where each new edge is
  * added to a PrimaryKeyFilter.
- * 
+ *
  * @author Felipe Leme (dbunit@felipeal.net)
  * @version $Revision$
  * @since Sep 9, 2005
  */
-public class ImportedAndExportedKeysSearchCallbackFilteredByPKs extends ImportedAndExportedKeysSearchCallback
-{
+@Slf4j
+public class ImportedAndExportedKeysSearchCallbackFilteredByPKs extends ImportedAndExportedKeysSearchCallback {
+    // primary key filter associated with the call back
+    private final PrimaryKeyFilter pksFilter;
 
-	/**
-	 * Logger for this class
-	 */
-	private static final Logger	logger = LoggerFactory.getLogger(ImportedAndExportedKeysSearchCallbackFilteredByPKs.class);
+    /**
+     * Default constructor.
+     *
+     * @param connection database connection
+     * @param allowedPKs map of allowed rows, based on the primary keys (key is the
+     *                   name of a table; value is a Set with allowed primary keys for
+     *                   that table)
+     */
+    public ImportedAndExportedKeysSearchCallbackFilteredByPKs(IDatabaseConnection connection, PkTableMap allowedPKs) {
+        super(connection);
+        pksFilter = new PrimaryKeyFilter(connection, allowedPKs, true);
+    }
 
-	// primary key filter associated with the call back
-	private final PrimaryKeyFilter pksFilter;
+    /**
+     * Get the primary key filter associated with the call back
+     *
+     * @return primary key filter associated with the call back
+     */
+    public ITableFilter getFilter() {
+        return this.pksFilter;
+    }
 
-	/**
-	 * Default constructor.
-	 * 
-	 * @param connection
-	 *            database connection
-	 * @param allowedPKs
-	 *            map of allowed rows, based on the primary keys (key is the
-	 *            name of a table; value is a Set with allowed primary keys for
-	 *            that table)
-	 */
-	public ImportedAndExportedKeysSearchCallbackFilteredByPKs(IDatabaseConnection connection, PkTableMap allowedPKs)
-	{
-		super(connection);
-		this.pksFilter = new PrimaryKeyFilter(connection, allowedPKs, true);
-	}
+    public void nodeAdded(Object node) {
+        log.debug("nodeAdded(node={}) - start", node);
+        pksFilter.nodeAdded(node);
+    }
 
-	/**
-	 * Get the primary key filter associated with the call back
-	 * 
-	 * @return primary key filter associated with the call back
-	 */
-	public ITableFilter getFilter()
-	{
-		return this.pksFilter;
-	}
-
-	public void nodeAdded(Object node) throws SearchException
-	{
-		logger.debug("nodeAdded(node={}) - start", node);
-		this.pksFilter.nodeAdded(node);
-	}
-
-	protected IEdge newEdge(ResultSet rs, int type, String from, String to, String fkColumn, String pkColumn) throws SearchException
-	{
-		if (logger.isDebugEnabled())
-		{
-			logger.debug("newEdge(rs={}, type={}, from={}, to={}, fkColumn={}, pkColumn={}) - start",
-				new Object[] { rs, String.valueOf(type), from, to, fkColumn, pkColumn });
-		}
-
-		ForeignKeyRelationshipEdge edge = createFKEdge(rs, type, from, to, fkColumn, pkColumn);
-		this.pksFilter.edgeAdded(edge);
-		return edge;
-	}
-
+    protected IEdge newEdge(ResultSet rs, int type, String from, String to, String fkColumn, String pkColumn) {
+		log.debug("newEdge(rs={}, type={}, from={}, to={}, fkColumn={}, pkColumn={}) - start", rs, type, from, to, fkColumn, pkColumn);
+        ForeignKeyRelationshipEdge edge = createFKEdge(rs, type, from, to, fkColumn, pkColumn);
+        pksFilter.edgeAdded(edge);
+        return edge;
+    }
 }

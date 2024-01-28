@@ -47,9 +47,8 @@ public class DefaultFailureHandler implements FailureHandler {
     /**
      * Create a default failure handler
      *
-     * @param additionalColumnInfo
-     *            the column names of the columns for which additional
-     *            information should be printed when an assertion failed.
+     * @param additionalColumnInfo the column names of the columns for which additional
+     *                             information should be printed when an assertion failed.
      */
     public DefaultFailureHandler(final Column[] additionalColumnInfo) {
         // Null-safe access
@@ -61,18 +60,16 @@ public class DefaultFailureHandler implements FailureHandler {
     /**
      * Create a default failure handler
      *
-     * @param additionalColumnInfo
-     *            the column names of the columns for which additional
-     *            information should be printed when an assertion failed.
+     * @param additionalColumnInfo the column names of the columns for which additional
+     *                             information should be printed when an assertion failed.
      */
     public DefaultFailureHandler(final String[] additionalColumnInfo) {
         this.additionalColumnInfo = additionalColumnInfo;
     }
 
     /**
-     * @param failureFactory
-     *            The {@link FailureFactory} to be used for creating assertion
-     *            errors.
+     * @param failureFactory The {@link FailureFactory} to be used for creating assertion
+     *                       errors.
      */
     public void setFailureFactory(final FailureFactory failureFactory) {
         if (failureFactory == null) {
@@ -85,8 +82,7 @@ public class DefaultFailureHandler implements FailureHandler {
         return this.failureFactory.createFailure(message, expected, actual);
     }
 
-    public Error createFailure(final String message)
-    {
+    public Error createFailure(final String message) {
         return this.failureFactory.createFailure(message);
     }
 
@@ -142,14 +138,11 @@ public class DefaultFailureHandler implements FailureHandler {
     }
 
     /**
-     * @param table
-     *            The table which might be a decorated table
-     * @param columnName
-     *            The column name for which a table is searched
+     * @param table      The table which might be a decorated table
+     * @param columnName The column name for which a table is searched
      * @return The table that as a column with the given name
-     * @throws DataSetException
-     *             If no table could be found having a column with the given
-     *             name
+     * @throws DataSetException If no table could be found having a column with the given
+     *                          name
      */
     private ITable getTableForColumn(final ITable table, final String columnName) throws DataSetException {
         final ITableMetaData tableMetaData = table.getTableMetaData();
@@ -217,8 +210,7 @@ public class DefaultFailureHandler implements FailureHandler {
         }
     }
 
-    protected boolean isFailMessage(final String failMessage)
-    {
+    protected boolean isFailMessage(final String failMessage) {
         return failMessage != null && !failMessage.isEmpty();
     }
 
@@ -234,7 +226,7 @@ public class DefaultFailureHandler implements FailureHandler {
      * @author gommma (gommma AT users.sourceforge.net)
      * @author Last changed by: $Author: gommma $
      * @version $Revision: 872 $ $Date: 2008-11-08 09:45:52 -0600 (Sat, 08 Nov
-     *          2008) $
+     * 2008) $
      * @since 2.4.0
      */
     public static class DefaultFailureFactory implements FailureFactory {

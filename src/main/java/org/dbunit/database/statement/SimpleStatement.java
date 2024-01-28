@@ -66,10 +66,10 @@ public class SimpleStatement extends AbstractBatchStatement
             if(logger.isDebugEnabled())
                 logger.debug("DbUnit SQL: " + sql);
             
-            boolean r = _statement.execute(sql);
+            boolean r = statement.execute(sql);
             if(!r)
             {
-                result += _statement.getUpdateCount();
+                result += statement.getUpdateCount();
             }
         }
         return result;

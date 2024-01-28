@@ -20,8 +20,8 @@
  */
 package org.dbunit.database.search;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
+import org.dbunit.util.search.IEdge;
 
 import java.util.SortedSet;
 
@@ -30,31 +30,24 @@ import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.util.search.SearchException;
 
 /**
- * ISearchCallback implementation that get the nodes using both direct and reverse 
- * foreign key dependency, i.e, if table C has a FK for a table A and table A has 
+ * ISearchCallback implementation that get the nodes using both direct and reverse
+ * foreign key dependency, i.e, if table C has a FK for a table A and table A has
  * a FK for a table B, then getNodes(A) will return B and C.
- * 
+ *
  * @author Felipe Leme (dbunit@felipeal.net)
  * @version $Revision$
  * @since Aug 25, 2005
  */
-public class ImportedAndExportedKeysSearchCallback extends AbstractMetaDataBasedSearchCallback 
-{
 
-    /**
-	 * Logger for this class
-	 */
-	private static final Logger	logger = LoggerFactory.getLogger(ImportedAndExportedKeysSearchCallback.class);
+@Slf4j
+public class ImportedAndExportedKeysSearchCallback extends AbstractMetaDataBasedSearchCallback {
 
-	public ImportedAndExportedKeysSearchCallback(IDatabaseConnection connection)
-	{
-		super(connection);
-	}
+    public ImportedAndExportedKeysSearchCallback(IDatabaseConnection connection) {
+        super(connection);
+    }
 
-	public SortedSet getEdges(Object node) throws SearchException
-	{
-		logger.debug("getEdges(node={}) - start", node);
-		return getNodesFromImportAndExportKeys(node);
-	}
-
+    public SortedSet<IEdge> getEdges(Object node) throws SearchException {
+        logger.debug("getEdges(node={}) - start", node);
+        return getNodesFromImportAndExportKeys(node);
+    }
 }

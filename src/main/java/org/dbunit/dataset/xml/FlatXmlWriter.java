@@ -25,6 +25,8 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.dbunit.dataset.Column;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
@@ -34,8 +36,6 @@ import org.dbunit.dataset.datatype.TypeCastException;
 import org.dbunit.dataset.stream.DataSetProducerAdapter;
 import org.dbunit.dataset.stream.IDataSetConsumer;
 import org.dbunit.util.xml.XmlWriter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author Manuel Laflamme
@@ -43,24 +43,19 @@ import org.slf4j.LoggerFactory;
  * @version $Revision$ $Date$
  * @since 1.5.5 (Apr 19, 2003)
  */
-public class FlatXmlWriter implements IDataSetConsumer
-{
-
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(FlatXmlWriter.class);
-
+@Slf4j
+public class FlatXmlWriter implements IDataSetConsumer {
     private static final String DATASET = "dataset";
 
-    private XmlWriter _xmlWriter;
-    private ITableMetaData _activeMetaData;
-    private int _activeRowCount;
-    private boolean _includeEmptyTable = false;
-    private String _systemId = null;
+    private final XmlWriter xmlWriter;
+    private ITableMetaData activeMetaData;
+    private int activeRowCount;
+    @Setter
+    private boolean includeEmptyTable = false;
+    @Setter
+    private String systemId = null;
 
-    public FlatXmlWriter(OutputStream out) throws IOException
-    {
+    public FlatXmlWriter(OutputStream out) throws IOException {
         this(out, null);
     }
 
@@ -68,35 +63,20 @@ public class FlatXmlWriter implements IDataSetConsumer
      * @param outputStream The stream to which the XML will be written.
      * @param encoding The encoding to be used for the {@link XmlWriter}.
      * Can be null. See {@link XmlWriter#XmlWriter(OutputStream, String)}.
-     * @throws UnsupportedEncodingException
      */
-    public FlatXmlWriter(OutputStream outputStream, String encoding) 
-    throws UnsupportedEncodingException
-    {
-        _xmlWriter = new XmlWriter(outputStream, encoding);
-        _xmlWriter.enablePrettyPrint(true);
+    public FlatXmlWriter(OutputStream outputStream, String encoding) throws UnsupportedEncodingException {
+        xmlWriter = new XmlWriter(outputStream, encoding);
+        xmlWriter.enablePrettyPrint(true);
     }
 
-    public FlatXmlWriter(Writer writer)
-    {
-        _xmlWriter = new XmlWriter(writer);
-        _xmlWriter.enablePrettyPrint(true);
+    public FlatXmlWriter(Writer writer) {
+        xmlWriter = new XmlWriter(writer);
+        xmlWriter.enablePrettyPrint(true);
     }
 
-    public FlatXmlWriter(Writer writer, String encoding)
-    {
-        _xmlWriter = new XmlWriter(writer, encoding);
-        _xmlWriter.enablePrettyPrint(true);
-    }
-
-    public void setIncludeEmptyTable(boolean includeEmptyTable)
-    {
-        _includeEmptyTable = includeEmptyTable;
-    }
-
-    public void setDocType(String systemId)
-    {
-        _systemId = systemId;
+    public FlatXmlWriter(Writer writer, String encoding) {
+        xmlWriter = new XmlWriter(writer, encoding);
+        xmlWriter.enablePrettyPrint(true);
     }
 
     /**
@@ -105,127 +85,88 @@ public class FlatXmlWriter implements IDataSetConsumer
      * <code>false</code> otherwise.
      * @since 2.4
      */
-    public void setPrettyPrint(boolean enabled)
-    {
-        _xmlWriter.enablePrettyPrint(enabled);
+    public void setPrettyPrint(boolean enabled) {
+        xmlWriter.enablePrettyPrint(enabled);
     }
     
     /**
      * Writes the given {@link IDataSet} using this writer.
      * @param dataSet The {@link IDataSet} to be written
-     * @throws DataSetException
      */
-    public void write(IDataSet dataSet) throws DataSetException
-    {
-        logger.debug("write(dataSet={}) - start", dataSet);
-
+    public void write(IDataSet dataSet) throws DataSetException {
+        log.debug("write(dataSet={}) - start", dataSet);
         DataSetProducerAdapter provider = new DataSetProducerAdapter(dataSet);
         provider.setConsumer(this);
         provider.produce();
     }
 
-    ////////////////////////////////////////////////////////////////////////////
-    // IDataSetConsumer interface
-
-    public void startDataSet() throws DataSetException
-    {
-        logger.debug("startDataSet() - start");
-
-        try
-        {
-            _xmlWriter.writeDeclaration();
-            _xmlWriter.writeDoctype(_systemId, null);
-            _xmlWriter.writeElement(DATASET);
-        }
-        catch (IOException e)
-        {
+    public void startDataSet() throws DataSetException {
+        log.debug("startDataSet() - start");
+        try {
+            xmlWriter.writeDeclaration();
+            xmlWriter.writeDoctype(systemId, null);
+            xmlWriter.writeElement(DATASET);
+        } catch (IOException e) {
             throw new DataSetException(e);
         }
     }
 
-    public void endDataSet() throws DataSetException
-    {
-        logger.debug("endDataSet() - start");
-
-        try
-        {
-            _xmlWriter.endElement();
-            _xmlWriter.close();
-        }
-        catch (IOException e)
-        {
+    public void endDataSet() throws DataSetException {
+        log.debug("endDataSet() - start");
+        try {
+            xmlWriter.endElement();
+            xmlWriter.close();
+        } catch (IOException e) {
             throw new DataSetException(e);
         }
     }
 
-    public void startTable(ITableMetaData metaData) throws DataSetException
-    {
-        logger.debug("startTable(metaData={}) - start", metaData);
-
-        _activeMetaData = metaData;
-        _activeRowCount = 0;
+    public void startTable(ITableMetaData metaData) throws DataSetException {
+        log.debug("startTable(metaData={}) - start", metaData);
+        activeMetaData = metaData;
+        activeRowCount = 0;
     }
 
-    public void endTable() throws DataSetException
-    {
-        logger.debug("endTable() - start");
-
-        if (_includeEmptyTable && _activeRowCount == 0)
-        {
-            try
-            {
-                String tableName = _activeMetaData.getTableName();
-                _xmlWriter.writeEmptyElement(tableName);
-            }
-            catch (IOException e)
-            {
+    public void endTable() throws DataSetException {
+        log.debug("endTable() - start");
+        if (includeEmptyTable && activeRowCount == 0) {
+            try {
+                String tableName = activeMetaData.getTableName();
+                xmlWriter.writeEmptyElement(tableName);
+            } catch (IOException e) {
                 throw new DataSetException(e);
             }
         }
-
-        _activeMetaData = null;
+        activeMetaData = null;
     }
 
-    public void row(Object[] values) throws DataSetException
-    {
-        logger.debug("row(values={}) - start", values);
+    public void row(Object[] values) throws DataSetException {
+        log.debug("row(values={}) - start", values);
+        try {
+            String tableName = activeMetaData.getTableName();
+            xmlWriter.writeElement(tableName);
 
-        try
-        {
-            String tableName = _activeMetaData.getTableName();
-            _xmlWriter.writeElement(tableName);
-
-            Column[] columns = _activeMetaData.getColumns();
-            for (int i = 0; i < columns.length; i++)
-            {
+            Column[] columns = activeMetaData.getColumns();
+            for (int i = 0; i < columns.length; i++) {
                 String columnName = columns[i].getColumnName();
                 Object value = values[i];
 
                 // Skip null value
-                if (value == null)
-                {
+                if (value == null) {
                     continue;
                 }
 
-                try
-                {
+                try {
                     String stringValue = DataType.asString(value);
-                    _xmlWriter.writeAttribute(columnName, stringValue, true);
-                }
-                catch (TypeCastException e)
-                {
-                    throw new DataSetException("table=" +
-                            _activeMetaData.getTableName() + ", row=" + i +
-                            ", column=" + columnName +
-                            ", value=" + value, e);
+                    xmlWriter.writeAttribute(columnName, stringValue, true);
+                } catch (TypeCastException e) {
+                    throw new DataSetException("table=" + activeMetaData.getTableName() + ", row=" + i + ", column=" + columnName + ", value=" + value, e);
                 }
             }
 
-            _activeRowCount++;
-            _xmlWriter.endElement();
-        }
-        catch (IOException e)
-        {
+            activeRowCount++;
+            xmlWriter.endElement();
+        } catch (IOException e) {
             throw new DataSetException(e);
         }
     }

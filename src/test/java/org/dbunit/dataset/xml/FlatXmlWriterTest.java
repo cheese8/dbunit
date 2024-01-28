@@ -75,7 +75,7 @@ public class FlatXmlWriterTest extends TestCase
 
         StringWriter stringWriter = new StringWriter();
         FlatXmlWriter xmlWriter = new FlatXmlWriter(stringWriter);
-        xmlWriter.setDocType("dataset.dtd");
+        xmlWriter.setSystemId("dataset.dtd");
         xmlWriter.write(dataSet);
 
         String actualOutput = stringWriter.toString();
@@ -180,8 +180,7 @@ public class FlatXmlWriterTest extends TestCase
         table1.addRow();
         table1.setValue(0, col0, "value");
         DefaultTable table2 = new DefaultTable("EMPTY_TABLE", columns);
-        IDataSet dataSet = new DefaultDataSet(table1, table2);
-        return dataSet;
+        return new DefaultDataSet(table1, table2);
     }
 
 }

@@ -19,8 +19,7 @@ public class IsActualNullValueComparer extends ValueComparerTemplateBase {
         return actualValue == null;
     }
 
-    protected String makeFailMessage()
-    {
+    protected String makeFailMessage() {
         return ACTUAL_VALUE_IS_NOT_NULL;
     }
 

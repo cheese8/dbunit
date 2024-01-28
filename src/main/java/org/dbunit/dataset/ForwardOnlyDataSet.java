@@ -20,105 +20,69 @@
  */
 package org.dbunit.dataset;
 
+import lombok.extern.slf4j.Slf4j;
 import org.dbunit.database.QueryTableIterator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Decorator that allows forward only access to decorated dataset.
  *
  * @author Manuel Laflamme
- * @since Apr 9, 2003
  * @version $Revision$
+ * @since Apr 9, 2003
  */
-public class ForwardOnlyDataSet extends AbstractDataSet
-{
+@Slf4j
+public class ForwardOnlyDataSet extends AbstractDataSet {
+    private final IDataSet dataSet;
+    private int iteratorCount;
 
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(ForwardOnlyDataSet.class);
-
-    private final IDataSet _dataSet;
-    private int _iteratorCount;
-
-    public ForwardOnlyDataSet(IDataSet dataSet)
-    {
-        _dataSet = dataSet;
+    public ForwardOnlyDataSet(IDataSet dataSet) {
+        this.dataSet = dataSet;
     }
 
-    ////////////////////////////////////////////////////////////////////////////
-    // AbstractDataSet class
-
-    protected ITableIterator createIterator(boolean reversed)
-            throws DataSetException
-    {
-        logger.debug("createIterator(reversed={}) - start", String.valueOf(reversed));
-
-        if (reversed)
-        {
+    protected ITableIterator createIterator(boolean reversed) throws DataSetException {
+        log.debug("createIterator(reversed={}) - start", reversed);
+        if (reversed) {
             throw new UnsupportedOperationException("Reverse iterator not supported!");
         }
-
-        if (_iteratorCount > 0)
-        {
+        if (iteratorCount > 0) {
             throw new UnsupportedOperationException("Only one iterator allowed!");
         }
-
-        return new ForwardOnlyIterator(_dataSet.iterator());
+        return new ForwardOnlyIterator(dataSet.iterator());
     }
 
-    ////////////////////////////////////////////////////////////////////////////
-    // IDataSet interface
-
-    public String[] getTableNames() throws DataSetException
-    {
+    public String[] getTableNames() throws DataSetException {
         throw new UnsupportedOperationException();
     }
 
-    public ITableMetaData getTableMetaData(String tableName) throws DataSetException
-    {
+    public ITableMetaData getTableMetaData(String tableName) throws DataSetException {
         throw new UnsupportedOperationException();
     }
 
-    public ITable getTable(String tableName) throws DataSetException
-    {
+    public ITable getTable(String tableName) throws DataSetException {
         throw new UnsupportedOperationException();
     }
 
-    ////////////////////////////////////////////////////////////////////////////
-    // ForwardOnlyIterator class
+    private class ForwardOnlyIterator implements ITableIterator {
+        private final ITableIterator iterator;
 
-    private class ForwardOnlyIterator implements ITableIterator
-    {
-        private final ITableIterator _iterator;
-
-        public ForwardOnlyIterator(ITableIterator iterator)
-        {
-            _iterator = iterator;
-            _iteratorCount++;
+        public ForwardOnlyIterator(ITableIterator iterator) {
+            this.iterator = iterator;
+            iteratorCount++;
         }
 
-        ////////////////////////////////////////////////////////////////////////////
-        // ITableIterator interface
-
-        public boolean next() throws DataSetException
-        {
-            if(_iterator instanceof QueryTableIterator) {
-                return ((QueryTableIterator) _iterator).nextWithoutClosing();
-            } else {
-                return _iterator.next();
+        public boolean next() throws DataSetException {
+            if (iterator instanceof QueryTableIterator) {
+                return ((QueryTableIterator) iterator).nextWithoutClosing();
             }
+            return iterator.next();
         }
 
-        public ITableMetaData getTableMetaData() throws DataSetException
-        {
-            return _iterator.getTableMetaData();
+        public ITableMetaData getTableMetaData() throws DataSetException {
+            return iterator.getTableMetaData();
         }
 
-        public ITable getTable() throws DataSetException
-        {
-            return new ForwardOnlyTable(_iterator.getTable());
+        public ITable getTable() throws DataSetException {
+            return new ForwardOnlyTable(iterator.getTable());
         }
     }
 }

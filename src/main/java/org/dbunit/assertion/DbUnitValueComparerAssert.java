@@ -23,10 +23,8 @@ public class DbUnitValueComparerAssert extends DbUnitAssertBase {
      * order, the columns data type, and which columns are composing the primary
      * keys.
      *
-     * @param expectedDataSet
-     *            {@link IDataSet} containing all expected results.
-     * @param actualDataSet
-     *            {@link IDataSet} containing all actual results.
+     * @param expectedDataSet {@link IDataSet} containing all expected results.
+     * @param actualDataSet   {@link IDataSet} containing all actual results.
      */
     public void assertWithValueComparer(final IDataSet expectedDataSet, final IDataSet actualDataSet) throws DatabaseUnitException {
         final ValueComparator defaultValueComparator = valueComparerDefaults.getDefaultValueComparer();
@@ -40,14 +38,11 @@ public class DbUnitValueComparerAssert extends DbUnitAssertBase {
      * order, the columns data type, and which columns are composing the primary
      * keys.
      *
-     * @param expectedDataSet
-     *            {@link IDataSet} containing all expected results.
-     * @param actualDataSet
-     *            {@link IDataSet} containing all actual results.
-     * @param defaultValueComparator
-     *            {@link ValueComparator} to use with all column value
-     *            comparisons. Can be <code>null</code> and will default to
-     *            {@link ValueComparerDefaults#getDefaultValueComparer()}.
+     * @param expectedDataSet        {@link IDataSet} containing all expected results.
+     * @param actualDataSet          {@link IDataSet} containing all actual results.
+     * @param defaultValueComparator {@link ValueComparator} to use with all column value
+     *                               comparisons. Can be <code>null</code> and will default to
+     *                               {@link ValueComparerDefaults#getDefaultValueComparer()}.
      */
     public void assertWithValueComparer(final IDataSet expectedDataSet, final IDataSet actualDataSet, final ValueComparator defaultValueComparator) throws DatabaseUnitException {
         final Map<String, Map<String, ValueComparator>> tableColumnValueComparers = valueComparerDefaults.getDefaultTableColumnValueComparerMap();
@@ -61,24 +56,20 @@ public class DbUnitValueComparerAssert extends DbUnitAssertBase {
      * the table names, the columns order, the columns data type, and which
      * columns are composing the primary keys.
      *
-     * @param expectedDataSet
-     *            {@link IDataSet} containing all expected results.
-     * @param actualDataSet
-     *            {@link IDataSet} containing all actual results.
-     * @param defaultValueComparator
-     *            {@link ValueComparator} to use with column value comparisons
-     *            when the column name for the table is not in the
-     *            tableColumnValueComparers {@link Map}. Can be
-     *            <code>null</code> and will default to
-     *            {@link ValueComparerDefaults#getDefaultValueComparer()}.
-     * @param tableColumnValueComparers
-     *            {@link Map} of {@link ValueComparator}s to use for specific
-     *            tables and columns. Key is table name, value is {@link Map} of
-     *            column name in the table to {@link ValueComparator}s. Can be
-     *            <code>null</code> and will default to using
-     *            {@link ValueComparerDefaults#getDefaultColumnValueComparerMapForTable(String)} or,
-     *            if that is empty, defaultValueComparer for all columns in all
-     *            tables.
+     * @param expectedDataSet           {@link IDataSet} containing all expected results.
+     * @param actualDataSet             {@link IDataSet} containing all actual results.
+     * @param defaultValueComparator    {@link ValueComparator} to use with column value comparisons
+     *                                  when the column name for the table is not in the
+     *                                  tableColumnValueComparers {@link Map}. Can be
+     *                                  <code>null</code> and will default to
+     *                                  {@link ValueComparerDefaults#getDefaultValueComparer()}.
+     * @param tableColumnValueComparers {@link Map} of {@link ValueComparator}s to use for specific
+     *                                  tables and columns. Key is table name, value is {@link Map} of
+     *                                  column name in the table to {@link ValueComparator}s. Can be
+     *                                  <code>null</code> and will default to using
+     *                                  {@link ValueComparerDefaults#getDefaultColumnValueComparerMapForTable(String)} or,
+     *                                  if that is empty, defaultValueComparer for all columns in all
+     *                                  tables.
      */
     public void assertWithValueComparer(final IDataSet expectedDataSet, final IDataSet actualDataSet, final ValueComparator defaultValueComparator, final Map<String, Map<String, ValueComparator>> tableColumnValueComparers) throws DatabaseUnitException {
         final FailureHandler failureHandler = getDefaultFailureHandler();
@@ -92,10 +83,8 @@ public class DbUnitValueComparerAssert extends DbUnitAssertBase {
      * order, the columns data type, and which columns are composing the primary
      * keys.
      *
-     * @param expectedTable
-     *            {@link ITable} containing all expected results.
-     * @param actualTable
-     *            {@link ITable} containing all actual results.
+     * @param expectedTable {@link ITable} containing all expected results.
+     * @param actualTable   {@link ITable} containing all actual results.
      */
     public void assertWithValueComparer(final ITable expectedTable, final ITable actualTable) throws DatabaseUnitException {
         final ValueComparator defaultValueComparator = valueComparerDefaults.getDefaultValueComparer();
@@ -109,14 +98,11 @@ public class DbUnitValueComparerAssert extends DbUnitAssertBase {
      * order, the columns data type, and which columns are composing the primary
      * keys.
      *
-     * @param expectedTable
-     *            {@link ITable} containing all expected results.
-     * @param actualTable
-     *            {@link ITable} containing all actual results.
-     * @param defaultValueComparator
-     *            {@link ValueComparator} to use with all column value
-     *            comparisons. Can be <code>null</code> and will default to
-     *            {@link ValueComparerDefaults#getDefaultValueComparer()}.
+     * @param expectedTable          {@link ITable} containing all expected results.
+     * @param actualTable            {@link ITable} containing all actual results.
+     * @param defaultValueComparator {@link ValueComparator} to use with all column value
+     *                               comparisons. Can be <code>null</code> and will default to
+     *                               {@link ValueComparerDefaults#getDefaultValueComparer()}.
      */
     public void assertWithValueComparer(final ITable expectedTable, final ITable actualTable, final ValueComparator defaultValueComparator) throws DatabaseUnitException {
         final String tableName = expectedTable.getTableMetaData().getTableName();
@@ -131,24 +117,20 @@ public class DbUnitValueComparerAssert extends DbUnitAssertBase {
      * the table names, the columns order, the columns data type, and which
      * columns are composing the primary keys.
      *
-     * @param expectedTable
-     *            {@link ITable} containing all expected results.
-     * @param actualTable
-     *            {@link ITable} containing all actual results.
-     * @param defaultValueComparator
-     *            {@link ValueComparator} to use with column value comparisons
-     *            when the column name for the table is not in the
-     *            columnValueComparers {@link Map}. Can be <code>null</code> and
-     *            will default to {@link ValueComparerDefaults#getDefaultValueComparer()}.
-     * @param columnValueComparers
-     *            {@link Map} of {@link ValueComparator}s to use for specific
-     *            columns. Key is column name in the table, value is
-     *            {@link ValueComparator} to use in comparing expected to actual
-     *            column values. Can be <code>null</code> and will default to
-     *            using
-     *            {@link ValueComparerDefaults#getDefaultColumnValueComparerMapForTable(String)} or,
-     *            if that is empty, defaultValueComparer for all columns in the
-     *            table.
+     * @param expectedTable          {@link ITable} containing all expected results.
+     * @param actualTable            {@link ITable} containing all actual results.
+     * @param defaultValueComparator {@link ValueComparator} to use with column value comparisons
+     *                               when the column name for the table is not in the
+     *                               columnValueComparers {@link Map}. Can be <code>null</code> and
+     *                               will default to {@link ValueComparerDefaults#getDefaultValueComparer()}.
+     * @param columnValueComparers   {@link Map} of {@link ValueComparator}s to use for specific
+     *                               columns. Key is column name in the table, value is
+     *                               {@link ValueComparator} to use in comparing expected to actual
+     *                               column values. Can be <code>null</code> and will default to
+     *                               using
+     *                               {@link ValueComparerDefaults#getDefaultColumnValueComparerMapForTable(String)} or,
+     *                               if that is empty, defaultValueComparer for all columns in the
+     *                               table.
      */
     public void assertWithValueComparer(final ITable expectedTable, final ITable actualTable, final ValueComparator defaultValueComparator, final Map<String, ValueComparator> columnValueComparers) throws DatabaseUnitException {
         final FailureHandler failureHandler = getDefaultFailureHandler();
@@ -163,30 +145,25 @@ public class DbUnitValueComparerAssert extends DbUnitAssertBase {
      * the columns order, the columns data type, and which columns are composing
      * the primary keys.
      *
-     * @param expectedTable
-     *            {@link ITable} containing all expected results.
-     * @param actualTable
-     *            {@link ITable} containing all actual results.
-     * @param additionalColumnInfo
-     *            The columns to be printed out if the assert fails because of a
-     *            data mismatch. Provides some additional column values that may
-     *            be useful to quickly identify the columns for which the
-     *            mismatch occurred (for example a primary key column). Can be
-     *            <code>null</code>
-     * @param defaultValueComparator
-     *            {@link ValueComparator} to use with column value comparisons
-     *            when the column name for the table is not in the
-     *            columnValueComparers {@link Map}. Can be <code>null</code> and
-     *            will default to {@link ValueComparerDefaults#getDefaultValueComparer()}.
-     * @param columnValueComparers
-     *            {@link Map} of {@link ValueComparator}s to use for specific
-     *            columns. Key is column name in the table, value is
-     *            {@link ValueComparator} to use in comparing expected to actual
-     *            column values. Can be <code>null</code> and will default to
-     *            using
-     *            {@link ValueComparerDefaults#getDefaultColumnValueComparerMapForTable(String)} or,
-     *            if that is empty, defaultValueComparer for all columns in the
-     *            table.
+     * @param expectedTable          {@link ITable} containing all expected results.
+     * @param actualTable            {@link ITable} containing all actual results.
+     * @param additionalColumnInfo   The columns to be printed out if the assert fails because of a
+     *                               data mismatch. Provides some additional column values that may
+     *                               be useful to quickly identify the columns for which the
+     *                               mismatch occurred (for example a primary key column). Can be
+     *                               <code>null</code>
+     * @param defaultValueComparator {@link ValueComparator} to use with column value comparisons
+     *                               when the column name for the table is not in the
+     *                               columnValueComparers {@link Map}. Can be <code>null</code> and
+     *                               will default to {@link ValueComparerDefaults#getDefaultValueComparer()}.
+     * @param columnValueComparers   {@link Map} of {@link ValueComparator}s to use for specific
+     *                               columns. Key is column name in the table, value is
+     *                               {@link ValueComparator} to use in comparing expected to actual
+     *                               column values. Can be <code>null</code> and will default to
+     *                               using
+     *                               {@link ValueComparerDefaults#getDefaultColumnValueComparerMapForTable(String)} or,
+     *                               if that is empty, defaultValueComparer for all columns in the
+     *                               table.
      */
     public void assertWithValueComparer(final ITable expectedTable, final ITable actualTable, final Column[] additionalColumnInfo, final ValueComparator defaultValueComparator, final Map<String, ValueComparator> columnValueComparers) throws DatabaseUnitException {
         final FailureHandler failureHandler = getDefaultFailureHandler(additionalColumnInfo);

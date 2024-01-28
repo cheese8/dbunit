@@ -24,7 +24,7 @@ import org.dbunit.dataset.ITable;
 
 /**
  * Handles the failure of an assertion.
- * 
+ *
  * @author gommma (gommma AT users.sourceforge.net)
  * @author Last changed by: $Author$
  * @version $Revision$ $Date$
@@ -33,13 +33,14 @@ import org.dbunit.dataset.ITable;
 public interface FailureHandler extends DifferenceListener, FailureFactory {
 
     /**
-     * Returns a string to be appended to the assertion failure message. Is used to 
+     * Returns a string to be appended to the assertion failure message. Is used to
      * provide some more information about a failure (for example to print out some
      * PK columns for identifying the failed rows in the DB).
+     *
      * @param expectedTable
      * @param actualTable
-     * @param row The row for which the assertion failed
-     * @param columnName The column for which the assertion failed
+     * @param row           The row for which the assertion failed
+     * @param columnName    The column for which the assertion failed
      * @return A string that is appended to the assertion failure message
      */
     String getAdditionalInfo(ITable expectedTable, ITable actualTable, int row, String columnName);

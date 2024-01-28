@@ -43,8 +43,7 @@ public class IsActualContainingExpectedStringValueComparer extends ValueComparer
     }
 
     @Override
-    protected String getFailPhrase()
-    {
+    protected String getFailPhrase() {
         return "not containing";
     }
 }

@@ -12,6 +12,8 @@ import org.dbunit.assertion.comparer.value.ValueComparator;
  * @since 2.6.0
  */
 public interface VerifyTableDefinitionVerifier {
-    /** Verify the {@link VerifyTableDefinition} is valid. */
+    /**
+     * Verify the {@link VerifyTableDefinition} is valid.
+     */
     void verify(final VerifyTableDefinition verifyTableDefinition);
 }
