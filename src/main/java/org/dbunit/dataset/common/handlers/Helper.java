@@ -21,9 +21,7 @@
 
 package org.dbunit.dataset.common.handlers;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author fede
@@ -31,13 +29,8 @@ import org.slf4j.LoggerFactory;
  * @version $Revision$ $Date$
  * @since 2.2 (Sep 12, 2004)
  */
+@Slf4j
 public abstract class Helper {
-
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(Helper.class);
-
     private PipelineComponent handler;
 
     abstract void helpWith(char c) throws PipelineException;
@@ -51,7 +44,7 @@ public abstract class Helper {
     }
 
     void setHandler(PipelineComponent handler) {
-        logger.debug("setHandler(handler={}) - start", handler);
+        log.debug("setHandler(handler={}) - start", handler);
         this.handler = handler;
     }
 }

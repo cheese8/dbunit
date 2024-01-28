@@ -21,8 +21,7 @@
 
 package org.dbunit.dataset.common.handlers;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author fede
@@ -30,23 +29,20 @@ import org.slf4j.LoggerFactory;
  * @version $Revision$ $Date$
  * @since 2.2 (Sep 12, 2004)
  */
+@Slf4j
 public class AllHandler extends AbstractPipelineComponent {
+    private AllHandler() {
+    }
 
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(AllHandler.class);
-
-    private AllHandler () {}
-
-    public static final PipelineComponent ACCEPT () {
-        logger.debug("ACCEPT() - start");
+    public static PipelineComponent ACCEPT() {
+        log.debug("ACCEPT() - start");
         return createPipelineComponent(new AllHandler(), new ACCEPT());
     }
 
-    public static final PipelineComponent IGNORE () {
-        logger.debug("IGNORE() - start");
-        return createPipelineComponent(new AllHandler() {}, new IGNORE());
+    public static PipelineComponent IGNORE() {
+        log.debug("IGNORE() - start");
+        return createPipelineComponent(new AllHandler() {
+        }, new IGNORE());
     }
 
     public boolean canHandle(char c) throws IllegalInputCharacterException {

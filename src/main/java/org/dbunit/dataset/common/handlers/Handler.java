@@ -21,7 +21,6 @@
 
 package org.dbunit.dataset.common.handlers;
 
-
 /**
  * @author fede
  * @author Last changed by: $Author$
@@ -29,8 +28,11 @@ package org.dbunit.dataset.common.handlers;
  * @since 2.2 (Sep 12, 2004)
  */
 public interface Handler {
-    public void handle(char c) throws IllegalInputCharacterException, PipelineException;
-    public boolean canHandle(char c) throws IllegalInputCharacterException;
-    public void noMoreInput() throws IllegalStateException;
-    public boolean allowForNoMoreInput() throws IllegalStateException;
+    void handle(char c) throws IllegalInputCharacterException, PipelineException;
+
+    boolean canHandle(char c) throws IllegalInputCharacterException;
+
+    void noMoreInput() throws IllegalStateException;
+
+    boolean allowForNoMoreInput() throws IllegalStateException;
 }

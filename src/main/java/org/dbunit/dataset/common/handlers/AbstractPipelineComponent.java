@@ -20,8 +20,7 @@
  */
 package org.dbunit.dataset.common.handlers;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author fede
@@ -29,13 +28,8 @@ import org.slf4j.LoggerFactory;
  * @version $Revision$ $Date$
  * @since 2.2 (Sep 12, 2004)
  */
+@Slf4j
 public abstract class AbstractPipelineComponent implements PipelineComponent {
-
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(AbstractPipelineComponent.class);
-
     private PipelineComponent successor;
     private Pipeline pipeline;
 
@@ -50,33 +44,28 @@ public abstract class AbstractPipelineComponent implements PipelineComponent {
     }
 
     public void setPipeline(Pipeline pipeline) {
-        logger.debug("setPipeline(pipeline={}) - start", pipeline);
+        log.debug("setPipeline(pipeline={}) - start", pipeline);
         this.pipeline = pipeline;
     }
 
     protected PipelineConfig getPipelineConfig() {
-        if(this.getPipeline() != null) {
+        if (getPipeline() != null) {
             return this.getPipeline().getPipelineConfig();
         }
-        else {
-            throw new IllegalStateException("The pipeline is not set for this component. Cannot proceed");
-        }
+        throw new IllegalStateException("The pipeline is not set for this component. Cannot proceed");
     }
 
     public void setSuccessor(PipelineComponent successor) {
-        logger.debug("setSuccessor(successor={}) - start", successor);
+        log.debug("setSuccessor(successor={}) - start", successor);
         this.successor = successor;
     }
-
 
     private StringBuffer getThePiece() {
         return getPipeline().getCurrentProduct();
     }
 
     public void handle(char c) throws IllegalInputCharacterException, PipelineException {
-        if(logger.isDebugEnabled())
-            logger.debug("handle(c={}) - start", String.valueOf(c));
-
+        log.debug("handle(c={}) - start", c);
         if (!canHandle(c)) {
             getSuccessor().handle(c);
         } else {
@@ -85,22 +74,21 @@ public abstract class AbstractPipelineComponent implements PipelineComponent {
     }
 
     public void noMoreInput() {
-        logger.debug("noMoreInput() - start");
-
+        log.debug("noMoreInput() - start");
         if (allowForNoMoreInput()) {
-            if (getSuccessor()!= null)
+            if (getSuccessor() != null) {
                 getSuccessor().noMoreInput();
+            }
         }
     }
 
     public boolean allowForNoMoreInput() {
-        logger.debug("allowForNoMoreInput() - start");
-
+        log.debug("allowForNoMoreInput() - start");
         return getHelper().allowForNoMoreInput();
     }
 
     protected static PipelineComponent createPipelineComponent(AbstractPipelineComponent handler, Helper helper) {
-        logger.debug("createPipelineComponent(handler={}, helper={}) - start", handler, helper);
+        log.debug("createPipelineComponent(handler={}, helper={}) - start", handler, helper);
         helper.setHandler(handler);
         handler.setHelper(helper);
         return handler;
@@ -108,7 +96,6 @@ public abstract class AbstractPipelineComponent implements PipelineComponent {
 
     /**
      * Method invoked when the character should be accepted
-     * @param c
      */
     public void accept(char c) {
         getThePiece().append(c);
@@ -119,7 +106,7 @@ public abstract class AbstractPipelineComponent implements PipelineComponent {
     }
 
     private void setHelper(Helper helper) {
-        logger.debug("setHelper(helper={}) - start", helper);
+        log.debug("setHelper(helper={}) - start", helper);
         this.helper = helper;
     }
 
@@ -131,9 +118,7 @@ public abstract class AbstractPipelineComponent implements PipelineComponent {
 
     static protected class ACCEPT extends Helper {
         public void helpWith(char c) {
-            if(logger.isDebugEnabled())
-                logger.debug("helpWith(c={}) - start", String.valueOf(c));
-            
+            log.debug("helpWith(c={}) - start", c);
             getHandler().accept(c);
         }
     }
