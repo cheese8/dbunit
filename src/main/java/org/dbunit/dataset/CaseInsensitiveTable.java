@@ -30,8 +30,7 @@ import org.slf4j.LoggerFactory;
  * @since Mar 27, 2002
  * @deprecated All IDataSet implementations are case insensitive since DbUnit 1.5
  */
-public class CaseInsensitiveTable implements ITable
-{
+public class CaseInsensitiveTable implements ITable {
 
     /**
      * Logger for this class
@@ -40,23 +39,19 @@ public class CaseInsensitiveTable implements ITable
 
     private final ITable _table;
 
-    public CaseInsensitiveTable(ITable table)
-    {
+    public CaseInsensitiveTable(ITable table) {
         _table = table;
     }
 
     private String getInternalColumnName(String columnName)
-            throws DataSetException
-    {
+            throws DataSetException {
         logger.debug("getInternalColumnName(columnName={}) - start", columnName);
 
         Column[] columns = _table.getTableMetaData().getColumns();
 
-        for (int i = 0; i < columns.length; i++)
-        {
+        for (int i = 0; i < columns.length; i++) {
             Column column = columns[i];
-            if (columnName.equalsIgnoreCase(column.getColumnName()))
-            {
+            if (columnName.equalsIgnoreCase(column.getColumnName())) {
                 return column.getColumnName();
             }
         }
@@ -67,19 +62,16 @@ public class CaseInsensitiveTable implements ITable
     ////////////////////////////////////////////////////////////////////////////
     // ITable interface
 
-    public ITableMetaData getTableMetaData()
-    {
+    public ITableMetaData getTableMetaData() {
         return _table.getTableMetaData();
     }
 
-    public int getRowCount()
-    {
+    public int getRowCount() {
         return _table.getRowCount();
     }
 
-    public Object getValue(int row, String column) throws DataSetException
-    {
-        if(logger.isDebugEnabled())
+    public Object getValue(int row, String column) throws DataSetException {
+        if (logger.isDebugEnabled())
             logger.debug("getValue(row={}, columnName={}) - start", Integer.toString(row), column);
 
         return _table.getValue(row, getInternalColumnName(column));

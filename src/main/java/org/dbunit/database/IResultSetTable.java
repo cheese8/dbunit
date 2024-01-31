@@ -25,8 +25,8 @@ import org.dbunit.dataset.ITable;
 
 /**
  * @author Manuel Laflamme
- * @since Apr 10, 2003
  * @version $Revision$
+ * @since Apr 10, 2003
  */
 public interface IResultSetTable extends ITable {
     void close() throws DataSetException;

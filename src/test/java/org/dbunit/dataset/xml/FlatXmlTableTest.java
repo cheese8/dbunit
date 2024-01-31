@@ -34,25 +34,20 @@ import java.io.File;
  * @version $Revision$
  * @since Mar 12, 2002
  */
-public class FlatXmlTableTest extends AbstractTableTest
-{
-    public FlatXmlTableTest(String s)
-    {
+public class FlatXmlTableTest extends AbstractTableTest {
+    public FlatXmlTableTest(String s) {
         super(s);
     }
 
-    protected ITable createTable() throws Exception
-    {
+    protected ITable createTable() throws Exception {
         return createDataSet(true).getTable("TEST_TABLE");
     }
 
-    protected IDataSet createDataSet(boolean noneAsNull) throws Exception
-    {
+    protected IDataSet createDataSet(boolean noneAsNull) throws Exception {
         return new FlatXmlDataSetBuilder().build(TestUtils.getFile("xml/flatXmlTableTest.xml"));
     }
 
-    public void testGetMissingValue() throws Exception
-    {
+    public void testGetMissingValue() throws Exception {
         int row = 0;
         Object[] expected = {"row 1 col 0", null, "row 1 col 2"};
 
@@ -61,15 +56,13 @@ public class FlatXmlTableTest extends AbstractTableTest
         Column[] columns = table.getTableMetaData().getColumns();
         assertEquals("column count", expected.length, columns.length);
         assertEquals("row count", 1, table.getRowCount());
-        for (int i = 0; i < columns.length; i++)
-        {
+        for (int i = 0; i < columns.length; i++) {
             assertEquals("value " + i, expected[i],
                     table.getValue(row, columns[i].getColumnName()));
         }
     }
 
-    public void testLoadCRLF() throws Exception
-    {
+    public void testLoadCRLF() throws Exception {
         int row = 0;
         Object[] expected = {"row 0 \n col 0 \r"}; // in the expected result the &#xA; and &#xD; should be replaced by \n and \r
 
@@ -78,14 +71,13 @@ public class FlatXmlTableTest extends AbstractTableTest
         Column[] columns = table.getTableMetaData().getColumns();
         assertEquals("column count", expected.length, columns.length);
         assertEquals("row count", 1, table.getRowCount());
-        for (int i = 0; i < columns.length; i++)
-        {
+        for (int i = 0; i < columns.length; i++) {
             assertEquals("value " + i, expected[i],
                     table.getValue(row, columns[i].getColumnName()));
         }
     }
-    
-    
+
+
 //    public void testGetValueAndNoSuchColumn() throws Exception
 //    {
 //        ITable table = createTable();

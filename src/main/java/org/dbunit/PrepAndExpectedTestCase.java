@@ -34,14 +34,11 @@ public interface PrepAndExpectedTestCase {
     /**
      * Configure the test. Call this method before performing the test steps.
      *
-     * @param verifyTableDefinitions
-     *            Table definitions to verify after test execution.
-     * @param prepDataFiles
-     *            The prep data files (as classpath resources) to load and
-     *            insert contents into the database as seed data.
-     * @param expectedDataFiles
-     *            The expected data files (as classpath resources) to load as
-     *            expected data and verify actual data matches at test end.
+     * @param verifyTableDefinitions Table definitions to verify after test execution.
+     * @param prepDataFiles          The prep data files (as classpath resources) to load and
+     *                               insert contents into the database as seed data.
+     * @param expectedDataFiles      The expected data files (as classpath resources) to load as
+     *                               expected data and verify actual data matches at test end.
      */
     void configureTest(VerifyTableDefinition[] verifyTableDefinitions, String[] prepDataFiles, String[] expectedDataFiles) throws Exception;
 
@@ -53,30 +50,23 @@ public interface PrepAndExpectedTestCase {
     /**
      * Convenience method to call configureTest() and preTest().
      *
-     * @param verifyTables
-     *            Table definitions to verify after test execution.
-     * @param prepDataFiles
-     *            The prep data files (as classpath resources) to load and
-     *            insert contents into the database as seed data.
-     * @param expectedDataFiles
-     *            The expected data files (as classpath resources) to load as
-     *            expected data and verify actual data matches at test end.
+     * @param verifyTables      Table definitions to verify after test execution.
+     * @param prepDataFiles     The prep data files (as classpath resources) to load and
+     *                          insert contents into the database as seed data.
+     * @param expectedDataFiles The expected data files (as classpath resources) to load as
+     *                          expected data and verify actual data matches at test end.
      */
     void preTest(VerifyTableDefinition[] verifyTables, String[] prepDataFiles, String[] expectedDataFiles) throws Exception;
 
     /**
      * Run the DbUnit test.
      *
-     * @param verifyTables
-     *            Table definitions to verify after test execution.
-     * @param prepDataFiles
-     *            The prep data files (as classpath resources) to load and
-     *            insert contents into the database as seed data.
-     * @param expectedDataFiles
-     *            The expected data files (as classpath resources) to load as
-     *            expected data and verify actual data matches at test end.
-     * @param testSteps
-     *            The test steps to run.
+     * @param verifyTables      Table definitions to verify after test execution.
+     * @param prepDataFiles     The prep data files (as classpath resources) to load and
+     *                          insert contents into the database as seed data.
+     * @param expectedDataFiles The expected data files (as classpath resources) to load as
+     *                          expected data and verify actual data matches at test end.
+     * @param testSteps         The test steps to run.
      * @return User defined object from running the test steps.
      * @since 2.5.2
      */
@@ -85,7 +75,6 @@ public interface PrepAndExpectedTestCase {
     /**
      * Execute all post-test steps. Call this method after performing the test
      * steps.
-     *
      */
     void postTest() throws Exception;
 
@@ -93,18 +82,16 @@ public interface PrepAndExpectedTestCase {
      * Execute post-test steps. Call this method after performing the test
      * steps.
      *
-     * @param verifyData
-     *            Specify true to perform verify data steps, false to not.
-     *            Useful to specify false when test has failure in progress
-     *            (e.g. an exception) and verifying data would fail, masking
-     *            original test failure.
+     * @param verifyData Specify true to perform verify data steps, false to not.
+     *                   Useful to specify false when test has failure in progress
+     *                   (e.g. an exception) and verifying data would fail, masking
+     *                   original test failure.
      */
     void postTest(boolean verifyData) throws Exception;
 
     /**
      * For the provided VerifyTableDefinitions, verify each table's actual
      * results are as expected.
-     *
      */
     void verifyData() throws Exception;
 
@@ -112,7 +99,6 @@ public interface PrepAndExpectedTestCase {
      * Cleanup tables specified in prep and expected datasets, using the
      * provided databaseTester. See
      * {@link org.dbunit.IDatabaseTester#onTearDown()}.
-     *
      */
     void cleanupData() throws Exception;
 

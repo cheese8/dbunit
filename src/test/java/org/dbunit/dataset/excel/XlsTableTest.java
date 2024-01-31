@@ -37,31 +37,26 @@ import org.dbunit.testutil.TestUtils;
  * @version $Revision$ $Date$
  * @since Feb 21, 2003
  */
-public class XlsTableTest extends AbstractTableTest
-{
+public class XlsTableTest extends AbstractTableTest {
 //    private static final long ONE_SECOND_IN_MILLIS = 1000;
 //    private static final long ONE_MINUTE_IN_MILLIS = 60 * 1000;
 //    private static final long ONE_HOUR_IN_MILLIS = 60 * ONE_MINUTE_IN_MILLIS;
 //    private static final long ONE_DAY_IN_MILLIS = 24 * ONE_HOUR_IN_MILLIS;
-    
-    
-    public XlsTableTest(String s)
-    {
+
+
+    public XlsTableTest(String s) {
         super(s);
     }
 
-    protected ITable createTable() throws Exception
-    {
+    protected ITable createTable() throws Exception {
         return createDataSet().getTable("TEST_TABLE");
     }
 
-    protected IDataSet createDataSet() throws Exception
-    {
+    protected IDataSet createDataSet() throws Exception {
         return new XlsDataSet(TestUtils.getFile("xml/tableTest.xls"));
     }
 
-    public void testGetMissingValue() throws Exception
-    {
+    public void testGetMissingValue() throws Exception {
         int row = 0;
         Object[] expected = {"row 0 col 0", null, "row 0 col 2"};
 
@@ -70,44 +65,40 @@ public class XlsTableTest extends AbstractTableTest
         Column[] columns = table.getTableMetaData().getColumns();
         assertEquals("column count", expected.length, columns.length);
         assertEquals("row count", 1, table.getRowCount());
-        for (int i = 0; i < columns.length; i++)
-        {
+        for (int i = 0; i < columns.length; i++) {
             assertEquals("value " + i, expected[i],
                     table.getValue(row, columns[i].getColumnName()));
         }
     }
-    
-    public void testEmptyTableColumns() throws Exception
-    {
-    	Column[] expectedColumns = new Column[] {
-    			new Column("COLUMN0", DataType.UNKNOWN),
-    			new Column("COLUMN1", DataType.UNKNOWN),
-    			new Column("COLUMN2", DataType.UNKNOWN),
-    			new Column("COLUMN3", DataType.UNKNOWN)
-    	};
+
+    public void testEmptyTableColumns() throws Exception {
+        Column[] expectedColumns = new Column[]{
+                new Column("COLUMN0", DataType.UNKNOWN),
+                new Column("COLUMN1", DataType.UNKNOWN),
+                new Column("COLUMN2", DataType.UNKNOWN),
+                new Column("COLUMN3", DataType.UNKNOWN)
+        };
         ITable table = createDataSet().getTable("EMPTY_TABLE");
 
         Column[] columns = table.getTableMetaData().getColumns();
-    	assertEquals("Column count", expectedColumns.length, columns.length);
-    	for (int i = 0; i < columns.length; i++) {
-			assertEquals("Column " + i, expectedColumns[i], columns[i]);
-		}
+        assertEquals("Column count", expectedColumns.length, columns.length);
+        for (int i = 0; i < columns.length; i++) {
+            assertEquals("Column " + i, expectedColumns[i], columns[i]);
+        }
     }
-    
-    public void testEmptySheet() throws Exception
-    {
+
+    public void testEmptySheet() throws Exception {
         ITable table = createDataSet().getTable("EMPTY_SHEET");
 
         Column[] columns = table.getTableMetaData().getColumns();
-    	assertEquals("Column count", 0, columns.length);
+        assertEquals("Column count", 0, columns.length);
     }
 
-    
-    public void testDifferentDatatypes() throws Exception
-    {
+
+    public void testDifferentDatatypes() throws Exception {
         int row = 0;
         ITable table = createDataSet().getTable("TABLE_DIFFERENT_DATATYPES");
-        
+
         // When cell type is numeric and cell value is datetime,
         // Apache-POI returns datetime with system default timezone offset.
         // And java.util.Date#getTime() returns time without timezone offset (= UTC).
@@ -121,47 +112,44 @@ public class XlsTableTest extends AbstractTableTest
 //                new Long(25569),// Dates stored as Long numbers
 //                new Long(25569447916666668L),
 //                new Long(563136574074074L),
-                new Long(0-tzOffset),// Dates stored as Long numbers
-                new Long(38700000-tzOffset),
-                new Long(-2209026545000L-tzOffset),
-                new BigDecimal("10000.00"), 
-                new BigDecimal("-200"), 
+                new Long(0 - tzOffset),// Dates stored as Long numbers
+                new Long(38700000 - tzOffset),
+                new Long(-2209026545000L - tzOffset),
+                new BigDecimal("10000.00"),
+                new BigDecimal("-200"),
                 new BigDecimal("12345.123456789000"),
-                new Long(1233398764000L-tzOffset),
+                new Long(1233398764000L - tzOffset),
                 new Long(1233332866000L) // The last column is a dbunit-date-formatted column in the excel sheet
-                };
+        };
 
         Column[] columns = table.getTableMetaData().getColumns();
         assertEquals("column count", expected.length, columns.length);
-        for (int i = 0; i < columns.length; i++)
-        {
+        for (int i = 0; i < columns.length; i++) {
             Object actual = table.getValue(row, columns[i].getColumnName());
-            String typesResult = " expected=" + (expected[i]!=null ? expected[i].getClass().getName() : "null") + " - actual=" 
-                                    + (actual!=null ? actual.getClass().getName() : "null");
+            String typesResult = " expected=" + (expected[i] != null ? expected[i].getClass().getName() : "null") + " - actual="
+                    + (actual != null ? actual.getClass().getName() : "null");
             assertEquals("value " + i + " (" + typesResult + ")", expected[i], actual);
         }
     }
 
-    public void testNumberAsText() throws Exception
-    {
+    public void testNumberAsText() throws Exception {
         int row = 0;
         ITable table = createDataSet().getTable("TABLE_NUMBER_AS_TEXT");
-        
+
         String[] expected = {
-        		"0",
-        		"666",
-        		"66.6",
-        		"66.6",
-        		"-6.66"
-                };
+                "0",
+                "666",
+                "66.6",
+                "66.6",
+                "-6.66"
+        };
 
         Column[] columns = table.getTableMetaData().getColumns();
         assertEquals("column count", expected.length, columns.length);
-        for (int i = 0; i < columns.length; i++)
-        {
-        	String columnName = columns[i].getColumnName();
+        for (int i = 0; i < columns.length; i++) {
+            String columnName = columns[i].getColumnName();
             Object actual = table.getValue(row, columnName).toString();
-            assertEquals(columns[i].getColumnName(),expected[i],actual);
+            assertEquals(columns[i].getColumnName(), expected[i], actual);
         }
     }
 }

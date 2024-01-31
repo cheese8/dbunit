@@ -15,8 +15,7 @@ import junit.framework.ComparisonFailure;
  * @since 2.4.8
  */
 public class DefaultPrepAndExpectedTestCaseExtIT
-        extends DefaultPrepAndExpectedTestCase
-{
+        extends DefaultPrepAndExpectedTestCase {
     private static final String PREP_DATA_FILE_NAME =
             "/xml/flatXmlDataSetTest.xml";
     private static final String EXP_DATA_FILE_NAME =
@@ -38,14 +37,12 @@ public class DefaultPrepAndExpectedTestCaseExtIT
     private final DataFileLoader dataFileLoader = new FlatXmlDataFileLoader();
 
     private static VerifyTableDefinition makeVerifyTableDefinition(
-            final String tableName)
-    {
-        return new VerifyTableDefinition(tableName, new String[] {});
+            final String tableName) {
+        return new VerifyTableDefinition(tableName, new String[]{});
     }
 
     @Override
-    protected void setUp() throws Exception
-    {
+    protected void setUp() throws Exception {
         setDataFileLoader(dataFileLoader);
 
         // don't call super.setUp() here as prep data is not loaded yet
@@ -53,8 +50,7 @@ public class DefaultPrepAndExpectedTestCaseExtIT
         // super.setUp();
     }
 
-    public void testSuccessRun() throws Exception
-    {
+    public void testSuccessRun() throws Exception {
         final String[] prepDataFiles = {PREP_DATA_FILE_NAME};
         final String[] expectedDataFiles = {PREP_DATA_FILE_NAME};
         final VerifyTableDefinition[] tables = {TEST_TABLE, SECOND_TABLE,
@@ -83,8 +79,7 @@ public class DefaultPrepAndExpectedTestCaseExtIT
         postTest();
     }
 
-    public void testFailRun() throws Exception
-    {
+    public void testFailRun() throws Exception {
         final String[] prepDataFiles = {PREP_DATA_FILE_NAME};
         final String[] expectedDataFiles = {EXP_DATA_FILE_NAME};
         final VerifyTableDefinition[] tables = {TEST_TABLE, SECOND_TABLE,
@@ -110,19 +105,16 @@ public class DefaultPrepAndExpectedTestCaseExtIT
         final IDatabaseTester databaseTesterNew2 = makeDatabaseTester();
         setDatabaseTester(databaseTesterNew2);
 
-        try
-        {
+        try {
             postTest();
             fail("Did not catch expected exception:"
                     + " junit.framework.ComparisonFailure");
-        } catch (final ComparisonFailure e)
-        {
+        } catch (final ComparisonFailure e) {
             // test passes
         }
     }
 
-    protected IDatabaseTester makeDatabaseTester() throws Exception
-    {
+    protected IDatabaseTester makeDatabaseTester() throws Exception {
         final DatabaseEnvironment dbEnv = DatabaseEnvironment.getInstance();
         final IDatabaseConnection connection = dbEnv.getConnection();
         return new DefaultDatabaseTester(connection);

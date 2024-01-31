@@ -35,15 +35,12 @@ import org.dbunit.testutil.TestUtils;
  * @version $Revision$ $Date$
  * @since 1.0 (Feb 22, 2002)
  */
-public class CompositeDataSetTest extends AbstractDataSetTest
-{
-    public CompositeDataSetTest(String s)
-    {
+public class CompositeDataSetTest extends AbstractDataSetTest {
+    public CompositeDataSetTest(String s) {
         super(s);
     }
 
-    protected IDataSet createDataSet() throws Exception
-    {
+    protected IDataSet createDataSet() throws Exception {
         IDataSet dataSet1 = new XmlDataSet(
                 TestUtils.getFileReader("xml/compositeDataSetTest1.xml"));
         assertTrue("count before combine (1)",
@@ -57,19 +54,16 @@ public class CompositeDataSetTest extends AbstractDataSetTest
         return new CompositeDataSet(dataSet1, dataSet2);
     }
 
-    protected IDataSet createDuplicateDataSet() throws Exception
-    {
+    protected IDataSet createDuplicateDataSet() throws Exception {
         return createCompositeDataSet(false, false);
     }
 
-    protected IDataSet createMultipleCaseDuplicateDataSet() throws Exception 
-    {
+    protected IDataSet createMultipleCaseDuplicateDataSet() throws Exception {
         return createCompositeDataSet(false, true);
     }
 
-    
-    public void testCombineTables() throws Exception
-    {
+
+    public void testCombineTables() throws Exception {
         CompositeDataSet combinedDataSet = createCompositeDataSet(true, false);
         String[] tableNames = combinedDataSet.getTableNames();
         assertEquals("table count combined", 2, tableNames.length);
@@ -77,10 +71,9 @@ public class CompositeDataSetTest extends AbstractDataSetTest
         assertEquals("EMPTY_TABLE", tableNames[1]);
     }
 
-    
-    private CompositeDataSet createCompositeDataSet(boolean combined, boolean multipleCase) 
-    throws DataSetException, FileNotFoundException, IOException 
-    {
+
+    private CompositeDataSet createCompositeDataSet(boolean combined, boolean multipleCase)
+            throws DataSetException, FileNotFoundException, IOException {
         IDataSet dataSet1 = new FlatXmlDataSetBuilder().build(
                 TestUtils.getFileReader("xml/compositeDataSetDuplicateTest1.xml"));
         assertTrue("count before combine (1)",
@@ -91,10 +84,10 @@ public class CompositeDataSetTest extends AbstractDataSetTest
         assertTrue("count before combine (2)",
                 dataSet2.getTableNames().length < getExpectedDuplicateNames().length);
 
-        if(multipleCase){
+        if (multipleCase) {
             dataSet2 = new LowerCaseDataSet(dataSet2);
         }
-        
+
         CompositeDataSet dataSet = new CompositeDataSet(dataSet1, dataSet2, combined);
         return dataSet;
     }

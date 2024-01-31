@@ -57,8 +57,8 @@ import org.dbunit.util.FileHelper;
  * @author Ben Cox
  * @author Last changed by: $Author$
  * @version $Revision$ $Date$
- * @since Jun 10, 2002
  * @see org.dbunit.ant.AllTests
+ * @since Jun 10, 2002
  */
 public class DbUnitTaskIT extends BuildFileTest {
     static protected Class classUnderTest = DbUnitTaskIT.class;
@@ -68,8 +68,7 @@ public class DbUnitTaskIT extends BuildFileTest {
 
     private File outputDir;
 
-    public DbUnitTaskIT(String name)
-    {
+    public DbUnitTaskIT(String name) {
         super(name);
     }
 
@@ -136,13 +135,12 @@ public class DbUnitTaskIT extends BuildFileTest {
 
     public void testSetFlatFalse() {
         String targetName = "set-format-xml";
-        Operation operation = (Operation)getFirstStepFromTarget(targetName);
+        Operation operation = (Operation) getFirstStepFromTarget(targetName);
         assertTrue("Operation attribute format should have been 'xml', but was: "
                 + operation.getFormat(), operation.getFormat().equalsIgnoreCase("xml"));
     }
 
-    public void testResolveOperationTypes()
-    {
+    public void testResolveOperationTypes() {
         assertOperationType("Should have been a NONE operation",
                 "test-type-none", DatabaseOperation.NONE);
         assertOperationType("Should have been an DELETE_ALL operation",
@@ -169,26 +167,23 @@ public class DbUnitTaskIT extends BuildFileTest {
                 "test-type-mssql-clean-insert", InsertIdentityOperation.CLEAN_INSERT);
     }
 
-    public void testInvalidCompositeOperationSrc()
-    {
+    public void testInvalidCompositeOperationSrc() {
         expectBuildException("invalid-composite-operation-src",
                 "Should have objected to nested operation src attribute "
                         + "being set.");
     }
 
-    public void testInvalidCompositeOperationFlat()
-    {
+    public void testInvalidCompositeOperationFlat() {
         expectBuildException("invalid-composite-operation-format-flat",
                 "Should have objected to nested operation format attribute "
                         + "being set.");
     }
 
-    public void testExportFull()
-    {
+    public void testExportFull() {
         String targetName = "test-export-full";
-        Export export = (Export)getFirstStepFromTarget(targetName);
+        Export export = (Export) getFirstStepFromTarget(targetName);
         assertTrue("Should have been a flat format, "
-                + "but was: " + export.getFormat(),
+                        + "but was: " + export.getFormat(),
                 export.getFormat().equalsIgnoreCase("flat"));
         List tables = export.getTables();
         assertTrue("Should have been an empty table list "
@@ -196,26 +191,24 @@ public class DbUnitTaskIT extends BuildFileTest {
                 + tables, tables.size() == 0);
     }
 
-    public void testExportPartial()
-    {
+    public void testExportPartial() {
         String targetName = "test-export-partial";
-        Export export = (Export)getFirstStepFromTarget(targetName);
+        Export export = (Export) getFirstStepFromTarget(targetName);
         List tables = export.getTables();
         assertEquals("table count", 2, tables.size());
-        Table testTable = (Table)tables.get(0);
-        Table pkTable = (Table)tables.get(1);
+        Table testTable = (Table) tables.get(0);
+        Table pkTable = (Table) tables.get(1);
         assertTrue("Should have been been TABLE TEST_TABLE, but was: "
                 + testTable.getName(), testTable.getName().equals("TEST_TABLE"));
         assertTrue("Should have been been TABLE PK_TABLE, but was: "
                 + pkTable.getName(), pkTable.getName().equals("PK_TABLE"));
     }
 
-    public void testExportWithForwardOnlyResultSetTable() throws SQLException, DatabaseUnitException
-    {
+    public void testExportWithForwardOnlyResultSetTable() throws SQLException, DatabaseUnitException {
         String targetName = "test-export-forward-only-result-set-table-via-config";
 
         // Test if the correct result set table factory is set according to dbconfig
-        Export export = (Export)getFirstStepFromTarget(targetName);
+        Export export = (Export) getFirstStepFromTarget(targetName);
         DbUnitTask task = getFirstTargetTask(targetName);
         IDatabaseConnection connection = task.createConnection();
         IDataSet dataSetToBeExported = export.getExportDataSet(connection);
@@ -223,68 +216,61 @@ public class DbUnitTaskIT extends BuildFileTest {
                 connection.getConfig().getProperty(DatabaseConfig.PROPERTY_RESULTSET_TABLE_FACTORY).getClass().getName());
     }
 
-    public void testExportFlat()
-    {
+    public void testExportFlat() {
         String targetName = "test-export-format-flat";
-        Export export = (Export)getFirstStepFromTarget(targetName);
+        Export export = (Export) getFirstStepFromTarget(targetName);
         assertEquals("format", "FLAT", export.getFormat());
     }
 
-    public void testExportFlatWithDocytpe()
-    {
+    public void testExportFlatWithDocytpe() {
         String targetName = "test-export-format-flat-with-doctype";
-        Export export = (Export)getFirstStepFromTarget(targetName);
+        Export export = (Export) getFirstStepFromTarget(targetName);
         assertEquals("format", "FLAT", export.getFormat());
         assertEquals("doctype", "dataset.dtd", export.getDoctype());
     }
 
-    public void testExportFlatWithEncoding()
-    {
+    public void testExportFlatWithEncoding() {
         String targetName = "test-export-format-flat-with-encoding";
-        Export export = (Export)getFirstStepFromTarget(targetName);
+        Export export = (Export) getFirstStepFromTarget(targetName);
         assertEquals("format", "FLAT", export.getFormat());
         assertEquals("encoding", "ISO-8859-1", export.getEncoding());
     }
 
-    public void testExportXml()
-    {
+    public void testExportXml() {
         String targetName = "test-export-format-xml";
-        Export export = (Export)getFirstStepFromTarget(targetName);
+        Export export = (Export) getFirstStepFromTarget(targetName);
         assertTrue("Should have been an xml format, "
-                + "but was: " + export.getFormat(),
+                        + "but was: " + export.getFormat(),
                 export.getFormat().equalsIgnoreCase("xml"));
     }
 
     public void testExportCsv() {
         String targetName = "test-export-format-csv";
-        Export export = (Export)getFirstStepFromTarget(targetName);
+        Export export = (Export) getFirstStepFromTarget(targetName);
         assertTrue("Should have been a csv format, "
-                + "but was: " + export.getFormat(),
+                        + "but was: " + export.getFormat(),
                 export.getFormat().equalsIgnoreCase("csv"));
     }
 
-    public void testExportDtd()
-    {
+    public void testExportDtd() {
         String targetName = "test-export-format-dtd";
-        Export export = (Export)getFirstStepFromTarget(targetName);
+        Export export = (Export) getFirstStepFromTarget(targetName);
         assertTrue("Should have been a dtd format, "
-                + "but was: " + export.getFormat(),
+                        + "but was: " + export.getFormat(),
                 export.getFormat().equalsIgnoreCase("dtd"));
     }
 
-    public void testInvalidExportFormat()
-    {
+    public void testInvalidExportFormat() {
         expectBuildException("invalid-export-format",
                 "Should have objected to invalid format attribute.");
     }
 
-    public void testExportXmlOrdered() throws Exception
-    {
+    public void testExportXmlOrdered() throws Exception {
         String targetName = "test-export-format-xml-ordered";
-        Export export = (Export)getFirstStepFromTarget(targetName);
+        Export export = (Export) getFirstStepFromTarget(targetName);
         assertEquals("Should be ordered", true, export.isOrdered());
         assertTrue("Should have been an xml format, "
-                + "but was: " + export.getFormat(),
+                        + "but was: " + export.getFormat(),
                 export.getFormat().equalsIgnoreCase("xml"));
 
         // Test if the correct dataset is created for ordered export
@@ -295,27 +281,26 @@ public class DbUnitTaskIT extends BuildFileTest {
         assertEquals(dataSetToBeExported.getClass(), FilteredDataSet.class);
     }
 
-    public void testExportQuery()
-    {
+    public void testExportQuery() {
         String targetName = "test-export-query";
-        Export export = (Export)getFirstStepFromTarget(targetName);
+        Export export = (Export) getFirstStepFromTarget(targetName);
         assertEquals("format", "FLAT", export.getFormat());
 
         List queries = export.getTables();
         assertEquals("query count", 2, getQueryCount(queries));
 
-        Query testTable = (Query)queries.get(0);
+        Query testTable = (Query) queries.get(0);
         assertEquals("name", "TEST_TABLE", testTable.getName());
         assertEquals("sql", "SELECT * FROM TEST_TABLE ORDER BY column0 DESC", testTable.getSql());
 
-        Query pkTable = (Query)queries.get(1);
+        Query pkTable = (Query) queries.get(1);
         assertEquals("name", "PK_TABLE", pkTable.getName());
         assertEquals("sql", "SELECT * FROM PK_TABLE", pkTable.getSql());
     }
 
     public void testExportWithQuerySet() {
         String targetName = "test-export-with-queryset";
-        Export export = (Export)getFirstStepFromTarget(targetName);
+        Export export = (Export) getFirstStepFromTarget(targetName);
         assertEquals("format", "CSV", export.getFormat());
 
         List queries = export.getTables();
@@ -324,25 +309,25 @@ public class DbUnitTaskIT extends BuildFileTest {
         assertEquals("table count", 1, getTableCount(queries));
         assertEquals("queryset count", 2, getQuerySetCount(queries));
 
-        Query secondTable = (Query)queries.get(0);
+        Query secondTable = (Query) queries.get(0);
         assertEquals("name", "SECOND_TABLE", secondTable.getName());
         assertEquals("sql", "SELECT * FROM SECOND_TABLE", secondTable.getSql());
 
-        QuerySet queryset1 = (QuerySet)queries.get(1);
+        QuerySet queryset1 = (QuerySet) queries.get(1);
 
-        Query testTable = (Query)queryset1.getQueries().get(0);
+        Query testTable = (Query) queryset1.getQueries().get(0);
 
         assertEquals("name", "TEST_TABLE", testTable.getName());
 
-        QuerySet queryset2 = (QuerySet)queries.get(2);
+        QuerySet queryset2 = (QuerySet) queries.get(2);
 
-        Query pkTable = (Query)queryset2.getQueries().get(0);
-        Query testTable2 = (Query)queryset2.getQueries().get(1);
+        Query pkTable = (Query) queryset2.getQueries().get(0);
+        Query testTable2 = (Query) queryset2.getQueries().get(1);
 
         assertEquals("name", "PK_TABLE", pkTable.getName());
         assertEquals("name", "TEST_TABLE", testTable2.getName());
 
-        Table emptyTable = (Table)queries.get(3);
+        Table emptyTable = (Table) queries.get(3);
 
         assertEquals("name", "EMPTY_TABLE", emptyTable.getName());
     }
@@ -355,15 +340,15 @@ public class DbUnitTaskIT extends BuildFileTest {
     public void testWithReferenceQuerySet() {
         String targetName = "test-queryset-reference";
 
-        Export export = (Export)getFirstStepFromTarget(targetName);
+        Export export = (Export) getFirstStepFromTarget(targetName);
 
         List tables = export.getTables();
 
         assertEquals("total count", 1, tables.size());
 
-        QuerySet queryset = (QuerySet)tables.get(0);
-        Query testTable = (Query)queryset.getQueries().get(0);
-        Query secondTable = (Query)queryset.getQueries().get(1);
+        QuerySet queryset = (QuerySet) tables.get(0);
+        Query testTable = (Query) queryset.getQueries().get(0);
+        Query secondTable = (Query) queryset.getQueries().get(1);
 
         assertEquals("name", "TEST_TABLE", testTable.getName());
         assertEquals("sql", "SELECT * FROM TEST_TABLE WHERE COLUMN0 = 'row0 col0'",
@@ -373,13 +358,13 @@ public class DbUnitTaskIT extends BuildFileTest {
         assertEquals("sql",
                 "SELECT B.* FROM TEST_TABLE A, SECOND_TABLE B " +
                         "WHERE A.COLUMN0 = 'row0 col0' AND B.COLUMN0 = A.COLUMN0",
-                        secondTable.getSql());
+                secondTable.getSql());
 
     }
 
     public void testExportQueryMixed() {
         String targetName = "test-export-query-mixed";
-        Export export = (Export)getFirstStepFromTarget(targetName);
+        Export export = (Export) getFirstStepFromTarget(targetName);
         assertEquals("format", "FLAT", export.getFormat());
 
         List tables = export.getTables();
@@ -387,10 +372,10 @@ public class DbUnitTaskIT extends BuildFileTest {
         assertEquals("table count", 1, getTableCount(tables));
         assertEquals("query count", 1, getQueryCount(tables));
 
-        Table testTable = (Table)tables.get(0);
+        Table testTable = (Table) tables.get(0);
         assertEquals("name", "TEST_TABLE", testTable.getName());
 
-        Query pkTable = (Query)tables.get(1);
+        Query pkTable = (Query) tables.get(1);
         assertEquals("name", "PK_TABLE", pkTable.getName());
     }
 
@@ -404,61 +389,57 @@ public class DbUnitTaskIT extends BuildFileTest {
         try {
             getFirstTargetTask(targetName);
             fail("Should not be able to invoke ant task where the expected table was not found because it was tried to read in the wrong format.");
-        }
-        catch(BuildException expected){
+        } catch (BuildException expected) {
             Throwable cause = expected.getCause();
             assertTrue(cause instanceof DatabaseUnitException);
-            DatabaseUnitException dbUnitException = (DatabaseUnitException)cause;
+            DatabaseUnitException dbUnitException = (DatabaseUnitException) cause;
             String filename = new File(outputDir, "antExportDataSet.xml").toString();
             String expectedMsg = "Did not find table in source file '" + filename + "' using format 'XML'";
             assertEquals(expectedMsg, dbUnitException.getMessage());
             assertTrue(dbUnitException.getCause() instanceof NoSuchTableException);
-            NoSuchTableException nstException = (NoSuchTableException)dbUnitException.getCause();
+            NoSuchTableException nstException = (NoSuchTableException) dbUnitException.getCause();
             assertEquals("TEST_TABLE", nstException.getMessage());
         }
     }
 
-    public void testDataTypeFactory() throws Exception
-    {
+    public void testDataTypeFactory() throws Exception {
         String targetName = "test-datatypefactory";
         DbUnitTask task = getFirstTargetTask(targetName);
 
         IDatabaseConnection connection = task.createConnection();
-        IDataTypeFactory factory = (IDataTypeFactory)connection.getConfig().getProperty(
+        IDataTypeFactory factory = (IDataTypeFactory) connection.getConfig().getProperty(
                 DatabaseConfig.PROPERTY_DATATYPE_FACTORY);
 
         Class expectedClass = OracleDataTypeFactory.class;
         assertEquals("factory", expectedClass, factory.getClass());
     }
 
-    public void testEscapePattern() throws Exception
-    {
+    public void testEscapePattern() throws Exception {
         String targetName = "test-escapepattern";
         DbUnitTask task = getFirstTargetTask(targetName);
 
         IDatabaseConnection connection = task.createConnection();
-        String actualPattern = (String)connection.getConfig().getProperty(
+        String actualPattern = (String) connection.getConfig().getProperty(
                 DatabaseConfig.PROPERTY_ESCAPE_PATTERN);
 
         String expectedPattern = "[?]";
         assertEquals("factory", expectedPattern, actualPattern);
     }
 
-    public void testDataTypeFactoryViaGenericConfig() throws Exception
-    {
+    public void testDataTypeFactoryViaGenericConfig() throws Exception {
         String targetName = "test-datatypefactory-via-generic-config";
         DbUnitTask task = getFirstTargetTask(targetName);
 
         IDatabaseConnection connection = task.createConnection();
 
-        DatabaseConfig config =connection.getConfig();
+        DatabaseConfig config = connection.getConfig();
 
-        IDataTypeFactory factory = (IDataTypeFactory)config.getProperty(
+        IDataTypeFactory factory = (IDataTypeFactory) config.getProperty(
                 DatabaseConfig.PROPERTY_DATATYPE_FACTORY);
         Class expectedClass = OracleDataTypeFactory.class;
         assertEquals("factory", expectedClass, factory.getClass());
 
-        String[] actualTableType = (String[])config.getProperty(DatabaseConfig.PROPERTY_TABLE_TYPE);
+        String[] actualTableType = (String[]) config.getProperty(DatabaseConfig.PROPERTY_TABLE_TYPE);
         ArrayAssert.assertEquals("tableType", new String[]{"TABLE", "SYNONYM"}, actualTableType);
         assertTrue("batched statements feature should be true",
                 connection.getConfig().getFeature(DatabaseConfig.FEATURE_BATCHED_STATEMENTS));
@@ -467,34 +448,26 @@ public class DbUnitTaskIT extends BuildFileTest {
     }
 
 
-    public void testClasspath() throws Exception
-    {
+    public void testClasspath() throws Exception {
         String targetName = "test-classpath";
 
-        try
-        {
+        try {
             executeTarget(targetName);
             fail("Should not be able to connect with invalid url!");
-        }
-        catch (BuildException e)
-        {
+        } catch (BuildException e) {
             // Verify exception type
             assertTrue("nested exxception type", e.getException() instanceof SQLException);
         }
 
     }
 
-    public void testDriverNotInClasspath() throws Exception
-    {
+    public void testDriverNotInClasspath() throws Exception {
         String targetName = "test-drivernotinclasspath";
 
-        try
-        {
+        try {
             executeTarget(targetName);
             fail("Should not have found driver!");
-        }
-        catch (BuildException e)
-        {
+        } catch (BuildException e) {
             // Verify exception type
             assertEquals("nested exception type", ClassNotFoundException.class, e.getException().getClass());
         }
@@ -506,8 +479,8 @@ public class DbUnitTaskIT extends BuildFileTest {
         executeTarget(targetName);
         final IDataSet ds = dbTest.getConnection().createDataSet();
         final ITable table = ds.getTable("PK_TABLE");
-        assertNull(table.getValue(0,"NORMAL0"));
-        assertEquals("row 1",table.getValue(1,"NORMAL0"));
+        assertNull(table.getValue(0, "NORMAL0"));
+        assertEquals("row 1", table.getValue(1, "NORMAL0"));
     }
 
     public void testOrderedOperation() throws Exception {
@@ -516,8 +489,8 @@ public class DbUnitTaskIT extends BuildFileTest {
         executeTarget(targetName);
         final IDataSet ds = dbTest.getConnection().createDataSet();
         final ITable table = ds.getTable("PK_TABLE");
-        assertEquals("row 0",table.getValue(0,"NORMAL0"));
-        assertEquals("row 1",table.getValue(1,"NORMAL0"));
+        assertEquals("row 0", table.getValue(0, "NORMAL0"));
+        assertEquals("row 1", table.getValue(1, "NORMAL0"));
     }
 
     public void testReplaceOrderedOperation() throws Exception {
@@ -526,23 +499,20 @@ public class DbUnitTaskIT extends BuildFileTest {
         executeTarget(targetName);
         final IDataSet ds = dbTest.getConnection().createDataSet();
         final ITable table = ds.getTable("PK_TABLE");
-        assertNull(table.getValue(0,"NORMAL0"));
-        assertEquals("row 1",table.getValue(1,"NORMAL0"));
+        assertNull(table.getValue(0, "NORMAL0"));
+        assertEquals("row 1", table.getValue(1, "NORMAL0"));
     }
 
     protected void assertOperationType(String failMessage, String targetName, DatabaseOperation expected) {
-        Operation oper = (Operation)getFirstStepFromTarget(targetName);
+        Operation oper = (Operation) getFirstStepFromTarget(targetName);
         DatabaseOperation dbOper = oper.getDatabaseOperation();
         assertTrue(failMessage + ", but was: " + dbOper, expected.equals(dbOper));
     }
 
-    protected int getQueryCount(List tables)
-    {
+    protected int getQueryCount(List tables) {
         int count = 0;
-        for (Iterator it = tables.iterator(); it.hasNext();)
-        {
-            if (it.next() instanceof Query)
-            {
+        for (Iterator it = tables.iterator(); it.hasNext(); ) {
+            if (it.next() instanceof Query) {
                 count++;
             }
         }
@@ -550,13 +520,10 @@ public class DbUnitTaskIT extends BuildFileTest {
         return count;
     }
 
-    protected int getTableCount(List tables)
-    {
+    protected int getTableCount(List tables) {
         int count = 0;
-        for (Iterator it = tables.iterator(); it.hasNext();)
-        {
-            if (it.next() instanceof Table)
-            {
+        for (Iterator it = tables.iterator(); it.hasNext(); ) {
+            if (it.next() instanceof Table) {
                 count++;
             }
         }
@@ -566,7 +533,7 @@ public class DbUnitTaskIT extends BuildFileTest {
 
     protected int getQuerySetCount(List tables) {
         int count = 0;
-        for (Iterator it = tables.iterator(); it.hasNext();) {
+        for (Iterator it = tables.iterator(); it.hasNext(); ) {
             if (it.next() instanceof QuerySet) {
                 count++;
             }
@@ -575,34 +542,30 @@ public class DbUnitTaskIT extends BuildFileTest {
         return count;
     }
 
-    protected DbUnitTaskStep getFirstStepFromTarget(String targetName)
-    {
+    protected DbUnitTaskStep getFirstStepFromTarget(String targetName) {
         return getStepFromTarget(targetName, 0);
     }
 
-    protected DbUnitTaskStep getStepFromTarget(String targetName, int index)
-    {
+    protected DbUnitTaskStep getStepFromTarget(String targetName, int index) {
         DbUnitTask task = getFirstTargetTask(targetName);
         List steps = task.getSteps();
-        if(steps == null || steps.size() == 0)
-        {
+        if (steps == null || steps.size() == 0) {
             fail("Can't get a dbunit <step> from the target: " + targetName + ". No steps available.");
         }
-        return (DbUnitTaskStep)steps.get(index);
+        return (DbUnitTaskStep) steps.get(index);
     }
 
-    private DbUnitTask getFirstTargetTask(String targetName)
-    {
+    private DbUnitTask getFirstTargetTask(String targetName) {
         Hashtable targets = project.getTargets();
         executeTarget(targetName);
-        Target target = (Target)targets.get(targetName);
+        Target target = (Target) targets.get(targetName);
 
         DbUnitTask task = null;
 
         Object[] tasks = target.getTasks();
-        for(int i = 0; i < tasks.length; i++) {
-        	if(tasks[i] instanceof DbUnitTask) {
-        		task = (DbUnitTask)tasks[i];
+        for (int i = 0; i < tasks.length; i++) {
+            if (tasks[i] instanceof DbUnitTask) {
+                task = (DbUnitTask) tasks[i];
             }
         }
 

@@ -39,8 +39,7 @@ import org.slf4j.LoggerFactory;
  * @version $Revision$ $Date$
  * @since Jan 12, 2004
  */
-public class OracleClobDataType extends ClobDataType
-{
+public class OracleClobDataType extends ClobDataType {
 
     /**
      * Logger for this class
@@ -49,10 +48,8 @@ public class OracleClobDataType extends ClobDataType
             LoggerFactory.getLogger(OracleClobDataType.class);
 
     public Object getSqlValue(int column, ResultSet resultSet)
-            throws SQLException, TypeCastException
-    {
-        if (logger.isDebugEnabled())
-        {
+            throws SQLException, TypeCastException {
+        if (logger.isDebugEnabled()) {
             logger.debug("getSqlValue(column={}, resultSet={}) - start",
                     new Integer(column), resultSet);
         }
@@ -61,27 +58,23 @@ public class OracleClobDataType extends ClobDataType
     }
 
     public void setSqlValue(Object value, int column,
-            PreparedStatement statement) throws SQLException, TypeCastException
-    {
-        if (logger.isDebugEnabled())
-        {
+                            PreparedStatement statement) throws SQLException, TypeCastException {
+        if (logger.isDebugEnabled()) {
             logger.debug(
                     "setSqlValue(value={}, column={}, statement={}) - start",
-                    new Object[] {value, new Integer(column), statement});
+                    new Object[]{value, new Integer(column), statement});
         }
 
         statement.setObject(column, getClob(value, statement.getConnection()));
     }
 
     protected Object getClob(Object value, Connection connection)
-            throws TypeCastException
-    {
+            throws TypeCastException {
         logger.debug("getClob(value={}, connection={}) - start", value,
                 connection);
 
         Writer tempClobWriter = null;
-        try
-        {
+        try {
             java.sql.Clob tempClob = connection.createClob();
             tempClobWriter = tempClob.setCharacterStream(1);
 
@@ -91,11 +84,9 @@ public class OracleClobDataType extends ClobDataType
             // Flush and close the stream
             tempClobWriter.flush();
             return tempClob;
-        } catch (IOException | SQLException e)
-        {
+        } catch (IOException | SQLException e) {
             throw new TypeCastException(value, this, e);
-        } finally
-        {
+        } finally {
             IOUtils.closeQuietly(tempClobWriter);
         }
     }

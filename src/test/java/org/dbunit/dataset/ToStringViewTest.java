@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 /**
  * This class only logs out the toString() results for review, does not test
  * anything. Currently only ITables that subclass AbstractTable.
- * 
+ *
  * @author Jeff Jensen jeffjensen AT users.sourceforge.net
  * @author Last changed by: $Author$
  * @version $Revision$ $Date$

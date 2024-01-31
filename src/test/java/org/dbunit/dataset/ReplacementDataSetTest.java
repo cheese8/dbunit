@@ -29,28 +29,24 @@ import org.dbunit.testutil.TestUtils;
 
 /**
  * @author Manuel Laflamme
- * @since Mar 17, 2003
  * @version $Revision$
+ * @since Mar 17, 2003
  */
-public class ReplacementDataSetTest extends AbstractDataSetDecoratorTest
-{
-    public ReplacementDataSetTest(String s)
-    {
+public class ReplacementDataSetTest extends AbstractDataSetDecoratorTest {
+    public ReplacementDataSetTest(String s) {
         super(s);
     }
 
     ////////////////////////////////////////////////////////////////////////////
     // AbstractDataSetTest class
 
-    protected IDataSet createDataSet() throws Exception
-    {
+    protected IDataSet createDataSet() throws Exception {
         return new ReplacementDataSet(new FlatXmlDataSetBuilder().build(new FileReader(
                 FlatXmlDataSetTest.DATASET_FILE)));
     }
 
     public void testConstructor_DataSetHasCaseSensitive_ReplacementSetHasCaseSensitive()
-            throws Exception
-    {
+            throws Exception {
         FileReader xmlReader = new FileReader(FlatXmlDataSetTest.DATASET_FILE);
         FlatXmlDataSet flatDataSet = new FlatXmlDataSetBuilder()
                 .setCaseSensitiveTableNames(true).build(xmlReader);
@@ -60,8 +56,7 @@ public class ReplacementDataSetTest extends AbstractDataSetDecoratorTest
     }
 
     public void testConstructor_DifferentCaseTableNames_CaseSensitiveMatch()
-            throws Exception
-    {
+            throws Exception {
         FileReader fileReader = TestUtils
                 .getFileReader("/xml/replacementDataSetCaseSensitive.xml");
         IDataSet originalDataSet = new FlatXmlDataSetBuilder()
@@ -72,8 +67,7 @@ public class ReplacementDataSetTest extends AbstractDataSetDecoratorTest
         assertCaseSensitiveTables(replacementDataSet);
     }
 
-    private void assertCaseSensitiveTables(IDataSet dataSet) throws DataSetException
-    {
+    private void assertCaseSensitiveTables(IDataSet dataSet) throws DataSetException {
         ITable[] tables = dataSet.getTables();
         assertEquals(
                 "Should be 2 tables with case-sensitive table names; 1 without.",

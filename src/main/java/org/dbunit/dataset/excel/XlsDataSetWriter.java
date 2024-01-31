@@ -47,14 +47,13 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Writes an {@link IDataSet} to an XLS file or OutputStream.
- * 
+ *
  * @author gommma (gommma AT users.sourceforge.net)
  * @author Last changed by: $Author$
  * @version $Revision$ $Date$
  * @since 2.4.0
  */
-public class XlsDataSetWriter 
-{
+public class XlsDataSetWriter {
     private static final Logger logger = LoggerFactory.getLogger(XlsDataSetWriter.class);
 
     public static final String ZEROS = "0000000000000000000000000000000000000000000000000000";
@@ -81,18 +80,16 @@ public class XlsDataSetWriter
      * Write the specified dataset to the specified Excel document.
      */
     public void write(IDataSet dataSet, OutputStream out)
-            throws IOException, DataSetException
-    {
+            throws IOException, DataSetException {
         logger.debug("write(dataSet={}, out={}) - start", dataSet, out);
 
         Workbook workbook = createWorkbook();
 
         this.dateCellStyle = createDateCellStyle(workbook);
-        
+
         int index = 0;
         ITableIterator iterator = dataSet.iterator();
-        while(iterator.next())
-        {
+        while (iterator.next()) {
             // create the table i.e. sheet
             ITable table = iterator.getTable();
             ITableMetaData metaData = table.getTableMetaData();
@@ -103,34 +100,27 @@ public class XlsDataSetWriter
 
             Row headerRow = sheet.createRow(0);
             Column[] columns = metaData.getColumns();
-            for (int j = 0; j < columns.length; j++)
-            {
+            for (int j = 0; j < columns.length; j++) {
                 Column column = columns[j];
                 Cell cell = headerRow.createCell(j);
                 cell.setCellValue(column.getColumnName());
             }
-            
+
             // write table data
-            for (int j = 0; j < table.getRowCount(); j++)
-            {
+            for (int j = 0; j < table.getRowCount(); j++) {
                 Row row = sheet.createRow(j + 1);
-                for (int k = 0; k < columns.length; k++)
-                {
+                for (int k = 0; k < columns.length; k++) {
                     Column column = columns[k];
                     Object value = table.getValue(j, column.getColumnName());
-                    if (value != null)
-                    {
+                    if (value != null) {
                         Cell cell = row.createCell(k);
-                        if(value instanceof Date){
-                            setDateCell(cell, (Date)value, workbook);
-                        }
-                        else if(value instanceof BigDecimal){
-                            setNumericCell(cell, (BigDecimal)value, workbook);
-                        }
-                        else if(value instanceof Long){
-                            setDateCell(cell, new Date( ((Long)value).longValue()), workbook);
-                        }
-                        else {
+                        if (value instanceof Date) {
+                            setDateCell(cell, (Date) value, workbook);
+                        } else if (value instanceof BigDecimal) {
+                            setNumericCell(cell, (BigDecimal) value, workbook);
+                        } else if (value instanceof Long) {
+                            setDateCell(cell, new Date(((Long) value).longValue()), workbook);
+                        } else {
                             cell.setCellValue(DataType.asString(value));
                         }
                     }
@@ -144,15 +134,14 @@ public class XlsDataSetWriter
         workbook.write(out);
         out.flush();
     }
-    
+
     protected static CellStyle createDateCellStyle(Workbook workbook) {
         DataFormat format = workbook.createDataFormat();
         short dateFormatCode = format.getFormat(DATE_FORMAT_AS_NUMBER_DBUNIT);
         return getCellStyle(workbook, dateFormatCode);
     }
 
-    protected static CellStyle getCellStyle(Workbook workbook, short formatCode)
-    {
+    protected static CellStyle getCellStyle(Workbook workbook, short formatCode) {
         Map<Short, CellStyle> map = findWorkbookCellStyleMap(workbook);
         CellStyle cellStyle = findCellStyle(workbook, formatCode, map);
 
@@ -160,11 +149,9 @@ public class XlsDataSetWriter
     }
 
     protected static Map<Short, CellStyle> findWorkbookCellStyleMap(
-            Workbook workbook)
-    {
+            Workbook workbook) {
         Map<Short, CellStyle> map = cellStyleMap.get(workbook);
-        if (map == null)
-        {
+        if (map == null) {
             map = new HashMap<Short, CellStyle>();
             cellStyleMap.put(workbook, map);
         }
@@ -173,11 +160,9 @@ public class XlsDataSetWriter
     }
 
     protected static CellStyle findCellStyle(Workbook workbook,
-            Short formatCode, Map<Short, CellStyle> map)
-    {
+                                             Short formatCode, Map<Short, CellStyle> map) {
         CellStyle cellStyle = map.get(formatCode);
-        if (cellStyle == null)
-        {
+        if (cellStyle == null) {
             cellStyle = workbook.createCellStyle();
             cellStyle.setDataFormat(formatCode);
             map.put(formatCode, cellStyle);
@@ -186,17 +171,16 @@ public class XlsDataSetWriter
         return cellStyle;
     }
 
-    protected void setDateCell(Cell cell, Date value, Workbook workbook) 
-    {
+    protected void setDateCell(Cell cell, Date value, Workbook workbook) {
 //        double excelDateValue = HSSFDateUtil.getExcelDate(value);
 //        cell.setCellValue(excelDateValue);
 //        cell.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
 
         long timeMillis = value.getTime();
-        cell.setCellValue( (double)timeMillis );
+        cell.setCellValue((double) timeMillis);
         cell.setCellType(CellType.NUMERIC);
         cell.setCellStyle(this.dateCellStyle);
-        
+
 //      System.out.println(HSSFDataFormat.getBuiltinFormats());
         // TODO Find out correct cell styles for date objects
 //        HSSFCellStyle cellStyleDate = workbook.createCellStyle();
@@ -248,25 +232,23 @@ public class XlsDataSetWriter
 
     }
 
-    protected void setNumericCell(Cell cell, BigDecimal value, Workbook workbook)
-    {
-        if(logger.isDebugEnabled())
-            logger.debug("setNumericCell(cell={}, value={}, workbook={}) - start", 
-                new Object[] {cell, value, workbook} );
+    protected void setNumericCell(Cell cell, BigDecimal value, Workbook workbook) {
+        if (logger.isDebugEnabled())
+            logger.debug("setNumericCell(cell={}, value={}, workbook={}) - start",
+                    new Object[]{cell, value, workbook});
 
-        cell.setCellValue( ((BigDecimal)value).doubleValue() );
+        cell.setCellValue(((BigDecimal) value).doubleValue());
 
         DataFormat df = workbook.createDataFormat();
-        int scale = ((BigDecimal)value).scale();
+        int scale = ((BigDecimal) value).scale();
         short format;
-        if(scale <= 0){
+        if (scale <= 0) {
             format = df.getFormat("####");
-        }
-        else {
-            String zeros = createZeros(((BigDecimal)value).scale());
+        } else {
+            String zeros = createZeros(((BigDecimal) value).scale());
             format = df.getFormat("####." + zeros);
         }
-        if(logger.isDebugEnabled())
+        if (logger.isDebugEnabled())
             logger.debug("Using format '{}' for value '{}'.", String.valueOf(format), value);
 
         CellStyle cellStyleNumber = getCellStyle(workbook, format);
@@ -297,7 +279,7 @@ public class XlsDataSetWriter
     private static String createZeros(int count) {
         return ZEROS.substring(0, count);
     }
-    
+
     protected Workbook createWorkbook() {
         return new HSSFWorkbook();
     }

@@ -39,29 +39,25 @@ import java.io.StringReader;
 
 /**
  * @author Manuel Laflamme
- * @since Apr 28, 2003
  * @version $Revision$
+ * @since Apr 28, 2003
  */
-public class FlatXmlProducerTest extends AbstractProducerTest
-{
+public class FlatXmlProducerTest extends AbstractProducerTest {
     private static final File DATASET_FILE =
             TestUtils.getFile("xml/flatXmlProducerTest.xml");
 
-    public FlatXmlProducerTest(String s)
-    {
+    public FlatXmlProducerTest(String s) {
         super(s);
     }
 
-    protected IDataSetProducer createProducer() throws Exception
-    {
+    protected IDataSetProducer createProducer() throws Exception {
         String uri = DATASET_FILE.getAbsoluteFile().toURL().toString();
         InputSource source = new InputSource(uri);
 
         return new FlatXmlProducer(source);
     }
 
-    public void testProduceEmptyDataSet() throws Exception
-    {
+    public void testProduceEmptyDataSet() throws Exception {
         // Setup consumer
         MockDataSetConsumer consumer = new MockDataSetConsumer();
         consumer.addExpectedStartDataSet();
@@ -70,7 +66,7 @@ public class FlatXmlProducerTest extends AbstractProducerTest
         // Setup producer
         String content =
                 "<?xml version=\"1.0\"?>" +
-                "<dataset/>";
+                        "<dataset/>";
         InputSource source = new InputSource(new StringReader(content));
         IDataSetProducer producer = new FlatXmlProducer(source);
         producer.setConsumer(consumer);
@@ -80,8 +76,7 @@ public class FlatXmlProducerTest extends AbstractProducerTest
         consumer.verify();
     }
 
-    public void testProduceNoDtd() throws Exception
-    {
+    public void testProduceNoDtd() throws Exception {
         // Setup consumer
         String tableName = "EMPTY_TABLE";
         MockDataSetConsumer consumer = new MockDataSetConsumer();
@@ -93,9 +88,9 @@ public class FlatXmlProducerTest extends AbstractProducerTest
         // Setup producer
         String content =
                 "<?xml version=\"1.0\"?>" +
-                "<dataset>" +
-                    "<EMPTY_TABLE/>" +
-                "</dataset>";
+                        "<dataset>" +
+                        "<EMPTY_TABLE/>" +
+                        "</dataset>";
         InputSource source = new InputSource(new StringReader(content));
         IDataSetProducer producer = new FlatXmlProducer(source);
         producer.setConsumer(consumer);
@@ -105,8 +100,7 @@ public class FlatXmlProducerTest extends AbstractProducerTest
         consumer.verify();
     }
 
-    public void testProduceIgnoreDtd() throws Exception
-    {
+    public void testProduceIgnoreDtd() throws Exception {
         // Setup consumer
         String tableName = "EMPTY_TABLE";
         MockDataSetConsumer consumer = new MockDataSetConsumer();
@@ -118,10 +112,10 @@ public class FlatXmlProducerTest extends AbstractProducerTest
         // Setup producer
         String content =
                 "<?xml version=\"1.0\"?>" +
-                "<!DOCTYPE dataset SYSTEM \"uri:/dummy.dtd\">" +
-                "<dataset>" +
-                    "<EMPTY_TABLE/>" +
-                "</dataset>";
+                        "<!DOCTYPE dataset SYSTEM \"uri:/dummy.dtd\">" +
+                        "<dataset>" +
+                        "<EMPTY_TABLE/>" +
+                        "</dataset>";
         InputSource source = new InputSource(new StringReader(content));
         IDataSetProducer producer = new FlatXmlProducer(source, false);
         producer.setConsumer(consumer);
@@ -131,8 +125,7 @@ public class FlatXmlProducerTest extends AbstractProducerTest
         consumer.verify();
     }
 
-    public void testProduceMetaDataSet() throws Exception
-    {
+    public void testProduceMetaDataSet() throws Exception {
         // Setup consumer
         String tableName = "EMPTY_TABLE";
         MockDataSetConsumer consumer = new MockDataSetConsumer();
@@ -144,10 +137,10 @@ public class FlatXmlProducerTest extends AbstractProducerTest
         // Setup producer
         String content =
                 "<?xml version=\"1.0\"?>" +
-                "<!DOCTYPE dataset SYSTEM \"urn:/dummy.dtd\">" +
-                "<dataset>" +
-                    "<EMPTY_TABLE/>" +
-                "</dataset>";
+                        "<!DOCTYPE dataset SYSTEM \"urn:/dummy.dtd\">" +
+                        "<dataset>" +
+                        "<EMPTY_TABLE/>" +
+                        "</dataset>";
         InputSource source = new InputSource(new StringReader(content));
         DefaultDataSet metaDataSet = new DefaultDataSet();
         metaDataSet.addTable(new DefaultTable(tableName, expectedColumns));
@@ -159,8 +152,7 @@ public class FlatXmlProducerTest extends AbstractProducerTest
         consumer.verify();
     }
 
-    public void testProduceCustomEntityResolver() throws Exception
-    {
+    public void testProduceCustomEntityResolver() throws Exception {
         // Setup consumer
         String tableName = "EMPTY_TABLE";
         MockDataSetConsumer consumer = new MockDataSetConsumer();
@@ -170,26 +162,25 @@ public class FlatXmlProducerTest extends AbstractProducerTest
         consumer.addExpectedEndDataSet();
 
         // Setup producer
-       String dtdContent =
+        String dtdContent =
                 "<!ELEMENT dataset (EMPTY_TABLE)>" +
-                "<!ATTLIST EMPTY_TABLE " +
-                    "COLUMN0 CDATA #IMPLIED " +
-                    "COLUMN1 CDATA #IMPLIED " +
-                    "COLUMN2 CDATA #IMPLIED " +
-                    "COLUMN3 CDATA #IMPLIED>" +
-                "<!ELEMENT TEST_TABLE EMPTY>";
+                        "<!ATTLIST EMPTY_TABLE " +
+                        "COLUMN0 CDATA #IMPLIED " +
+                        "COLUMN1 CDATA #IMPLIED " +
+                        "COLUMN2 CDATA #IMPLIED " +
+                        "COLUMN3 CDATA #IMPLIED>" +
+                        "<!ELEMENT TEST_TABLE EMPTY>";
         final InputSource dtdSource = new InputSource(new StringReader(dtdContent));
 
         String xmlContent =
                 "<?xml version=\"1.0\"?>" +
-                "<!DOCTYPE dataset SYSTEM \"urn:/dummy.dtd\">" +
-                "<dataset>" +
-                    "<EMPTY_TABLE/>" +
-                "</dataset>";
+                        "<!DOCTYPE dataset SYSTEM \"urn:/dummy.dtd\">" +
+                        "<dataset>" +
+                        "<EMPTY_TABLE/>" +
+                        "</dataset>";
         InputSource xmlSource = new InputSource(new StringReader(xmlContent));
-        IDataSetProducer producer = new FlatXmlProducer(xmlSource, new EntityResolver(){
-            public InputSource resolveEntity(String s, String s1) throws SAXException, IOException
-            {
+        IDataSetProducer producer = new FlatXmlProducer(xmlSource, new EntityResolver() {
+            public InputSource resolveEntity(String s, String s1) throws SAXException, IOException {
                 return dtdSource;
             }
         });
@@ -200,8 +191,7 @@ public class FlatXmlProducerTest extends AbstractProducerTest
         consumer.verify();
     }
 
-    public void testProduceNotWellFormedXml() throws Exception
-    {
+    public void testProduceNotWellFormedXml() throws Exception {
         // Setup consumer
         MockDataSetConsumer consumer = new MockDataSetConsumer();
         consumer.addExpectedStartDataSet();
@@ -209,19 +199,16 @@ public class FlatXmlProducerTest extends AbstractProducerTest
         // Setup producer
         String content =
                 "<?xml version=\"1.0\"?>" +
-                "<dataset>";
+                        "<dataset>";
         InputSource source = new InputSource(new StringReader(content));
         IDataSetProducer producer = new FlatXmlProducer(source);
         producer.setConsumer(consumer);
 
         // Produce and verify consumer
-        try
-        {
+        try {
             producer.produce();
             fail("Should not be here!");
-        }
-        catch (DataSetException e)
-        {
+        } catch (DataSetException e) {
         }
 
         consumer.verify();

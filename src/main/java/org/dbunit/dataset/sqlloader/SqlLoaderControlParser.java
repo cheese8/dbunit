@@ -30,7 +30,7 @@ import org.dbunit.dataset.common.handlers.PipelineException;
 
 /**
  * Interface of Parser which parses Oracle SQLLoader files.
- * 
+ *
  * @author Stephan Strittmatter (stritti AT users.sourceforge.net)
  * @author Last changed by: $Author$
  * @version $Revision$ $Date$
@@ -40,10 +40,9 @@ public interface SqlLoaderControlParser {
 
     /**
      * Parse.
-     * 
+     *
      * @param file the file
      * @return the list
-     * 
      * @throws IOException
      * @throws SqlLoaderControlParserException
      */
@@ -51,10 +50,9 @@ public interface SqlLoaderControlParser {
 
     /**
      * Parse.
-     * 
+     *
      * @param url the URL
      * @return the list
-     * 
      * @throws IOException
      * @throws SqlLoaderControlParserException
      */
@@ -62,10 +60,9 @@ public interface SqlLoaderControlParser {
 
     /**
      * Parse.
-     * 
+     *
      * @param csv the CSV data
      * @return the list
-     * 
      * @throws IllegalInputCharacterException
      * @throws PipelineException
      */

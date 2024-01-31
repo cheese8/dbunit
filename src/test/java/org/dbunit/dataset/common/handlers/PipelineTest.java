@@ -31,22 +31,23 @@ import junit.framework.TestCase;
 public class PipelineTest extends TestCase {
     Pipeline line;
 
-    public void testRemovingTheLastHandlerThrowsException () {
+    public void testRemovingTheLastHandlerThrowsException() {
         try {
             line.removeFront();
             line.removeFront();
-            fail ("Removing from an ampty pipeline should throw an exception");
-        } catch (PipelineException e) {}
+            fail("Removing from an ampty pipeline should throw an exception");
+        } catch (PipelineException e) {
+        }
     }
 
-    public void testAnHandlerCanBeAddedInFront () throws PipelineException {
+    public void testAnHandlerCanBeAddedInFront() throws PipelineException {
         PipelineComponent handler = SeparatorHandler.ACCEPT();
         line.putFront(handler);
         assertSame(handler, line.removeFront());
         assertSame(line, handler.getPipeline());
     }
 
-    public void testTheFrontHandlerIsThereAfterAddingAndRemovingAnother () throws PipelineException {
+    public void testTheFrontHandlerIsThereAfterAddingAndRemovingAnother() throws PipelineException {
         PipelineComponent handler = SeparatorHandler.ACCEPT();
         PipelineComponent handler2 = SeparatorHandler.ACCEPT();
         line.putFront(handler);
@@ -55,7 +56,7 @@ public class PipelineTest extends TestCase {
         assertSame(handler, line.removeFront());
     }
 
-    public void testEachHandlerIsCalled () throws IllegalInputCharacterException, PipelineException {
+    public void testEachHandlerIsCalled() throws IllegalInputCharacterException, PipelineException {
         MockHandler component = new MockHandler();
         MockHandler component2 = new MockHandler();
         component.setExpectedHandleCalls(1);
@@ -67,13 +68,14 @@ public class PipelineTest extends TestCase {
         try {
             line.handle('x');
             fail("Exception expected");
-        } catch (IllegalInputCharacterException seen) {}
+        } catch (IllegalInputCharacterException seen) {
+        }
 
         component.verify();
         component2.verify();
     }
 
-    public void testWhenAPieceIsDoneIsAddedToProducts () throws IllegalInputCharacterException, PipelineException {
+    public void testWhenAPieceIsDoneIsAddedToProducts() throws IllegalInputCharacterException, PipelineException {
         PipelineComponent c = AllHandler.ACCEPT();
         line.putFront(c);
         line.handle('x');
@@ -82,7 +84,7 @@ public class PipelineTest extends TestCase {
         assertEquals("x", line.getProducts().get(0));
     }
 
-    public void testWhetAPieceIsDoneANewOneIsCreated () throws IllegalInputCharacterException, PipelineException {
+    public void testWhetAPieceIsDoneANewOneIsCreated() throws IllegalInputCharacterException, PipelineException {
         PipelineComponent c = AllHandler.ACCEPT();
         line.putFront(c);
         line.handle('x');

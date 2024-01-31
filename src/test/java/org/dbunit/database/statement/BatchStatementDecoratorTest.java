@@ -29,15 +29,12 @@ import org.dbunit.dataset.datatype.DataType;
  * @version $Revision$
  * @since Mar 16, 2002
  */
-public class BatchStatementDecoratorTest extends TestCase
-{
-    public BatchStatementDecoratorTest(String s)
-    {
+public class BatchStatementDecoratorTest extends TestCase {
+    public BatchStatementDecoratorTest(String s) {
         super(s);
     }
 
-    public void testAddBatch() throws Exception
-    {
+    public void testAddBatch() throws Exception {
         String template = "START VAL0 = ?, VAL1 = ?, VAL2 = ? END";
         String expected = "START VAL0 = NULL, VAL1 = 'value', VAL2 = 1234 END";
         Object[] values = new Object[]{null, "value", new Integer(1234)};
@@ -51,8 +48,7 @@ public class BatchStatementDecoratorTest extends TestCase
         IPreparedBatchStatement preparedStatement =
                 new BatchStatementDecorator(template, mockStatement);
 
-        for (int i = 0; i < values.length; i++)
-        {
+        for (int i = 0; i < values.length; i++) {
             Object value = values[i];
             preparedStatement.addValue(value, DataType.forObject(value));
         }
@@ -63,8 +59,7 @@ public class BatchStatementDecoratorTest extends TestCase
         mockStatement.verify();
     }
 
-    public void testMultipleAddBatch() throws Exception
-    {
+    public void testMultipleAddBatch() throws Exception {
         String template = "I am ?";
         String[] expected = {"I am 'Manuel'", "I am 'not here'", "I am 'fine'"};
         String[] values = {"Manuel", "not here", "fine"};
@@ -78,8 +73,7 @@ public class BatchStatementDecoratorTest extends TestCase
         IPreparedBatchStatement preparedStatement =
                 new BatchStatementDecorator(template, mockStatement);
 
-        for (int i = 0; i < values.length; i++)
-        {
+        for (int i = 0; i < values.length; i++) {
             Object value = values[i];
             preparedStatement.addValue(value, DataType.VARCHAR);
             preparedStatement.addBatch();

@@ -36,8 +36,8 @@ import org.dbunit.dataset.datatype.StringDataType;
  *
  * @author Federico Spinazzi
  * @author Manuel Laflamme
- * @since Jul 17, 2003
  * @version $Revision$
+ * @since Jul 17, 2003
  */
 @Slf4j
 public class Db2DataTypeFactory extends DefaultDataTypeFactory {
@@ -54,7 +54,7 @@ public class Db2DataTypeFactory extends DefaultDataTypeFactory {
      * @see org.dbunit.dataset.datatype.IDbProductRelatable#getValidDbProducts()
      */
     public Collection<String> getValidDbProducts() {
-      return DATABASE_PRODUCTS;
+        return DATABASE_PRODUCTS;
     }
 
     public DataType createDataType(int sqlType, String sqlTypeName) throws DataTypeException {

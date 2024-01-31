@@ -10,14 +10,12 @@ import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.datatype.DataType;
 import org.junit.Test;
 
-public class IsActualContainingExpectedStringValueComparerTest
-{
+public class IsActualContainingExpectedStringValueComparerTest {
     final IsActualContainingExpectedStringValueComparer sut =
             new IsActualContainingExpectedStringValueComparer();
 
     @Test
-    public void testIsExpected_AllNull_True() throws DatabaseUnitException
-    {
+    public void testIsExpected_AllNull_True() throws DatabaseUnitException {
         final ITable expectedTable = null;
         final ITable actualTable = null;
         final int rowNum = 0;
@@ -34,8 +32,7 @@ public class IsActualContainingExpectedStringValueComparerTest
 
     @Test
     public void testIsExpected_ActualNullExpectedNotNull_False()
-            throws DatabaseUnitException
-    {
+            throws DatabaseUnitException {
         final ITable expectedTable = null;
         final ITable actualTable = null;
         final int rowNum = 0;
@@ -53,8 +50,7 @@ public class IsActualContainingExpectedStringValueComparerTest
 
     @Test
     public void testIsExpected_ActualNotNullExpectedNull_False()
-            throws DatabaseUnitException
-    {
+            throws DatabaseUnitException {
         final ITable expectedTable = null;
         final ITable actualTable = null;
         final int rowNum = 0;
@@ -73,8 +69,7 @@ public class IsActualContainingExpectedStringValueComparerTest
 
     @Test
     public void testIsExpected_ActualEqualToExpected_BigInt_True()
-            throws DatabaseUnitException
-    {
+            throws DatabaseUnitException {
         final ITable expectedTable = null;
         final ITable actualTable = null;
         final int rowNum = 0;
@@ -91,8 +86,7 @@ public class IsActualContainingExpectedStringValueComparerTest
 
     @Test
     public void testIsExpected_ActualEqualToExpected_Double_True()
-            throws DatabaseUnitException
-    {
+            throws DatabaseUnitException {
         final ITable expectedTable = null;
         final ITable actualTable = null;
         final int rowNum = 0;
@@ -109,8 +103,7 @@ public class IsActualContainingExpectedStringValueComparerTest
 
     @Test
     public void testIsExpected_ActualEqualToExpected_Varchar_True()
-            throws DatabaseUnitException
-    {
+            throws DatabaseUnitException {
         final ITable expectedTable = null;
         final ITable actualTable = null;
         final int rowNum = 0;
@@ -127,8 +120,7 @@ public class IsActualContainingExpectedStringValueComparerTest
 
     @Test
     public void testIsExpected_ActualContainsExpected_BigInt_True()
-            throws DatabaseUnitException
-    {
+            throws DatabaseUnitException {
         final ITable expectedTable = null;
         final ITable actualTable = null;
         final int rowNum = 0;
@@ -145,8 +137,7 @@ public class IsActualContainingExpectedStringValueComparerTest
 
     @Test
     public void testIsExpected_ActualContainsExpected_Double_True()
-            throws DatabaseUnitException
-    {
+            throws DatabaseUnitException {
         final ITable expectedTable = null;
         final ITable actualTable = null;
         final int rowNum = 0;
@@ -163,8 +154,7 @@ public class IsActualContainingExpectedStringValueComparerTest
 
     @Test
     public void testIsExpected_ActualContainsExpected_Varchar_True()
-            throws DatabaseUnitException
-    {
+            throws DatabaseUnitException {
         final ITable expectedTable = null;
         final ITable actualTable = null;
         final int rowNum = 0;
@@ -181,8 +171,7 @@ public class IsActualContainingExpectedStringValueComparerTest
 
     @Test
     public void testIsExpected_ActualNotContainsExpected_BigInt_True()
-            throws DatabaseUnitException
-    {
+            throws DatabaseUnitException {
         final ITable expectedTable = null;
         final ITable actualTable = null;
         final int rowNum = 0;
@@ -199,8 +188,7 @@ public class IsActualContainingExpectedStringValueComparerTest
 
     @Test
     public void testIsExpected_ActualNotContainsExpected_Double_True()
-            throws DatabaseUnitException
-    {
+            throws DatabaseUnitException {
         final ITable expectedTable = null;
         final ITable actualTable = null;
         final int rowNum = 0;
@@ -217,8 +205,7 @@ public class IsActualContainingExpectedStringValueComparerTest
 
     @Test
     public void testIsExpected_ActualNotContainsExpected_Varchar_True()
-            throws DatabaseUnitException
-    {
+            throws DatabaseUnitException {
         final ITable expectedTable = null;
         final ITable actualTable = null;
         final int rowNum = 0;
@@ -234,8 +221,7 @@ public class IsActualContainingExpectedStringValueComparerTest
     }
 
     @Test
-    public void testGetFailPhrase() throws Exception
-    {
+    public void testGetFailPhrase() throws Exception {
         final String actual = sut.getFailPhrase();
 
         assertThat("Should have fail phrase.", actual, not(nullValue()));

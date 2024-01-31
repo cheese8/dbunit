@@ -26,15 +26,12 @@ import org.dbunit.AbstractDatabaseTesterIT;
 /**
  * @author Andres Almiray
  */
-public abstract class AbstractDatabaseTesterConnectionIT extends AbstractDatabaseTesterIT
-{
-    public AbstractDatabaseTesterConnectionIT(String s)
-    {
+public abstract class AbstractDatabaseTesterConnectionIT extends AbstractDatabaseTesterIT {
+    public AbstractDatabaseTesterConnectionIT(String s) {
         super(s);
     }
 
-    public final void testGetRowCount() throws Exception
-    {
+    public final void testGetRowCount() throws Exception {
         assertEquals("EMPTY_TABLE", 0, _connection.getRowCount("EMPTY_TABLE", null));
         assertEquals("EMPTY_TABLE", 0, _connection.getRowCount("EMPTY_TABLE"));
 

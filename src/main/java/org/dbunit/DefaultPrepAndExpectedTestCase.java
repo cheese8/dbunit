@@ -63,9 +63,11 @@ import org.dbunit.util.fileloader.DataFileLoader;
 @NoArgsConstructor
 @Slf4j
 public class DefaultPrepAndExpectedTestCase extends DBTestCase implements PrepAndExpectedTestCase {
-    @Getter @Setter
+    @Getter
+    @Setter
     private IDatabaseTester databaseTester;
-    @Getter @Setter
+    @Getter
+    @Setter
     private DataFileLoader dataFileLoader;
 
     // per test data
@@ -74,19 +76,19 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase implements PrepAn
     @Setter
     private IDataSet expectedDataSet = new DefaultDataSet();
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private VerifyTableDefinition[] verifyTableDefs = {};
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private ExpectedDataSetAndVerifyTableDefinitionVerifier expectedDataSetAndVerifyTableDefinitionVerifier = new DefaultExpectedDataSetAndVerifyTableDefinitionVerifier();
 
     /**
      * Create new instance with specified dataFileLoader and databaseTester.
      *
-     * @param dataFileLoader
-     *            Load to use for loading the data files.
-     * @param databaseTester
-     *            Tester to use for database manipulation.
+     * @param dataFileLoader Load to use for loading the data files.
+     * @param databaseTester Tester to use for database manipulation.
      */
     public DefaultPrepAndExpectedTestCase(final DataFileLoader dataFileLoader, final IDatabaseTester databaseTester) {
         this.dataFileLoader = dataFileLoader;
@@ -96,8 +98,7 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase implements PrepAn
     /**
      * Create new instance with specified test case name.
      *
-     * @param name
-     *            The test case name.
+     * @param name The test case name.
      */
     public DefaultPrepAndExpectedTestCase(final String name) {
         super(name);
@@ -214,7 +215,7 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase implements PrepAn
             final boolean isCaseSensitiveTableNames = lookupFeatureValue();
             log.info("cleanupData: using case sensitive table names={}", isCaseSensitiveTableNames);
 
-            final IDataSet[] dataSets = new IDataSet[] {prepDataSet, expectedDataSet};
+            final IDataSet[] dataSets = new IDataSet[]{prepDataSet, expectedDataSet};
             final IDataSet dataset = new CompositeDataSet(dataSets, true, isCaseSensitiveTableNames);
             final String[] tableNames = dataset.getTableNames();
             final int count = tableNames.length;
@@ -242,7 +243,6 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase implements PrepAn
     /**
      * Use the provided databaseTester to prep the database with the provided
      * prep dataset. See {@link org.dbunit.IDatabaseTester#onSetup()}.
-     *
      */
     public void setupData() throws Exception {
         log.info("setupData: setting prep dataset and inserting rows");
@@ -348,28 +348,22 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase implements PrepAn
      * For the specified expected and actual tables (and excluding and including
      * the specified columns), verify the actual data is as expected.
      *
-     * @param expectedTable
-     *            The expected table to compare the actual table to.
-     * @param actualTable
-     *            The actual table to compare to the expected table.
-     * @param excludeColumns
-     *            The column names to exclude from comparison. See
-     *            {@link org.dbunit.dataset.filter.DefaultColumnFilter#excludeColumn(String)}
-     *            .
-     * @param includeColumns
-     *            The column names to only include in comparison. See
-     *            {@link org.dbunit.dataset.filter.DefaultColumnFilter#includeColumn(String)}
-     *            .
-     * @param defaultValueComparator
-     *            {@link ValueComparator} to use with column value comparisons
-     *            when the column name for the table is not in the
-     *            columnValueComparators {@link Map}. Can be <code>null</code> and
-     *            will default.
-     * @param columnValueComparators
-     *            {@link Map} of {@link ValueComparator}s to use for specific
-     *            columns. Key is column name, value is the
-     *            {@link ValueComparator}. Can be <code>null</code> and will
-     *            default to defaultValueComparer for all columns in all tables.
+     * @param expectedTable          The expected table to compare the actual table to.
+     * @param actualTable            The actual table to compare to the expected table.
+     * @param excludeColumns         The column names to exclude from comparison. See
+     *                               {@link org.dbunit.dataset.filter.DefaultColumnFilter#excludeColumn(String)}
+     *                               .
+     * @param includeColumns         The column names to only include in comparison. See
+     *                               {@link org.dbunit.dataset.filter.DefaultColumnFilter#includeColumn(String)}
+     *                               .
+     * @param defaultValueComparator {@link ValueComparator} to use with column value comparisons
+     *                               when the column name for the table is not in the
+     *                               columnValueComparators {@link Map}. Can be <code>null</code> and
+     *                               will default.
+     * @param columnValueComparators {@link Map} of {@link ValueComparator}s to use for specific
+     *                               columns. Key is column name, value is the
+     *                               {@link ValueComparator}. Can be <code>null</code> and will
+     *                               default to defaultValueComparer for all columns in all tables.
      */
     protected void verifyData(final ITable expectedTable, final ITable actualTable, final String[] excludeColumns, final String[] includeColumns, final ValueComparator defaultValueComparator, final Map<String, ValueComparator> columnValueComparators) throws DatabaseUnitException {
         final String methodName = "verifyData";
@@ -409,7 +403,6 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase implements PrepAn
     /**
      * If expected column definitions exist and are {@link DataType#UNKNOWN},
      * make them from actual table column definitions.
-     *
      */
     private Column[] makeExpectedTableColumns(final Column[] actualColumns, final ITableMetaData expectedTableMetaData) throws DataSetException {
         final Column[] expectedTableColumns;
@@ -462,7 +455,9 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase implements PrepAn
         }
     }
 
-    /** Compare the tables, enables easy overriding. */
+    /**
+     * Compare the tables, enables easy overriding.
+     */
     protected void compareData(final ITable expectedTable, final ITable actualTable, final Column[] additionalColumnInfo, final ValueComparator defaultValueComparator, final Map<String, ValueComparator> columnValueComparators) throws DatabaseUnitException {
         Assertion.assertWithValueComparer(expectedTable, actualTable, additionalColumnInfo, defaultValueComparator, columnValueComparators);
     }
@@ -471,10 +466,8 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase implements PrepAn
      * Don't add excluded columns to additionalColumnInfo as they are not found
      * and generate a not found message in the fail message.
      *
-     * @param expectedTable
-     *            Not null.
-     * @param excludeColumns
-     *            Nullable.
+     * @param expectedTable  Not null.
+     * @param excludeColumns Nullable.
      */
     protected Column[] makeAdditionalColumnInfo(final ITable expectedTable, final String[] excludeColumns) throws DataSetException {
         final Column[] allColumns = expectedTable.getTableMetaData().getColumns();
@@ -485,10 +478,8 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase implements PrepAn
      * Don't add excluded columns to additionalColumnInfo as they are not found
      * and generate a not found message in the fail message.
      *
-     * @param excludeColumns
-     *            Not null.
-     * @param allColumns
-     *            Not null.
+     * @param excludeColumns Not null.
+     * @param allColumns     Not null.
      */
     protected Column[] makeAdditionalColumnInfo(final String[] excludeColumns, final Column[] allColumns) {
         final List<Column> keepColumnsList = new ArrayList<>();
@@ -507,15 +498,11 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase implements PrepAn
     /**
      * Make a <code>IDataSet</code> from the specified files.
      *
-     * @param dataFiles
-     *            Represents the array of dbUnit data files.
-     * @param dataFilesName
-     *            Concept name of the data files, e.g. prep, expected.
-     * @param isCaseSensitiveTableNames
-     *            true if case-sensitive table names is on.
+     * @param dataFiles                 Represents the array of dbUnit data files.
+     * @param dataFilesName             Concept name of the data files, e.g. prep, expected.
+     * @param isCaseSensitiveTableNames true if case-sensitive table names is on.
      * @return The composite dataset.
-     * @throws DataSetException
-     *             On dbUnit errors.
+     * @throws DataSetException On dbUnit errors.
      */
     public IDataSet makeCompositeDataSet(final String[] dataFiles, final String dataFilesName, final boolean isCaseSensitiveTableNames) throws DataSetException {
         Assert.assertThat(dataFileLoader != null, new IllegalStateException("dataFileLoader is null; must configure or set it first"));
@@ -532,7 +519,7 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase implements PrepAn
             list.add(ds);
         }
 
-        final IDataSet[] dataSet = list.toArray(new IDataSet[] {});
+        final IDataSet[] dataSet = list.toArray(new IDataSet[]{});
         return new CompositeDataSet(dataSet, true, isCaseSensitiveTableNames);
     }
 
@@ -540,13 +527,10 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase implements PrepAn
      * Apply the specified exclude and include column filters to the specified
      * table.
      *
-     * @param table
-     *            The table to apply the filters to.
-     * @param excludeColumns
-     *            The excluded filters; use null or empty array to mean exclude
-     *            none.
-     * @param includeColumns
-     *            The included filters; use null to mean include all.
+     * @param table          The table to apply the filters to.
+     * @param excludeColumns The excluded filters; use null or empty array to mean exclude
+     *                       none.
+     * @param includeColumns The included filters; use null to mean include all.
      * @return The filtered table.
      */
     public ITable applyColumnFilters(final ITable table, final String[] excludeColumns, final String[] includeColumns) throws DataSetException {

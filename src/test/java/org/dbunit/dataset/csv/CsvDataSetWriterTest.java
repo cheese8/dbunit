@@ -11,9 +11,9 @@ import java.io.File;
 
 /**
  * Created By:   fede
- * Date:         10-mar-2004 
+ * Date:         10-mar-2004
  * Time:         17.21.34
- *
+ * <p>
  * Last Checkin: $Author$
  * Date:         $Date$
  * Revision:     $Revision$
@@ -22,9 +22,9 @@ public class CsvDataSetWriterTest extends TestCase {
     private static final String DEST = "target/csv/orders-out";
     private static final String SOURCE = TestUtils.getFileName("csv/orders");
 
-    public void testProduceAndWriteBackToDisk () throws Exception {
-        produceToFolder (SOURCE, DEST);
-        IDataSet expected = produceToMemory (SOURCE);
+    public void testProduceAndWriteBackToDisk() throws Exception {
+        produceToFolder(SOURCE, DEST);
+        IDataSet expected = produceToMemory(SOURCE);
         IDataSet actual = produceToMemory(DEST);
         Assertion.assertEquals(expected, actual);
     }
@@ -45,11 +45,11 @@ public class CsvDataSetWriterTest extends TestCase {
         producer.produce();
     }
 
-    public void testEscapeQuote () {
+    public void testEscapeQuote() {
         assertEquals("\\\"foo\\\"", CsvDataSetWriter.escape("\"foo\""));
     }
 
-    public void testEscapeEscape () {
+    public void testEscapeEscape() {
         assertEquals("\\\\foo\\\\", CsvDataSetWriter.escape("\\foo\\"));
     }
 

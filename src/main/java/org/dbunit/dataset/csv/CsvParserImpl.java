@@ -97,24 +97,22 @@ public class CsvParserImpl implements CsvParser {
         BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
         try {
             return parse(reader, file.getAbsolutePath().toString());
-        }
-        finally {
+        } finally {
             reader.close();
         }
     }
-    
+
     public List parse(URL url) throws IOException, CsvParserException {
         logger.debug("parse(url={}) - start", url);
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
         try {
             return parse(reader, url.toString());
-        }
-        finally {
+        } finally {
             reader.close();
         }
     }
-    
+
     public List parse(Reader reader, String source) throws IOException, CsvParserException {
         logger.debug("parse(reader={}, source={}) - start", reader, source);
 
@@ -133,13 +131,13 @@ public class CsvParserImpl implements CsvParser {
 //    	return parseFirstLine(lineNumberReader, file.getAbsolutePath().toString(), rows);
 //    }
 
-    /** 
-     * parse the first line of data from the given source 
+    /**
+     * parse the first line of data from the given source
      */
     private List parseFirstLine(LineNumberReader lineNumberReader, String source, List rows) throws IOException, CsvParserException {
-        if(logger.isDebugEnabled())
-            logger.debug("parseFirstLine(lineNumberReader={}, source={}, rows={}) - start", 
-                new Object[]{lineNumberReader,source,rows});
+        if (logger.isDebugEnabled())
+            logger.debug("parseFirstLine(lineNumberReader={}, source={}, rows={}) - start",
+                    new Object[]{lineNumberReader, source, rows});
 
         String firstLine = lineNumberReader.readLine();
         if (firstLine == null)
@@ -151,8 +149,8 @@ public class CsvParserImpl implements CsvParser {
     }
 
     private void parseTheData(final List columnsInFirstLine, LineNumberReader lineNumberReader, List rows) throws IOException, CsvParserException {
-        logger.debug("parseTheData(columnsInFirstLine={}, lineNumberReader={}, rows={}) - start", 
-                new Object[] {columnsInFirstLine, lineNumberReader, rows} );
+        logger.debug("parseTheData(columnsInFirstLine={}, lineNumberReader={}, rows={}) - start",
+                new Object[]{columnsInFirstLine, lineNumberReader, rows});
 
         int nColumns = columnsInFirstLine.size();
         List columns;
@@ -161,16 +159,16 @@ public class CsvParserImpl implements CsvParser {
         }
     }
 
-    private List collectExpectedNumberOfColumns(int expectedNumberOfColumns, LineNumberReader lineNumberReader) throws IOException, CsvParserException  {
-        if(logger.isDebugEnabled())
+    private List collectExpectedNumberOfColumns(int expectedNumberOfColumns, LineNumberReader lineNumberReader) throws IOException, CsvParserException {
+        if (logger.isDebugEnabled())
             logger.debug("collectExpectedNumberOfColumns(expectedNumberOfColumns={}, lineNumberReader={}) - start",
-                String.valueOf(expectedNumberOfColumns), lineNumberReader);
+                    String.valueOf(expectedNumberOfColumns), lineNumberReader);
 
         List columns = null;
         int columnsCollectedSoFar = 0;
         StringBuffer buffer = new StringBuffer();
         String anotherLine = lineNumberReader.readLine();
-        if(anotherLine == null)
+        if (anotherLine == null)
             return null;
         boolean shouldProceed = false;
         while (columnsCollectedSoFar < expectedNumberOfColumns) {
@@ -181,7 +179,7 @@ public class CsvParserImpl implements CsvParser {
             } catch (IllegalStateException e) {
                 resetThePipeline();
                 anotherLine = lineNumberReader.readLine();
-                if(anotherLine == null)
+                if (anotherLine == null)
                     break;
                 buffer.append("\n");
                 shouldProceed = true;

@@ -29,20 +29,16 @@ import java.sql.Types;
 /**
  * @author Klas Axell
  */
-public class HsqldbDataTypeFactoryTest extends AbstractDataTypeFactoryTest
-{
-    public HsqldbDataTypeFactoryTest(String s)
-    {
+public class HsqldbDataTypeFactoryTest extends AbstractDataTypeFactoryTest {
+    public HsqldbDataTypeFactoryTest(String s) {
         super(s);
     }
 
-    public IDataTypeFactory createFactory() throws Exception
-    {
+    public IDataTypeFactory createFactory() throws Exception {
         return new HsqldbDataTypeFactory();
     }
 
-    public void testCreateBooleanDataType() throws Exception
-    {
+    public void testCreateBooleanDataType() throws Exception {
         int sqlType = Types.BIT;
         String sqlTypeName = "BOOLEAN";
 

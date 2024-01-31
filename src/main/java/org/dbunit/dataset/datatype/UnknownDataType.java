@@ -32,44 +32,38 @@ import java.sql.Types;
  * @author Manuel Laflamme
  * @version $Revision$
  */
-public class UnknownDataType extends AbstractDataType
-{
+public class UnknownDataType extends AbstractDataType {
 
     /**
      * Logger for this class
      */
     private static final Logger logger = LoggerFactory.getLogger(UnknownDataType.class);
 
-    UnknownDataType()
-    {
+    UnknownDataType() {
         super("UNKNOWN", Types.OTHER, Object.class, false);
     }
 
     ////////////////////////////////////////////////////////////////////////////
     // DataType class
 
-    public Object typeCast(Object value) throws TypeCastException
-    {
+    public Object typeCast(Object value) throws TypeCastException {
         logger.debug("typeCast(value={}) - start", value);
 
-        if (value == ITable.NO_VALUE)
-        {
+        if (value == ITable.NO_VALUE) {
             return null;
         }
 
         return value;
     }
 
-    public int compare(Object o1, Object o2) throws TypeCastException
-    {
+    public int compare(Object o1, Object o2) throws TypeCastException {
         logger.debug("compare(o1={}, o2={}) - start", o1, o2);
 
         // New since dbunit 2.4 for performance optimization (avoid the "asString")
-        if(areObjectsEqual(o1, o2))
-        {
+        if (areObjectsEqual(o1, o2)) {
             return 0;
         }
-        
+
         return super.compare(asString(o1), asString(o2));
     }
 }

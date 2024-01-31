@@ -33,20 +33,17 @@ import org.dbunit.operation.DatabaseOperation;
  * @version $Revision$
  * @since Feb 18, 2002
  */
-public class QueryDataSetIT extends AbstractDataSetTest
-{
+public class QueryDataSetIT extends AbstractDataSetTest {
     private IDatabaseConnection _connection;
 
-    public QueryDataSetIT(String s)
-    {
+    public QueryDataSetIT(String s) {
         super(s);
     }
 
     ////////////////////////////////////////////////////////////////////////////
     // TestCase class
 
-    protected void setUp() throws Exception
-    {
+    protected void setUp() throws Exception {
         super.setUp();
 
         DatabaseEnvironment env = DatabaseEnvironment.getInstance();
@@ -55,8 +52,7 @@ public class QueryDataSetIT extends AbstractDataSetTest
         DatabaseOperation.CLEAN_INSERT.execute(_connection, env.getInitDataSet());
     }
 
-    protected void tearDown() throws Exception
-    {
+    protected void tearDown() throws Exception {
         super.tearDown();
 
         _connection = null;
@@ -65,13 +61,11 @@ public class QueryDataSetIT extends AbstractDataSetTest
     ////////////////////////////////////////////////////////////////////////////
     // AbstractDataSetTest class
 
-    protected IDataSet createDataSet() throws Exception
-    {
+    protected IDataSet createDataSet() throws Exception {
         String[] names = getExpectedNames();
 
         QueryDataSet dataSet = new QueryDataSet(_connection);
-        for (int i = 0; i < names.length; i++)
-        {
+        for (int i = 0; i < names.length; i++) {
             String name = names[i];
             String query = "select * from " + name;
             dataSet.addTable(name, query);
@@ -90,8 +84,7 @@ public class QueryDataSetIT extends AbstractDataSetTest
         return dataSet;
     }
 
-    protected IDataSet createDuplicateDataSet() throws Exception
-    {
+    protected IDataSet createDuplicateDataSet() throws Exception {
         QueryDataSet dataSet = new QueryDataSet(_connection);
         String[] names = getExpectedDuplicateNames();
 
@@ -133,8 +126,7 @@ public class QueryDataSetIT extends AbstractDataSetTest
     ////////////////////////////////////////////////////////////////////////////
     // Test methods
 
-    public void testGetSelectPartialData() throws Exception
-    {
+    public void testGetSelectPartialData() throws Exception {
 
         QueryDataSet ptds = new QueryDataSet(_connection);
         ptds.addTable("PK_TABLE", "SELECT PK0, PK1 FROM PK_TABLE where PK0 = 0");
@@ -145,8 +137,7 @@ public class QueryDataSetIT extends AbstractDataSetTest
 
     }
 
-    public void testGetAllColumnsWithStar() throws Exception
-    {
+    public void testGetAllColumnsWithStar() throws Exception {
 
         QueryDataSet ptds = new QueryDataSet(_connection);
         ptds.addTable("PK_TABLE", "SELECT * FROM PK_TABLE where PK0 = 0");
@@ -157,8 +148,7 @@ public class QueryDataSetIT extends AbstractDataSetTest
 
     }
 
-    public void testGetAllRowsSingleColumn() throws Exception
-    {
+    public void testGetAllRowsSingleColumn() throws Exception {
 
         QueryDataSet ptds = new QueryDataSet(_connection);
         ptds.addTable("PK_TABLE", "SELECT PK0 FROM PK_TABLE ORDER BY PK0");
@@ -169,8 +159,7 @@ public class QueryDataSetIT extends AbstractDataSetTest
     }
 
 
-    public void testOnlySpecifiedColumnsReturned() throws Exception
-    {
+    public void testOnlySpecifiedColumnsReturned() throws Exception {
 
         QueryDataSet ptds = new QueryDataSet(_connection);
         ptds.addTable("PK_TABLE", "SELECT PK0 FROM PK_TABLE ORDER BY PK0 ASC");
@@ -178,20 +167,16 @@ public class QueryDataSetIT extends AbstractDataSetTest
         ITable table = ptds.getTable("PK_TABLE");
         assertEquals("", "0", table.getValue(0, "PK0").toString());
 
-        try
-        {
+        try {
             table.getValue(0, "PK1").toString();
             fail("Should not have reached here, we should have thrown a NoSuchColumnException");
-        }
-        catch (NoSuchColumnException nsce)
-        {
+        } catch (NoSuchColumnException nsce) {
             String errorMsg = "org.dbunit.dataset.NoSuchColumnException: PK_TABLE.PK1";
             assertTrue("Find text:" + errorMsg, nsce.toString().indexOf(errorMsg) >= 0);
         }
     }
 
-    public void testGetSelectPartialData2() throws Exception
-    {
+    public void testGetSelectPartialData2() throws Exception {
 
         QueryDataSet ptds = new QueryDataSet(_connection);
         ptds.addTable("SECOND_TABLE",
@@ -204,8 +189,7 @@ public class QueryDataSetIT extends AbstractDataSetTest
 
     }
 
-    public void testCombinedWhere() throws Exception
-    {
+    public void testCombinedWhere() throws Exception {
 
         QueryDataSet ptds = new QueryDataSet(_connection);
         ptds.addTable("SECOND_TABLE",
@@ -218,8 +202,7 @@ public class QueryDataSetIT extends AbstractDataSetTest
 
     }
 
-    public void testMultipleTables() throws Exception
-    {
+    public void testMultipleTables() throws Exception {
         ITable table = null;
 
         QueryDataSet ptds = new QueryDataSet(_connection);
@@ -239,8 +222,7 @@ public class QueryDataSetIT extends AbstractDataSetTest
 
     }
 
-    public void testMultipleTablesWithMissingWhere() throws Exception
-    {
+    public void testMultipleTablesWithMissingWhere() throws Exception {
         QueryDataSet ptds = new QueryDataSet(_connection);
         ptds.addTable("SECOND_TABLE",
                 "SELECT * from SECOND_TABLE where COLUMN0='row 0 col 0' and COLUMN2='row 0 col 2'");

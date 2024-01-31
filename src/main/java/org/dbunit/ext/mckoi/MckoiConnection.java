@@ -30,7 +30,7 @@ import java.sql.Connection;
 /**
  * Database connection for Mckoi that pre-configures all properties required to successfully
  * use dbunit with Mckoi.
- * 
+ *
  * @author Luigi Talamona (luigitalamona AT users.sourceforge.net)
  * @author Last changed by: $Author$
  * @version $Revision$ $Date$

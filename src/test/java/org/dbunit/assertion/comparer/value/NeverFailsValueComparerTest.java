@@ -8,13 +8,11 @@ import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.datatype.DataType;
 import org.junit.Test;
 
-public class NeverFailsValueComparerTest
-{
+public class NeverFailsValueComparerTest {
     private final NeverFailsValueComparer sut = new NeverFailsValueComparer();
 
     @Test
-    public void testIsExpected_AllNulls_True() throws DatabaseUnitException
-    {
+    public void testIsExpected_AllNulls_True() throws DatabaseUnitException {
         final ITable expectedTable = null;
         final ITable actualTable = null;
         final int rowNum = 0;
@@ -30,8 +28,7 @@ public class NeverFailsValueComparerTest
 
     @Test
     public void testIsExpected_DifferenceValues_True()
-            throws DatabaseUnitException
-    {
+            throws DatabaseUnitException {
         final ITable expectedTable = null;
         final ITable actualTable = null;
         final int rowNum = 0;
@@ -47,8 +44,7 @@ public class NeverFailsValueComparerTest
     }
 
     @Test
-    public void testGetFailPhrase()
-    {
+    public void testGetFailPhrase() {
         final String actual = sut.getFailPhrase();
 
         assertThat(

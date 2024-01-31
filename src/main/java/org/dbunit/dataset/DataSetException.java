@@ -25,7 +25,7 @@ import org.dbunit.DatabaseUnitException;
 
 /**
  * Thrown to indicate that a problem occurred with a dataset.
- * 
+ *
  * @author Manuel Laflamme
  * @author Last changed by: $Author$
  * @version $Revision$ $Date$

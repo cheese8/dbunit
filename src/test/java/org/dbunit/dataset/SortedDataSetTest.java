@@ -31,15 +31,12 @@ import org.dbunit.testutil.TestUtils;
  * @version $Revision$
  * @since Feb 19, 2003
  */
-public class SortedDataSetTest extends AbstractDataSetDecoratorTest
-{
-    public SortedDataSetTest(String s)
-    {
+public class SortedDataSetTest extends AbstractDataSetDecoratorTest {
+    public SortedDataSetTest(String s) {
         super(s);
     }
 
-    protected IDataSet createDataSet() throws Exception
-    {
+    protected IDataSet createDataSet() throws Exception {
         IDataSet dataSet = new FlatXmlDataSetBuilder().build(
                 TestUtils.getFileReader("xml/sortedDataSetTest.xml"));
 

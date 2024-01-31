@@ -27,19 +27,16 @@ import org.dbunit.database.DatabaseConnection;
 import java.sql.Connection;
 
 /**
- *
  * @author manuel.laflamme
- * @since Sep 4, 2003
  * @version $Revision$
+ * @since Sep 4, 2003
  */
-public class MySqlConnection extends DatabaseConnection
-{
-    public MySqlConnection(Connection connection, String schema) throws DatabaseUnitException
-    {
+public class MySqlConnection extends DatabaseConnection {
+    public MySqlConnection(Connection connection, String schema) throws DatabaseUnitException {
         super(connection, schema);
         getConfig().setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY,
                 new MySqlDataTypeFactory());
-        getConfig().setProperty(DatabaseConfig.PROPERTY_METADATA_HANDLER, 
+        getConfig().setProperty(DatabaseConfig.PROPERTY_METADATA_HANDLER,
                 new MySqlMetadataHandler());
     }
 }

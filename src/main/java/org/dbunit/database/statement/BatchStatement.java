@@ -32,41 +32,35 @@ import java.sql.SQLException;
  * @version $Revision$
  * @since Feb 20, 2002
  */
-public class BatchStatement extends AbstractBatchStatement
-{
+public class BatchStatement extends AbstractBatchStatement {
 
     /**
      * Logger for this class
      */
     private static final Logger logger = LoggerFactory.getLogger(BatchStatement.class);
 
-    BatchStatement(Connection connection) throws SQLException
-    {
+    BatchStatement(Connection connection) throws SQLException {
         super(connection);
     }
 
-    public void addBatch(String sql) throws SQLException
-    {
+    public void addBatch(String sql) throws SQLException {
         logger.debug("addBatch(sql={}) - start", sql);
 
         statement.addBatch(sql);
     }
 
-    public int executeBatch() throws SQLException
-    {
+    public int executeBatch() throws SQLException {
         logger.debug("executeBatch() - start");
 
         int[] results = statement.executeBatch();
         int result = 0;
-        for (int i = 0; i < results.length; i++)
-        {
+        for (int i = 0; i < results.length; i++) {
             result += results[i];
         }
         return result;
     }
 
-    public void clearBatch() throws SQLException
-    {
+    public void clearBatch() throws SQLException {
         logger.debug("clearBatch() - start");
 
         statement.clearBatch();

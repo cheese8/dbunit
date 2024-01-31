@@ -42,43 +42,37 @@ import org.dbunit.testutil.TestUtils;
  * @version $Revision$
  * @since Mar 13, 2002
  */
-public class FlatXmlDataSetTest extends AbstractDataSetTest
-{
+public class FlatXmlDataSetTest extends AbstractDataSetTest {
     public static final File DATASET_FILE =
             TestUtils.getFile("xml/flatXmlDataSetTest.xml");
     public static final File DUPLICATE_DATASET_FILE =
             TestUtils.getFile("xml/flatXmlDataSetDuplicateTest.xml");
-    public static final File DUPLICATE_DATASET_MULTIPLE_CASE_FILE = 
+    public static final File DUPLICATE_DATASET_MULTIPLE_CASE_FILE =
             TestUtils.getFile("xml/flatXmlDataSetDuplicateMultipleCaseTest.xml");
 
-    private static final File FLAT_XML_TABLE = 
-    		    TestUtils.getFile("xml/flatXmlTableTest.xml");
+    private static final File FLAT_XML_TABLE =
+            TestUtils.getFile("xml/flatXmlTableTest.xml");
 
-    private static final File FLAT_XML_DTD_DIFFERENT_CASE_FILE = 
+    private static final File FLAT_XML_DTD_DIFFERENT_CASE_FILE =
             TestUtils.getFile("xml/flatXmlDataSetDtdDifferentCaseTest.xml");
-    
-    public FlatXmlDataSetTest(String s)
-    {
+
+    public FlatXmlDataSetTest(String s) {
         super(s);
     }
 
-    protected IDataSet createDataSet() throws Exception
-    {
+    protected IDataSet createDataSet() throws Exception {
         return new FlatXmlDataSetBuilder().build(DATASET_FILE);
     }
 
-    protected IDataSet createDuplicateDataSet() throws Exception
-    {
+    protected IDataSet createDuplicateDataSet() throws Exception {
         return new FlatXmlDataSetBuilder().build(DUPLICATE_DATASET_FILE);
     }
 
-    protected IDataSet createMultipleCaseDuplicateDataSet() throws Exception 
-    {
+    protected IDataSet createMultipleCaseDuplicateDataSet() throws Exception {
         return new FlatXmlDataSetBuilder().build(DUPLICATE_DATASET_MULTIPLE_CASE_FILE);
     }
 
-    public void testMissingColumnAndEnableDtdMetadata() throws Exception
-    {
+    public void testMissingColumnAndEnableDtdMetadata() throws Exception {
         FlatXmlDataSetBuilder builder = new FlatXmlDataSetBuilder();
         builder.setDtdMetadata(true);
         IDataSet dataSet = builder.build(FLAT_XML_TABLE);
@@ -89,20 +83,18 @@ public class FlatXmlDataSetTest extends AbstractDataSetTest
         assertEquals("column count", 3, columns.length);
     }
 
-    public void testMissingColumnAndDisableDtdMetadata() throws Exception
-    {
+    public void testMissingColumnAndDisableDtdMetadata() throws Exception {
         FlatXmlDataSetBuilder builder = new FlatXmlDataSetBuilder();
         builder.setDtdMetadata(false);
         IDataSet dataSet = builder.build(FLAT_XML_TABLE);
-        
+
         ITable table = dataSet.getTable("MISSING_VALUES");
 
         Column[] columns = table.getTableMetaData().getColumns();
         assertEquals("column count", 2, columns.length);
     }
 
-    public void testMissingColumnAndDisableDtdMetadataEnableSensing() throws Exception
-    {
+    public void testMissingColumnAndDisableDtdMetadataEnableSensing() throws Exception {
         FlatXmlDataSetBuilder builder = new FlatXmlDataSetBuilder();
         builder.setDtdMetadata(false);
         builder.setColumnSensing(true);
@@ -123,29 +115,23 @@ public class FlatXmlDataSetTest extends AbstractDataSetTest
         assertEquals("row 2 col 3", table.getValue(2, "COLUMN3"));
     }
 
-    
-    public void testWrite() throws Exception
-    {
+
+    public void testWrite() throws Exception {
         IDataSet expectedDataSet = createDataSet();
         File tempFile = File.createTempFile("flatXmlDataSetTest", ".xml");
-        try
-        {
+        try {
             Writer out = new FileWriter(tempFile);
 
             // write dataset in temp file
-            try
-            {
+            try {
                 FlatXmlDataSet.write(expectedDataSet, out);
-            }
-            finally
-            {
+            } finally {
                 out.close();
             }
 
             // load new dataset from temp file
             FileReader in = new FileReader(tempFile);
-            try
-            {
+            try {
                 IDataSet actualDataSet = new FlatXmlDataSetBuilder().build(in);
 
                 // verify table count
@@ -156,8 +142,7 @@ public class FlatXmlDataSetTest extends AbstractDataSetTest
                 ITable[] expected = DataSetUtils.getTables(expectedDataSet);
                 ITable[] actual = DataSetUtils.getTables(actualDataSet);
                 assertEquals("table count", expected.length, actual.length);
-                for (int i = 0; i < expected.length; i++)
-                {
+                for (int i = 0; i < expected.length; i++) {
                     String expectedName = expected[i].getTableMetaData().getTableName();
                     String actualName = actual[i].getTableMetaData().getTableName();
                     assertEquals("table name", expectedName, actualName);
@@ -165,30 +150,24 @@ public class FlatXmlDataSetTest extends AbstractDataSetTest
                     assertTrue("not same instance", expected[i] != actual[i]);
                     Assertion.assertEquals(expected[i], actual[i]);
                 }
-            }
-            finally
-            {
+            } finally {
                 in.close();
             }
-        }
-        finally
-        {
+        } finally {
             tempFile.delete();
         }
     }
 
-    
-    public void testReadFlatXmlWithDifferentCaseInDtd()throws Exception
-    {
+
+    public void testReadFlatXmlWithDifferentCaseInDtd() throws Exception {
         // The creation of such a dataset should work
         IDataSet ds = new FlatXmlDataSetBuilder().build(FLAT_XML_DTD_DIFFERENT_CASE_FILE);
         assertEquals(1, ds.getTableNames().length);
         assertEquals("emp", ds.getTableNames()[0]);
     }
 
-    
-    public void testCreateMultipleCaseDuplicateDataSet_CaseSensitive() throws Exception
-    {
+
+    public void testCreateMultipleCaseDuplicateDataSet_CaseSensitive() throws Exception {
         FlatXmlDataSetBuilder builder = new FlatXmlDataSetBuilder();
         builder.setDtdMetadata(false);
         builder.setColumnSensing(false);
@@ -202,32 +181,32 @@ public class FlatXmlDataSetTest extends AbstractDataSetTest
         assertEquals("EMPTY_TABLE", tables[1].getTableMetaData().getTableName());
         assertEquals("duplicate_TABLE", tables[2].getTableMetaData().getTableName());
     }
-    
+
     /**
      * Overridden from parent because FlatXml has different behaviour than other datasets.
      * It allows the occurrence of the same table multiple times in arbitrary locations.
+     *
      * @see org.dbunit.dataset.AbstractDataSetTest#testCreateDuplicateDataSet()
      */
     //@Override
-    public void testCreateDuplicateDataSet() throws Exception
-    {
-            IDataSet dataSet = createDuplicateDataSet();
-            ITable[] tables = dataSet.getTables();
-            assertEquals(2, tables.length);
-            assertEquals("DUPLICATE_TABLE", tables[0].getTableMetaData().getTableName());
-            assertEquals(3, tables[0].getRowCount());
-            assertEquals("EMPTY_TABLE", tables[1].getTableMetaData().getTableName());
-            assertEquals(0, tables[1].getRowCount());
+    public void testCreateDuplicateDataSet() throws Exception {
+        IDataSet dataSet = createDuplicateDataSet();
+        ITable[] tables = dataSet.getTables();
+        assertEquals(2, tables.length);
+        assertEquals("DUPLICATE_TABLE", tables[0].getTableMetaData().getTableName());
+        assertEquals(3, tables[0].getRowCount());
+        assertEquals("EMPTY_TABLE", tables[1].getTableMetaData().getTableName());
+        assertEquals(0, tables[1].getRowCount());
     }
 
     /**
      * Overridden from parent because FlatXml has different behaviour than other datasets.
      * It allows the occurrence of the same table multiple times in arbitrary locations.
+     *
      * @see org.dbunit.dataset.AbstractDataSetTest#testCreateMultipleCaseDuplicateDataSet()
      */
     //@Override
-    public void testCreateMultipleCaseDuplicateDataSet() throws Exception
-    {
+    public void testCreateMultipleCaseDuplicateDataSet() throws Exception {
         IDataSet dataSet = createMultipleCaseDuplicateDataSet();
         ITable[] tables = dataSet.getTables();
         assertEquals(2, tables.length);
@@ -237,22 +216,21 @@ public class FlatXmlDataSetTest extends AbstractDataSetTest
         assertEquals(0, tables[1].getRowCount());
     }
 
-    public void testCreateDuplicateDataSetWithVaryingColumnsAndColumnSensing() throws Exception
-    {
-        String xmlString = 
-            "<dataset>" +
-                "<MISSING_VALUES_SENSING COLUMN0='row 0 col 0' COLUMN3='row 0 col 3'/>"+
-                "<MISSING_VALUES         COLUMN0='row 1 col 0' COLUMN2='row 1 col 2'/>"+
-                "<MISSING_VALUES_SENSING COLUMN0='row 1 col 0' COLUMN1='row 1 col 1'/>"+
-            "</dataset>";
-        
+    public void testCreateDuplicateDataSetWithVaryingColumnsAndColumnSensing() throws Exception {
+        String xmlString =
+                "<dataset>" +
+                        "<MISSING_VALUES_SENSING COLUMN0='row 0 col 0' COLUMN3='row 0 col 3'/>" +
+                        "<MISSING_VALUES         COLUMN0='row 1 col 0' COLUMN2='row 1 col 2'/>" +
+                        "<MISSING_VALUES_SENSING COLUMN0='row 1 col 0' COLUMN1='row 1 col 1'/>" +
+                        "</dataset>";
+
         FlatXmlDataSetBuilder builder = new FlatXmlDataSetBuilder();
         builder.setDtdMetadata(false);
         builder.setColumnSensing(true);
         IDataSet dataSet = builder.build(new StringReader(xmlString));
         ITable[] tables = dataSet.getTables();
         assertEquals(2, tables.length);
-        
+
         ITableMetaData meta1 = tables[0].getTableMetaData();
         assertEquals("MISSING_VALUES_SENSING", meta1.getTableName());
         assertEquals(3, meta1.getColumns().length);
@@ -262,22 +240,21 @@ public class FlatXmlDataSetTest extends AbstractDataSetTest
         assertEquals(2, tables[0].getRowCount());
         assertEquals("row 0 col 0", tables[0].getValue(0, "COLUMN0"));
         assertEquals("row 0 col 3", tables[0].getValue(0, "COLUMN3"));
-        assertEquals(null,          tables[0].getValue(0, "COLUMN1"));
+        assertEquals(null, tables[0].getValue(0, "COLUMN1"));
         assertEquals("row 1 col 0", tables[0].getValue(1, "COLUMN0"));
-        assertEquals(null,          tables[0].getValue(1, "COLUMN3"));
+        assertEquals(null, tables[0].getValue(1, "COLUMN3"));
         assertEquals("row 1 col 1", tables[0].getValue(1, "COLUMN1"));
-        
+
         assertEquals("MISSING_VALUES", tables[1].getTableMetaData().getTableName());
         assertEquals(1, tables[1].getRowCount());
     }
 
-    public void testCreateDataSetWithVaryingColumnCasingAndColumnSensing() throws Exception
-    {
+    public void testCreateDataSetWithVaryingColumnCasingAndColumnSensing() throws Exception {
         String xmlContent =
-            "<dataset>" +
-                "<CASED_COLUMNS COLUMN0='row 0 col 0' COLUMN1='row 0 col 1' />" +
-                "<CASED_COLUMNS column0='row 1 col 0' COLUMN1='row 1 col 1' />" +
-            "</dataset>";
+                "<dataset>" +
+                        "<CASED_COLUMNS COLUMN0='row 0 col 0' COLUMN1='row 0 col 1' />" +
+                        "<CASED_COLUMNS column0='row 1 col 0' COLUMN1='row 1 col 1' />" +
+                        "</dataset>";
 
         FlatXmlDataSetBuilder builder = new FlatXmlDataSetBuilder();
         builder.setDtdMetadata(false);

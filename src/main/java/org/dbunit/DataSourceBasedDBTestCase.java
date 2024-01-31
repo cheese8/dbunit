@@ -35,21 +35,21 @@ import javax.sql.DataSource;
  */
 @NoArgsConstructor
 public abstract class DataSourceBasedDBTestCase extends DBTestCase {
-   public DataSourceBasedDBTestCase(String name) {
-      super(name);
-   }
+    public DataSourceBasedDBTestCase(String name) {
+        super(name);
+    }
 
-   /**
-    * Creates a new IDatabaseTester.<br>
-    * Default implementation returns a {@link DataSourceDatabaseTester}
-    * configured with the value returned from {@link #getDataSource()}.
-    */
-   protected IDatabaseTester newDatabaseTester() {
-      return new DataSourceDatabaseTester(getDataSource());
-   }
+    /**
+     * Creates a new IDatabaseTester.<br>
+     * Default implementation returns a {@link DataSourceDatabaseTester}
+     * configured with the value returned from {@link #getDataSource()}.
+     */
+    protected IDatabaseTester newDatabaseTester() {
+        return new DataSourceDatabaseTester(getDataSource());
+    }
 
-   /**
-    * Returns the test DataSource.
-    */
-   protected abstract DataSource getDataSource();
+    /**
+     * Returns the test DataSource.
+     */
+    protected abstract DataSource getDataSource();
 }

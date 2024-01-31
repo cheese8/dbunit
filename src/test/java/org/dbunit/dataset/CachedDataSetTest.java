@@ -33,33 +33,28 @@ import org.xml.sax.InputSource;
  * @version $Revision$ $Date$
  * @since 1.x (Apr 18, 2003)
  */
-public class CachedDataSetTest extends AbstractDataSetDecoratorTest
-{
-    public CachedDataSetTest(String s)
-    {
+public class CachedDataSetTest extends AbstractDataSetDecoratorTest {
+    public CachedDataSetTest(String s) {
         super(s);
     }
 
-    protected IDataSet createDataSet() throws Exception
-    {
+    protected IDataSet createDataSet() throws Exception {
         FileReader reader = new FileReader(FlatXmlDataSetTest.DATASET_FILE);
         return new CachedDataSet(new FlatXmlProducer(new InputSource(reader)));
     }
 
-    public void testGetTable() throws Exception
-    {
+    public void testGetTable() throws Exception {
         super.testGetTable();
     }
 
     /**
      * Test constructor CacheDataSet(IDataSet dataSet).
-     *
+     * <p>
      * The automated test inherited from AbstractDataSetDecoratorTest do not
      * test this constructor.
      */
     @Test
-    public void testCachedDataSetDataSetConstructor() throws Exception
-    {
+    public void testCachedDataSetDataSetConstructor() throws Exception {
         final IDataSet cachedDataSetCreatedByProducer = createDataSet();
 
         // createDateSet() returns a CacheDataSet that was created using the
@@ -75,16 +70,13 @@ public class CachedDataSetTest extends AbstractDataSetDecoratorTest
         // are missing, something went wrong.
         final ITableIterator iterator =
                 cachedDataSetCreatedByProducer.iterator();
-        while (iterator.next())
-        {
+        while (iterator.next()) {
             final String tableNameFromProducer =
                     iterator.getTable().getTableMetaData().getTableName();
-            try
-            {
+            try {
                 assertNotNull(cachedDataSetCreatedByDataSetConstructor
                         .getTable(tableNameFromProducer));
-            } catch (final Exception exception)
-            {
+            } catch (final Exception exception) {
                 fail("Table " + tableNameFromProducer + " was not cached.");
             }
         }

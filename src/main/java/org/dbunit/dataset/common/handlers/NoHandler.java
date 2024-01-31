@@ -22,7 +22,6 @@
 package org.dbunit.dataset.common.handlers;
 
 
-
 /**
  * @author fede
  * @author Last changed by: $Author$
@@ -31,9 +30,10 @@ package org.dbunit.dataset.common.handlers;
  */
 public class NoHandler extends AbstractPipelineComponent {
 
-    private NoHandler() {}
+    private NoHandler() {
+    }
 
-    public static final PipelineComponent IGNORE () {
+    public static final PipelineComponent IGNORE() {
         return createPipelineComponent(new NoHandler(), new ACCEPT());
     }
 

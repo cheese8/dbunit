@@ -31,11 +31,10 @@ import org.dbunit.dataset.DataSetException;
  * sequence from the filtered dataset and support duplicate table names.
  *
  * @author Manuel Laflamme
- * @since Apr 17, 2004
  * @version $Revision$
+ * @since Apr 17, 2004
  */
-public class DefaultTableFilter extends AbstractTableFilter implements ITableFilter
-{
+public class DefaultTableFilter extends AbstractTableFilter implements ITableFilter {
 
     /**
      * Logger for this class
@@ -51,8 +50,7 @@ public class DefaultTableFilter extends AbstractTableFilter implements ITableFil
      * '*' matches zero or more characters,
      * '?' matches one character.
      */
-    public void includeTable(String patternName)
-    {
+    public void includeTable(String patternName) {
         logger.debug("includeTable(patternName=" + patternName + ") - start");
 
         _includeFilter.includeTable(patternName);
@@ -64,8 +62,7 @@ public class DefaultTableFilter extends AbstractTableFilter implements ITableFil
      * '*' matches zero or more characters,
      * '?' matches one character.
      */
-    public void excludeTable(String patternName)
-    {
+    public void excludeTable(String patternName) {
         logger.debug("excludeTable(patternName=" + patternName + ") - start");
 
         _excludeFilter.excludeTable(patternName);
@@ -74,12 +71,10 @@ public class DefaultTableFilter extends AbstractTableFilter implements ITableFil
     ////////////////////////////////////////////////////////////////////////////
     // AbstractTableFilter interface
 
-    public boolean isValidName(String tableName) throws DataSetException
-    {
+    public boolean isValidName(String tableName) throws DataSetException {
         logger.debug("isValidName(tableName=" + tableName + ") - start");
 
-        if (_includeFilter.isEmpty() || _includeFilter.accept(tableName))
-        {
+        if (_includeFilter.isEmpty() || _includeFilter.accept(tableName)) {
             return _excludeFilter.accept(tableName);
         }
         return false;

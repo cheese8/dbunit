@@ -79,7 +79,7 @@ public class DatabaseProfile {
     public String[] getUnsupportedFeatures() {
         String property = properties.getProperty(PROFILE_UNSUPPORTED_FEATURES);
         if (property == null) {
-        	return new String[0];
+            return new String[0];
         }
         List<String> stringList = new ArrayList<>();
         StringTokenizer tokenizer = new StringTokenizer(property, ",");

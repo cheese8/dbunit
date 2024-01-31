@@ -74,7 +74,7 @@ public abstract class AbstractTableFilter implements ITableFilter {
         }
 
         public boolean next() throws DataSetException {
-            while(iterator.next()) {
+            while (iterator.next()) {
                 if (accept(iterator.getTableMetaData().getTableName())) {
                     return true;
                 }

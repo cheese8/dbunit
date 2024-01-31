@@ -28,23 +28,19 @@ import java.sql.Types;
 
 /**
  * @author Manuel Laflamme
- * @since Aug 13, 2003
  * @version $Revision$
+ * @since Aug 13, 2003
  */
-public class OracleDataTypeFactoryTest extends AbstractDataTypeFactoryTest
-{
-    public OracleDataTypeFactoryTest(String s)
-    {
+public class OracleDataTypeFactoryTest extends AbstractDataTypeFactoryTest {
+    public OracleDataTypeFactoryTest(String s) {
         super(s);
     }
 
-    public IDataTypeFactory createFactory() throws Exception
-    {
+    public IDataTypeFactory createFactory() throws Exception {
         return new OracleDataTypeFactory();
     }
 
-    public void testCreateBlobDataType() throws Exception
-    {
+    public void testCreateBlobDataType() throws Exception {
         int sqlType = Types.OTHER;
         String sqlTypeName = "BLOB";
 
@@ -53,8 +49,7 @@ public class OracleDataTypeFactoryTest extends AbstractDataTypeFactoryTest
         assertSame("type", expected, actual);
     }
 
-    public void testCreateClobDataType() throws Exception
-    {
+    public void testCreateClobDataType() throws Exception {
         int sqlType = Types.OTHER;
         String sqlTypeName = "CLOB";
 
@@ -63,8 +58,7 @@ public class OracleDataTypeFactoryTest extends AbstractDataTypeFactoryTest
         assertSame("type", expected, actual);
     }
 
-    public void testCreateNClobDataType() throws Exception
-    {
+    public void testCreateNClobDataType() throws Exception {
         int sqlType = Types.OTHER;
         String sqlTypeName = "NCLOB";
 
@@ -73,8 +67,7 @@ public class OracleDataTypeFactoryTest extends AbstractDataTypeFactoryTest
         assertSame("type", expected, actual);
     }
 
-    public void testCreateLongRawDataType() throws Exception
-    {
+    public void testCreateLongRawDataType() throws Exception {
         int sqlType = Types.LONGVARBINARY;
         String sqlTypeName = "LONG RAW";
 
@@ -83,8 +76,7 @@ public class OracleDataTypeFactoryTest extends AbstractDataTypeFactoryTest
         assertSame("type", expected, actual);
     }
 
-    public void testCreateTimestampDataType() throws Exception
-    {
+    public void testCreateTimestampDataType() throws Exception {
         int sqlType = Types.OTHER;
         String sqlTypeName = "TIMESTAMP(6)";
 
@@ -93,8 +85,7 @@ public class OracleDataTypeFactoryTest extends AbstractDataTypeFactoryTest
         assertSame("type", expected, actual);
     }
 
-    public void testCreateDateDataType() throws Exception
-    {
+    public void testCreateDateDataType() throws Exception {
         int sqlType = Types.DATE;
         String sqlTypeName = "DATE";
 
@@ -103,8 +94,7 @@ public class OracleDataTypeFactoryTest extends AbstractDataTypeFactoryTest
         assertSame("type", expected, actual);
     }
 
-    public void testCreateNChar2DataType() throws Exception
-    {
+    public void testCreateNChar2DataType() throws Exception {
         int sqlType = Types.OTHER;
         String sqlTypeName = "NCHAR2";
 
@@ -113,8 +103,7 @@ public class OracleDataTypeFactoryTest extends AbstractDataTypeFactoryTest
         assertSame("type", expected, actual);
     }
 
-    public void testCreateNVarChar2DataType() throws Exception
-    {
+    public void testCreateNVarChar2DataType() throws Exception {
         int sqlType = Types.OTHER;
         String sqlTypeName = "NVARCHAR2";
 
@@ -123,8 +112,7 @@ public class OracleDataTypeFactoryTest extends AbstractDataTypeFactoryTest
         assertSame("type", expected, actual);
     }
 
-    public void testCreateFloatDataType() throws Exception
-    {
+    public void testCreateFloatDataType() throws Exception {
         int sqlType = Types.OTHER;
         String sqlTypeName = "FLOAT";
 
@@ -133,8 +121,7 @@ public class OracleDataTypeFactoryTest extends AbstractDataTypeFactoryTest
         assertSame("type", expected, actual);
     }
 
-    public void testCreateBinaryDoubleDataType() throws Exception
-    {
+    public void testCreateBinaryDoubleDataType() throws Exception {
         int sqlType = Types.OTHER;
         String sqlTypeName = "BINARY_DOUBLE";
 
@@ -143,8 +130,7 @@ public class OracleDataTypeFactoryTest extends AbstractDataTypeFactoryTest
         assertSame("type", expected, actual);
     }
 
-    public void testCreateBinaryFloatDataType() throws Exception
-    {
+    public void testCreateBinaryFloatDataType() throws Exception {
         int sqlType = Types.OTHER;
         String sqlTypeName = "BINARY_FLOAT";
 
@@ -153,8 +139,7 @@ public class OracleDataTypeFactoryTest extends AbstractDataTypeFactoryTest
         assertSame("type", expected, actual);
     }
 
-    public void testCreateSdoGeometryDataType() throws Exception
-    {
+    public void testCreateSdoGeometryDataType() throws Exception {
         int sqlType = Types.STRUCT;
         String sqlTypeName = "SDO_GEOMETRY";
 

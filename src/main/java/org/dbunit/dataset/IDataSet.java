@@ -40,10 +40,10 @@ public interface IDataSet {
      * Returns the specified table metadata.
      *
      * @throws org.dbunit.database.AmbiguousTableNameException if dataset contains multiple tables
-     *      having the specified name. Use {@link #iterator} to access
-     *      to all tables.
-     * @throws NoSuchTableException if dataset do not contain the specified
-     *      table
+     *                                                         having the specified name. Use {@link #iterator} to access
+     *                                                         to all tables.
+     * @throws NoSuchTableException                            if dataset do not contain the specified
+     *                                                         table
      */
     ITableMetaData getTableMetaData(String tableName) throws DataSetException;
 
@@ -51,9 +51,9 @@ public interface IDataSet {
      * Returns the specified table.
      *
      * @throws org.dbunit.database.AmbiguousTableNameException if dataset contains multiple tables
-     *      having the specified name. Use {@link #iterator} to access
-     *      to all tables.
-     * @throws NoSuchTableException if dataset do not contain the specified table
+     *                                                         having the specified name. Use {@link #iterator} to access
+     *                                                         to all tables.
+     * @throws NoSuchTableException                            if dataset do not contain the specified table
      */
     ITable getTable(String tableName) throws DataSetException;
 
@@ -74,9 +74,10 @@ public interface IDataSet {
      * Returns an iterator over the tables in this dataset in reverse sequence.
      */
     ITableIterator reverseIterator() throws DataSetException;
-    
+
     /**
      * Whether this dataset handles table names in a case-sensitive way or not.
+     *
      * @return <code>true</code> if the case sensitivity of table names is used in this dataset.
      * @since 2.4.2
      */

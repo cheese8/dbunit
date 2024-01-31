@@ -26,14 +26,14 @@ import org.dbunit.dataset.DataSetException;
 
 /**
  * @author Manuel Laflamme
- * @since Mar 23, 2003
  * @version $Revision$
+ * @since Mar 23, 2003
  */
 public class CyclicTablesDependencyException extends DataSetException {
     public CyclicTablesDependencyException(String message) {
         super(message);
     }
-    
+
     /**
      * @param tableName
      * @param cyclicTableNames

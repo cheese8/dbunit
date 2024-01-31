@@ -35,22 +35,21 @@ import junit.framework.TestCase;
  */
 public class DatabaseTestCaseIT extends TestCase {
 
-	public void testTearDownExceptionDoesNotObscureTestException() 
-	{
-		//TODO implement #1087040  	  tearDownOperation Exception obscures underlying problem
-	}
-	
-	/**
-	 * Tests whether the user can simply change the {@link DatabaseConfig} by
-	 * overriding the method {@link DatabaseTestCase#setUpDatabaseConfig(DatabaseConfig)}.
-	 * @throws Exception
-	 */
-	public void testConfigureConnection() throws Exception
-	{
-	    DatabaseEnvironment dbEnv = DatabaseEnvironment.getInstance();
-	    final IDatabaseConnection conn = dbEnv.getConnection();
-	    
-	    DatabaseTestCase testSubject = new DatabaseTestCase() {
+    public void testTearDownExceptionDoesNotObscureTestException() {
+        //TODO implement #1087040  	  tearDownOperation Exception obscures underlying problem
+    }
+
+    /**
+     * Tests whether the user can simply change the {@link DatabaseConfig} by
+     * overriding the method {@link DatabaseTestCase#setUpDatabaseConfig(DatabaseConfig)}.
+     *
+     * @throws Exception
+     */
+    public void testConfigureConnection() throws Exception {
+        DatabaseEnvironment dbEnv = DatabaseEnvironment.getInstance();
+        final IDatabaseConnection conn = dbEnv.getConnection();
+
+        DatabaseTestCase testSubject = new DatabaseTestCase() {
 
             /**
              * method under test
@@ -75,14 +74,14 @@ public class DatabaseTestCaseIT extends TestCase {
                 return DatabaseOperation.NONE;
             }
         };
-        
+
         // Simulate JUnit which first of all calls the "setUp" method
         testSubject.setUp();
-        
+
         IDatabaseConnection actualConn = testSubject.getConnection();
         assertEquals(new Integer(97), actualConn.getConfig().getProperty(DatabaseConfig.PROPERTY_BATCH_SIZE));
-        
+
         IDatabaseConnection actualConn2 = testSubject.getDatabaseTester().getConnection();
         assertEquals(new Integer(97), actualConn2.getConfig().getProperty(DatabaseConfig.PROPERTY_BATCH_SIZE));
-	}
+    }
 }

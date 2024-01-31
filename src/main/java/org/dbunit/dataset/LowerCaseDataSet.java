@@ -34,8 +34,7 @@ import org.slf4j.LoggerFactory;
  * @version $Revision$
  * @since Feb 14, 2003
  */
-public class LowerCaseDataSet extends AbstractDataSet
-{
+public class LowerCaseDataSet extends AbstractDataSet {
 
     /**
      * Logger for this class
@@ -44,23 +43,19 @@ public class LowerCaseDataSet extends AbstractDataSet
 
     private final IDataSet _dataSet;
 
-    public LowerCaseDataSet(ITable table) throws DataSetException
-    {
+    public LowerCaseDataSet(ITable table) throws DataSetException {
         this(new DefaultDataSet(table));
     }
 
-    public LowerCaseDataSet(ITable[] tables) throws DataSetException
-    {
+    public LowerCaseDataSet(ITable[] tables) throws DataSetException {
         this(new DefaultDataSet(tables));
     }
 
-    public LowerCaseDataSet(IDataSet dataSet) throws DataSetException
-    {
+    public LowerCaseDataSet(IDataSet dataSet) throws DataSetException {
         _dataSet = dataSet;
     }
 
-    private ITable createLowerTable(ITable table) throws DataSetException
-    {
+    private ITable createLowerTable(ITable table) throws DataSetException {
         logger.debug("createLowerTable(table={}) - start", table);
 
         return new CompositeTable(
@@ -71,8 +66,7 @@ public class LowerCaseDataSet extends AbstractDataSet
     // AbstractDataSet class
 
     protected ITableIterator createIterator(boolean reversed)
-            throws DataSetException
-    {
+            throws DataSetException {
         logger.debug("createIterator(reversed={}) - start", String.valueOf(reversed));
 
         return new LowerCaseIterator(reversed ?
@@ -82,26 +76,22 @@ public class LowerCaseDataSet extends AbstractDataSet
     ////////////////////////////////////////////////////////////////////////////
     // IDataSet interface
 
-    public String[] getTableNames() throws DataSetException
-    {
+    public String[] getTableNames() throws DataSetException {
         logger.debug("getTableNames() - start");
 
         String[] tableNames = super.getTableNames();
-        for (int i = 0; i < tableNames.length; i++)
-        {
+        for (int i = 0; i < tableNames.length; i++) {
             tableNames[i] = tableNames[i].toLowerCase();
         }
         return tableNames;
     }
 
-    public ITableMetaData getTableMetaData(String tableName) throws DataSetException
-    {
+    public ITableMetaData getTableMetaData(String tableName) throws DataSetException {
         logger.debug("getTableMetaData(tableName={}) - start", tableName);
         return new LowerCaseTableMetaData(super.getTableMetaData(tableName));
     }
 
-    public ITable getTable(String tableName) throws DataSetException
-    {
+    public ITable getTable(String tableName) throws DataSetException {
         logger.debug("getTable(tableName={}) - start", tableName);
         return createLowerTable(super.getTable(tableName));
     }
@@ -109,31 +99,26 @@ public class LowerCaseDataSet extends AbstractDataSet
     ////////////////////////////////////////////////////////////////////////////
     // LowerCaseIterator class
 
-    private class LowerCaseIterator implements ITableIterator
-    {
+    private class LowerCaseIterator implements ITableIterator {
 
         private final ITableIterator _iterator;
 
-        public LowerCaseIterator(ITableIterator iterator)
-        {
+        public LowerCaseIterator(ITableIterator iterator) {
             _iterator = iterator;
         }
 
         ////////////////////////////////////////////////////////////////////////
         // ITableIterator interface
 
-        public boolean next() throws DataSetException
-        {
+        public boolean next() throws DataSetException {
             return _iterator.next();
         }
 
-        public ITableMetaData getTableMetaData() throws DataSetException
-        {
+        public ITableMetaData getTableMetaData() throws DataSetException {
             return new LowerCaseTableMetaData(_iterator.getTableMetaData());
         }
 
-        public ITable getTable() throws DataSetException
-        {
+        public ITable getTable() throws DataSetException {
             return createLowerTable(_iterator.getTable());
         }
     }

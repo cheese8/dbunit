@@ -125,7 +125,7 @@ public abstract class AbstractBatchOperation extends AbstractOperation {
                 int increment = reverseRowOrder ? -1 : 1;
 
                 try {
-                    for (int i = start;; i = i + increment) {
+                    for (int i = start; ; i = i + increment) {
 
                         // If current row have a different ignore value mapping
                         // than

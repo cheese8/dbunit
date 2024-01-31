@@ -54,53 +54,48 @@ import org.xml.sax.InputSource;
 public class FlatDtdDataSet extends AbstractDataSet implements IDataSetConsumer {
     private boolean _ready = false;
 
-    public FlatDtdDataSet()
-    {
+    public FlatDtdDataSet() {
         initialize();
     }
 
-    public FlatDtdDataSet(InputStream in) throws DataSetException, IOException
-    {
+    public FlatDtdDataSet(InputStream in) throws DataSetException, IOException {
         this(new FlatDtdProducer(new InputSource(in)));
     }
 
-    public FlatDtdDataSet(Reader reader) throws DataSetException, IOException
-    {
+    public FlatDtdDataSet(Reader reader) throws DataSetException, IOException {
         this(new FlatDtdProducer(new InputSource(reader)));
     }
 
-    public FlatDtdDataSet(IDataSetProducer producer) throws DataSetException
-    {
+    public FlatDtdDataSet(IDataSetProducer producer) throws DataSetException {
         initialize();
         producer.setConsumer(this);
         producer.produce();
     }
 
-    protected void initialize()
-    {
-        if(orderedTableNameMap == null) {
+    protected void initialize() {
+        if (orderedTableNameMap == null) {
             orderedTableNameMap = super.createTableNameMap();
         }
     }
 
     /**
      * Write the specified dataset to the specified output stream as DTD.
+     *
      * @see FlatDtdWriter
      */
     public static void write(IDataSet dataSet, OutputStream out)
-            throws IOException, DataSetException
-    {
+            throws IOException, DataSetException {
         log.debug("write(dataSet={}, out={}) - start", dataSet, out);
         write(dataSet, new OutputStreamWriter(out));
     }
 
     /**
      * Write the specified dataset to the specified writer as DTD.
+     *
      * @see FlatDtdWriter
      */
     public static void write(IDataSet dataSet, Writer out)
-            throws IOException, DataSetException
-    {
+            throws IOException, DataSetException {
         log.debug("write(dataSet={}, out={}) - start", dataSet, out);
         FlatDtdWriter datasetWriter = new FlatDtdWriter(out);
         datasetWriter.write(dataSet);
@@ -110,24 +105,20 @@ public class FlatDtdDataSet extends AbstractDataSet implements IDataSetConsumer 
     // AbstractDataSet class
 
     protected ITableIterator createIterator(boolean reversed)
-            throws DataSetException
-    {
-    		log.debug("createIterator(reversed={}) - start", String.valueOf(reversed));
+            throws DataSetException {
+        log.debug("createIterator(reversed={}) - start", String.valueOf(reversed));
 
         // Verify producer notifications completed
-        if (!_ready)
-        {
+        if (!_ready) {
             throw new IllegalStateException("Not ready!");
         }
 
         String[] names = orderedTableNameMap.getTableNames();
         ITable[] tables = new ITable[names.length];
-        for (int i = 0; i < names.length; i++)
-        {
+        for (int i = 0; i < names.length; i++) {
             String tableName = names[i];
-            ITable table = (ITable)orderedTableNameMap.get(tableName);
-            if (table == null)
-            {
+            ITable table = (ITable) orderedTableNameMap.get(tableName);
+            if (table == null) {
                 throw new NoSuchTableException(tableName);
             }
 
@@ -140,39 +131,33 @@ public class FlatDtdDataSet extends AbstractDataSet implements IDataSetConsumer 
     ////////////////////////////////////////////////////////////////////////////
     // IDataSet interface
 
-    public String[] getTableNames() throws DataSetException
-    {
+    public String[] getTableNames() throws DataSetException {
         log.debug("getTableNames() - start");
 
         // Verify producer notifications completed
-        if (!_ready)
-        {
+        if (!_ready) {
             throw new IllegalStateException("Not ready!");
         }
 
         return orderedTableNameMap.getTableNames();
     }
 
-    public ITableMetaData getTableMetaData(String tableName) throws DataSetException
-    {
+    public ITableMetaData getTableMetaData(String tableName) throws DataSetException {
         log.debug("getTableMetaData(tableName={}) - start", tableName);
 
         // Verify producer notifications completed
-        if (!_ready)
-        {
+        if (!_ready) {
             throw new IllegalStateException("Not ready!");
         }
 
         return super.getTableMetaData(tableName);
     }
 
-    public ITable getTable(String tableName) throws DataSetException
-    {
+    public ITable getTable(String tableName) throws DataSetException {
         log.debug("getTable(tableName={}) - start", tableName);
 
         // Verify producer notifications completed
-        if (!_ready)
-        {
+        if (!_ready) {
             throw new IllegalStateException("Not ready!");
         }
 
@@ -182,45 +167,39 @@ public class FlatDtdDataSet extends AbstractDataSet implements IDataSetConsumer 
     ////////////////////////////////////////////////////////////////////////
     // IDataSetConsumer interface
 
-    public void startDataSet() throws DataSetException
-    {
+    public void startDataSet() throws DataSetException {
         log.debug("startDataSet() - start");
 
         _ready = false;
     }
 
-    public void endDataSet() throws DataSetException
-    {
+    public void endDataSet() throws DataSetException {
         log.debug("endDataSet() - start");
 
         _ready = true;
     }
 
-    public void startTable(ITableMetaData metaData) throws DataSetException
-    {
+    public void startTable(ITableMetaData metaData) throws DataSetException {
         log.debug("startTable(metaData={}) - start", metaData);
 
         String tableName = metaData.getTableName();
         orderedTableNameMap.add(tableName, new DefaultTable(metaData));
     }
 
-    public void endTable() throws DataSetException
-    {
+    public void endTable() throws DataSetException {
         // no op
     }
 
-    public void row(Object[] values) throws DataSetException
-    {
+    public void row(Object[] values) throws DataSetException {
         // no op
     }
 
-    public String toString()
-    {
-    	StringBuffer sb = new StringBuffer();
-    	sb.append(getClass().getName()).append("[");
-    	sb.append("_ready=").append(this._ready);
-    	sb.append(", _orderedTableNameMap=").append(this.orderedTableNameMap);
-    	sb.append("]");
-    	return sb.toString();
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+        sb.append(getClass().getName()).append("[");
+        sb.append("_ready=").append(this._ready);
+        sb.append(", _orderedTableNameMap=").append(this.orderedTableNameMap);
+        sb.append("]");
+        return sb.toString();
     }
 }

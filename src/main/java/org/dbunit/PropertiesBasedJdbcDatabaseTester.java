@@ -27,15 +27,15 @@ package org.dbunit;
  * present in the environment before using it. Example:
  * <xmp>
  * System.setProperty( PropertiesBasedJdbcDatabaseTester.DRIVER_CLASS,
- *             "mysql.Driver" );
+ * "mysql.Driver" );
  * System.setProperty( PropertiesBasedJdbcDatabaseTester.URL,
- *             "jdbc:mysql://host/dbname" );
+ * "jdbc:mysql://host/dbname" );
  * System.setProperty( PropertiesBasedJdbcDatabaseTester.USERNAME,
- *             "username" );
+ * "username" );
  * System.setProperty( PropertiesBasedJdbcDatabaseTester.PASSWORD,
- *             "password" );
+ * "password" );
  * System.setProperty( PropertiesBasedJdbcDatabaseTester.SCHEMA,
- *             "schema" );
+ * "schema" );
  * </xmp>
  *
  * @author Andres Almiray(aalmiray@users.sourceforge.net)
@@ -45,15 +45,25 @@ package org.dbunit;
  * @since 2.2.0
  */
 public class PropertiesBasedJdbcDatabaseTester extends JdbcDatabaseTester {
-    /** A key for property that defines the driver classname */
+    /**
+     * A key for property that defines the driver classname
+     */
     public static final String DRIVER_CLASS = "dbunit.driverClass";
-    /** A key for property that defines the connection url */
+    /**
+     * A key for property that defines the connection url
+     */
     public static final String URL = "dbunit.connectionUrl";
-    /** A key for property that defines the username */
+    /**
+     * A key for property that defines the username
+     */
     public static final String USERNAME = "dbunit.username";
-    /** A key for property that defines the user's password */
+    /**
+     * A key for property that defines the user's password
+     */
     public static final String PASSWORD = "dbunit.password";
-    /** A key for property that defines the database schema */
+    /**
+     * A key for property that defines the database schema
+     */
     public static final String SCHEMA = "dbunit.schema";
 
     /**

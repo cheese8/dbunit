@@ -86,21 +86,21 @@ public class CsvProducer implements IDataSetProducer {
 
         _consumer.startDataSet();
         try {
-        	List tableSpecs = CsvProducer.getTables(dir.toURL(), CsvDataSet.TABLE_ORDERING_FILE);
-        	for (Iterator tableIter = tableSpecs.iterator(); tableIter.hasNext();) {
-				String table = (String) tableIter.next();
-	            try {
-	                produceFromFile(new File(dir, table + ".csv"));
-	            } catch (CsvParserException e) {
-	                throw new DataSetException("error producing dataset for table '" + table + "'", e);
-	            } catch (DataSetException e) {
-	            	throw new DataSetException("error producing dataset for table '" + table + "'", e);
-	            }
+            List tableSpecs = CsvProducer.getTables(dir.toURL(), CsvDataSet.TABLE_ORDERING_FILE);
+            for (Iterator tableIter = tableSpecs.iterator(); tableIter.hasNext(); ) {
+                String table = (String) tableIter.next();
+                try {
+                    produceFromFile(new File(dir, table + ".csv"));
+                } catch (CsvParserException e) {
+                    throw new DataSetException("error producing dataset for table '" + table + "'", e);
+                } catch (DataSetException e) {
+                    throw new DataSetException("error producing dataset for table '" + table + "'", e);
+                }
 
-			}
+            }
             _consumer.endDataSet();
         } catch (IOException e) {
-        	throw new DataSetException("error getting list of tables", e);
+            throw new DataSetException("error getting list of tables", e);
         }
     }
 
@@ -122,10 +122,10 @@ public class CsvProducer implements IDataSetProducer {
             String tableName = theDataFile.getName().substring(0, theDataFile.getName().indexOf(".csv"));
             ITableMetaData metaData = new DefaultTableMetaData(tableName, columns);
             _consumer.startTable(metaData);
-            for (int i = 1 ; i < readData.size(); i++) {
-                List rowList = (List)readData.get(i);
+            for (int i = 1; i < readData.size(); i++) {
+                List rowList = (List) readData.get(i);
                 Object[] row = rowList.toArray();
-                for(int col = 0; col < row.length; col++) {
+                for (int col = 0; col < row.length; col++) {
                     row[col] = row[col].equals(CsvDataSetWriter.NULL) ? null : row[col];
                 }
                 _consumer.row(row);
@@ -140,34 +140,33 @@ public class CsvProducer implements IDataSetProducer {
         }
     }
 
-	/**
-	 * Get a list of tables that this producer will create
-	 * @return a list of Strings, where each item is a CSV file relative to the base URL
-	 * @throws IOException when IO on the base URL has issues.
-	 */
-	public static List getTables(URL base, String tableList) throws IOException {
+    /**
+     * Get a list of tables that this producer will create
+     *
+     * @return a list of Strings, where each item is a CSV file relative to the base URL
+     * @throws IOException when IO on the base URL has issues.
+     */
+    public static List getTables(URL base, String tableList) throws IOException {
         logger.debug("getTables(base={}, tableList={}) - start", base, tableList);
 
-		List orderedNames = new ArrayList();
-		InputStream tableListStream = new URL(base, tableList).openStream();
-		BufferedReader reader = null;
-		try {
-    		reader = new BufferedReader(new InputStreamReader(tableListStream));
-    		String line = null;
-    		while((line = reader.readLine()) != null) {
-    			String table = line.trim();
-    			if (table.length() > 0) {
-    				orderedNames.add(table);
-    			}
-    		}
-		}
-		finally {
-		    if(reader != null)
-		    {
-		        reader.close();
-		    }
-		}
-		return orderedNames;
-	}
+        List orderedNames = new ArrayList();
+        InputStream tableListStream = new URL(base, tableList).openStream();
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new InputStreamReader(tableListStream));
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                String table = line.trim();
+                if (table.length() > 0) {
+                    orderedNames.add(table);
+                }
+            }
+        } finally {
+            if (reader != null) {
+                reader.close();
+            }
+        }
+        return orderedNames;
+    }
 
 }

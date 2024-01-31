@@ -38,7 +38,7 @@ import java.util.Arrays;
 
 /**
  * Asynchronous table iterator that uses a new Thread for asynchronous processing.
- * 
+ *
  * @author Manuel Laflamme
  * @author Last changed by: $Author$
  * @version $Revision$ $Date$
@@ -55,13 +55,14 @@ public class StreamingIterator implements ITableIterator {
     /**
      * Variable to store an exception that might occur in the asynchronous consumer
      */
-	private Exception _asyncException;
+    private Exception _asyncException;
 
-	
+
     /**
      * Iterator that creates a table iterator by reading the input from
      * the given source in an asynchronous way. Therefore, a Thread is
      * created.
+     *
      * @param source The source of the data
      */
     public StreamingIterator(IDataSetProducer source) throws DataSetException {
@@ -77,24 +78,23 @@ public class StreamingIterator implements ITableIterator {
         try {
             _taken = _channel.take();
         } catch (InterruptedException e) {
-        	log.debug("Thread '" + Thread.currentThread() + "' was interrupted");
-        	throw resolveException(e);
+            log.debug("Thread '" + Thread.currentThread() + "' was interrupted");
+            throw resolveException(e);
         }
     }
 
     private DataSetException resolveException(InterruptedException cause) {
-    	String msg = "Current thread was interrupted (Thread=" + Thread.currentThread() + ")";
-    	if(this._asyncException != null) {
+        String msg = "Current thread was interrupted (Thread=" + Thread.currentThread() + ")";
+        if (this._asyncException != null) {
             return new DataSetException(msg, this._asyncException);
-    	} else {
-    		return new DataSetException(msg, cause);
-    	}
-	}
+        } else {
+            return new DataSetException(msg, cause);
+        }
+    }
 
     public boolean next() throws DataSetException {
         // End of dataset has previously been reach
-        if (_eod)
-        {
+        if (_eod) {
             return false;
         }
 
@@ -102,17 +102,15 @@ public class StreamingIterator implements ITableIterator {
         while (_activeTable != null && _activeTable.next()) { /* NO-OP */ }
 
         // End of dataset is reach
-        if (_taken == EOD)
-        {
+        if (_taken == EOD) {
             _eod = true;
             _activeTable = null;
             return false;
         }
 
         // New table
-        if (_taken instanceof ITableMetaData)
-        {
-            _activeTable = new StreamingTable((ITableMetaData)_taken);
+        if (_taken instanceof ITableMetaData) {
+            _activeTable = new StreamingTable((ITableMetaData) _taken);
             return true;
         }
 
@@ -120,27 +118,23 @@ public class StreamingIterator implements ITableIterator {
                 "Unexpected object taken from asynchronous handler: " + _taken);
     }
 
-    public ITableMetaData getTableMetaData() throws DataSetException
-    {
+    public ITableMetaData getTableMetaData() throws DataSetException {
         return _activeTable.getTableMetaData();
     }
 
-    public ITable getTable() throws DataSetException
-    {
+    public ITable getTable() throws DataSetException {
         return _activeTable;
     }
 
-	private void handleException(Exception e)
-	{
-		// Is invoked when the asynchronous thread reports an exception
-		this._asyncException = e;
-	}
+    private void handleException(Exception e) {
+        // Is invoked when the asynchronous thread reports an exception
+        this._asyncException = e;
+    }
 
     ////////////////////////////////////////////////////////////////////////////
     // StreamingTable class
 
-    private class StreamingTable extends AbstractTable
-    {
+    private class StreamingTable extends AbstractTable {
 
         /**
          * Logger for this class
@@ -152,83 +146,69 @@ public class StreamingIterator implements ITableIterator {
         private boolean _eot = false;
         private Object[] _rowValues;
 
-        public StreamingTable(ITableMetaData metaData)
-        {
+        public StreamingTable(ITableMetaData metaData) {
             _metaData = metaData;
         }
 
-        boolean next() throws DataSetException
-        {
+        boolean next() throws DataSetException {
             logger.debug("next() - start");
 
             // End of table has previously been reach
-            if (_eot)
-            {
+            if (_eot) {
                 return false;
             }
 
-            try
-            {
+            try {
                 _taken = _channel.take();
-                if (!(_taken instanceof Object[]))
-                {
+                if (!(_taken instanceof Object[])) {
                     _eot = true;
                     return false;
                 }
 
                 _lastRow++;
-                _rowValues = (Object[])_taken;
+                _rowValues = (Object[]) _taken;
                 return true;
-            }
-            catch (InterruptedException e)
-            {
-            	throw resolveException(e);
+            } catch (InterruptedException e) {
+                throw resolveException(e);
             }
         }
 
         ////////////////////////////////////////////////////////////////////////
         // ITable interface
 
-        public ITableMetaData getTableMetaData()
-        {
+        public ITableMetaData getTableMetaData() {
             logger.debug("getTableMetaData() - start");
 
             return _metaData;
         }
 
-        public int getRowCount()
-        {
+        public int getRowCount() {
             logger.debug("getRowCount() - start");
 
             throw new UnsupportedOperationException();
         }
 
-        public Object getValue(int row, String columnName) throws DataSetException
-        {
-            if(logger.isDebugEnabled())
+        public Object getValue(int row, String columnName) throws DataSetException {
+            if (logger.isDebugEnabled())
                 logger.debug("getValue(row={}, columnName={}) - start", row, columnName);
 
             // Iterate up to specified row
-            while (!_eot && row > _lastRow)
-            {
+            while (!_eot && row > _lastRow) {
                 next();
             }
 
-            if (row < _lastRow)
-            {
+            if (row < _lastRow) {
                 throw new UnsupportedOperationException("Cannot go backward!");
             }
 
-            if (_eot || row > _lastRow)
-            {
+            if (_eot || row > _lastRow) {
                 throw new RowOutOfBoundsException(row + " > " + _lastRow);
             }
 
             return _rowValues[getColumnIndex(columnName)];
         }
 
-        public String toString()
-        {
+        public String toString() {
             return getClass().getName() + "[" +
                     "_metaData=" +
                     (this._metaData == null ? "null" : this._metaData
@@ -256,8 +236,7 @@ public class StreamingIterator implements ITableIterator {
         private final StreamingIterator _exceptionHandler;
         private final Thread _invokerThread;
 
-        public AsynchronousConsumer(IDataSetProducer source, Puttable channel, StreamingIterator exceptionHandler)
-        {
+        public AsynchronousConsumer(IDataSetProducer source, Puttable channel, StreamingIterator exceptionHandler) {
             _producer = source;
             _channel = channel;
             _exceptionHandler = exceptionHandler;
@@ -267,74 +246,56 @@ public class StreamingIterator implements ITableIterator {
         ////////////////////////////////////////////////////////////////////////
         // Runnable interface
 
-        public void run()
-        {
+        public void run() {
             logger.debug("run() - start");
 
-            try
-            {
+            try {
                 _producer.setConsumer(this);
                 _producer.produce();
+            } catch (Exception e) {
+                _exceptionHandler.handleException(e);
+                // Since the invoker thread probably waits tell it that we have finished here
+                _invokerThread.interrupt();
             }
-            catch (Exception e)
-            {
-            	_exceptionHandler.handleException(e);
-            	// Since the invoker thread probably waits tell it that we have finished here
-            	_invokerThread.interrupt();
-            }
-            
+
             logger.debug("End of thread " + Thread.currentThread());
         }
 
         ////////////////////////////////////////////////////////////////////////
         // IDataSetConsumer interface
 
-        public void startDataSet() throws DataSetException
-        {
+        public void startDataSet() throws DataSetException {
         }
 
-        public void endDataSet() throws DataSetException
-        {
+        public void endDataSet() throws DataSetException {
             logger.debug("endDataSet() - start");
 
-            try
-            {
+            try {
                 _channel.put(EOD);
-            }
-            catch (InterruptedException e)
-            {
+            } catch (InterruptedException e) {
                 throw new DataSetException("Operation was interrupted");
             }
         }
 
-        public void startTable(ITableMetaData metaData) throws DataSetException
-        {
+        public void startTable(ITableMetaData metaData) throws DataSetException {
             logger.debug("startTable(metaData={}) - start", metaData);
 
-            try
-            {
+            try {
                 _channel.put(metaData);
-            }
-            catch (InterruptedException e)
-            {
+            } catch (InterruptedException e) {
                 throw new DataSetException("Operation was interrupted");
             }
         }
 
-        public void endTable() throws DataSetException
-        {
+        public void endTable() throws DataSetException {
         }
 
-        public void row(Object[] values) throws DataSetException
-        {
+        public void row(Object[] values) throws DataSetException {
             logger.debug("row(values={}) - start", values);
 
-            try
-            {
+            try {
                 _channel.put(values);
-            }
-            catch (InterruptedException e)
-            {
+            } catch (InterruptedException e) {
                 throw new DataSetException("Operation was interrupted");
             }
         }

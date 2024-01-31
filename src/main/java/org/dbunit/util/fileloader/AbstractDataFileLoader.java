@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Base class with common implementation for dbUnit data file loaders.
- * 
+ *
  * @author Jeff Jensen jeffjensen AT users.sourceforge.net
  * @author Last changed by: $Author$
  * @version $Revision$ $Date$
@@ -48,17 +48,18 @@ public abstract class AbstractDataFileLoader implements DataFileLoader {
     private Map replacementSubstrings;
     private Map replacementFunctions;
 
-    /** Create new instance. */
+    /**
+     * Create new instance.
+     */
     public AbstractDataFileLoader() {
         this(new HashMap(), new HashMap(), new HashMap<>());
     }
 
     /**
      * Create new instance with replacement objects.
-     * 
-     * @param ro
-     *            The replacement objects for use with
-     *            {@link org.dbunit.dataset.ReplacementDataSet}.
+     *
+     * @param ro The replacement objects for use with
+     *           {@link org.dbunit.dataset.ReplacementDataSet}.
      */
     public AbstractDataFileLoader(Map ro) {
         this(ro, new HashMap(), new HashMap());
@@ -66,13 +67,11 @@ public abstract class AbstractDataFileLoader implements DataFileLoader {
 
     /**
      * Create new instance with replacement objects and replacement substrings.
-     * 
-     * @param ro
-     *            The replacement objects for use with
-     *            {@link org.dbunit.dataset.ReplacementDataSet}.
-     * @param rs
-     *            The replacement substrings for use with
-     *            {@link org.dbunit.dataset.ReplacementDataSet}.
+     *
+     * @param ro The replacement objects for use with
+     *           {@link org.dbunit.dataset.ReplacementDataSet}.
+     * @param rs The replacement substrings for use with
+     *           {@link org.dbunit.dataset.ReplacementDataSet}.
      */
     public AbstractDataFileLoader(Map ro, Map rs, Map rf) {
         if (ro == null) {
@@ -136,16 +135,15 @@ public abstract class AbstractDataFileLoader implements DataFileLoader {
         return ds;
     }
 
-    /** 
+    /**
      * Add the replacements in the maps (objects and substrings) to the
      * specified dataset.
-     * 
-     * @param ds
-     *            The dataset to wrap with a <code>ReplacementDataSet</code> and
-     *            process replacement tokens on.
+     *
+     * @param ds The dataset to wrap with a <code>ReplacementDataSet</code> and
+     *           process replacement tokens on.
      * @return The specified dataset decorated with
-     *         <code>ReplacementDataSet</code> and processed with the tokens in
-     *         the replacement maps.
+     * <code>ReplacementDataSet</code> and processed with the tokens in
+     * the replacement maps.
      * @since 2.4.8
      */
     protected ReplacementDataSet processReplacementTokens(IDataSet ds) {

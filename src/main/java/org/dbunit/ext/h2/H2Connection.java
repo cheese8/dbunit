@@ -27,7 +27,6 @@ import org.dbunit.database.DatabaseConnection;
 import java.sql.Connection;
 
 /**
- *
  * @author Felipe Leme
  * @author Last changed by: $Author$
  * @version $Revision$ $Date$

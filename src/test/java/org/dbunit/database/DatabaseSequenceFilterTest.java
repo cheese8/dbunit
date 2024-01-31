@@ -35,29 +35,25 @@ import junit.framework.TestCase;
 
 /**
  * @author Manuel Laflamme
- * @since May 8, 2004
  * @version $Revision$
+ * @since May 8, 2004
  */
-public class DatabaseSequenceFilterTest extends TestCase
-{
+public class DatabaseSequenceFilterTest extends TestCase {
     Connection _jdbcConnection;
 
-    public DatabaseSequenceFilterTest(final String s)
-    {
+    public DatabaseSequenceFilterTest(final String s) {
         super(s);
     }
 
     @Override
-    protected void setUp() throws Exception
-    {
+    protected void setUp() throws Exception {
         super.setUp();
 
         _jdbcConnection = HypersonicEnvironment.createJdbcConnection("tempdb");
     }
 
     @Override
-    protected void tearDown() throws Exception
-    {
+    protected void tearDown() throws Exception {
         super.tearDown();
 
         HypersonicEnvironment.shutdown(_jdbcConnection);
@@ -66,8 +62,7 @@ public class DatabaseSequenceFilterTest extends TestCase
         HypersonicEnvironment.deleteFiles("tempdb");
     }
 
-    public void testGetTableNames() throws Exception
-    {
+    public void testGetTableNames() throws Exception {
         final String[] expectedNoFilter =
                 {"A", "B", "C", "D", "E", "F", "G", "H",};
         final String[] expectedFiltered =
@@ -91,8 +86,7 @@ public class DatabaseSequenceFilterTest extends TestCase
                 Arrays.asList(actualFiltered));
     }
 
-    public void testGetTableNamesCyclic() throws Exception
-    {
+    public void testGetTableNamesCyclic() throws Exception {
         final String[] expectedNoFilter = {"A", "B", "C", "D", "E",};
 
         DdlExecutor.executeDdlFile(
@@ -108,23 +102,20 @@ public class DatabaseSequenceFilterTest extends TestCase
 
         boolean gotCyclicTablesDependencyException = false;
 
-        try
-        {
+        try {
             final ITableFilter filter = new DatabaseSequenceFilter(connection);
             final IDataSet filteredDataSet =
                     new FilteredDataSet(filter, databaseDataset);
             filteredDataSet.getTableNames();
             fail("Should not be here!");
-        } catch (final CyclicTablesDependencyException expected)
-        {
+        } catch (final CyclicTablesDependencyException expected) {
             gotCyclicTablesDependencyException = true;
         }
         assertTrue("Expected CyclicTablesDependencyException was not raised",
                 gotCyclicTablesDependencyException);
     }
 
-    public void testCaseSensitiveTableNames() throws Exception
-    {
+    public void testCaseSensitiveTableNames() throws Exception {
         final String[] expectedNoFilter =
                 {"MixedCaseTable", "UPPER_CASE_TABLE"};
         final String[] expectedFiltered =
@@ -159,8 +150,7 @@ public class DatabaseSequenceFilterTest extends TestCase
      *
      * @throws Exception
      */
-    public void testMultiSchemaFks() throws Exception
-    {
+    public void testMultiSchemaFks() throws Exception {
         final Connection jdbcConnection =
                 H2Environment.createJdbcConnection("test");
         DdlExecutor.executeDdlFile(

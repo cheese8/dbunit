@@ -27,7 +27,7 @@ import org.dbunit.database.AmbiguousTableNameException;
 /**
  * Simple implementation of a dataset backed by {@link ITable} objects which can
  * be added dynamically.
- * 
+ *
  * @author Manuel Laflamme
  * @author Last changed by: $Author$
  * @version $Revision$ $Date$
@@ -37,15 +37,15 @@ import org.dbunit.database.AmbiguousTableNameException;
 public class DefaultDataSet extends AbstractDataSet {
 
     public DefaultDataSet() {
-    	super();
+        super();
     }
 
     /**
      * Creates a default dataset which is empty initially
+     *
      * @since 2.4.2
      */
-    public DefaultDataSet(boolean caseSensitiveTableNames)
-    {
+    public DefaultDataSet(boolean caseSensitiveTableNames) {
         super(caseSensitiveTableNames);
     }
 
@@ -54,15 +54,16 @@ public class DefaultDataSet extends AbstractDataSet {
     }
 
     public DefaultDataSet(ITable table1, ITable table2) throws AmbiguousTableNameException {
-        this(new ITable[] {table1, table2});
+        this(new ITable[]{table1, table2});
     }
 
     public DefaultDataSet(ITable[] tables) throws AmbiguousTableNameException {
         this(tables, false);
     }
-    
+
     /**
      * Creates a default dataset which consists of the given tables
+     *
      * @since 2.4.2
      */
     public DefaultDataSet(ITable[] tables, boolean caseSensitiveTableNames) throws AmbiguousTableNameException {
@@ -83,11 +84,12 @@ public class DefaultDataSet extends AbstractDataSet {
 
     /**
      * Initializes the {@link AbstractDataSet#orderedTableNameMap} of the parent class if it is not initialized yet.
+     *
      * @since 2.4.6
      */
     protected void initialize() {
         log.debug("initialize() - start");
-        if(orderedTableNameMap != null) {
+        if (orderedTableNameMap != null) {
             log.debug("The table name map has already been initialized.");
             return;
         }

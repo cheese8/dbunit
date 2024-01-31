@@ -20,7 +20,7 @@ public final class Testcases {
 
     @XmlAttribute(name = "base-dir")
     private String baseDir;
-    
+
     @XmlElement(name = "testcase")
     private Collection<Testcase> testcases = new LinkedList<>();
 }

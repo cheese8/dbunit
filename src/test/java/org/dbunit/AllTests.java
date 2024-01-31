@@ -28,10 +28,8 @@ import junit.framework.TestSuite;
  * @author Manuel Laflamme
  * @version $Revision$
  */
-public class AllTests extends TestSuite
-{
-    public static Test suite() throws Exception
-    {
+public class AllTests extends TestSuite {
+    public static Test suite() throws Exception {
         TestSuite suite = new TestSuite();
         suite.addTest(org.dbunit.ant.AllTests.suite());
         suite.addTest(org.dbunit.assertion.AllTests.suite());
@@ -49,8 +47,7 @@ public class AllTests extends TestSuite
         return suite;
     }
 
-    public static void main(String args[]) throws Exception
-    {
+    public static void main(String args[]) throws Exception {
         junit.textui.TestRunner.run(suite());
         System.exit(0);
     }

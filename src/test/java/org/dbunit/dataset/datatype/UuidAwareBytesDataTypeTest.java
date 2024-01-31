@@ -29,65 +29,57 @@ import org.dbunit.database.statement.MockPreparedStatement;
 /**
  * @author Timur Strekalov
  */
-public class UuidAwareBytesDataTypeTest extends BytesDataTypeTest
-{
+public class UuidAwareBytesDataTypeTest extends BytesDataTypeTest {
     private final static DataType[] TYPES = {DataType.BINARY,
-        DataType.VARBINARY, DataType.LONGVARBINARY};
+            DataType.VARBINARY, DataType.LONGVARBINARY};
 
-    public UuidAwareBytesDataTypeTest(final String name)
-    {
+    public UuidAwareBytesDataTypeTest(final String name) {
         super(name);
     }
 
     @Override
-    public void testTypeCast() throws Exception
-    {
+    public void testTypeCast() throws Exception {
         final Object[] values =
-            {null, "uuid'2aad615a-d8e1-11e2-b8ed-50e549c9b654'"};
+                {null, "uuid'2aad615a-d8e1-11e2-b8ed-50e549c9b654'"};
 
         final byte[][] expected =
-            {
-                null,
-                new byte[] {(byte) 0x2a, (byte) 0xad, (byte) 0x61,
-                        (byte) 0x5a, (byte) 0xd8, (byte) 0xe1,
-                        (byte) 0x11, (byte) 0xe2, (byte) 0xb8,
-                        (byte) 0xed, (byte) 0x50, (byte) 0xe5,
-                        (byte) 0x49, (byte) 0xc9, (byte) 0xb6,
-                        (byte) 0x54}};
+                {
+                        null,
+                        new byte[]{(byte) 0x2a, (byte) 0xad, (byte) 0x61,
+                                (byte) 0x5a, (byte) 0xd8, (byte) 0xe1,
+                                (byte) 0x11, (byte) 0xe2, (byte) 0xb8,
+                                (byte) 0xed, (byte) 0x50, (byte) 0xe5,
+                                (byte) 0x49, (byte) 0xc9, (byte) 0xb6,
+                                (byte) 0x54}};
 
         assertEquals("actual vs expected count", values.length, expected.length);
 
-        for (DataType element : TYPES)
-        {
-            for (int j = 0; j < values.length; j++)
-            {
+        for (DataType element : TYPES) {
+            for (int j = 0; j < values.length; j++) {
                 byte[] actual = (byte[]) element.typeCast(values[j]);
                 assertTrue("typecast " + j, Arrays.equals(expected[j], actual));
             }
         }
     }
 
-    public void testCompareEqualsUuidAware() throws Exception
-    {
+    public void testCompareEqualsUuidAware() throws Exception {
         final Object[] values1 =
-            {null, "uuid'2aad615a-d8e1-11e2-b8ed-50e549c9b654'"};
+                {null, "uuid'2aad615a-d8e1-11e2-b8ed-50e549c9b654'"};
 
         final byte[][] values2 =
-            {
-                null,
-                new byte[] {(byte) 0x2a, (byte) 0xad, (byte) 0x61,
-                        (byte) 0x5a, (byte) 0xd8, (byte) 0xe1,
-                        (byte) 0x11, (byte) 0xe2, (byte) 0xb8,
-                        (byte) 0xed, (byte) 0x50, (byte) 0xe5,
-                        (byte) 0x49, (byte) 0xc9, (byte) 0xb6,
-                        (byte) 0x54}};
+                {
+                        null,
+                        new byte[]{(byte) 0x2a, (byte) 0xad, (byte) 0x61,
+                                (byte) 0x5a, (byte) 0xd8, (byte) 0xe1,
+                                (byte) 0x11, (byte) 0xe2, (byte) 0xb8,
+                                (byte) 0xed, (byte) 0x50, (byte) 0xe5,
+                                (byte) 0x49, (byte) 0xc9, (byte) 0xb6,
+                                (byte) 0x54}};
 
         assertEquals("values count", values1.length, values2.length);
 
-        for (DataType element : TYPES)
-        {
-            for (int j = 0; j < values1.length; j++)
-            {
+        for (DataType element : TYPES) {
+            for (int j = 0; j < values1.length; j++) {
                 assertEquals("compare1 " + j, 0,
                         element.compare(values1[j], values2[j]));
                 assertEquals("compare2 " + j, 0,
@@ -96,30 +88,27 @@ public class UuidAwareBytesDataTypeTest extends BytesDataTypeTest
         }
     }
 
-    public void testSetSqlValueWithUuid() throws Exception
-    {
+    public void testSetSqlValueWithUuid() throws Exception {
         final MockPreparedStatement preparedStatement =
                 new MockPreparedStatement();
 
         final String[] given = {"uuid'2aad615a-d8e1-11e2-b8ed-50e549c9b654'"};
 
         final byte[][] expected =
-            {new byte[] {(byte) 0x2a, (byte) 0xad, (byte) 0x61,
-                    (byte) 0x5a, (byte) 0xd8, (byte) 0xe1, (byte) 0x11,
-                    (byte) 0xe2, (byte) 0xb8, (byte) 0xed, (byte) 0x50,
-                    (byte) 0xe5, (byte) 0x49, (byte) 0xc9, (byte) 0xb6,
-                    (byte) 0x54}};
+                {new byte[]{(byte) 0x2a, (byte) 0xad, (byte) 0x61,
+                        (byte) 0x5a, (byte) 0xd8, (byte) 0xe1, (byte) 0x11,
+                        (byte) 0xe2, (byte) 0xb8, (byte) 0xed, (byte) 0x50,
+                        (byte) 0xe5, (byte) 0x49, (byte) 0xc9, (byte) 0xb6,
+                        (byte) 0x54}};
 
         final int[] expectedSqlTypesForDataType =
-            {Types.BINARY, Types.VARBINARY, Types.LONGVARBINARY};
+                {Types.BINARY, Types.VARBINARY, Types.LONGVARBINARY};
 
-        for (int i = 0; i < expected.length; i++)
-        {
+        for (int i = 0; i < expected.length; i++) {
             final String givenValue = given[i];
             final byte[] expectedValue = expected[i];
 
-            for (int j = 0; j < TYPES.length; j++)
-            {
+            for (int j = 0; j < TYPES.length; j++) {
                 final DataType dataType = TYPES[j];
                 final int expectedSqlType = expectedSqlTypesForDataType[j];
 
@@ -150,27 +139,24 @@ public class UuidAwareBytesDataTypeTest extends BytesDataTypeTest
      * @throws Exception
      */
     public void testSetSqlValueWithSomethingThatLooksLikeUuidButIsNot()
-            throws Exception
-            {
+            throws Exception {
         final MockPreparedStatement preparedStatement =
                 new MockPreparedStatement();
 
         final String[] given =
-            {"2aad615a-d8e1-11e2-b8ed-50e549c9b654",
-            "uuid'2aad615a-d8e1-11e2-b8ed-50e549c9b65'"};
+                {"2aad615a-d8e1-11e2-b8ed-50e549c9b654",
+                        "uuid'2aad615a-d8e1-11e2-b8ed-50e549c9b65'"};
 
-        final byte[][] expected = { given[0].getBytes(), given[1].getBytes()};
+        final byte[][] expected = {given[0].getBytes(), given[1].getBytes()};
 
         final int[] expectedSqlTypesForDataType =
-            {Types.BINARY, Types.VARBINARY, Types.LONGVARBINARY};
+                {Types.BINARY, Types.VARBINARY, Types.LONGVARBINARY};
 
-        for (int i = 0; i < expected.length; i++)
-        {
+        for (int i = 0; i < expected.length; i++) {
             final String givenValue = given[i];
             final Object expectedValue = expected[i];
 
-            for (int j = 0; j < TYPES.length; j++)
-            {
+            for (int j = 0; j < TYPES.length; j++) {
                 final DataType dataType = TYPES[j];
                 final int expectedSqlType = expectedSqlTypesForDataType[j];
 
@@ -186,7 +172,7 @@ public class UuidAwareBytesDataTypeTest extends BytesDataTypeTest
                         preparedStatement.getLastSetObjectParamValue();
 
                 assertEquals("Loop " + i + " Type " + dataType, true,
-                    Arrays.equals((byte[]) expectedValue, (byte[]) actualValue));
+                        Arrays.equals((byte[]) expectedValue, (byte[]) actualValue));
             }
         }
     }

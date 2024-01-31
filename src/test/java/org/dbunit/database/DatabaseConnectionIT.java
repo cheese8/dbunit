@@ -37,128 +37,106 @@ import org.dbunit.dataset.ITable;
  * @version $Revision$
  * @since Mar 26, 2002
  */
-public class DatabaseConnectionIT extends AbstractDatabaseConnectionIT
-{
-    public DatabaseConnectionIT(String s)
-    {
+public class DatabaseConnectionIT extends AbstractDatabaseConnectionIT {
+    public DatabaseConnectionIT(String s) {
         super(s);
     }
 
-    protected String convertString(String str) throws Exception
-    {
+    protected String convertString(String str) throws Exception {
         return getEnvironment().convertString(str);
     }
 
 
-    public void testCreateNullConnection() throws Exception
-    {
-        try
-        {
+    public void testCreateNullConnection() throws Exception {
+        try {
             new DatabaseConnection(null);
             fail("Should not be able to create a database connection without a JDBC connection");
-        }
-        catch(NullPointerException expected)
-        {
+        } catch (NullPointerException expected) {
             // all right
         }
     }
 
-    public void testCreateConnectionWithNonExistingSchemaAndStrictValidation() throws Exception
-    {
+    public void testCreateConnectionWithNonExistingSchemaAndStrictValidation() throws Exception {
         DatabaseEnvironment environment = getEnvironment();
         String schema = environment.convertString("XYZ_INVALID_SCHEMA_1642344539");
         IDatabaseConnection validConnection = super.getConnection();
         // Try to create a database connection with an invalid schema
-        try
-        {
-        	boolean validate = true;
+        try {
+            boolean validate = true;
             new DatabaseConnection(validConnection.getConnection(), schema, validate);
             fail("Should not be able to create a database connection object with an unknown schema.");
-        }
-        catch(DatabaseUnitException expected)
-        {
+        } catch (DatabaseUnitException expected) {
             String expectedMsg = "The given schema '" + convertString(schema) + "' does not exist.";
             assertEquals(expectedMsg, expected.getMessage());
         }
     }
-    
-    public void testCreateConnectionWithNonExistingSchemaAndLenientValidation() throws Exception
-    {
+
+    public void testCreateConnectionWithNonExistingSchemaAndLenientValidation() throws Exception {
         DatabaseEnvironment environment = getEnvironment();
         String schema = environment.convertString("XYZ_INVALID_SCHEMA_1642344539");
         IDatabaseConnection validConnection = super.getConnection();
         // Try to create a database connection with an invalid schema
-    	boolean validate = false;
+        boolean validate = false;
         DatabaseConnection dbConnection = new DatabaseConnection(validConnection.getConnection(), schema, validate);
         assertNotNull(dbConnection);
     }
 
-    
-    public void testCreateConnectionWithSchemaDbStoresUpperCaseIdentifiers() throws Exception
-    {
+
+    public void testCreateConnectionWithSchemaDbStoresUpperCaseIdentifiers() throws Exception {
         IDatabaseConnection validConnection = super.getConnection();
         String schema = validConnection.getSchema();
         assertNotNull("Precondition: schema of connection must not be null", schema);
-        
-        
+
+
         DatabaseMetaData metaData = validConnection.getConnection().getMetaData();
-        if(metaData.storesUpperCaseIdentifiers())
-        {
+        if (metaData.storesUpperCaseIdentifiers()) {
             boolean validate = true;
             DatabaseConnection dbConnection = new DatabaseConnection(validConnection.getConnection(), schema.toLowerCase(Locale.ENGLISH), validate);
             assertNotNull(dbConnection);
             assertEquals(schema.toUpperCase(Locale.ENGLISH), dbConnection.getSchema());
-        }
-        else
-        {
+        } else {
             // skip this test
             assertTrue(true);
         }
     }
 
-    
-    public void testCreateConnectionWithSchemaDbStoresLowerCaseIdentifiers() throws Exception
-    {
+
+    public void testCreateConnectionWithSchemaDbStoresLowerCaseIdentifiers() throws Exception {
         IDatabaseConnection validConnection = super.getConnection();
         String schema = validConnection.getSchema();
         assertNotNull("Precondition: schema of connection must not be null", schema);
-        
-        
+
+
         DatabaseMetaData metaData = validConnection.getConnection().getMetaData();
-        if(metaData.storesLowerCaseIdentifiers())
-        {
+        if (metaData.storesLowerCaseIdentifiers()) {
             boolean validate = true;
             DatabaseConnection dbConnection = new DatabaseConnection(validConnection.getConnection(), schema.toUpperCase(Locale.ENGLISH), validate);
             assertNotNull(dbConnection);
             assertEquals(schema.toLowerCase(Locale.ENGLISH), dbConnection.getSchema());
-        }
-        else
-        {
+        } else {
             // skip this test
             assertTrue(true);
         }
     }
 
-    public void testCreateQueryWithPreparedStatement() throws Exception
-    {
+    public void testCreateQueryWithPreparedStatement() throws Exception {
         IDatabaseConnection connection = super.getConnection();
         PreparedStatement pstmt = connection.getConnection().prepareStatement("select * from TEST_TABLE where COLUMN0=?");
 
-        try{
+        try {
             pstmt.setString(1, "row 1 col 0");
             ITable table = connection.createTable("MY_TABLE", pstmt);
             assertEquals(1, table.getRowCount());
             assertEquals(4, table.getTableMetaData().getColumns().length);
             assertEquals("row 1 col 1", table.getValue(0, "COLUMN1"));
-            
+
             // Now reuse the prepared statement
             pstmt.setString(1, "row 2 col 0");
             ITable table2 = connection.createTable("MY_TABLE", pstmt);
             assertEquals(1, table2.getRowCount());
             assertEquals(4, table2.getTableMetaData().getColumns().length);
             assertEquals("row 2 col 1", table2.getValue(0, "COLUMN1"));
-        }
-        finally{
+        } finally {
             pstmt.close();
         }
     }

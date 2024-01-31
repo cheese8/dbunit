@@ -31,7 +31,7 @@ import java.util.Arrays;
 /**
  * Simple formatter to print out {@link ITable} objects in a beautiful way,
  * for example on a console.
- * 
+ *
  * @author gommma (gommma AT users.sourceforge.net)
  * @author Last changed by: $Author$
  * @version $Revision$ $Date$
@@ -42,6 +42,7 @@ public class TableFormatter {
     /**
      * Formats a table with all data in a beautiful way.
      * Can be useful to print out the table data on a console.
+     *
      * @param table The table to be formatted in a beautiful way
      * @return The table data as a formatted String
      */
@@ -55,7 +56,7 @@ public class TableFormatter {
         sb.append(" row count: ").append(table.getRowCount()).append(" ");
         sb.append("******");
         sb.append("\n");
-        
+
         // Column headers
         int width = 20;
         Column[] cols = tableMetaData.getColumns();
@@ -71,7 +72,7 @@ public class TableFormatter {
             sb.append("|");
         }
         sb.append("\n");
-        
+
         // Values
         for (int i = 0; i < table.getRowCount(); i++) {
             for (Column col : cols) {
@@ -83,13 +84,14 @@ public class TableFormatter {
             // New row
             sb.append("\n");
         }
-        
+
         return sb.toString();
     }
 
     /**
      * Pads the given String with the given <code>padChar</code>
      * up to the given <code>length</code>.
+     *
      * @return The padded string
      */
     public static String padRight(String s, int length, char padChar) {

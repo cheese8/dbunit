@@ -33,19 +33,16 @@ import org.dbunit.operation.DatabaseOperation;
  * @version $Revision$
  * @since Feb 19, 2002
  */
-public class ScrollableResultSetTableTest extends AbstractTableTest
-{
-    public ScrollableResultSetTableTest(String s)
-    {
+public class ScrollableResultSetTableTest extends AbstractTableTest {
+    public ScrollableResultSetTableTest(String s) {
         super(s);
     }
-    
+
     protected boolean runTest(String testName) {
-      return AbstractDatabaseIT.environmentHasFeature(TestFeature.SCROLLABLE_RESULTSET);
+        return AbstractDatabaseIT.environmentHasFeature(TestFeature.SCROLLABLE_RESULTSET);
     }
-    
-    protected ITable createTable() throws Exception
-    {
+
+    protected ITable createTable() throws Exception {
         DatabaseEnvironment env = DatabaseEnvironment.getInstance();
         IDatabaseConnection connection = env.getConnection();
 
@@ -55,8 +52,7 @@ public class ScrollableResultSetTableTest extends AbstractTableTest
         return new ScrollableResultSetTable("TEST_TABLE", selectStatement, connection);
     }
 
-    public void testGetMissingValue() throws Exception
-    {
+    public void testGetMissingValue() throws Exception {
         // Do not test this!
     }
 }

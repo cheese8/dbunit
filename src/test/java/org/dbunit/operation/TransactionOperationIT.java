@@ -39,19 +39,16 @@ import org.dbunit.testutil.TestUtils;
  * @version $Revision$
  * @since Feb 21, 2002
  */
-public class TransactionOperationIT extends AbstractDatabaseIT
-{
-    public TransactionOperationIT(String s)
-    {
+public class TransactionOperationIT extends AbstractDatabaseIT {
+    public TransactionOperationIT(String s) {
         super(s);
     }
-    
+
     protected boolean runTest(String testName) {
-      return environmentHasFeature(TestFeature.TRANSACTION);
+        return environmentHasFeature(TestFeature.TRANSACTION);
     }
 
-    public void testExecuteCommit() throws Exception
-    {
+    public void testExecuteCommit() throws Exception {
         String tableName = "TEST_TABLE";
         Reader in = new FileReader(
                 TestUtils.getFile("xml/transactionOperationTest.xml"));
@@ -73,8 +70,7 @@ public class TransactionOperationIT extends AbstractDatabaseIT
         assertEquals("autocommit after", true, jdbcConnection.getAutoCommit());
     }
 
-    public void testExclusiveTransaction() throws Exception
-    {
+    public void testExclusiveTransaction() throws Exception {
         String tableName = "TEST_TABLE";
         Reader in = new FileReader(
                 TestUtils.getFile("xml/transactionOperationTest.xml"));
@@ -88,19 +84,14 @@ public class TransactionOperationIT extends AbstractDatabaseIT
         ITable tableBefore = connection.createDataSet().getTable(tableName);
         assertEquals("before exclusive", 6, tableBefore.getRowCount());
 
-        try
-        {
+        try {
             // try with exclusive transaction
             DatabaseOperation operation = new TransactionOperation(
                     DatabaseOperation.DELETE);
             operation.execute(connection, xmlDataSet);
             fail("Should throw ExclusiveTransactionException");
-        }
-        catch (ExclusiveTransactionException e)
-        {
-        }
-        finally
-        {
+        } catch (ExclusiveTransactionException e) {
+        } finally {
             jdbcConnection.setAutoCommit(true);
         }
 
@@ -109,22 +100,20 @@ public class TransactionOperationIT extends AbstractDatabaseIT
         assertEquals("after", 6, tableAfter.getRowCount());
     }
 
-    public void testExecuteRollback() throws Exception
-    {
+    public void testExecuteRollback() throws Exception {
         String tableName = "TEST_TABLE";
         Reader in = new FileReader(
                 TestUtils.getFile("xml/transactionOperationTest.xml"));
         IDataSet xmlDataSet = new XmlDataSet(in);
         Exception[] exceptions = new Exception[]{
-            new SQLException(),
-            new DatabaseUnitException(),
-            new RuntimeException(),
+                new SQLException(),
+                new DatabaseUnitException(),
+                new RuntimeException(),
         };
         Connection jdbcConnection = connection.getConnection();
 
 
-        for (int i = 0; i < exceptions.length; i++)
-        {
+        for (int i = 0; i < exceptions.length; i++) {
 
             // snapshot before operation
             ITable tableBefore = connection.createDataSet().getTable(tableName);
@@ -135,17 +124,14 @@ public class TransactionOperationIT extends AbstractDatabaseIT
             mockOperation.setExpectedExecuteCalls(1);
             mockOperation.setupThrowExceptionOnExecute(exceptions[i]);
 
-            try
-            {
+            try {
                 DatabaseOperation operation = new CompositeOperation(
                         DatabaseOperation.DELETE_ALL,
                         mockOperation);
                 operation = new TransactionOperation(operation);
                 operation.execute(connection, xmlDataSet);
                 fail("Should throw an exception");
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 mockOperation.verify();
             }
 

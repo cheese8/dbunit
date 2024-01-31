@@ -37,9 +37,8 @@ import org.dbunit.operation.DatabaseOperation;
 @Slf4j
 public abstract class AbstractDatabaseIT extends DatabaseTestCase {
     protected IDatabaseConnection connection;
-    
-    public AbstractDatabaseIT(String s)
-    {
+
+    public AbstractDatabaseIT(String s) {
         super(s);
     }
 
@@ -58,6 +57,7 @@ public abstract class AbstractDatabaseIT extends DatabaseTestCase {
      * Most databases convert all metadata identifiers to uppercase.
      * PostgreSQL converts identifiers to lowercase.
      * MySQL preserves case.
+     *
      * @param str The identifier.
      * @return The identifier converted according to database rules.
      */
@@ -75,22 +75,22 @@ public abstract class AbstractDatabaseIT extends DatabaseTestCase {
     }
 
     protected IDatabaseTester getDatabaseTester() throws Exception {
-       try {
-          return getEnvironment().getDatabaseTester();
-       } catch(Exception e) {
-           //TODO matthias: this here hides original exceptions from being shown in the JUnit results 
-           //(logger is not configured for unit tests). Think about how exceptions can be passed through
-           // So I temporarily added the "e.printStackTrace()"...
-          log.error("getDatabaseTester()", e);
-          e.printStackTrace();
-       }
-       return super.getDatabaseTester();
+        try {
+            return getEnvironment().getDatabaseTester();
+        } catch (Exception e) {
+            //TODO matthias: this here hides original exceptions from being shown in the JUnit results
+            //(logger is not configured for unit tests). Think about how exceptions can be passed through
+            // So I temporarily added the "e.printStackTrace()"...
+            log.error("getDatabaseTester()", e);
+            e.printStackTrace();
+        }
+        return super.getDatabaseTester();
     }
 
     protected void setUpDatabaseConfig(DatabaseConfig config) {
         try {
             getEnvironment().setupDatabaseConfig(config);
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             throw new RuntimeException(ex); // JH_TODO: is this the "DbUnit way" to handle exceptions?
         }
     }
@@ -125,8 +125,9 @@ public abstract class AbstractDatabaseIT extends DatabaseTestCase {
 //    }
 
     /**
-     * This method is used so sub-classes can disable the tests according to 
+     * This method is used so sub-classes can disable the tests according to
      * some characteristics of the environment
+     *
      * @param testName name of the test to be checked
      * @return flag indicating if the test should be executed or not
      */
@@ -135,22 +136,22 @@ public abstract class AbstractDatabaseIT extends DatabaseTestCase {
     }
 
     protected void runTest() throws Throwable {
-      if (runTest(getName())) {
-        super.runTest();
-      } else { 
-        if (log.isDebugEnabled()) {
-            log.debug( "Skipping test " + getClass().getName() + "." + getName() );
+        if (runTest(getName())) {
+            super.runTest();
+        } else {
+            if (log.isDebugEnabled()) {
+                log.debug("Skipping test " + getClass().getName() + "." + getName());
+            }
         }
-      }
     }
-    
+
     public static boolean environmentHasFeature(TestFeature feature) {
-      try {
-        final DatabaseEnvironment environment = DatabaseEnvironment.getInstance();
-        final boolean runIt = environment.support(feature);
-        return runIt;
-      } catch (Exception e) {
-        throw new DatabaseUnitRuntimeException(e);
-      }
+        try {
+            final DatabaseEnvironment environment = DatabaseEnvironment.getInstance();
+            final boolean runIt = environment.support(feature);
+            return runIt;
+        } catch (Exception e) {
+            throw new DatabaseUnitRuntimeException(e);
+        }
     }
 }

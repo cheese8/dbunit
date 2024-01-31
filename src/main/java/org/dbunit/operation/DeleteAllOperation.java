@@ -56,8 +56,7 @@ import java.util.Stack;
 @Slf4j
 @NoArgsConstructor
 public class DeleteAllOperation extends AbstractOperation {
-    protected String getDeleteAllCommand()
-    {
+    protected String getDeleteAllCommand() {
         return "delete from ";
     }
 
@@ -67,11 +66,11 @@ public class DeleteAllOperation extends AbstractOperation {
         IDataSet databaseDataSet = connection.createDataSet();
 
         DatabaseConfig databaseConfig = connection.getConfig();
-        IStatementFactory statementFactory = (IStatementFactory)databaseConfig.getProperty(DatabaseConfig.PROPERTY_STATEMENT_FACTORY);
+        IStatementFactory statementFactory = (IStatementFactory) databaseConfig.getProperty(DatabaseConfig.PROPERTY_STATEMENT_FACTORY);
         IBatchStatement statement = statementFactory.createBatchStatement(connection);
         try {
             int count = 0;
-            
+
             Stack<String> tableNames = new Stack<>();
             Set<String> tablesSeen = new HashSet<>();
             ITableIterator iterator = dataSet.iterator();
@@ -95,7 +94,7 @@ public class DeleteAllOperation extends AbstractOperation {
                 statement.addBatch(sql);
 
                 log.debug("Added SQL: {}", sql);
-                
+
                 count++;
             }
 

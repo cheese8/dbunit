@@ -43,11 +43,11 @@ public class DatabaseDataSourceConnection extends AbstractDatabaseConnection imp
     private Connection connection;
 
     public DatabaseDataSourceConnection(InitialContext context, String jndiName, String schema) throws NamingException {
-        this((DataSource)context.lookup(jndiName), schema, null, null);
+        this((DataSource) context.lookup(jndiName), schema, null, null);
     }
 
     public DatabaseDataSourceConnection(InitialContext context, String jndiName, String schema, String user, String password) throws NamingException {
-        this((DataSource)context.lookup(jndiName), schema, user, password);
+        this((DataSource) context.lookup(jndiName), schema, user, password);
     }
 
     public DatabaseDataSourceConnection(InitialContext context, String jndiName) throws NamingException {

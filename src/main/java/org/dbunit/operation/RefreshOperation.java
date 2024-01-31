@@ -54,8 +54,8 @@ import java.util.BitSet;
  */
 @Slf4j
 public class RefreshOperation extends AbstractOperation {
-    private final InsertOperation insertOperation = (InsertOperation)DatabaseOperation.INSERT;
-    private final UpdateOperation updateOperation = (UpdateOperation)DatabaseOperation.UPDATE;
+    private final InsertOperation insertOperation = (InsertOperation) DatabaseOperation.INSERT;
+    private final UpdateOperation updateOperation = (UpdateOperation) DatabaseOperation.UPDATE;
 
     private boolean isEmpty(ITable table) throws DataSetException {
         return AbstractBatchOperation.isEmpty(table);
@@ -63,13 +63,13 @@ public class RefreshOperation extends AbstractOperation {
 
     public void execute(IDatabaseConnection connection, IDataSet dataSet) throws DatabaseUnitException, SQLException {
         log.debug("execute(connection={}, dataSet) - start", connection);
-        
+
         // for each table
         ITableIterator iterator = dataSet.iterator();
         while (iterator.next()) {
             ITable table = iterator.getTable();
-            
-            String tableName=table.getTableMetaData().getTableName();
+
+            String tableName = table.getTableMetaData().getTableName();
             log.trace("execute: processing table='{}'", tableName);
 
             // Do not process empty table
@@ -89,8 +89,8 @@ public class RefreshOperation extends AbstractOperation {
                     }
                 }
             } catch (RowOutOfBoundsException e) {
-            	// This exception occurs when records are exhausted
-            	// and we reach the end of the table.  Ignore this error.
+                // This exception occurs when records are exhausted
+                // and we reach the end of the table.  Ignore this error.
 
                 // end of table
             } catch (SQLException e) {
@@ -114,7 +114,7 @@ public class RefreshOperation extends AbstractOperation {
         }
 
         // otherwise, operation only verify if row exist
-        return new RowExistOperation(connection,  metaData);
+        return new RowExistOperation(connection, metaData);
     }
 
     /**
@@ -128,6 +128,7 @@ public class RefreshOperation extends AbstractOperation {
 
         /**
          * Execute this operation on the sepcified table row.
+         *
          * @return <code>true</code> if operation have been executed on the row.
          */
         public boolean execute(ITable table, int row) throws DataSetException, SQLException {
@@ -247,6 +248,7 @@ public class RefreshOperation extends AbstractOperation {
 
         /**
          * Verify if the specified table row exists in the database.
+         *
          * @return <code>true</code> if row exists.
          */
         public boolean execute(ITable table, int row) throws DataSetException, SQLException {

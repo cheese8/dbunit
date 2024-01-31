@@ -36,14 +36,12 @@ import org.junit.Test;
  * @version $Revision$
  */
 
-public class BigIntegerDataTypeTest extends AbstractDataTypeTest
-{
+public class BigIntegerDataTypeTest extends AbstractDataTypeTest {
     private static final String NUMBER_LARGER_THAN_LONG =
             "17446744073709551630";
     private final static DataType THIS_TYPE = DataType.BIGINT;
 
-    public BigIntegerDataTypeTest(String name)
-    {
+    public BigIntegerDataTypeTest(String name) {
         super(name);
     }
 
@@ -51,8 +49,7 @@ public class BigIntegerDataTypeTest extends AbstractDataTypeTest
      *
      */
     @Override
-    public void testToString() throws Exception
-    {
+    public void testToString() throws Exception {
         assertEquals("name", "BIGINT", THIS_TYPE.toString());
     }
 
@@ -60,8 +57,7 @@ public class BigIntegerDataTypeTest extends AbstractDataTypeTest
      *
      */
     @Override
-    public void testGetTypeClass() throws Exception
-    {
+    public void testGetTypeClass() throws Exception {
         assertEquals("class", BigInteger.class, THIS_TYPE.getTypeClass());
     }
 
@@ -69,20 +65,17 @@ public class BigIntegerDataTypeTest extends AbstractDataTypeTest
      *
      */
     @Override
-    public void testIsNumber() throws Exception
-    {
+    public void testIsNumber() throws Exception {
         assertEquals("is number", true, THIS_TYPE.isNumber());
     }
 
     @Override
-    public void testIsDateTime() throws Exception
-    {
+    public void testIsDateTime() throws Exception {
         assertEquals("is date/time", false, THIS_TYPE.isDateTime());
     }
 
     @Override
-    public void testTypeCast() throws Exception
-    {
+    public void testTypeCast() throws Exception {
         Object[] values =
                 {null, "5", new Long(1234), new Float(Long.MAX_VALUE),
                         new Float(Long.MIN_VALUE), "-7500",
@@ -107,39 +100,32 @@ public class BigIntegerDataTypeTest extends AbstractDataTypeTest
 
         assertEquals("actual vs expected count", values.length, expected.length);
 
-        for (int i = 0; i < values.length; i++)
-        {
+        for (int i = 0; i < values.length; i++) {
             assertEquals("typecast " + i, expected[i],
                     THIS_TYPE.typeCast(values[i]));
         }
     }
 
     @Override
-    public void testTypeCastNone() throws Exception
-    {
+    public void testTypeCastNone() throws Exception {
         assertEquals("typecast", null, THIS_TYPE.typeCast(ITable.NO_VALUE));
     }
 
     @Override
-    public void testTypeCastInvalid() throws Exception
-    {
+    public void testTypeCastInvalid() throws Exception {
         Object[] values = {new Object(), "bla", new java.util.Date()};
 
-        for (Object value : values)
-        {
-            try
-            {
+        for (Object value : values) {
+            try {
                 THIS_TYPE.typeCast(value);
                 fail("Should throw TypeCastException");
-            } catch (TypeCastException e)
-            {
+            } catch (TypeCastException e) {
             }
         }
     }
 
     @Override
-    public void testCompareEquals() throws Exception
-    {
+    public void testCompareEquals() throws Exception {
         Object[] values1 =
                 {null, "5", new Long(1234), new Float(Long.MAX_VALUE),
                         new Float(Long.MIN_VALUE), "-7500",
@@ -157,8 +143,7 @@ public class BigIntegerDataTypeTest extends AbstractDataTypeTest
 
         assertEquals("values count", values1.length, values2.length);
 
-        for (int i = 0; i < values1.length; i++)
-        {
+        for (int i = 0; i < values1.length; i++) {
             assertEquals("compare1 " + i, 0,
                     THIS_TYPE.compare(values1[i], values2[i]));
             assertEquals("compare2 " + i, 0,
@@ -167,44 +152,36 @@ public class BigIntegerDataTypeTest extends AbstractDataTypeTest
     }
 
     @Override
-    public void testCompareInvalid() throws Exception
-    {
+    public void testCompareInvalid() throws Exception {
         Object[] values1 = {new Object(), "bla", new java.util.Date()};
         Object[] values2 = {null, null, null};
 
         assertEquals("values count", values1.length, values2.length);
 
-        for (int i = 0; i < values1.length; i++)
-        {
-            try
-            {
+        for (int i = 0; i < values1.length; i++) {
+            try {
                 THIS_TYPE.compare(values1[i], values2[i]);
                 fail("Should throw TypeCastException");
-            } catch (TypeCastException e)
-            {
+            } catch (TypeCastException e) {
             }
 
-            try
-            {
+            try {
                 THIS_TYPE.compare(values2[i], values1[i]);
                 fail("Should throw TypeCastException");
-            } catch (TypeCastException e)
-            {
+            } catch (TypeCastException e) {
             }
         }
     }
 
     @Override
-    public void testCompareDifferent() throws Exception
-    {
+    public void testCompareDifferent() throws Exception {
         Object[] less = {null, null, "-7500",};
 
         Object[] greater = {"0", new Long(-5), new Long(5),};
 
         assertEquals("values count", less.length, greater.length);
 
-        for (int i = 0; i < less.length; i++)
-        {
+        for (int i = 0; i < less.length; i++) {
             assertTrue("less " + i, THIS_TYPE.compare(less[i], greater[i]) < 0);
             assertTrue("greater " + i,
                     THIS_TYPE.compare(greater[i], less[i]) > 0);
@@ -212,8 +189,7 @@ public class BigIntegerDataTypeTest extends AbstractDataTypeTest
     }
 
     @Override
-    public void testSqlType() throws Exception
-    {
+    public void testSqlType() throws Exception {
         assertEquals(THIS_TYPE, DataType.forSqlType(Types.BIGINT));
         assertEquals("forSqlTypeName", THIS_TYPE,
                 DataType.forSqlTypeName(THIS_TYPE.toString()));
@@ -221,30 +197,26 @@ public class BigIntegerDataTypeTest extends AbstractDataTypeTest
     }
 
     @Override
-    public void testForObject() throws Exception
-    {
+    public void testForObject() throws Exception {
         assertEquals(THIS_TYPE, DataType.forObject(new BigInteger("1234")));
     }
 
     @Override
-    public void testAsString() throws Exception
-    {
+    public void testAsString() throws Exception {
         Long[] values = {new Long(1234),};
 
         String[] expected = {"1234",};
 
         assertEquals("actual vs expected count", values.length, expected.length);
 
-        for (int i = 0; i < values.length; i++)
-        {
+        for (int i = 0; i < values.length; i++) {
             assertEquals("asString " + i, expected[i],
                     DataType.asString(values[i]));
         }
     }
 
     @Override
-    public void testGetSqlValue() throws Exception
-    {
+    public void testGetSqlValue() throws Exception {
         BigInteger[] expected =
                 {null, new BigInteger("5"), new BigInteger("1234"),
                         new BigInteger("" + Long.MAX_VALUE),
@@ -254,13 +226,10 @@ public class BigIntegerDataTypeTest extends AbstractDataTypeTest
         // Internally BigIntegerDataType uses resultSet.getBigDecimal() on the
         // JDBC API because there is no resultSet.getBigInteger().
         BigDecimal[] expectedForMock = new BigDecimal[expected.length];
-        for (int i = 0; i < expectedForMock.length; i++)
-        {
-            if (expected[i] == null)
-            {
+        for (int i = 0; i < expectedForMock.length; i++) {
+            if (expected[i] == null) {
                 expectedForMock[i] = null;
-            } else
-            {
+            } else {
                 expectedForMock[i] = new BigDecimal(expected[i]);
             }
         }
@@ -269,12 +238,10 @@ public class BigIntegerDataTypeTest extends AbstractDataTypeTest
                 new ExtendedMockSingleRowResultSet();
         resultSet.addExpectedIndexedValues(expectedForMock);
 
-        for (int i = 0; i < expected.length; i++)
-        {
+        for (int i = 0; i < expected.length; i++) {
             Object expectedValue = expected[i];
             Object actualValue = THIS_TYPE.getSqlValue(i + 1, resultSet);
-            if (expectedValue != null && actualValue != null)
-            {
+            if (expectedValue != null && actualValue != null) {
                 assertEquals("type mismatch", expectedValue.getClass(),
                         actualValue.getClass());
             }
@@ -283,10 +250,11 @@ public class BigIntegerDataTypeTest extends AbstractDataTypeTest
         }
     }
 
-    /** Issue 361: NPE when value is null. */
+    /**
+     * Issue 361: NPE when value is null.
+     */
     @Test
-    public void testSetSqlValue_Null() throws Exception
-    {
+    public void testSetSqlValue_Null() throws Exception {
         Object value = null;
         int column = 1;
         PreparedStatement statement = new MockPreparedStatement();
@@ -295,8 +263,7 @@ public class BigIntegerDataTypeTest extends AbstractDataTypeTest
     }
 
     @Test
-    public void testSetSqlValue_Integer() throws Exception
-    {
+    public void testSetSqlValue_Integer() throws Exception {
         Object value = 1;
         int column = 1;
         PreparedStatement statement = new MockPreparedStatement();

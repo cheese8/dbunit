@@ -47,7 +47,7 @@ import org.dbunit.dataset.IDataSet;
  * The <code>ctlDir</code> directory must then contain the files <code>COUNTRY.ctl</code>
  * and <code>LANGUAGE.ctl</code>.
  * </p>
- * 
+ *
  * @author Stephan Strittmatter (stritti AT users.sourceforge.net), gommma (gommma AT users.sourceforge.net)
  * @author Last changed by: $Author$
  * @version $Revision$ $Date$
@@ -57,43 +57,37 @@ public class SqlLoaderControlDataSet extends CachedDataSet implements IDataSet {
 
     /**
      * The Constructor.
-     * 
-     * @param ctlDir the control files directory
+     *
+     * @param ctlDir            the control files directory
      * @param orderedTablesFile the table order file
-     * 
      * @throws DataSetException the data set exception
      */
-    public SqlLoaderControlDataSet(String ctlDir, String orderedTablesFile) 
-    throws DataSetException 
-    {
+    public SqlLoaderControlDataSet(String ctlDir, String orderedTablesFile)
+            throws DataSetException {
         super(new SqlLoaderControlProducer(ctlDir, orderedTablesFile));
     }
 
     /**
      * The Constructor.
-     * 
-     * @param ctlDir the control files directory
+     *
+     * @param ctlDir            the control files directory
      * @param orderedTablesFile the table order file
-     * 
      * @throws DataSetException the data set exception
      */
-    public SqlLoaderControlDataSet(File ctlDir, File orderedTablesFile) 
-    throws DataSetException 
-    {
+    public SqlLoaderControlDataSet(File ctlDir, File orderedTablesFile)
+            throws DataSetException {
         super(new SqlLoaderControlProducer(ctlDir, orderedTablesFile));
     }
-    
+
     /**
      * The Constructor.
-     * 
-     * @param ctlDir the control files directory
+     *
+     * @param ctlDir            the control files directory
      * @param orderedTableNames a list of strings that contains the ordered table names
-     * 
      * @throws DataSetException the data set exception
      */
-    public SqlLoaderControlDataSet(File ctlDir, List orderedTableNames) 
-    throws DataSetException 
-    {
+    public SqlLoaderControlDataSet(File ctlDir, List orderedTableNames)
+            throws DataSetException {
         super(new SqlLoaderControlProducer(ctlDir, orderedTableNames));
     }
 

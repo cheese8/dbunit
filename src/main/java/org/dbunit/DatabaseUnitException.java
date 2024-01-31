@@ -60,6 +60,7 @@ public class DatabaseUnitException extends Exception {
 
     /**
      * Returns the nested exception or <code>null</code> if none.
+     *
      * @deprecated Use {@link #getCause()} to retrieve the nested exception
      */
     public Throwable getException() {

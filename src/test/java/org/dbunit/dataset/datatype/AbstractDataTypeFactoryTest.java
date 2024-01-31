@@ -26,59 +26,53 @@ import java.sql.Types;
 
 /**
  * @author Manuel Laflamme
- * @since Aug 13, 2003
  * @version $Revision$
+ * @since Aug 13, 2003
  */
-public class AbstractDataTypeFactoryTest extends TestCase
-{
-    public AbstractDataTypeFactoryTest(String s)
-    {
+public class AbstractDataTypeFactoryTest extends TestCase {
+    public AbstractDataTypeFactoryTest(String s) {
         super(s);
     }
 
-    public IDataTypeFactory createFactory() throws Exception
-    {
+    public IDataTypeFactory createFactory() throws Exception {
         return new DefaultDataTypeFactory();
     }
 
-    public void testCreateDataType() throws Exception
-    {
-        DataType[] expectedTypes = new DataType[] {
-            DataType.UNKNOWN,
-            DataType.CHAR,
-            DataType.VARCHAR,
-            DataType.LONGVARCHAR,
+    public void testCreateDataType() throws Exception {
+        DataType[] expectedTypes = new DataType[]{
+                DataType.UNKNOWN,
+                DataType.CHAR,
+                DataType.VARCHAR,
+                DataType.LONGVARCHAR,
 //            DataType.CLOB,
-            DataType.NUMERIC,
-            DataType.DECIMAL,
-            DataType.BOOLEAN,
-            DataType.TINYINT,
-            DataType.SMALLINT,
-            DataType.INTEGER,
-            DataType.BIGINT,
-            DataType.REAL,
-            DataType.FLOAT,
-            DataType.DOUBLE,
+                DataType.NUMERIC,
+                DataType.DECIMAL,
+                DataType.BOOLEAN,
+                DataType.TINYINT,
+                DataType.SMALLINT,
+                DataType.INTEGER,
+                DataType.BIGINT,
+                DataType.REAL,
+                DataType.FLOAT,
+                DataType.DOUBLE,
 //            DataType.DATE,
-            DataType.TIME,
-            DataType.TIMESTAMP,
-            DataType.BINARY,
-            DataType.VARBINARY,
-            DataType.LONGVARBINARY,
+                DataType.TIME,
+                DataType.TIMESTAMP,
+                DataType.BINARY,
+                DataType.VARBINARY,
+                DataType.LONGVARBINARY,
 //            DataType.BLOB,
         };
 
         IDataTypeFactory factory = createFactory();
-        for (int i = 0; i < expectedTypes.length; i++)
-        {
+        for (int i = 0; i < expectedTypes.length; i++) {
             DataType expected = expectedTypes[i];
             DataType actual = factory.createDataType(expected.getSqlType(), expected.toString());
-            assertSame("type", expected,  actual);
+            assertSame("type", expected, actual);
         }
     }
 
-    public void testCreateDateDataType() throws Exception
-    {
+    public void testCreateDateDataType() throws Exception {
         int sqlType = Types.DATE;
         String sqlTypeName = "DATE";
 
@@ -87,8 +81,7 @@ public class AbstractDataTypeFactoryTest extends TestCase
         assertSame("type", expected, actual);
     }
 
-    public void testCreateBlobDataType() throws Exception
-    {
+    public void testCreateBlobDataType() throws Exception {
         int sqlType = Types.BLOB;
         String sqlTypeName = "BLOB";
 
@@ -97,8 +90,7 @@ public class AbstractDataTypeFactoryTest extends TestCase
         assertSame("type", expected, actual);
     }
 
-    public void testCreateClobDataType() throws Exception
-    {
+    public void testCreateClobDataType() throws Exception {
         int sqlType = Types.CLOB;
         String sqlTypeName = "CLOB";
 

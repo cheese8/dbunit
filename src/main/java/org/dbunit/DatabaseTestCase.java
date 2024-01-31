@@ -35,8 +35,8 @@ import org.dbunit.operation.DatabaseOperation;
  * Convenience class for writing JUnit tests with dbunit easily.
  * <br />
  * Note that there are some even more convenient classes available such
- * as {@link DBTestCase}. 
- * 
+ * as {@link DBTestCase}.
+ *
  * @author Manuel Laflamme
  * @version $Revision$
  * @since 1.0 (Feb 17, 2002)
@@ -63,7 +63,7 @@ public abstract class DatabaseTestCase extends TestCase {
 
     /**
      * Creates a IDatabaseTester for this testCase.<br>
-     *
+     * <p>
      * A {@link DefaultDatabaseTester} is used by default.
      */
     protected IDatabaseTester newDatabaseTester() throws Exception {
@@ -75,6 +75,7 @@ public abstract class DatabaseTestCase extends TestCase {
     /**
      * Designed to be overridden by subclasses in order to set additional configuration
      * parameters for the {@link IDatabaseConnection}.
+     *
      * @param config The settings of the current {@link IDatabaseConnection} to be configured
      */
     protected void setUpDatabaseConfig(DatabaseConfig config) {
@@ -87,15 +88,16 @@ public abstract class DatabaseTestCase extends TestCase {
      * newDatabaseTester() to obtain a new instance.
      */
     protected IDatabaseTester getDatabaseTester() throws Exception {
-      if (this.tester == null) {
-          this.tester = newDatabaseTester();
-      }
-      return this.tester;
+        if (this.tester == null) {
+            this.tester = newDatabaseTester();
+        }
+        return this.tester;
     }
 
     /**
      * Close the specified connection. Override this method of you want to
      * keep your connection alive between tests.
+     *
      * @deprecated since 2.4.4 define a user defined {@link #getOperationListener()} in advance
      */
     protected void closeConnection(IDatabaseConnection connection) throws Exception {
@@ -120,8 +122,8 @@ public abstract class DatabaseTestCase extends TestCase {
     protected void setUp() throws Exception {
         super.setUp();
         final IDatabaseTester databaseTester = getDatabaseTester();
-        assertNotNull("DatabaseTester is not set", databaseTester );
-        databaseTester.setSetUpOperation( getSetUpOperation());
+        assertNotNull("DatabaseTester is not set", databaseTester);
+        databaseTester.setSetUpOperation(getSetUpOperation());
         databaseTester.setDataSet(getDataSet());
         databaseTester.setOperationListener(getOperationListener());
         databaseTester.onSetup();
@@ -131,7 +133,7 @@ public abstract class DatabaseTestCase extends TestCase {
         try {
             final IDatabaseTester databaseTester = getDatabaseTester();
             assertNotNull("DatabaseTester is not set", databaseTester);
-            databaseTester.setTearDownOperation( getTearDownOperation());
+            databaseTester.setTearDownOperation(getTearDownOperation());
             databaseTester.setDataSet(getDataSet());
             databaseTester.setOperationListener(getOperationListener());
             databaseTester.onTearDown();
@@ -140,7 +142,7 @@ public abstract class DatabaseTestCase extends TestCase {
             super.tearDown();
         }
     }
-    
+
     /**
      * @return The {@link IOperationListener} to be used by the {@link IDatabaseTester}.
      * @since 2.4.4
@@ -149,10 +151,10 @@ public abstract class DatabaseTestCase extends TestCase {
         if (this.operationListener == null) {
             this.operationListener = new DefaultOperationListener() {
                 public void connectionRetrieved(IDatabaseConnection connection) {
-                super.connectionRetrieved(connection);
-                // When a new connection has been created then invoke the setUp method
-                // so that user defined DatabaseConfig parameters can be set.
-                setUpDatabaseConfig(connection.getConfig());
+                    super.connectionRetrieved(connection);
+                    // When a new connection has been created then invoke the setUp method
+                    // so that user defined DatabaseConfig parameters can be set.
+                    setUpDatabaseConfig(connection.getConfig());
                 }
             };
         }

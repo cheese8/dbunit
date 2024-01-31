@@ -29,11 +29,10 @@ import org.dbunit.dataset.ITableIterator;
  * exposes only some tables from a dataset.
  *
  * @author Manuel Laflamme
- * @since Mar 7, 2003
  * @version $Revision$
+ * @since Mar 7, 2003
  */
-public interface ITableFilter extends ITableFilterSimple
-{
+public interface ITableFilter extends ITableFilterSimple {
 
     /**
      * Returns the table names allowed by this filter from the specified dataset.

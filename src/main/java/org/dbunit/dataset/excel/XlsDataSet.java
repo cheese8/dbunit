@@ -45,11 +45,11 @@ import org.slf4j.LoggerFactory;
  * and remaining rows contains the data.
  *
  * @author Manuel Laflamme
- * @since Feb 21, 2003
  * @version $Revision$
+ * @since Feb 21, 2003
  */
 public class XlsDataSet extends AbstractDataSet {
-    
+
     /**
      * Logger for this class
      */
@@ -61,16 +61,14 @@ public class XlsDataSet extends AbstractDataSet {
     /**
      * Creates a new XlsDataSet object that loads the specified Excel document.
      */
-    public XlsDataSet(File file) throws IOException, DataSetException
-    {
+    public XlsDataSet(File file) throws IOException, DataSetException {
         this(new FileInputStream(file));
     }
 
     /**
      * Creates a new XlsDataSet object that loads the specified Excel document.
      */
-    public XlsDataSet(InputStream in) throws IOException, DataSetException
-    {
+    public XlsDataSet(InputStream in) throws IOException, DataSetException {
         _tables = super.createTableNameMap();
 
         Workbook workbook;
@@ -79,13 +77,12 @@ public class XlsDataSet extends AbstractDataSet {
         } catch (EncryptedDocumentException e) {
             throw new IOException(e);
         }
-		
+
         int sheetCount = workbook.getNumberOfSheets();
-        for (int i = 0; i < sheetCount; i++)
-        {
+        for (int i = 0; i < sheetCount; i++) {
             ITable table = new XlsTable(workbook.getSheetName(i),
                     workbook.getSheetAt(i));
-            _tables.add(table.getTableMetaData().getTableName(), table);            
+            _tables.add(table.getTableMetaData().getTableName(), table);
         }
     }
 
@@ -93,8 +90,7 @@ public class XlsDataSet extends AbstractDataSet {
      * Write the specified dataset to the specified Excel document.
      */
     public static void write(IDataSet dataSet, OutputStream out)
-            throws IOException, DataSetException
-    {
+            throws IOException, DataSetException {
         logger.debug("write(dataSet={}, out={}) - start", dataSet, out);
 
         new XlsDataSetWriter().write(dataSet, out);
@@ -105,12 +101,11 @@ public class XlsDataSet extends AbstractDataSet {
     // AbstractDataSet class
 
     protected ITableIterator createIterator(boolean reversed)
-            throws DataSetException
-    {
-    	if(logger.isDebugEnabled())
-    		logger.debug("createIterator(reversed={}) - start", String.valueOf(reversed));
+            throws DataSetException {
+        if (logger.isDebugEnabled())
+            logger.debug("createIterator(reversed={}) - start", String.valueOf(reversed));
 
-    	ITable[] tables = (ITable[]) _tables.orderedValues().toArray(new ITable[0]);
+        ITable[] tables = (ITable[]) _tables.orderedValues().toArray(new ITable[0]);
         return new DefaultTableIterator(tables, reversed);
     }
 }

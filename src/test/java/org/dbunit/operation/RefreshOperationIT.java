@@ -47,47 +47,40 @@ import org.dbunit.testutil.TestUtils;
  * @version $Revision$
  * @since Feb 19, 2002
  */
-public class RefreshOperationIT extends AbstractDatabaseIT
-{
-    public RefreshOperationIT(String s)
-    {
+public class RefreshOperationIT extends AbstractDatabaseIT {
+    public RefreshOperationIT(String s) {
         super(s);
     }
 
-    public void testExecute() throws Exception
-    {
+    public void testExecute() throws Exception {
         Reader reader = TestUtils.getFileReader("xml/refreshOperationTest.xml");
         IDataSet dataSet = new FlatXmlDataSetBuilder().build(reader);
 
         testExecute(dataSet);
     }
 
-    public void testExecuteCaseInsensitive() throws Exception
-    {
+    public void testExecuteCaseInsensitive() throws Exception {
         Reader reader = TestUtils.getFileReader("xml/refreshOperationTest.xml");
         IDataSet dataSet = new FlatXmlDataSetBuilder().build(reader);
 
         testExecute(new LowerCaseDataSet(dataSet));
     }
 
-    public void testExecuteForwardOnly() throws Exception
-    {
+    public void testExecuteForwardOnly() throws Exception {
         Reader reader = TestUtils.getFileReader("xml/refreshOperationTest.xml");
         IDataSet dataSet = new FlatXmlDataSetBuilder().build(reader);
 
         testExecute(new ForwardOnlyDataSet(dataSet));
     }
 
-    private void testExecute(IDataSet dataSet) throws Exception
-    {
+    private void testExecute(IDataSet dataSet) throws Exception {
         String[] tableNames = {"PK_TABLE", "ONLY_PK_TABLE"};
         int[] tableRowCount = {3, 1};
         String primaryKey = "PK0";
 
         // verify table before
         assertEquals("array lenght", tableNames.length, tableRowCount.length);
-        for (int i = 0; i < tableNames.length; i++)
-        {
+        for (int i = 0; i < tableNames.length; i++) {
             ITable tableBefore = createOrderedTable(tableNames[i], primaryKey);
             assertEquals("row count before", tableRowCount[i], tableBefore.getRowCount());
         }
@@ -98,16 +91,14 @@ public class RefreshOperationIT extends AbstractDatabaseIT
         IDataSet expectedDataSet = new FlatXmlDataSetBuilder().build(
                 TestUtils.getFileReader("xml/refreshOperationTestExpected.xml"));
 
-        for (int i = 0; i < tableNames.length; i++)
-        {
+        for (int i = 0; i < tableNames.length; i++) {
             ITable expectedTable = expectedDataSet.getTable(tableNames[i]);
             ITable tableAfter = createOrderedTable(tableNames[i], primaryKey);
             Assertion.assertEquals(expectedTable, tableAfter);
         }
     }
 
-    public void testExecuteAndNoPrimaryKeys() throws Exception
-    {
+    public void testExecuteAndNoPrimaryKeys() throws Exception {
         String tableName = "TEST_TABLE";
 
         Reader reader = TestUtils.getFileReader("xml/refreshOperationNoPKTest.xml");
@@ -116,13 +107,10 @@ public class RefreshOperationIT extends AbstractDatabaseIT
         // verify table before
         assertEquals("row count before", 6, connection.getRowCount(tableName));
 
-        try
-        {
+        try {
             DatabaseOperation.REFRESH.execute(connection, dataSet);
             fail("Should not be here!");
-        }
-        catch (NoPrimaryKeyException e)
-        {
+        } catch (NoPrimaryKeyException e) {
 
         }
 
@@ -130,8 +118,7 @@ public class RefreshOperationIT extends AbstractDatabaseIT
         assertEquals("row count before", 6, connection.getRowCount(tableName));
     }
 
-    public void testExecuteWithEmptyTable() throws Exception
-    {
+    public void testExecuteWithEmptyTable() throws Exception {
         Column[] columns = {new Column("c1", DataType.VARCHAR)};
         ITable table = new DefaultTable(new DefaultTableMetaData(
                 "name", columns, columns));
@@ -153,13 +140,12 @@ public class RefreshOperationIT extends AbstractDatabaseIT
         connection.verify();
     }
 
-    public void testExecuteUnknownColumn() throws Exception
-    {
+    public void testExecuteUnknownColumn() throws Exception {
         String tableName = "table";
 
         // setup table
         Column[] columns = new Column[]{
-            new Column("unknown", DataType.VARCHAR),
+                new Column("unknown", DataType.VARCHAR),
         };
         DefaultTable table = new DefaultTable(tableName, columns);
         table.addRow();
@@ -168,7 +154,7 @@ public class RefreshOperationIT extends AbstractDatabaseIT
 
         IDataSet databaseDataSet = new DefaultDataSet(
                 new DefaultTable(tableName, new Column[]{
-                    new Column("column", DataType.VARCHAR),
+                        new Column("column", DataType.VARCHAR),
                 }));
 
         // setup mock objects
@@ -187,13 +173,10 @@ public class RefreshOperationIT extends AbstractDatabaseIT
         connection.setExpectedCloseCalls(0);
 
         // execute operation
-        try
-        {
+        try {
             new RefreshOperation().execute(connection, insertDataset);
             fail("Should not be here!");
-        }
-        catch (NoSuchColumnException e)
-        {
+        } catch (NoSuchColumnException e) {
 
         }
 

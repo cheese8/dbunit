@@ -31,108 +31,93 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Special metadata handler for Netezza.
- * 
+ *
  * @author Ameet (amit3011 AT users.sourceforge.net)
  * @author Last changed by: $Author$
  * @version $Revision$ $Date$
  * @since 2.4.6
  */
-public class NetezzaMetadataHandler implements IMetadataHandler
-{
+public class NetezzaMetadataHandler implements IMetadataHandler {
 
-	/**
-	 * Logger for this class
-	 */
-	private static final Logger logger = LoggerFactory.getLogger(NetezzaMetadataHandler.class);
+    /**
+     * Logger for this class
+     */
+    private static final Logger logger = LoggerFactory.getLogger(NetezzaMetadataHandler.class);
 
-	public NetezzaMetadataHandler()
-	{
-		logger.debug("Created object of metadatahandler");
-	}
+    public NetezzaMetadataHandler() {
+        logger.debug("Created object of metadatahandler");
+    }
 
-	public ResultSet getColumns(DatabaseMetaData databaseMetaData, String schemaName, String tableName) throws SQLException
-	{
-		// Note that Netezza uses the catalogName instead of the schemaName, so
-		// pass in the given schema name as catalog name (first argument).
-		ResultSet resultSet = databaseMetaData.getColumns(schemaName, null, tableName, "%");
-		return resultSet;
-	}
+    public ResultSet getColumns(DatabaseMetaData databaseMetaData, String schemaName, String tableName) throws SQLException {
+        // Note that Netezza uses the catalogName instead of the schemaName, so
+        // pass in the given schema name as catalog name (first argument).
+        ResultSet resultSet = databaseMetaData.getColumns(schemaName, null, tableName, "%");
+        return resultSet;
+    }
 
-	public boolean matches(ResultSet resultSet, String schema, String table, boolean caseSensitive) throws SQLException
-	{
-		return matches(resultSet, null, schema, table, null, caseSensitive);
-	}
+    public boolean matches(ResultSet resultSet, String schema, String table, boolean caseSensitive) throws SQLException {
+        return matches(resultSet, null, schema, table, null, caseSensitive);
+    }
 
-	public boolean matches(ResultSet columnsResultSet, String catalog, String schema, String table, String column, boolean caseSensitive) throws SQLException
-	{
-		String catalogName = columnsResultSet.getString(1);
-		String schemaName = columnsResultSet.getString(2);
-		String tableName = columnsResultSet.getString(3);
-		String columnName = columnsResultSet.getString(4);
+    public boolean matches(ResultSet columnsResultSet, String catalog, String schema, String table, String column, boolean caseSensitive) throws SQLException {
+        String catalogName = columnsResultSet.getString(1);
+        String schemaName = columnsResultSet.getString(2);
+        String tableName = columnsResultSet.getString(3);
+        String columnName = columnsResultSet.getString(4);
 
-		logger.debug("inputCatalog="+catalog+" inputSchema="+schema+" inputTable="+table+" inputColumn="+column);
-		logger.debug("catalogName=" + catalogName + " schemaName=" + schemaName+"tableName=" + tableName+" columnName=" + columnName);
-		
-		// Netezza provides only a catalog but no schema
-		//if (schema != null && schemaName == null && catalog == null && catalogName != null)
-		if(catalog==null && catalogName!=null && schemaName !=null)
-		{
-			logger.debug("Netezza uses catalogs");
-			schema = schemaName;
-			catalog = catalogName;
-		}
+        logger.debug("inputCatalog=" + catalog + " inputSchema=" + schema + " inputTable=" + table + " inputColumn=" + column);
+        logger.debug("catalogName=" + catalogName + " schemaName=" + schemaName + "tableName=" + tableName + " columnName=" + columnName);
 
-		boolean areEqual = areEqualIgnoreNull(catalog, catalogName, caseSensitive) && areEqualIgnoreNull(schema, schemaName, caseSensitive) && areEqualIgnoreNull(table, tableName, caseSensitive) && areEqualIgnoreNull(column, columnName, caseSensitive);
-		return areEqual;
-	}
+        // Netezza provides only a catalog but no schema
+        //if (schema != null && schemaName == null && catalog == null && catalogName != null)
+        if (catalog == null && catalogName != null && schemaName != null) {
+            logger.debug("Netezza uses catalogs");
+            schema = schemaName;
+            catalog = catalogName;
+        }
 
-	private boolean areEqualIgnoreNull(String value1, String value2, boolean caseSensitive)
-	{
-		return SQLHelper.areEqualIgnoreNull(value1, value2, caseSensitive);
-	}
+        boolean areEqual = areEqualIgnoreNull(catalog, catalogName, caseSensitive) && areEqualIgnoreNull(schema, schemaName, caseSensitive) && areEqualIgnoreNull(table, tableName, caseSensitive) && areEqualIgnoreNull(column, columnName, caseSensitive);
+        return areEqual;
+    }
 
-	public String getSchema(ResultSet resultSet) throws SQLException
-	{
-		String catalogName = resultSet.getString(1);
-		String schemaName = resultSet.getString(2);
+    private boolean areEqualIgnoreNull(String value1, String value2, boolean caseSensitive) {
+        return SQLHelper.areEqualIgnoreNull(value1, value2, caseSensitive);
+    }
 
-		// Fix schema/catalog for netezza. Normally the schema is not set but only the catalog is set
-		if (schemaName == null && catalogName != null)
-		{
-			logger.debug("Using catalogName '" + catalogName + "' as schema since the schema is null but the catalog is set (probably in Netezza environment).");
-			schemaName = catalogName;
-		}
-		return schemaName;
-	}
+    public String getSchema(ResultSet resultSet) throws SQLException {
+        String catalogName = resultSet.getString(1);
+        String schemaName = resultSet.getString(2);
 
-	public boolean tableExists(DatabaseMetaData metaData, String schema, String tableName) throws SQLException
-	{
-		ResultSet tableRs = metaData.getTables(schema, null, tableName, null);
-		try
-		{
-			return tableRs.next();
-		}
-		finally
-		{
-			SQLHelper.close(tableRs);
-		}
-	}
+        // Fix schema/catalog for netezza. Normally the schema is not set but only the catalog is set
+        if (schemaName == null && catalogName != null) {
+            logger.debug("Using catalogName '" + catalogName + "' as schema since the schema is null but the catalog is set (probably in Netezza environment).");
+            schemaName = catalogName;
+        }
+        return schemaName;
+    }
 
-	public ResultSet getTables(DatabaseMetaData metaData, String schemaName, String[] tableType) throws SQLException
-	{
-		if (logger.isTraceEnabled())
-			logger.trace("tableExists(metaData={}, schemaName={}, tableType={}) - start", new Object[] { metaData, schemaName, tableType });
+    public boolean tableExists(DatabaseMetaData metaData, String schema, String tableName) throws SQLException {
+        ResultSet tableRs = metaData.getTables(schema, null, tableName, null);
+        try {
+            return tableRs.next();
+        } finally {
+            SQLHelper.close(tableRs);
+        }
+    }
 
-		return metaData.getTables(schemaName, null, "%", tableType);
-	}
+    public ResultSet getTables(DatabaseMetaData metaData, String schemaName, String[] tableType) throws SQLException {
+        if (logger.isTraceEnabled())
+            logger.trace("tableExists(metaData={}, schemaName={}, tableType={}) - start", new Object[]{metaData, schemaName, tableType});
 
-	public ResultSet getPrimaryKeys(DatabaseMetaData metaData, String schemaName, String tableName) throws SQLException
-	{
-		if (logger.isTraceEnabled())
-			logger.trace("getPrimaryKeys(metaData={}, schemaName={}, tableName={}) - start", new Object[] { metaData, schemaName, tableName });
-		ResultSet resultSet = metaData.getPrimaryKeys(schemaName, null, tableName);
-		return resultSet;
-	}
+        return metaData.getTables(schemaName, null, "%", tableType);
+    }
+
+    public ResultSet getPrimaryKeys(DatabaseMetaData metaData, String schemaName, String tableName) throws SQLException {
+        if (logger.isTraceEnabled())
+            logger.trace("getPrimaryKeys(metaData={}, schemaName={}, tableName={}) - start", new Object[]{metaData, schemaName, tableName});
+        ResultSet resultSet = metaData.getPrimaryKeys(schemaName, null, tableName);
+        return resultSet;
+    }
 }
 
  	  	 

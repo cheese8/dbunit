@@ -42,7 +42,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Producer that creates an {@link IDataSet} using SQLLoader style '.ctl' files.
- * 
+ *
  * @author Stephan Strittmatter (stritti AT users.sourceforge.net), gommma (gommma AT users.sourceforge.net)
  * @author Last changed by: $Author$
  * @version $Revision$ $Date$
@@ -58,16 +58,24 @@ public class SqlLoaderControlProducer implements IDataSetProducer {
     private static final String TMP_TABLE_LIST_FILENAME = "table-list.txt";
 
 
-    /** The Constant NULL. */
+    /**
+     * The Constant NULL.
+     */
     public static final String NULL = "null";
 
-    /** The Constant EMPTY_CONSUMER. */
+    /**
+     * The Constant EMPTY_CONSUMER.
+     */
     private static final IDataSetConsumer EMPTY_CONSUMER = new DefaultConsumer();
 
-    /** The consumer. */
+    /**
+     * The consumer.
+     */
     private IDataSetConsumer consumer = EMPTY_CONSUMER;
 
-    /** The control files directory */
+    /**
+     * The control files directory
+     */
     private final File controlFilesDir;
 
     /**
@@ -78,41 +86,38 @@ public class SqlLoaderControlProducer implements IDataSetProducer {
 
     /**
      * The Constructor.
-     * 
+     *
      * @param controlFilesDir the control files directory
-     * @param tableOrderFile the table order file
-     * @throws DataSetException 
+     * @param tableOrderFile  the table order file
+     * @throws DataSetException
      */
-    public SqlLoaderControlProducer(String controlFilesDir, String tableOrderFile) 
-    throws DataSetException 
-    {
+    public SqlLoaderControlProducer(String controlFilesDir, String tableOrderFile)
+            throws DataSetException {
         this(new File(controlFilesDir), new File(tableOrderFile));
     }
 
     /**
      * The Constructor.
-     * 
+     *
      * @param controlFilesDir the control files directory
-     * @param tableOrderFile the table order file
-     * @throws DataSetException 
+     * @param tableOrderFile  the table order file
+     * @throws DataSetException
      */
-    public SqlLoaderControlProducer(File controlFilesDir, File tableOrderFile) 
-    throws DataSetException 
-    {
+    public SqlLoaderControlProducer(File controlFilesDir, File tableOrderFile)
+            throws DataSetException {
         this.controlFilesDir = controlFilesDir;
-        
+
         try {
             this.orderedTableNames = SqlLoaderControlProducer.getTables(controlFilesDir, tableOrderFile);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new DataSetException("error getting list of tables from file '" + tableOrderFile + "'", e);
         }
     }
 
     /**
      * The Constructor.
-     * 
-     * @param controlFilesDir the control files directory
+     *
+     * @param controlFilesDir   the control files directory
      * @param orderedTableNames a list of strings that contains the ordered table names
      */
     public SqlLoaderControlProducer(File controlFilesDir, List orderedTableNames) {
@@ -141,17 +146,15 @@ public class SqlLoaderControlProducer implements IDataSetProducer {
         }
 
         this.consumer.startDataSet();
-        
-        for (Iterator tableIter = this.orderedTableNames.iterator(); tableIter.hasNext();) {
+
+        for (Iterator tableIter = this.orderedTableNames.iterator(); tableIter.hasNext(); ) {
             String table = (String) tableIter.next();
             try {
                 File ctlFile = new File(dir, table + ".ctl");
                 produceFromControlFile(ctlFile);
-            }
-            catch (SqlLoaderControlParserException e) {
+            } catch (SqlLoaderControlParserException e) {
                 throw new DataSetException("error producing dataset for table '" + table + "'", e);
-            }
-            catch (DataSetException e) {
+            } catch (DataSetException e) {
                 throw new DataSetException("error producing dataset for table '" + table + "'", e);
             }
 
@@ -161,15 +164,13 @@ public class SqlLoaderControlProducer implements IDataSetProducer {
 
     /**
      * Produce from control file.
-     * 
+     *
      * @param controlFile the control file
-     * 
-     * @throws DataSetException the data set exception
+     * @throws DataSetException                the data set exception
      * @throws SqlLoaderControlParserException the oracle control parser exception
      */
     private void produceFromControlFile(File controlFile) throws DataSetException,
-    SqlLoaderControlParserException 
-    {
+            SqlLoaderControlParserException {
         logger.debug("produceFromControlFile(controlFile={}) - start", controlFile);
 
         try {
@@ -194,30 +195,24 @@ public class SqlLoaderControlProducer implements IDataSetProducer {
                 this.consumer.row(row);
             }
             this.consumer.endTable();
-        }
-        catch (PipelineException e) {
+        } catch (PipelineException e) {
             throw new DataSetException(e);
-        }
-        catch (IllegalInputCharacterException e) {
+        } catch (IllegalInputCharacterException e) {
             throw new DataSetException(e);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new DataSetException(e);
         }
     }
 
     /**
      * Get a list of tables that this producer will create.
-     * 
+     *
      * @param controlFilesDir the base directory
-     * @param tableList the table list
-     * 
+     * @param tableList       the table list
      * @return a list of Strings, where each item is a CSV file relative to the base URL
-     * 
      * @throws IOException when IO on the base URL has issues.
      */
-    public static List getTables(File controlFilesDir, File tableList) throws IOException 
-    {
+    public static List getTables(File controlFilesDir, File tableList) throws IOException {
         logger.debug("getTables(controlFilesDir={}, tableList={}) - start", controlFilesDir, tableList);
 
         // Copy file into the control directory
@@ -227,8 +222,7 @@ public class SqlLoaderControlProducer implements IDataSetProducer {
         List orderedNames;
         try {
             orderedNames = FileHelper.readLines(tmpTableList);
-        }
-        finally {
+        } finally {
             boolean success = tmpTableList.delete();
             if (!success) {
                 throw new IOException("Deletion of temorary file failed: " + tmpTableList);

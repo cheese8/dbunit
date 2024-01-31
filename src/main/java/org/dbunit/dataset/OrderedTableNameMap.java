@@ -38,9 +38,9 @@ import org.dbunit.database.AmbiguousTableNameException;
  * <p>
  * The map ensures that one table name can only be added once.
  * </p>
- * 
+ * <p>
  * TODO In the future it might be discussed if a ListOrderedMap (apache-commons-collections) can/should be used.
- * 
+ *
  * @author gommma
  * @author Last changed by: $Author$
  * @version $Revision$
@@ -48,61 +48,65 @@ import org.dbunit.database.AmbiguousTableNameException;
  */
 @Slf4j
 public class OrderedTableNameMap {
-	/**
-	 * The map for fast access to the existing table names and for
-	 * associating an arbitrary object with a table name
-	 */
-	private final Map<String, Object> tableMap = new HashMap<>();
-	/**
-	 * Chronologically ordered list of table names - keeps the order
-	 * in which the table names have been added as well as the case in
-	 * which the table has been added
-	 */
-	private final List<String> tableNames = new ArrayList<>();
-	
-	private String lastTableNameOverride;
-	
-	/**
-	 * Whether case-sensitive table names should be used. Defaults to false.
-	 */
-	private final boolean caseSensitiveTableNames;
+    /**
+     * The map for fast access to the existing table names and for
+     * associating an arbitrary object with a table name
+     */
+    private final Map<String, Object> tableMap = new HashMap<>();
+    /**
+     * Chronologically ordered list of table names - keeps the order
+     * in which the table names have been added as well as the case in
+     * which the table has been added
+     */
+    private final List<String> tableNames = new ArrayList<>();
 
-	/**
+    private String lastTableNameOverride;
+
+    /**
+     * Whether case-sensitive table names should be used. Defaults to false.
+     */
+    private final boolean caseSensitiveTableNames;
+
+    /**
      * Creates a new map which does strictly force that one table can only occur once.
+     *
      * @param caseSensitiveTableNames Whether table names should be case-sensitive
      */
     public OrderedTableNameMap(boolean caseSensitiveTableNames) {
         this.caseSensitiveTableNames = caseSensitiveTableNames;
     }
 
-	/**
-	 * Returns the object associated with the given table name
-	 * @param tableName The table name for which the associated object is retrieved
-	 * @return The object that has been associated with the given table name
-	 */
-	public Object get(String tableName) {
-	    String correctedCaseTableName = getTableName(tableName);
-		return tableMap.get(correctedCaseTableName);
-	}
+    /**
+     * Returns the object associated with the given table name
+     *
+     * @param tableName The table name for which the associated object is retrieved
+     * @return The object that has been associated with the given table name
+     */
+    public Object get(String tableName) {
+        String correctedCaseTableName = getTableName(tableName);
+        return tableMap.get(correctedCaseTableName);
+    }
 
-	/**
-	 * Provides the ordered table names having the same order in which the table
-	 * names have been added via {@link #add(String, Object)}.
-	 * @return The list of table names ordered in the sequence as
-	 * they have been added to this map
-	 */
-	public String[] getTableNames() {
-		return tableNames.toArray(new String[0]);
-	}
+    /**
+     * Provides the ordered table names having the same order in which the table
+     * names have been added via {@link #add(String, Object)}.
+     *
+     * @return The list of table names ordered in the sequence as
+     * they have been added to this map
+     */
+    public String[] getTableNames() {
+        return tableNames.toArray(new String[0]);
+    }
 
-	/**
-	 * Checks if this map contains the given table name
-	 * @return Returns <code>true</code> if the map of tables contains the given table name
-	 */
-	public boolean containsTable(String tableName) {
-	    String correctedCaseTableName = getTableName(tableName);
-		return tableMap.containsKey(correctedCaseTableName);
-	}
+    /**
+     * Checks if this map contains the given table name
+     *
+     * @return Returns <code>true</code> if the map of tables contains the given table name
+     */
+    public boolean containsTable(String tableName) {
+        String correctedCaseTableName = getTableName(tableName);
+        return tableMap.containsKey(correctedCaseTableName);
+    }
 
     /**
      * @param tableName The table name to check
@@ -110,7 +114,7 @@ public class OrderedTableNameMap {
      */
     public boolean isLastTable(String tableName) {
         log.debug("isLastTable(tableName={}) - start", tableName);
-        if(CollectionUtils.isEmpty(tableNames)) {
+        if (CollectionUtils.isEmpty(tableNames)) {
             return false;
         }
         String lastTable = getLastTableName();
@@ -120,39 +124,40 @@ public class OrderedTableNameMap {
     }
 
     /**
-     * @return The name of the last table that has been added to this map. Returns <code>null</code> if no 
+     * @return The name of the last table that has been added to this map. Returns <code>null</code> if no
      * table has been added yet.
      */
     public String getLastTableName() {
         log.debug("getLastTableName() - start");
-        if(lastTableNameOverride != null) {
+        if (lastTableNameOverride != null) {
             return lastTableNameOverride;
         }
-        if(!CollectionUtils.isEmpty(tableNames)) {
-            return tableNames.get(tableNames.size()-1);
+        if (!CollectionUtils.isEmpty(tableNames)) {
+            return tableNames.get(tableNames.size() - 1);
         }
         return null;
     }
-    
+
 
     public void setLastTable(String tableName) throws NoSuchTableException {
         log.debug("setLastTable(name{}) - start", tableName);
-        if(!containsTable(tableName)) {
+        if (!containsTable(tableName)) {
             throw new NoSuchTableException(tableName);
         }
         lastTableNameOverride = tableName;
     }
 
-	/**
-	 * Adds the given table name to the map of table names, associating 
-	 * it with the given object.
-	 * @param tableName The table name to be added
-	 * @param object Object to be associated with the given table name. Can be null
-	 * @throws AmbiguousTableNameException If the given table name already exists
-	 */
-	public void add(String tableName, Object object) throws AmbiguousTableNameException {
+    /**
+     * Adds the given table name to the map of table names, associating
+     * it with the given object.
+     *
+     * @param tableName The table name to be added
+     * @param object    Object to be associated with the given table name. Can be null
+     * @throws AmbiguousTableNameException If the given table name already exists
+     */
+    public void add(String tableName, Object object) throws AmbiguousTableNameException {
         log.debug("add(tableName={}, object={}) - start", tableName, object);
-	    // Get the table name in the correct case
+        // Get the table name in the correct case
         String tableNameCorrectedCase = getTableName(tableName);
         // prevent table name conflict
         if (containsTable(tableNameCorrectedCase)) {
@@ -162,8 +167,8 @@ public class OrderedTableNameMap {
         tableNames.add(tableName);
         // Reset the override of the lastTableName
         lastTableNameOverride = null;
-	}
-	
+    }
+
     /**
      * @return The values of this map ordered in the sequence they have been added
      */
@@ -176,32 +181,34 @@ public class OrderedTableNameMap {
         }
         return orderedValues;
     }
-    
-	/**
-	 * Updates the value associated with the given table name. Must be invoked if
-	 * the table name has already been added before.
-	 * @param tableName The table name for which the association should be updated
-	 * @param object The new object to be associated with the given table name
-	 */
-	public void update(String tableName, Object object) {
+
+    /**
+     * Updates the value associated with the given table name. Must be invoked if
+     * the table name has already been added before.
+     *
+     * @param tableName The table name for which the association should be updated
+     * @param object    The new object to be associated with the given table name
+     */
+    public void update(String tableName, Object object) {
         log.debug("update(tableName={}, object={}) - start", tableName, object);
         // prevent table name conflict
         if (!containsTable(tableName)) {
-        	throw new IllegalArgumentException("The table name '" + tableName + "' does not exist in the map");
+            throw new IllegalArgumentException("The table name '" + tableName + "' does not exist in the map");
         }
         tableName = getTableName(tableName);
         tableMap.put(tableName, object);
-	}
+    }
 
     /**
      * Returns the table name in the correct case (for example as upper case string)
+     *
      * @param tableName The input table name to be resolved
      * @return The table name for the given string in the correct case.
      */
     public String getTableName(String tableName) {
         log.debug("getTableName(tableName={}) - start", tableName);
         String result = tableName;
-        if(!caseSensitiveTableNames) {
+        if (!caseSensitiveTableNames) {
             // "Locale.ENGLISH" Fixes bug #1537894 when clients have a special locale like turkish. (for release 2.4.3)
             result = tableName.toUpperCase(Locale.ENGLISH);
         }
@@ -209,7 +216,7 @@ public class OrderedTableNameMap {
         return result;
     }
 
-	public String toString() {
+    public String toString() {
         return getClass().getName() + "[" + "tableNames=" + tableNames + ", tableMap=" + tableMap + ", caseSensitiveTableNames=" + caseSensitiveTableNames + "]";
-	}
+    }
 }

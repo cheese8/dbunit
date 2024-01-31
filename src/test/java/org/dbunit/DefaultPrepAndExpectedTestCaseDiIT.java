@@ -15,8 +15,7 @@ import junit.framework.TestCase;
  * @version $Revision$ $Date$
  * @since 2.4.8
  */
-public class DefaultPrepAndExpectedTestCaseDiIT extends TestCase
-{
+public class DefaultPrepAndExpectedTestCaseDiIT extends TestCase {
     private static final String PREP_DATA_FILE_NAME =
             "/xml/flatXmlDataSetTest.xml";
     private static final String EXP_DATA_FILE_NAME =
@@ -38,13 +37,11 @@ public class DefaultPrepAndExpectedTestCaseDiIT extends TestCase
     private final DataFileLoader dataFileLoader = new FlatXmlDataFileLoader();
 
     private static VerifyTableDefinition makeVerifyTableDefinition(
-            final String tableName)
-    {
-        return new VerifyTableDefinition(tableName, new String[] {});
+            final String tableName) {
+        return new VerifyTableDefinition(tableName, new String[]{});
     }
 
-    public void testSuccessRun() throws Exception
-    {
+    public void testSuccessRun() throws Exception {
         // use same files to have no data comparison fails
         final String[] prepDataFiles = {PREP_DATA_FILE_NAME};
         final String[] expectedDataFiles = {PREP_DATA_FILE_NAME};
@@ -76,8 +73,7 @@ public class DefaultPrepAndExpectedTestCaseDiIT extends TestCase
         tc.postTest();
     }
 
-    public void testFailRun() throws Exception
-    {
+    public void testFailRun() throws Exception {
         final String[] prepDataFiles = {PREP_DATA_FILE_NAME};
         final String[] expectedDataFiles = {EXP_DATA_FILE_NAME};
         final VerifyTableDefinition[] tables = {TEST_TABLE, SECOND_TABLE,
@@ -104,19 +100,16 @@ public class DefaultPrepAndExpectedTestCaseDiIT extends TestCase
         final IDatabaseTester databaseTesterNew2 = makeDatabaseTester();
         tc.setDatabaseTester(databaseTesterNew2);
 
-        try
-        {
+        try {
             tc.postTest();
             fail("Did not catch expected exception:"
                     + " junit.framework.ComparisonFailure");
-        } catch (final ComparisonFailure e)
-        {
+        } catch (final ComparisonFailure e) {
             // test passes
         }
     }
 
-    protected IDatabaseTester makeDatabaseTester() throws Exception
-    {
+    protected IDatabaseTester makeDatabaseTester() throws Exception {
         final DatabaseEnvironment dbEnv = DatabaseEnvironment.getInstance();
         final IDatabaseConnection connection = dbEnv.getConnection();
         return new DefaultDatabaseTester(connection);

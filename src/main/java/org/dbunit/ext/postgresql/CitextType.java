@@ -74,7 +74,8 @@ public class CitextType extends AbstractDataType {
             Method setValueMethod = aPGObjectClass.getMethod("setValue", String.class);
             setValueMethod.invoke(tempCitext, value.toString());
 
-        } catch (ClassNotFoundException | InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
+        } catch (ClassNotFoundException | InstantiationException | InvocationTargetException | NoSuchMethodException |
+                 IllegalAccessException e) {
             throw new TypeCastException(value, this, e);
         }
         return tempCitext;

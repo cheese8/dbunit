@@ -25,13 +25,11 @@ import junit.framework.TestSuite;
 
 /**
  * @author Manuel Laflamme
- * @since Apr 11, 2003
  * @version $Revision$
+ * @since Apr 11, 2003
  */
-public class AllTests extends TestSuite
-{
-    public static Test suite() throws Exception
-    {
+public class AllTests extends TestSuite {
+    public static Test suite() throws Exception {
         TestSuite suite = new TestSuite();
 
         suite.addTest(new TestSuite(InsertIdentityOperationIT.class));

@@ -29,11 +29,10 @@ import java.util.Iterator;
 
 /**
  * @author Manuel Laflamme
- * @since Apr 17, 2004
  * @version $Revision$
+ * @since Apr 17, 2004
  */
-class PatternMatcher
-{
+class PatternMatcher {
 
     /**
      * Logger for this class
@@ -49,48 +48,37 @@ class PatternMatcher
      * '*' matches zero or more characters,
      * '?' matches one character.
      */
-    public void addPattern(String patternName)
-    {
+    public void addPattern(String patternName) {
         logger.debug("addPattern(patternName={}) - start", patternName);
 
-        if (patternName.indexOf("*") != -1 || patternName.indexOf("?") != -1)
-        {
+        if (patternName.indexOf("*") != -1 || patternName.indexOf("?") != -1) {
             _acceptedPatterns.add(patternName);
-        }
-        else
-        {
+        } else {
             _acceptedNames.add(patternName.toUpperCase());
         }
     }
 
-    public boolean isEmpty()
-    {
+    public boolean isEmpty() {
         logger.debug("isEmpty() - start");
 
-        if (_acceptedNames.isEmpty() && _acceptedPatterns.isEmpty())
-        {
+        if (_acceptedNames.isEmpty() && _acceptedPatterns.isEmpty()) {
             return true;
         }
 
         return false;
     }
 
-    public boolean accept(String name)
-    {
+    public boolean accept(String name) {
         logger.debug("accept(name={}) - start", name);
 
-        if (_acceptedNames.contains(name.toUpperCase()))
-        {
+        if (_acceptedNames.contains(name.toUpperCase())) {
             return true;
         }
 
-        if (_acceptedPatterns.size() > 0)
-        {
-            for (Iterator it = _acceptedPatterns.iterator(); it.hasNext();)
-            {
-                String pattern = (String)it.next();
-                if (match(pattern, name, false))
-                {
+        if (_acceptedPatterns.size() > 0) {
+            for (Iterator it = _acceptedPatterns.iterator(); it.hasNext(); ) {
+                String pattern = (String) it.next();
+                if (match(pattern, name, false)) {
                     return true;
                 }
             }
@@ -108,15 +96,13 @@ class PatternMatcher
      * @param pattern the (non-null) pattern to match against
      * @param str     the (non-null) string that must be matched against the
      *                pattern
-     *
      * @return <code>true</code> when the string matches against the pattern,
-     *         <code>false</code> otherwise.
+     * <code>false</code> otherwise.
      */
-    private boolean match(String pattern, String str, boolean isCaseSensitive)
-    {
-    	if(logger.isDebugEnabled())
-    		logger.debug("match(pattern={}, str={}, isCaseSensitive={}) - start", 
-    				new Object[]{pattern, str, String.valueOf(isCaseSensitive)});
+    private boolean match(String pattern, String str, boolean isCaseSensitive) {
+        if (logger.isDebugEnabled())
+            logger.debug("match(pattern={}, str={}, isCaseSensitive={}) - start",
+                    new Object[]{pattern, str, String.valueOf(isCaseSensitive)});
 
         /* Following pattern matching code taken from the Apache Ant project. */
 
@@ -129,34 +115,26 @@ class PatternMatcher
         char ch;
 
         boolean containsStar = false;
-        for (int i = 0; i < patArr.length; i++)
-        {
-            if (patArr[i] == '*')
-            {
+        for (int i = 0; i < patArr.length; i++) {
+            if (patArr[i] == '*') {
                 containsStar = true;
                 break;
             }
         }
 
-        if (!containsStar)
-        {
+        if (!containsStar) {
             // No '*'s, so we make a shortcut
-            if (patIdxEnd != strIdxEnd)
-            {
+            if (patIdxEnd != strIdxEnd) {
                 return false; // Pattern and string do not have the same size
             }
-            for (int i = 0; i <= patIdxEnd; i++)
-            {
+            for (int i = 0; i <= patIdxEnd; i++) {
                 ch = patArr[i];
-                if (ch != '?')
-                {
-                    if (isCaseSensitive && ch != strArr[i])
-                    {
+                if (ch != '?') {
+                    if (isCaseSensitive && ch != strArr[i]) {
                         return false;// Character mismatch
                     }
                     if (!isCaseSensitive && Character.toUpperCase(ch) !=
-                            Character.toUpperCase(strArr[i]))
-                    {
+                            Character.toUpperCase(strArr[i])) {
                         return false; // Character mismatch
                     }
                 }
@@ -164,37 +142,29 @@ class PatternMatcher
             return true; // String matches against pattern
         }
 
-        if (patIdxEnd == 0)
-        {
+        if (patIdxEnd == 0) {
             return true; // Pattern contains only '*', which matches anything
         }
 
         // Process characters before first star
-        while ((ch = patArr[patIdxStart]) != '*' && strIdxStart <= strIdxEnd)
-        {
-            if (ch != '?')
-            {
-                if (isCaseSensitive && ch != strArr[strIdxStart])
-                {
+        while ((ch = patArr[patIdxStart]) != '*' && strIdxStart <= strIdxEnd) {
+            if (ch != '?') {
+                if (isCaseSensitive && ch != strArr[strIdxStart]) {
                     return false;// Character mismatch
                 }
                 if (!isCaseSensitive && Character.toUpperCase(ch) !=
-                        Character.toUpperCase(strArr[strIdxStart]))
-                {
+                        Character.toUpperCase(strArr[strIdxStart])) {
                     return false;// Character mismatch
                 }
             }
             patIdxStart++;
             strIdxStart++;
         }
-        if (strIdxStart > strIdxEnd)
-        {
+        if (strIdxStart > strIdxEnd) {
             // All characters in the string are used. Check if only '*'s are
             // left in the pattern. If so, we succeeded. Otherwise failure.
-            for (int i = patIdxStart; i <= patIdxEnd; i++)
-            {
-                if (patArr[i] != '*')
-                {
+            for (int i = patIdxStart; i <= patIdxEnd; i++) {
+                if (patArr[i] != '*') {
                     return false;
                 }
             }
@@ -202,31 +172,24 @@ class PatternMatcher
         }
 
         // Process characters after last star
-        while ((ch = patArr[patIdxEnd]) != '*' && strIdxStart <= strIdxEnd)
-        {
-            if (ch != '?')
-            {
-                if (isCaseSensitive && ch != strArr[strIdxEnd])
-                {
+        while ((ch = patArr[patIdxEnd]) != '*' && strIdxStart <= strIdxEnd) {
+            if (ch != '?') {
+                if (isCaseSensitive && ch != strArr[strIdxEnd]) {
                     return false;// Character mismatch
                 }
                 if (!isCaseSensitive && Character.toUpperCase(ch) !=
-                        Character.toUpperCase(strArr[strIdxEnd]))
-                {
+                        Character.toUpperCase(strArr[strIdxEnd])) {
                     return false;// Character mismatch
                 }
             }
             patIdxEnd--;
             strIdxEnd--;
         }
-        if (strIdxStart > strIdxEnd)
-        {
+        if (strIdxStart > strIdxEnd) {
             // All characters in the string are used. Check if only '*'s are
             // left in the pattern. If so, we succeeded. Otherwise failure.
-            for (int i = patIdxStart; i <= patIdxEnd; i++)
-            {
-                if (patArr[i] != '*')
-                {
+            for (int i = patIdxStart; i <= patIdxEnd; i++) {
+                if (patArr[i] != '*') {
                     return false;
                 }
             }
@@ -235,19 +198,15 @@ class PatternMatcher
 
         // process pattern between stars. padIdxStart and patIdxEnd point
         // always to a '*'.
-        while (patIdxStart != patIdxEnd && strIdxStart <= strIdxEnd)
-        {
+        while (patIdxStart != patIdxEnd && strIdxStart <= strIdxEnd) {
             int patIdxTmp = -1;
-            for (int i = patIdxStart + 1; i <= patIdxEnd; i++)
-            {
-                if (patArr[i] == '*')
-                {
+            for (int i = patIdxStart + 1; i <= patIdxEnd; i++) {
+                if (patArr[i] == '*') {
                     patIdxTmp = i;
                     break;
                 }
             }
-            if (patIdxTmp == patIdxStart + 1)
-            {
+            if (patIdxTmp == patIdxStart + 1) {
                 // Two stars next to each other, skip the first one.
                 patIdxStart++;
                 continue;
@@ -258,20 +217,15 @@ class PatternMatcher
             int strLength = (strIdxEnd - strIdxStart + 1);
             int foundIdx = -1;
             strLoop:
-            for (int i = 0; i <= strLength - patLength; i++)
-            {
-                for (int j = 0; j < patLength; j++)
-                {
+            for (int i = 0; i <= strLength - patLength; i++) {
+                for (int j = 0; j < patLength; j++) {
                     ch = patArr[patIdxStart + j + 1];
-                    if (ch != '?')
-                    {
-                        if (isCaseSensitive && ch != strArr[strIdxStart + i + j])
-                        {
+                    if (ch != '?') {
+                        if (isCaseSensitive && ch != strArr[strIdxStart + i + j]) {
                             continue strLoop;
                         }
                         if (!isCaseSensitive && Character.toUpperCase(ch) !=
-                                Character.toUpperCase(strArr[strIdxStart + i + j]))
-                        {
+                                Character.toUpperCase(strArr[strIdxStart + i + j])) {
                             continue strLoop;
                         }
                     }
@@ -281,8 +235,7 @@ class PatternMatcher
                 break;
             }
 
-            if (foundIdx == -1)
-            {
+            if (foundIdx == -1) {
                 return false;
             }
 
@@ -292,19 +245,16 @@ class PatternMatcher
 
         // All characters in the string are used. Check if only '*'s are left
         // in the pattern. If so, we succeeded. Otherwise failure.
-        for (int i = patIdxStart; i <= patIdxEnd; i++)
-        {
-            if (patArr[i] != '*')
-            {
+        for (int i = patIdxStart; i <= patIdxEnd; i++) {
+            if (patArr[i] != '*') {
                 return false;
             }
         }
         return true;
     }
-    
-    
-    public String toString()
-    {
+
+
+    public String toString() {
         StringBuffer sb = new StringBuffer();
         sb.append(getClass().getName()).append("[");
         sb.append("_acceptedNames=").append(_acceptedNames);

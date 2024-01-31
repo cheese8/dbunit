@@ -41,10 +41,9 @@ import org.dbunit.dataset.xml.XmlDataSet;
 public class FullXmlDataFileLoader extends AbstractDataFileLoader {
     /**
      * Create new instance with replacement objects.
-     * 
-     * @param ro
-     *            The replacement objects for use with
-     *            {@link org.dbunit.dataset.ReplacementDataSet}.
+     *
+     * @param ro The replacement objects for use with
+     *           {@link org.dbunit.dataset.ReplacementDataSet}.
      */
     public FullXmlDataFileLoader(Map ro) {
         super(ro);
@@ -52,13 +51,11 @@ public class FullXmlDataFileLoader extends AbstractDataFileLoader {
 
     /**
      * Create new instance with replacement objects and replacement substrings.
-     * 
-     * @param ro
-     *            The replacement objects for use with
-     *            {@link org.dbunit.dataset.ReplacementDataSet}.
-     * @param rs
-     *            The replacement substrings for use with
-     *            {@link org.dbunit.dataset.ReplacementDataSet}.
+     *
+     * @param ro The replacement objects for use with
+     *           {@link org.dbunit.dataset.ReplacementDataSet}.
+     * @param rs The replacement substrings for use with
+     *           {@link org.dbunit.dataset.ReplacementDataSet}.
      */
     public FullXmlDataFileLoader(Map ro, Map rs, Map rf) {
         super(ro, rs, rf);

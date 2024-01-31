@@ -47,10 +47,14 @@ import org.dbunit.dataset.ITable;
  * @since 1.3 (Mar 22, 2002)
  */
 public class Assertion {
-    /** Assert using equals comparisons. */
+    /**
+     * Assert using equals comparisons.
+     */
     private static final DbUnitAssert EQUALS_INSTANCE = new DbUnitAssert();
 
-    /** Assert using compare comparisons. @since 2.6.0 */
+    /**
+     * Assert using compare comparisons. @since 2.6.0
+     */
     private static final DbUnitValueComparerAssert VALUE_COMPARE_INSTANCE = new DbUnitValueComparerAssert();
 
     private Assertion() {
@@ -59,7 +63,7 @@ public class Assertion {
 
     /**
      * @see DbUnitAssert#assertEqualsIgnoreCols(IDataSet, IDataSet, String,
-     *      String[], FailureHandler)
+     * String[], FailureHandler)
      */
     public static void assertEqualsIgnoreCols(final IDataSet expectedDataset, final IDataSet actualDataset, final String tableName,
                                               final String[] ignoreCols, FailureHandler failureHandler) throws DatabaseUnitException {
@@ -76,19 +80,19 @@ public class Assertion {
 
     /**
      * @see DbUnitAssert#assertEqualsByQuery(IDataSet, IDatabaseConnection,
-     *      String, String, String[])
+     * String, String, String[])
      */
     public static void assertEqualsByQuery(final IDataSet expectedDataset, final IDatabaseConnection connection, final String sqlQuery,
-            final String tableName, final String[] ignoreCols) throws DatabaseUnitException, SQLException {
+                                           final String tableName, final String[] ignoreCols) throws DatabaseUnitException, SQLException {
         EQUALS_INSTANCE.assertEqualsByQuery(expectedDataset, connection, sqlQuery, tableName, ignoreCols);
     }
 
     /**
      * @see DbUnitAssert#assertEqualsByQuery(ITable, IDatabaseConnection,
-     *      String, String, String[])
+     * String, String, String[])
      */
     public static void assertEqualsByQuery(final ITable expectedTable, final IDatabaseConnection connection, final String tableName,
-            final String sqlQuery, final String[] ignoreCols) throws DatabaseUnitException, SQLException {
+                                           final String sqlQuery, final String[] ignoreCols) throws DatabaseUnitException, SQLException {
         EQUALS_INSTANCE.assertEqualsByQuery(expectedTable, connection, tableName, sqlQuery, ignoreCols);
     }
 
@@ -132,7 +136,7 @@ public class Assertion {
 
     /**
      * @see DbUnitValueComparerAssert#assertWithValueComparer(IDataSet,
-     *      IDataSet, ValueComparator, Map)
+     * IDataSet, ValueComparator, Map)
      * @since 2.6.0
      */
     public static void assertWithValueComparer(final IDataSet expectedDataSet, final IDataSet actualDataSet, final ValueComparator defaultValueComparator,
@@ -142,7 +146,7 @@ public class Assertion {
 
     /**
      * @see DbUnitValueComparerAssert#assertWithValueComparer(ITable, ITable,
-     *      ValueComparator, Map)
+     * ValueComparator, Map)
      * @since 2.6.0
      */
     public static void assertWithValueComparer(final ITable expectedTable, final ITable actualTable, final ValueComparator defaultValueComparator,
@@ -152,7 +156,7 @@ public class Assertion {
 
     /**
      * @see DbUnitValueComparerAssert#assertWithValueComparer(IDataSet,
-     *      IDataSet, FailureHandler, ValueComparator, Map)
+     * IDataSet, FailureHandler, ValueComparator, Map)
      * @since 2.6.0
      */
     public static void assertWithValueComparer(final IDataSet expectedDataSet, final IDataSet actualDataSet, final FailureHandler failureHandler,
@@ -162,7 +166,7 @@ public class Assertion {
 
     /**
      * @see DbUnitValueComparerAssert#assertWithValueComparer(ITable, ITable,
-     *      Column[], ValueComparator, Map)
+     * Column[], ValueComparator, Map)
      * @since 2.6.0
      */
     public static void assertWithValueComparer(final ITable expectedTable, final ITable actualTable, final Column[] additionalColumnInfo,
@@ -172,7 +176,7 @@ public class Assertion {
 
     /**
      * @see DbUnitValueComparerAssert#assertWithValueComparer(ITable, ITable,
-     *      FailureHandler, ValueComparator, Map)
+     * FailureHandler, ValueComparator, Map)
      * @since 2.6.0
      */
     public static void assertWithValueComparer(final ITable expectedTable, final ITable actualTable, final FailureHandler failureHandler,

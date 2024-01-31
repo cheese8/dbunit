@@ -39,16 +39,14 @@ import org.slf4j.LoggerFactory;
  * @version $Revision$
  * @since Feb 19, 2002
  */
-public class DataSetUtils
-{
+public class DataSetUtils {
 
     /**
      * Logger for this class
      */
     private static final Logger logger = LoggerFactory.getLogger(DataSetUtils.class);
 
-    private DataSetUtils()
-    {
+    private DataSetUtils() {
     }
 
     /**
@@ -58,8 +56,7 @@ public class DataSetUtils
      * @deprecated Use Assertion.assertEquals
      */
     public static void assertEquals(IDataSet expectedDataSet,
-            IDataSet actualDataSet) throws Exception
-    {
+                                    IDataSet actualDataSet) throws Exception {
         logger.debug("assertEquals(expectedDataSet={}, actualDataSet={}) - start", expectedDataSet, actualDataSet);
 
         Assertion.assertEquals(expectedDataSet, actualDataSet);
@@ -74,8 +71,7 @@ public class DataSetUtils
      * @deprecated Use Assertion.assertEquals
      */
     public static void assertEquals(ITable expectedTable, ITable actualTable)
-            throws Exception
-    {
+            throws Exception {
         logger.debug("assertEquals(expectedTable={}, actualTable={}) - start", expectedTable, actualTable);
 
         Assertion.assertEquals(expectedTable, actualTable);
@@ -94,31 +90,29 @@ public class DataSetUtils
      * returns <code>"PREFIX1.NAME"</code>.
      *
      * @param prefix the prefix that qualifies the name and is prepended if the name is not qualified yet
-     * @param name the name The name to be qualified if it is not qualified already
+     * @param name   the name The name to be qualified if it is not qualified already
      * @return the qualified name
      * @deprecated since 2.3.0. Prefer usage of {@link QualifiedTableName#getQualifiedName()} creating a new {@link QualifiedTableName} object
      */
-    public static String getQualifiedName(String prefix, String name)
-    {
+    public static String getQualifiedName(String prefix, String name) {
         logger.debug("getQualifiedName(prefix={}, name={}) - start", prefix, name);
 
-        return new QualifiedTableName(name, prefix, (String)null).getQualifiedName();
+        return new QualifiedTableName(name, prefix, (String) null).getQualifiedName();
     }
 
     /**
-     * @param prefix the prefix that qualifies the name and is prepended if the name is not qualified yet
-     * @param name the name The name to be qualified if it is not qualified already
+     * @param prefix        the prefix that qualifies the name and is prepended if the name is not qualified yet
+     * @param name          the name The name to be qualified if it is not qualified already
      * @param escapePattern The escape pattern to be applied on the prefix and the name. Can be null.
      * @return The qualified name
      * @deprecated since 2.3.0. Prefer usage of {@link QualifiedTableName#getQualifiedName()} creating a new {@link QualifiedTableName} object
      */
     public static String getQualifiedName(String prefix, String name,
-            String escapePattern)
-    {
-        if(logger.isDebugEnabled())
-            logger.debug("getQualifiedName(prefix={}, name={}, escapePattern={}) - start", 
-                    new String[] {prefix, name, escapePattern});
-        
+                                          String escapePattern) {
+        if (logger.isDebugEnabled())
+            logger.debug("getQualifiedName(prefix={}, name={}, escapePattern={}) - start",
+                    new String[]{prefix, name, escapePattern});
+
         return new QualifiedTableName(name, prefix, escapePattern).getQualifiedName();
     }
 
@@ -128,8 +122,7 @@ public class DataSetUtils
      * @return The escaped name if the escape pattern is not null
      * @deprecated since 2.3.0. Prefer usage of {@link QualifiedTableName#getQualifiedName()} creating a new {@link QualifiedTableName} object
      */
-    public static String getEscapedName(String name, String escapePattern)
-    {
+    public static String getEscapedName(String name, String escapePattern) {
         logger.debug("getEscapedName(name={}, escapePattern={}) - start", name, escapePattern);
         return new QualifiedTableName(name, null, escapePattern).getQualifiedName();
     }
@@ -139,41 +132,34 @@ public class DataSetUtils
      * For example the string <code>myValue</code> is returned as
      * <code>'myValue'</code>.
      *
-     * @param value the value
+     * @param value    the value
      * @param dataType the value data type
      * @return the SQL string value
      */
     public static String getSqlValueString(Object value, DataType dataType)
-            throws TypeCastException
-    {
+            throws TypeCastException {
         logger.debug("getSqlValueString(value={}, dataType={}) - start", value, dataType);
 
-        if (value == null || value == ITable.NO_VALUE)
-        {
+        if (value == null || value == ITable.NO_VALUE) {
             return "NULL";
         }
 
         String stringValue = DataType.asString(value);
-        if (dataType == DataType.DATE)
-        {
+        if (dataType == DataType.DATE) {
             return "{d '" + stringValue + "'}";
         }
 
-        if (dataType == DataType.TIME)
-        {
+        if (dataType == DataType.TIME) {
             return "{t '" + stringValue + "'}";
         }
 
-        if (dataType == DataType.TIMESTAMP)
-        {
+        if (dataType == DataType.TIMESTAMP) {
             return "{ts '" + stringValue + "'}";
         }
 
-        if (!dataType.isNumber())
-        {
+        if (!dataType.isNumber()) {
             // no single quotes
-            if (stringValue.indexOf("'") < 0)
-            {
+            if (stringValue.indexOf("'") < 0) {
                 return stringValue = "'" + stringValue + "'";
             }
 
@@ -182,12 +168,10 @@ public class DataSetUtils
             StringTokenizer tokenizer = new StringTokenizer(stringValue, "'", true);
 
             buffer.append("'");
-            while (tokenizer.hasMoreTokens())
-            {
+            while (tokenizer.hasMoreTokens()) {
                 String token = tokenizer.nextToken();
                 buffer.append(token);
-                if (token.equals("'"))
-                {
+                if (token.equals("'")) {
                     buffer.append("'");
                 }
             }
@@ -203,12 +187,11 @@ public class DataSetUtils
      * Search and returns the specified column from the specified column array.
      *
      * @param columnName the name of the column to search.
-     * @param columns the array of columns from which the column must be searched.
+     * @param columns    the array of columns from which the column must be searched.
      * @return the column or <code>null</code> if the column is not found
      * @deprecated since 2.3.0 - prefer usage of {@link Columns#getColumn(String, Column[])}
      */
-    public static Column getColumn(String columnName, Column[] columns)
-    {
+    public static Column getColumn(String columnName, Column[] columns) {
         logger.debug("getColumn(columnName={}, columns={}) - start", columnName, columns);
         return Columns.getColumn(columnName, columns);
     }
@@ -216,18 +199,16 @@ public class DataSetUtils
     /**
      * Search and returns the specified tables from the specified dataSet.
      *
-     * @param names the names of the tables to search.
+     * @param names   the names of the tables to search.
      * @param dataSet the dataset from which the tables must be searched.
      * @return the tables or an empty array if no tables are found.
      */
     public static ITable[] getTables(String[] names, IDataSet dataSet)
-            throws DataSetException
-    {
+            throws DataSetException {
         logger.debug("getTables(names={}, dataSet={}) - start", names, dataSet);
 
         ITable[] tables = new ITable[names.length];
-        for (int i = 0; i < names.length; i++)
-        {
+        for (int i = 0; i < names.length; i++) {
             String name = names[i];
             tables[i] = dataSet.getTable(name);
         }
@@ -238,8 +219,7 @@ public class DataSetUtils
     /**
      * Returns the tables from the specified dataset.
      */
-    public static ITable[] getTables(IDataSet dataSet) throws DataSetException
-    {
+    public static ITable[] getTables(IDataSet dataSet) throws DataSetException {
         logger.debug("getTables(dataSet={}) - start", dataSet);
 
         return getTables(dataSet.iterator());
@@ -248,42 +228,38 @@ public class DataSetUtils
     /**
      * Returns the tables from the specified iterator.
      */
-    public static ITable[] getTables(ITableIterator iterator) throws DataSetException
-    {
+    public static ITable[] getTables(ITableIterator iterator) throws DataSetException {
         logger.debug("getTables(iterator={}) - start", iterator);
 
         List tableList = new ArrayList();
-        while(iterator.next())
-        {
+        while (iterator.next()) {
             tableList.add(iterator.getTable());
         }
-        return (ITable[])tableList.toArray(new ITable[0]);
+        return (ITable[]) tableList.toArray(new ITable[0]);
     }
 
     /**
      * Returns the table names from the specified dataset in reverse order.
      */
     public static String[] getReverseTableNames(IDataSet dataSet)
-            throws DataSetException
-    {
+            throws DataSetException {
         logger.debug("getReverseTableNames(dataSet={}) - start", dataSet);
         return reverseStringArray(dataSet.getTableNames());
     }
 
     /**
      * reverses a String array.
+     *
      * @param array
      * @return String[] - reversed array.
      */
-    public static String[] reverseStringArray(String[] array)
-	{
-		logger.debug("reverseStringArray(array={}) - start", array);
+    public static String[] reverseStringArray(String[] array) {
+        logger.debug("reverseStringArray(array={}) - start", array);
         String[] newArray = new String[array.length];
-        for (int i = 0; i < array.length; i++)
-        {
+        for (int i = 0; i < array.length; i++) {
             newArray[array.length - 1 - i] = array[i];
         }
         return newArray;
-	}
+    }
 
 }

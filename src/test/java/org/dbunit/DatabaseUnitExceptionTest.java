@@ -27,18 +27,15 @@ import junit.framework.TestCase;
  * @version $Revision$
  * @since 2.3.0
  */
-public class DatabaseUnitExceptionTest extends TestCase 
-{
+public class DatabaseUnitExceptionTest extends TestCase {
 
-    public void testNestedException()
-    {
+    public void testNestedException() {
         IllegalStateException nested = new IllegalStateException("bla bla");
         DatabaseUnitException ex = new DatabaseUnitException(nested);
         assertEquals(nested, ex.getCause());
     }
-    
-    public void testNestedExceptionWithMessage()
-    {
+
+    public void testNestedExceptionWithMessage() {
         String msg = "a dbunit exception message";
         IllegalStateException nested = new IllegalStateException("bla bla");
         DatabaseUnitException ex = new DatabaseUnitException(msg, nested);

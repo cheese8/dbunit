@@ -46,8 +46,7 @@ public abstract class AbstractDatabaseConnection implements IDatabaseConnection 
     private IDataSet dataSet = null;
     private final DatabaseConfig databaseConfig;
 
-    public AbstractDatabaseConnection()
-    {
+    public AbstractDatabaseConnection() {
         databaseConfig = new DatabaseConfig();
     }
 

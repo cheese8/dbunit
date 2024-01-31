@@ -32,8 +32,7 @@ import org.slf4j.LoggerFactory;
  * @version $Revision$
  * @since Feb 19, 2002
  */
-public class CompositeDataSet extends AbstractDataSet
-{
+public class CompositeDataSet extends AbstractDataSet {
 
     /**
      * Logger for this class
@@ -46,51 +45,42 @@ public class CompositeDataSet extends AbstractDataSet
      * Creates a composite dataset that combines specified datasets.
      * Tables having the same name are merged into one table.
      */
-    public CompositeDataSet(IDataSet[] dataSets) throws DataSetException
-    {
+    public CompositeDataSet(IDataSet[] dataSets) throws DataSetException {
         this(dataSets, true);
     }
 
     /**
      * Creates a composite dataset that combines specified datasets.
      *
-     * @param dataSets
-     *      list of datasets
-     * @param combine
-     *      if <code>true</code>, tables having the same name are merged into
-     *      one table.
+     * @param dataSets list of datasets
+     * @param combine  if <code>true</code>, tables having the same name are merged into
+     *                 one table.
      */
     public CompositeDataSet(IDataSet[] dataSets, boolean combine)
-            throws DataSetException
-    {
+            throws DataSetException {
         this(dataSets, combine, false);
     }
-    
+
     /**
      * Creates a composite dataset that combines specified datasets.
      *
-     * @param dataSets
-     *      list of datasets
-     * @param combine
-     *      if <code>true</code>, tables having the same name are merged into
-     *      one table.
+     * @param dataSets                list of datasets
+     * @param combine                 if <code>true</code>, tables having the same name are merged into
+     *                                one table.
      * @param caseSensitiveTableNames Whether or not table names are handled in a case sensitive
-     * way over all datasets.
+     *                                way over all datasets.
      * @since 2.4.2
      */
     public CompositeDataSet(IDataSet[] dataSets, boolean combine, boolean caseSensitiveTableNames)
-            throws DataSetException
-    {
+            throws DataSetException {
         super(caseSensitiveTableNames);
-        
+
         // Check for duplicates using the OrderedTableNameMap as helper
         OrderedTableNameMap orderedTableMap = super.createTableNameMap();
-        for (int i = 0; i < dataSets.length; i++)
-        {
+        for (int i = 0; i < dataSets.length; i++) {
             IDataSet dataSet = dataSets[i];
             ITableIterator iterator = dataSet.iterator();
-            while(iterator.next())
-            {
+            while (iterator.next()) {
                 addTable(iterator.getTable(), orderedTableMap, combine);
             }
         }
@@ -103,53 +93,43 @@ public class CompositeDataSet extends AbstractDataSet
      * Tables having the same name are merged into one table.
      */
     public CompositeDataSet(IDataSet dataSet1, IDataSet dataSet2)
-            throws DataSetException
-    {
+            throws DataSetException {
         this(new IDataSet[]{dataSet1, dataSet2});
     }
 
     /**
      * Creates a composite dataset that combines the two specified datasets.
      *
-     * @param dataSet1
-     *      first dataset
-     * @param dataSet2
-     *      second dataset
-     * @param combine
-     *      if <code>true</code>, tables having the same name are merged into
-     *      one table.
+     * @param dataSet1 first dataset
+     * @param dataSet2 second dataset
+     * @param combine  if <code>true</code>, tables having the same name are merged into
+     *                 one table.
      */
     public CompositeDataSet(IDataSet dataSet1, IDataSet dataSet2, boolean combine)
-            throws DataSetException
-    {
+            throws DataSetException {
         this(new IDataSet[]{dataSet1, dataSet2}, combine);
     }
 
     /**
      * Creates a composite dataset that combines duplicate tables of the specified dataset.
      *
-     * @param dataSet
-     *      the dataset
-     * @param combine
-     *      if <code>true</code>, tables having the same name are merged into
-     *      one table.
+     * @param dataSet the dataset
+     * @param combine if <code>true</code>, tables having the same name are merged into
+     *                one table.
      * @deprecated This constructor is useless when the combine parameter is
-     * <code>false</code>. Use overload that doesn't have the combine argument. 
+     * <code>false</code>. Use overload that doesn't have the combine argument.
      */
     public CompositeDataSet(IDataSet dataSet, boolean combine)
-            throws DataSetException
-    {
+            throws DataSetException {
         this(new IDataSet[]{dataSet}, combine);
     }
 
     /**
      * Creates a composite dataset that combines duplicate tables of the specified dataset.
      *
-     * @param dataSet
-     *      the dataset
+     * @param dataSet the dataset
      */
-    public CompositeDataSet(IDataSet dataSet) throws DataSetException
-    {
+    public CompositeDataSet(IDataSet dataSet) throws DataSetException {
         this(new IDataSet[]{dataSet}, true);
     }
 
@@ -157,65 +137,59 @@ public class CompositeDataSet extends AbstractDataSet
      * Creates a composite dataset that combines tables having identical name.
      * Tables having the same name are merged into one table.
      */
-    public CompositeDataSet(ITable[] tables) throws DataSetException
-    {
+    public CompositeDataSet(ITable[] tables) throws DataSetException {
         this(tables, false);
     }
-    
+
     /**
      * Creates a composite dataset that combines tables having identical name.
      * Tables having the same name are merged into one table.
-     * @param tables The tables to merge to one dataset
+     *
+     * @param tables                  The tables to merge to one dataset
      * @param caseSensitiveTableNames Whether or not table names are handled in a case sensitive
-     * way over all datasets.
+     *                                way over all datasets.
      * @since 2.4.2
      */
-    public CompositeDataSet(ITable[] tables, boolean caseSensitiveTableNames) throws DataSetException
-    {
+    public CompositeDataSet(ITable[] tables, boolean caseSensitiveTableNames) throws DataSetException {
         super(caseSensitiveTableNames);
-        
+
         OrderedTableNameMap orderedTableMap = super.createTableNameMap();
-        for (int i = 0; i < tables.length; i++)
-        {
+        for (int i = 0; i < tables.length; i++) {
             addTable(tables[i], orderedTableMap, true);
         }
 
         _tables = (ITable[]) orderedTableMap.orderedValues().toArray(new ITable[0]);
     }
 
-    
+
     /**
      * @param newTable
      * @param tableMap
      * @param combine
      * @throws AmbiguousTableNameException Can only occur when the combine flag is set to <code>false</code>.
      */
-    private void addTable(ITable newTable, OrderedTableNameMap tableMap, boolean combine) 
-    throws AmbiguousTableNameException
-    {
-    	if (logger.isDebugEnabled())
-    	{
-    		logger.debug("addTable(newTable={}, tableList={}, combine={}) - start",
-    				new Object[] { newTable, tableMap, String.valueOf(combine) });
-    	}
+    private void addTable(ITable newTable, OrderedTableNameMap tableMap, boolean combine)
+            throws AmbiguousTableNameException {
+        if (logger.isDebugEnabled()) {
+            logger.debug("addTable(newTable={}, tableList={}, combine={}) - start",
+                    new Object[]{newTable, tableMap, String.valueOf(combine)});
+        }
 
         String tableName = newTable.getTableMetaData().getTableName();
-        
+
         // No merge required, simply add new table at then end of the list
-        if (!combine)
-        {
+        if (!combine) {
             tableMap.add(tableName, newTable);
             return;
         }
 
         // Merge required, search for existing table with the same name
         ITable existingTable = (ITable) tableMap.get(tableName);
-        if(existingTable != null) {
+        if (existingTable != null) {
             // Found existing table, merge existing and new tables together
             tableMap.update(tableName, new CompositeTable(existingTable, newTable));
             return;
-        }
-        else {
+        } else {
             // No existing table found, add new table at the end of the list
             tableMap.add(tableName, newTable);
         }
@@ -225,11 +199,10 @@ public class CompositeDataSet extends AbstractDataSet
     // AbstractDataSet class
 
     protected ITableIterator createIterator(boolean reversed)
-            throws DataSetException
-    {
-        if(logger.isDebugEnabled())
+            throws DataSetException {
+        if (logger.isDebugEnabled())
             logger.debug("createIterator(reversed={}) - start", String.valueOf(reversed));
-        
+
         return new DefaultTableIterator(_tables, reversed);
     }
 }

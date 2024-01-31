@@ -49,25 +49,27 @@ public abstract class AbstractDatabaseTester extends SimpleAssert implements IDa
 
         private final String key;
 
-        private OperationType(String key)
-        {
+        private OperationType(String key) {
             this.key = key;
         }
 
         @Override
-        public String toString()
-        {
+        public String toString() {
             return "OperationType: " + key;
         }
     }
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private IDataSet dataSet;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String schema;
-    @Getter @Setter
+    @Getter
+    @Setter
     private DatabaseOperation setUpOperation = DatabaseOperation.CLEAN_INSERT;
-    @Getter @Setter
+    @Getter
+    @Setter
     private DatabaseOperation tearDownOperation = DatabaseOperation.NONE;
     @Setter
     private IOperationListener operationListener;
@@ -77,8 +79,7 @@ public abstract class AbstractDatabaseTester extends SimpleAssert implements IDa
     }
 
     /**
-     * @param schema
-     *            The schema to be tested. Can be <code>null</code>
+     * @param schema The schema to be tested. Can be <code>null</code>
      * @since 2.4.3
      */
     public AbstractDatabaseTester(String schema) {

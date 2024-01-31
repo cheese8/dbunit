@@ -45,9 +45,11 @@ import org.dbunit.util.Assert;
 public class DbConfig extends ProjectComponent {
     private final Set<Property> properties = new HashSet<>();
     private final Set<Feature> features = new HashSet<>();
+
     public void addProperty(Property property) {
         properties.add(property);
     }
+
     public void addFeature(Feature feature) {
         features.add(feature);
     }

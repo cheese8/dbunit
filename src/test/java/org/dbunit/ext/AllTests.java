@@ -25,13 +25,11 @@ import junit.framework.TestSuite;
 
 /**
  * @author Manuel Laflamme
- * @since Aug 13, 2003
  * @version $Revision$
+ * @since Aug 13, 2003
  */
-public class AllTests extends TestSuite
-{
-    public static Test suite() throws Exception
-    {
+public class AllTests extends TestSuite {
+    public static Test suite() throws Exception {
         TestSuite suite = new TestSuite();
         suite.addTest(org.dbunit.ext.db2.AllTests.suite());
         suite.addTest(org.dbunit.ext.mckoi.AllTests.suite());

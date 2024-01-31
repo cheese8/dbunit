@@ -1,14 +1,14 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 
-<!ELEMENT dataset (table+)>
+        <!ELEMENT dataset (table+)>
 
-<!ELEMENT table (column* , row*)>
+        <!ELEMENT table (column* , row*)>
 
-<!ATTLIST table  name CDATA  #REQUIRED>
-<!ELEMENT column (#PCDATA)>
+        <!ATTLIST table  name CDATA  #REQUIRED>
+        <!ELEMENT column (#PCDATA)>
 
-<!ELEMENT row (value | null)*>
+        <!ELEMENT row (value | null)*>
 
-<!ELEMENT value (#PCDATA)>
+        <!ELEMENT value (#PCDATA)>
 
-<!ELEMENT null EMPTY>
+        <!ELEMENT null EMPTY>

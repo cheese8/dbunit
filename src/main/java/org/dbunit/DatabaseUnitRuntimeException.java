@@ -39,6 +39,7 @@ public class DatabaseUnitRuntimeException extends RuntimeException {
     /**
      * Constructs an <code>DatabaseUnitRuntimeException</code> with the specified
      * detail message and no encapsulated exception.
+     *
      * @param msg Exception message
      */
     public DatabaseUnitRuntimeException(String msg) {
@@ -48,6 +49,7 @@ public class DatabaseUnitRuntimeException extends RuntimeException {
     /**
      * Constructs an <code>DatabaseUnitRuntimeException</code> with the specified
      * detail message and encapsulated exception.
+     *
      * @param msg
      * @param cause The cause of this exception
      */
@@ -58,6 +60,7 @@ public class DatabaseUnitRuntimeException extends RuntimeException {
     /**
      * Constructs an <code>DatabaseUnitRuntimeException</code> with the encapsulated
      * exception and use its message as detail message.
+     *
      * @param cause The cause of this exception
      */
     public DatabaseUnitRuntimeException(Throwable cause) {
@@ -66,6 +69,7 @@ public class DatabaseUnitRuntimeException extends RuntimeException {
 
     /**
      * Returns the encapsulated exception or <code>null</code> if none.
+     *
      * @deprecated Use {@link Exception#getCause()} instead
      */
     public Throwable getException() {

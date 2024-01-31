@@ -26,26 +26,21 @@ import java.sql.Types;
 import org.dbunit.dataset.datatype.ToleratedDeltaMap.ToleratedDelta;
 
 
-
 /**
  * @author Manuel Laflamme
- * @since Aug 13, 2003
  * @version $Revision$
+ * @since Aug 13, 2003
  */
-public class DefaultDataTypeFactoryTest extends AbstractDataTypeFactoryTest
-{
-    public DefaultDataTypeFactoryTest(String s)
-    {
+public class DefaultDataTypeFactoryTest extends AbstractDataTypeFactoryTest {
+    public DefaultDataTypeFactoryTest(String s) {
         super(s);
     }
 
-    public IDataTypeFactory createFactory() throws Exception
-    {
+    public IDataTypeFactory createFactory() throws Exception {
         return new DefaultDataTypeFactory();
     }
-    
-    public void testCreateNumberTolerantDataType_Numeric() throws Exception
-    {
+
+    public void testCreateNumberTolerantDataType_Numeric() throws Exception {
         int sqlType = Types.NUMERIC;
         String sqlTypeName = "NUMBER";
 
@@ -53,12 +48,11 @@ public class DefaultDataTypeFactoryTest extends AbstractDataTypeFactoryTest
         factory.addToleratedDelta(new ToleratedDelta("TEST_TABLE", "COLUMN0", 1E-5));
         DataType actual = factory.createDataType(sqlType, sqlTypeName, "TEST_TABLE", "COLUMN0");
         assertEquals("type", NumberTolerantDataType.class, actual.getClass());
-        assertEquals(new BigDecimal("1.0E-5"), ((NumberTolerantDataType)actual).getToleratedDelta().getDelta());
+        assertEquals(new BigDecimal("1.0E-5"), ((NumberTolerantDataType) actual).getToleratedDelta().getDelta());
     }
 
-    
-    public void testCreateNumberTolerantDataType_Decimal() throws Exception
-    {
+
+    public void testCreateNumberTolerantDataType_Decimal() throws Exception {
         int sqlType = Types.DECIMAL;
         String sqlTypeName = "DECIMAL";
 
@@ -66,12 +60,11 @@ public class DefaultDataTypeFactoryTest extends AbstractDataTypeFactoryTest
         factory.addToleratedDelta(new ToleratedDelta("TEST_TABLE", "COLUMN0", 1E-5));
         DataType actual = factory.createDataType(sqlType, sqlTypeName, "TEST_TABLE", "COLUMN0");
         assertEquals("type", NumberTolerantDataType.class, actual.getClass());
-        assertEquals(new BigDecimal("1.0E-5"), ((NumberTolerantDataType)actual).getToleratedDelta().getDelta());
+        assertEquals(new BigDecimal("1.0E-5"), ((NumberTolerantDataType) actual).getToleratedDelta().getDelta());
     }
 
-    
-    public void testCreateNumberTolerantDataTypeAndNoToleranceSetForColumn_Numeric() throws Exception
-    {
+
+    public void testCreateNumberTolerantDataTypeAndNoToleranceSetForColumn_Numeric() throws Exception {
         int sqlType = Types.NUMERIC;
         String sqlTypeName = "NUMBER";
 
@@ -81,8 +74,7 @@ public class DefaultDataTypeFactoryTest extends AbstractDataTypeFactoryTest
         assertSame("type", DataType.NUMERIC, actual);
     }
 
-    public void testCreateNumberTolerantDataTypeAndNoToleranceSetForColumn_Decimal() throws Exception
-    {
+    public void testCreateNumberTolerantDataTypeAndNoToleranceSetForColumn_Decimal() throws Exception {
         int sqlType = Types.DECIMAL;
         String sqlTypeName = "DECIMAL";
 

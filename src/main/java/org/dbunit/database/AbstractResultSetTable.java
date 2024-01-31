@@ -31,8 +31,8 @@ import org.dbunit.dataset.ITableMetaData;
 
 /**
  * @author Manuel Laflamme
- * @since Apr 10, 2003
  * @version $Revision$
+ * @since Apr 10, 2003
  */
 public abstract class AbstractResultSetTable extends AbstractTable implements IResultSetTable {
     protected ITableMetaData metaData;
@@ -60,9 +60,9 @@ public abstract class AbstractResultSetTable extends AbstractTable implements IR
         }
     }
 
-	public AbstractResultSetTable(ITableMetaData metaData, IDatabaseConnection connection) throws DataSetException, SQLException {
-		statement = createStatement(connection);
-        String escapePattern = (String)connection.getConfig().getProperty(DatabaseConfig.PROPERTY_ESCAPE_PATTERN);
+    public AbstractResultSetTable(ITableMetaData metaData, IDatabaseConnection connection) throws DataSetException, SQLException {
+        statement = createStatement(connection);
+        String escapePattern = (String) connection.getConfig().getProperty(DatabaseConfig.PROPERTY_ESCAPE_PATTERN);
         try {
             String schema = connection.getSchema();
             String selectStatement = getSelectStatement(schema, metaData, escapePattern);
@@ -86,8 +86,7 @@ public abstract class AbstractResultSetTable extends AbstractTable implements IR
         return DatabaseDataSet.getSelectStatement(schema, metaData, escapePattern);
     }
 
-    public ITableMetaData getTableMetaData()
-    {
+    public ITableMetaData getTableMetaData() {
         return metaData;
     }
 

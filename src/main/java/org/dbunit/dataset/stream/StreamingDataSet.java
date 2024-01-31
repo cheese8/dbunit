@@ -36,8 +36,7 @@ import org.slf4j.LoggerFactory;
  * @version $Revision$ $Date$
  * @since Apr 18, 2003
  */
-public class StreamingDataSet extends AbstractDataSet
-{
+public class StreamingDataSet extends AbstractDataSet {
 
     /**
      * Logger for this class
@@ -47,8 +46,7 @@ public class StreamingDataSet extends AbstractDataSet
     private IDataSetProducer _source;
     private int _iteratorCount;
 
-    public StreamingDataSet(IDataSetProducer source)
-    {
+    public StreamingDataSet(IDataSetProducer source) {
         _source = source;
     }
 
@@ -56,18 +54,15 @@ public class StreamingDataSet extends AbstractDataSet
     // AbstractDataSet class
 
     protected ITableIterator createIterator(boolean reversed)
-            throws DataSetException
-    {
+            throws DataSetException {
         logger.debug("createIterator(reversed={}) - start", Boolean.valueOf(reversed));
 
-        if (reversed)
-        {
+        if (reversed) {
             throw new UnsupportedOperationException(
                     "Reverse iterator not supported!");
         }
 
-        if (_iteratorCount > 0)
-        {
+        if (_iteratorCount > 0) {
             throw new UnsupportedOperationException(
                     "Only one iterator allowed!");
         }
@@ -81,19 +76,19 @@ public class StreamingDataSet extends AbstractDataSet
 
     /**
      * Not supported.
+     *
      * @throws UnsupportedOperationException
      */
-    public String[] getTableNames() throws DataSetException
-    {
+    public String[] getTableNames() throws DataSetException {
         throw new UnsupportedOperationException();
     }
 
     /**
      * Not supported.
+     *
      * @throws UnsupportedOperationException
      */
-    public ITableMetaData getTableMetaData(String tableName) throws DataSetException
-    {
+    public ITableMetaData getTableMetaData(String tableName) throws DataSetException {
         logger.debug("getTableMetaData(tableName={}) - start", tableName);
 
         throw new UnsupportedOperationException();
@@ -101,10 +96,10 @@ public class StreamingDataSet extends AbstractDataSet
 
     /**
      * Not supported.
+     *
      * @throws UnsupportedOperationException
      */
-    public ITable getTable(String tableName) throws DataSetException
-    {
+    public ITable getTable(String tableName) throws DataSetException {
         logger.debug("getTable(tableName={}) - start", tableName);
 
         throw new UnsupportedOperationException();

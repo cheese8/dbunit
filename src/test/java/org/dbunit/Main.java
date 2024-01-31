@@ -44,10 +44,8 @@ import java.sql.Connection;
  * @version $Revision$
  * @since Mar 14, 2002
  */
-public class Main
-{
-    public static void main(String[] args) throws Exception
-    {
+public class Main {
+    public static void main(String[] args) throws Exception {
 //        System.setProperty("dbunit.qualified.table.names", "true");
 
 //        testFlatXmlWriter();
@@ -100,8 +98,7 @@ public class Main
 //        cellTypes();
     }
 
-    private static void testFlatXmlWriter() throws Exception
-    {
+    private static void testFlatXmlWriter() throws Exception {
         MockDataSetProducer mockProducer = new MockDataSetProducer();
         mockProducer.setupColumnCount(5);
         mockProducer.setupRowCount(100000);
@@ -113,8 +110,7 @@ public class Main
         writer.write(dataSet);
     }
 
-    private static void testXmlWriter() throws Exception
-    {
+    private static void testXmlWriter() throws Exception {
         MockDataSetProducer mockProducer = new MockDataSetProducer();
         mockProducer.setupColumnCount(5);
         mockProducer.setupRowCount(100000);
@@ -135,25 +131,23 @@ public class Main
 //        out.flush();
 //    }
 
-    public void test() throws Exception
-    {
+    public void test() throws Exception {
         Connection jdbcConnection = null;
-    IDatabaseConnection connection = new DatabaseConnection(jdbcConnection, "");
-    DatabaseConfig config = connection.getConfig();
+        IDatabaseConnection connection = new DatabaseConnection(jdbcConnection, "");
+        DatabaseConfig config = connection.getConfig();
 
-    // Use the ForwardOnlyResultSetTableFactory to export very large dataset.
-    config.setProperty(DatabaseConfig.PROPERTY_RESULTSET_TABLE_FACTORY,
-            new ForwardOnlyResultSetTableFactory());
+        // Use the ForwardOnlyResultSetTableFactory to export very large dataset.
+        config.setProperty(DatabaseConfig.PROPERTY_RESULTSET_TABLE_FACTORY,
+                new ForwardOnlyResultSetTableFactory());
 
         // Use the StreamingDataSet to import very large dataset.
-    IDataSetProducer producer = new FlatXmlProducer(
-            new InputSource("dataset.xml"));
-    IDataSet dataSet = new StreamingDataSet(producer);
+        IDataSetProducer producer = new FlatXmlProducer(
+                new InputSource("dataset.xml"));
+        IDataSet dataSet = new StreamingDataSet(producer);
     }
 
 
-    private static void oldMain() throws Exception
-    {
+    private static void oldMain() throws Exception {
 
 //        System.setProperty("dbunit.name.escapePattern", "\"?\"");
         IDatabaseConnection connection =
@@ -195,8 +189,7 @@ public class Main
 //                new FileOutputStream("src/dtd/flatXmlDataSetTest.dtd"));
     }
 
-    private static void writeXls() throws IOException, DataSetException
-    {
+    private static void writeXls() throws IOException, DataSetException {
         Reader in = new FileReader(
                 "P:/dbunit-cvs/dbunit/src/xml/dataSetTest.xml");
         FileOutputStream out = new FileOutputStream(

@@ -27,7 +27,7 @@ import org.dbunit.dataset.DataSetException;
 
 /**
  * This class constructs an IDataSet given a directory containing CSV
- * files. It handles translations of "null"(the string), into null. 
+ * files. It handles translations of "null"(the string), into null.
  *
  * @author Lenny Marks (lenny@aps.org)
  * @author Last changed by: $Author$
@@ -35,13 +35,13 @@ import org.dbunit.dataset.DataSetException;
  * @since Sep 12, 2004 (pre 2.3)
  */
 public class CsvDataSet extends CachedDataSet {
-	public static final String TABLE_ORDERING_FILE = "table-ordering.txt";
-	
+    public static final String TABLE_ORDERING_FILE = "table-ordering.txt";
+
 //	private File dir;
-	
+
     public CsvDataSet(File dir) throws DataSetException {
         super(new CsvProducer(dir));
 //        this.dir = dir;
     }
-    
+
 }

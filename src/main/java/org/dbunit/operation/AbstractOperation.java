@@ -36,15 +36,15 @@ import org.dbunit.util.QualifiedTableName;
 
 /**
  * @author Manuel Laflamme
- * @since Jan 17, 2004
  * @version $Revision$
+ * @since Jan 17, 2004
  */
 @Slf4j
 public abstract class AbstractOperation extends DatabaseOperation {
 
     protected String getQualifiedName(String prefix, String name, IDatabaseConnection connection) {
         log.debug("getQualifiedName(prefix={}, name={}, connection={}) - start", prefix, name, connection);
-        String escapePattern = (String)connection.getConfig().getProperty(DatabaseConfig.PROPERTY_ESCAPE_PATTERN);
+        String escapePattern = (String) connection.getConfig().getProperty(DatabaseConfig.PROPERTY_ESCAPE_PATTERN);
         QualifiedTableName qualifiedTableName = new QualifiedTableName(name, prefix, escapePattern);
         return qualifiedTableName.getQualifiedName();
     }
@@ -55,7 +55,7 @@ public abstract class AbstractOperation extends DatabaseOperation {
      * database table.
      *
      * @param connection the database connection
-     * @param metaData the XML table metadata
+     * @param metaData   the XML table metadata
      */
     static ITableMetaData getOperationMetaData(IDatabaseConnection connection, ITableMetaData metaData) throws DatabaseUnitException, SQLException {
         log.debug("getOperationMetaData(connection={}, metaData={}) - start", connection, metaData);

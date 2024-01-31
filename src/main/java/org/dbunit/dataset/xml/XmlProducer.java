@@ -50,15 +50,14 @@ import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * Parses an XML and produces a dataset from it.
- * 
+ *
  * @author Manuel Laflamme
  * @author Last changed by: $Author$
  * @version $Revision$ $Date$
  * @since Apr 30, 2003
  */
 public class XmlProducer extends DefaultHandler
-        implements IDataSetProducer, ContentHandler, ErrorHandler
-{
+        implements IDataSetProducer, ContentHandler, ErrorHandler {
 
     /**
      * Logger for this class
@@ -89,45 +88,38 @@ public class XmlProducer extends DefaultHandler
     private StringBuffer _activeCharacters;
     private List _activeRowValues;
 
-    public XmlProducer(InputSource inputSource)
-    {
+    public XmlProducer(InputSource inputSource) {
         _inputSource = inputSource;
     }
 
-    private ITableMetaData createMetaData(String tableName, List columnNames)
-    {
+    private ITableMetaData createMetaData(String tableName, List columnNames) {
         logger.debug("createMetaData(tableName={}, _columnNames={}) - start", tableName, columnNames);
 
         Column[] columns = new Column[columnNames.size()];
-        for (int i = 0; i < columns.length; i++)
-        {
-            String columnName = (String)columnNames.get(i);
+        for (int i = 0; i < columns.length; i++) {
+            String columnName = (String) columnNames.get(i);
             columns[i] = new Column(columnName, DataType.UNKNOWN);
         }
         DefaultTableMetaData metaData = new DefaultTableMetaData(tableName, columns);
         return metaData;
     }
 
-    public void setValidating(boolean validating)
-    {
+    public void setValidating(boolean validating) {
         _validating = validating;
     }
 
     ////////////////////////////////////////////////////////////////////////////
     // IDataSetProducer interface
 
-    public void setConsumer(IDataSetConsumer consumer) throws DataSetException
-    {
+    public void setConsumer(IDataSetConsumer consumer) throws DataSetException {
         logger.debug("setConsumer(consumer={}) - start", consumer);
         _consumer = consumer;
     }
 
-    public void produce() throws DataSetException
-    {
+    public void produce() throws DataSetException {
         logger.debug("produce() - start");
 
-        try
-        {
+        try {
             SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
             saxParserFactory.setValidating(_validating);
             XMLReader xmlReader = saxParserFactory.newSAXParser().getXMLReader();
@@ -136,49 +128,39 @@ public class XmlProducer extends DefaultHandler
             xmlReader.setEntityResolver(this);
             xmlReader.setErrorHandler(this);
             xmlReader.parse(_inputSource);
-        }
-        catch (ParserConfigurationException e)
-        {
+        } catch (ParserConfigurationException e) {
             throw new DataSetException(e);
-        }
-        catch (SAXException e)
-        {
+        } catch (SAXException e) {
             DataSetException exceptionToRethrow = XmlProducer.buildException(e);
             throw exceptionToRethrow;
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             throw new DataSetException(e);
         }
     }
 
     /**
      * Wraps a {@link SAXException} into a {@link DataSetException}
+     *
      * @param cause The cause to be wrapped into a {@link DataSetException}
      * @return A {@link DataSetException} that wraps the given {@link SAXException}
      */
-    protected final static DataSetException buildException(SAXException cause) 
-    {
+    protected final static DataSetException buildException(SAXException cause) {
         int lineNumber = -1;
-        if (cause instanceof SAXParseException)
-        {
-            lineNumber = ((SAXParseException)cause).getLineNumber();
+        if (cause instanceof SAXParseException) {
+            lineNumber = ((SAXParseException) cause).getLineNumber();
         }
         Exception exception = cause.getException() == null ? cause : cause.getException();
         String message;
-        
-        if (lineNumber >= 0)
-        {
+
+        if (lineNumber >= 0) {
             message = "Line " + lineNumber + ": " + exception.getMessage();
-        }
-        else {
+        } else {
             message = exception.getMessage();
         }
 
-        if(exception instanceof DataSetException) {
+        if (exception instanceof DataSetException) {
             return (DataSetException) exception;
-        }
-        else {
+        } else {
             return new DataSetException(message, exception);
         }
     }
@@ -187,8 +169,7 @@ public class XmlProducer extends DefaultHandler
     // EntityResolver interface
 
     public InputSource resolveEntity(String publicId, String systemId)
-            throws SAXException
-    {
+            throws SAXException {
         logger.debug("resolveEntity(publicId={}, systemId={}) - start", publicId, systemId);
 
         InputStream in = getClass().getClassLoader().getResourceAsStream(
@@ -199,45 +180,37 @@ public class XmlProducer extends DefaultHandler
     ////////////////////////////////////////////////////////////////////////
     // ContentHandler interface
 
-    public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException
-    {
-    	if (logger.isDebugEnabled())
-    	{
-    		logger.debug("startElement(uri={}, localName={}, qName={}, attributes={}) - start",
-    				new Object[]{ uri, localName, qName, attributes });
-    	}
+    public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+        if (logger.isDebugEnabled()) {
+            logger.debug("startElement(uri={}, localName={}, qName={}, attributes={}) - start",
+                    new Object[]{uri, localName, qName, attributes});
+        }
 
-        try
-        {
+        try {
             // dataset
-            if (qName.equals(DATASET))
-            {
+            if (qName.equals(DATASET)) {
                 _consumer.startDataSet();
                 return;
             }
 
             // table
-            if (qName.equals(TABLE))
-            {
+            if (qName.equals(TABLE)) {
                 _activeTableName = attributes.getValue(NAME);
                 _activeColumnNames = new LinkedList();
                 return;
             }
 
             // column
-            if (qName.equals(COLUMN))
-            {
+            if (qName.equals(COLUMN)) {
                 _activeCharacters = new StringBuffer();
                 return;
             }
 
             // row
-            if (qName.equals(ROW))
-            {
+            if (qName.equals(ROW)) {
                 // End of metadata at first row
-                if (_activeColumnNames != null)
-                {
-                    _activeMetaData = createMetaData(_activeTableName,_activeColumnNames);
+                if (_activeColumnNames != null) {
+                    _activeMetaData = createMetaData(_activeTableName, _activeColumnNames);
                     _consumer.startTable(_activeMetaData);
                     _activeColumnNames = null;
 
@@ -248,55 +221,44 @@ public class XmlProducer extends DefaultHandler
             }
 
             // value
-            if (qName.equals(VALUE))
-            {
+            if (qName.equals(VALUE)) {
                 _activeCharacters = new StringBuffer();
                 return;
             }
 
             // null
-            if (qName.equals(NULL))
-            {
+            if (qName.equals(NULL)) {
                 _activeRowValues.add(null);
                 return;
             }
 
             // none
-            if (qName.equals(NONE))
-            {
+            if (qName.equals(NONE)) {
                 _activeRowValues.add(ITable.NO_VALUE);
                 return;
             }
-        }
-        catch (DataSetException e)
-        {
+        } catch (DataSetException e) {
             throw new SAXException(e);
         }
     }
 
-    public void endElement(String uri, String localName, String qName) throws SAXException
-    {
-    	if (logger.isDebugEnabled())
-    	{
-    		logger.debug("endElement(uri={}, localName={}, qName={}) - start",
-    				new Object[]{ uri, localName, qName });
-    	}
+    public void endElement(String uri, String localName, String qName) throws SAXException {
+        if (logger.isDebugEnabled()) {
+            logger.debug("endElement(uri={}, localName={}, qName={}) - start",
+                    new Object[]{uri, localName, qName});
+        }
 
-        try
-        {
+        try {
             // dataset
-            if (qName.equals(DATASET))
-            {
+            if (qName.equals(DATASET)) {
                 _consumer.endDataSet();
                 return;
             }
 
             // table
-            if (qName.equals(TABLE))
-            {
+            if (qName.equals(TABLE)) {
                 // End of metadata
-                if (_activeColumnNames != null)
-                {
+                if (_activeColumnNames != null) {
                     _activeMetaData = createMetaData(_activeTableName, _activeColumnNames);
                     _consumer.startTable(_activeMetaData);
                     _activeColumnNames = null;
@@ -309,20 +271,17 @@ public class XmlProducer extends DefaultHandler
             }
 
             // column
-            if (qName.equals(COLUMN))
-            {
+            if (qName.equals(COLUMN)) {
                 _activeColumnNames.add(_activeCharacters.toString());
                 _activeCharacters = null;
                 return;
             }
 
             // row
-            if (qName.equals(ROW))
-            {
+            if (qName.equals(ROW)) {
                 final int length = Math.max(_activeRowValues.size(), _activeMetaData.getColumns().length);
                 Object[] values = new Object[length];
-                for (int i = 0; i < values.length; i++)
-                {
+                for (int i = 0; i < values.length; i++) {
                     values[i] = (i >= _activeRowValues.size()) ? ITable.NO_VALUE : _activeRowValues.get(i);
                 }
                 _consumer.row(values);
@@ -331,38 +290,31 @@ public class XmlProducer extends DefaultHandler
             }
 
             // value
-            if (qName.equals(VALUE))
-            {
+            if (qName.equals(VALUE)) {
                 _activeRowValues.add(_activeCharacters.toString());
                 _activeCharacters = null;
                 return;
             }
 
             // null
-            if (qName.equals(NULL))
-            {
+            if (qName.equals(NULL)) {
                 // Nothing to do, already processed in startElement()
                 return;
             }
 
             // none
-            if (qName.equals(NONE))
-            {
+            if (qName.equals(NONE)) {
                 // Nothing to do, already processed in startElement()
                 return;
             }
-        }
-        catch (DataSetException e)
-        {
+        } catch (DataSetException e) {
             throw new SAXException(e);
         }
     }
 
     public void characters(char ch[], int start, int length)
-            throws SAXException
-    {
-        if (_activeCharacters != null)
-        {
+            throws SAXException {
+        if (_activeCharacters != null) {
             _activeCharacters.append(ch, start, length);
         }
     }
@@ -377,8 +329,7 @@ public class XmlProducer extends DefaultHandler
 //    }
 
     public void error(SAXParseException e)
-            throws SAXException
-    {
+            throws SAXException {
         throw e;
     }
 

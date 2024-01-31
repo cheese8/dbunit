@@ -22,8 +22,8 @@ package org.dbunit.dataset;
 
 /**
  * @author Manuel Laflamme
- * @since Apr 5, 2003
  * @version $Revision$
+ * @since Apr 5, 2003
  */
 public interface ITableIterator {
     /**

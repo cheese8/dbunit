@@ -64,7 +64,7 @@ public class CsvParserTest extends TestCase {
     }
 */
 
-    
+
     public void testCanParseNonQuotedStrings() throws PipelineException, IllegalInputCharacterException {
         String csv = "Hello, world";
         List parsed = parser.parse(csv);
@@ -73,11 +73,11 @@ public class CsvParserTest extends TestCase {
         assertEquals(parsed.get(1), "world");
     }
 
-    public void testAFieldCanContainANewLine () throws PipelineException, IllegalInputCharacterException {
+    public void testAFieldCanContainANewLine() throws PipelineException, IllegalInputCharacterException {
         assertEquals("", 3, parser.parse("Hello, World\nIt's today, the day before tomorrow").size());
     }
 
-    public void testDontAcceptIncompleteFields () throws PipelineException, IllegalInputCharacterException {
+    public void testDontAcceptIncompleteFields() throws PipelineException, IllegalInputCharacterException {
         String incompleteFields = "AAAAA,\"BB";
 
         try {
@@ -88,7 +88,7 @@ public class CsvParserTest extends TestCase {
         }
     }
 
-    public void testAFileCanContainFieldWithNewLine () throws IOException, CsvParserException {
+    public void testAFileCanContainFieldWithNewLine() throws IOException, CsvParserException {
         final String pathname = "csv/with-newlines.csv";
         List list = parser.parse(TestUtils.getFile(pathname));
         assertEquals("wrong number of lines parsed from " + pathname, 2, list.size());
@@ -97,11 +97,11 @@ public class CsvParserTest extends TestCase {
         assertEquals("BB\nBBB", row.get(1));
     }
 
-    public void testRaiseACSVParserExceptonWhenParsingAnEmptyFile () throws IOException {
+    public void testRaiseACSVParserExceptonWhenParsingAnEmptyFile() throws IOException {
         failParsing(TestUtils.getFile("csv/empty-file.csv"));
     }
 
-    public void testRaiseACSVParserExceptonWhenParsingFileWithDifferentNumberOfColumns () throws IllegalInputCharacterException, IOException, PipelineException {
+    public void testRaiseACSVParserExceptonWhenParsingFileWithDifferentNumberOfColumns() throws IllegalInputCharacterException, IOException, PipelineException {
         failParsing(TestUtils.getFile("csv/different-column-numbers-last.csv"));
         failParsing(TestUtils.getFile("csv/different-column-numbers-first.csv"));
     }

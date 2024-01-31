@@ -22,8 +22,8 @@ package org.dbunit;
 
 /**
  * @author Manuel Laflamme
- * @since Apr 11, 2003
  * @version $Revision$
+ * @since Apr 11, 2003
  */
 public class TestFeature {
     public static final TestFeature BLOB = new TestFeature("BLOB");
@@ -38,13 +38,11 @@ public class TestFeature {
 
     private final String name;
 
-    private TestFeature(String name)
-    {
+    private TestFeature(String name) {
         this.name = name;
     }
 
-    public String toString()
-    {
+    public String toString() {
         return name;
     }
 }

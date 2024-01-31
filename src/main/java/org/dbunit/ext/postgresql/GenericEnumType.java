@@ -50,17 +50,16 @@ public class GenericEnumType extends AbstractDataType {
      * Logger for this class
      */
     private static final Logger logger = LoggerFactory.getLogger(GenericEnumType.class);
-    
+
     private final String sqlTypeName;
 
     /**
      * @param sqlTypeName The name of the enum type needed to invoke the "setType()" method on
-     * the PGObject class.
+     *                    the PGObject class.
      */
-    public GenericEnumType(String sqlTypeName) 
-    {
+    public GenericEnumType(String sqlTypeName) {
         super(sqlTypeName, Types.OTHER, String.class, false);
-        
+
         if (sqlTypeName == null) {
             throw new NullPointerException(
                     "The parameter 'sqlTypeName' must not be null");
@@ -68,19 +67,16 @@ public class GenericEnumType extends AbstractDataType {
         this.sqlTypeName = sqlTypeName;
     }
 
-    public Object getSqlValue(int column, ResultSet resultSet) throws SQLException, TypeCastException 
-    {
+    public Object getSqlValue(int column, ResultSet resultSet) throws SQLException, TypeCastException {
         return resultSet.getString(column);
     }
 
     public void setSqlValue(Object enumObject, int column,
-                            PreparedStatement statement) throws SQLException, TypeCastException 
-    {
+                            PreparedStatement statement) throws SQLException, TypeCastException {
         statement.setObject(column, getEnum(enumObject, statement.getConnection()));
     }
 
-    public Object typeCast(Object arg0) throws TypeCastException 
-    {
+    public Object typeCast(Object arg0) throws TypeCastException {
         return arg0.toString();
     }
 
@@ -119,6 +115,6 @@ public class GenericEnumType extends AbstractDataType {
     public String getSqlTypeName() {
         return sqlTypeName;
     }
-    
-    
+
+
 }

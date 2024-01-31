@@ -34,19 +34,16 @@ import java.sql.SQLException;
  * @version $Revision$
  * @since Mar 16, 2002
  */
-public class MockDatabaseOperation extends DatabaseOperation implements Verifiable
-{
+public class MockDatabaseOperation extends DatabaseOperation implements Verifiable {
     private ExpectationCounter _executeCalls =
             new ExpectationCounter("MockDatabaseOperation.execute");
     private Exception _executeException = null;
 
-    public void setExpectedExecuteCalls(int callsCount)
-    {
+    public void setExpectedExecuteCalls(int callsCount) {
         _executeCalls.setExpected(callsCount);
     }
 
-    public void setupThrowExceptionOnExecute(Exception exception)
-    {
+    public void setupThrowExceptionOnExecute(Exception exception) {
         _executeException = exception;
     }
 
@@ -54,8 +51,7 @@ public class MockDatabaseOperation extends DatabaseOperation implements Verifiab
     ///////////////////////////////////////////////////////////////////////////
     // Verifiable interface
 
-    public void verify()
-    {
+    public void verify() {
         _executeCalls.verify();
     }
 
@@ -63,21 +59,15 @@ public class MockDatabaseOperation extends DatabaseOperation implements Verifiab
     // DatabaseOperation class
 
     public void execute(IDatabaseConnection connection, IDataSet dataSet)
-            throws DatabaseUnitException, SQLException
-    {
+            throws DatabaseUnitException, SQLException {
         _executeCalls.inc();
 
-        if (_executeException instanceof SQLException)
-        {
-            throw (SQLException)_executeException;
-        }
-        else if (_executeException instanceof DatabaseUnitException)
-        {
-            throw (DatabaseUnitException)_executeException;
-        }
-        else if (_executeException instanceof RuntimeException)
-        {
-            throw (RuntimeException)_executeException;
+        if (_executeException instanceof SQLException) {
+            throw (SQLException) _executeException;
+        } else if (_executeException instanceof DatabaseUnitException) {
+            throw (DatabaseUnitException) _executeException;
+        } else if (_executeException instanceof RuntimeException) {
+            throw (RuntimeException) _executeException;
         }
     }
 }

@@ -60,7 +60,7 @@ public class JndiDatabaseTester extends AbstractDatabaseTester {
      * Creates a JndiDatabaseTester with specific JNDI properties.
      *
      * @param environment A Properties object with JNDI properties. Can be null
-     * @param lookupName the name of the resource in the JNDI context
+     * @param lookupName  the name of the resource in the JNDI context
      */
     public JndiDatabaseTester(Properties environment, String lookupName) {
         this(environment, lookupName, null);
@@ -68,10 +68,10 @@ public class JndiDatabaseTester extends AbstractDatabaseTester {
 
     /**
      * Creates a JndiDatabaseTester with specific JNDI properties.
-     * 
+     *
      * @param environment A Properties object with JNDI properties. Can be <code>null</code>
-     * @param lookupName the name of the resource in the JNDI context
-     * @param schema The schema name to be used for new dbunit connections. Can be <code>null</code>
+     * @param lookupName  the name of the resource in the JNDI context
+     * @param schema      The schema name to be used for new dbunit connections. Can be <code>null</code>
      * @since 2.4.5
      */
     public JndiDatabaseTester(Properties environment, String lookupName, String schema) {

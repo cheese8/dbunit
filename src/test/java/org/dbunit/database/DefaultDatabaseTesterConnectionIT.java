@@ -33,23 +33,22 @@ import org.dbunit.IDatabaseTester;
  * @since 2.2.0
  */
 public class DefaultDatabaseTesterConnectionIT extends AbstractDatabaseTesterConnectionIT {
-   private PropertiesBasedJdbcDatabaseTester databaseTester;
+    private PropertiesBasedJdbcDatabaseTester databaseTester;
 
-   public DefaultDatabaseTesterConnectionIT(String s)
-   {
-      super(s);
-   }
+    public DefaultDatabaseTesterConnectionIT(String s) {
+        super(s);
+    }
 
-   protected IDatabaseTester getDatabaseTester() throws Exception {
-      if (databaseTester == null) {
-         DatabaseProfile profile = getEnvironment().getProfile();
-         System.setProperty( PropertiesBasedJdbcDatabaseTester.DRIVER_CLASS, profile.getDriverClass() );
-         System.setProperty( PropertiesBasedJdbcDatabaseTester.URL, profile.getConnectionUrl() );
-         System.setProperty( PropertiesBasedJdbcDatabaseTester.USERNAME, profile.getUser() );
-         System.setProperty( PropertiesBasedJdbcDatabaseTester.PASSWORD, profile.getPassword() );
-         System.setProperty( PropertiesBasedJdbcDatabaseTester.SCHEMA, profile.getSchema() );
-         databaseTester = new PropertiesBasedJdbcDatabaseTester();
-      }
-      return databaseTester;
-   }
+    protected IDatabaseTester getDatabaseTester() throws Exception {
+        if (databaseTester == null) {
+            DatabaseProfile profile = getEnvironment().getProfile();
+            System.setProperty(PropertiesBasedJdbcDatabaseTester.DRIVER_CLASS, profile.getDriverClass());
+            System.setProperty(PropertiesBasedJdbcDatabaseTester.URL, profile.getConnectionUrl());
+            System.setProperty(PropertiesBasedJdbcDatabaseTester.USERNAME, profile.getUser());
+            System.setProperty(PropertiesBasedJdbcDatabaseTester.PASSWORD, profile.getPassword());
+            System.setProperty(PropertiesBasedJdbcDatabaseTester.SCHEMA, profile.getSchema());
+            databaseTester = new PropertiesBasedJdbcDatabaseTester();
+        }
+        return databaseTester;
+    }
 }

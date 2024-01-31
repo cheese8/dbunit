@@ -13,23 +13,20 @@ import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.testutil.TestUtils;
 import org.junit.Test;
 
-public class DbUnitValueComparerAssertIT
-{
+public class DbUnitValueComparerAssertIT {
     public static final String FILE_PATH = "xml/assertionTest.xml";
 
     private final DbUnitValueComparerAssert sut =
             new DbUnitValueComparerAssert();
 
-    private IDataSet getDataSet() throws DataSetException, FileNotFoundException
-    {
+    private IDataSet getDataSet() throws DataSetException, FileNotFoundException {
         return new FlatXmlDataSetBuilder()
                 .build(TestUtils.getFileReader(FILE_PATH));
     }
 
     @Test
     public void testAssertWithValueComparerITableITableValueComparer_AllRowsEqual_NoFail()
-            throws Exception
-    {
+            throws Exception {
         final IDataSet dataSet = getDataSet();
 
         final ITable expectedTable = dataSet.getTable("TEST_TABLE");
@@ -43,8 +40,7 @@ public class DbUnitValueComparerAssertIT
 
     @Test
     public void testAssertWithValueComparerITableITableValueComparerMap_OneColumnNotEqual_NoFail()
-            throws Exception
-    {
+            throws Exception {
         final IDataSet dataSet = getDataSet();
 
         final ITable expectedTable = dataSet.getTable("TEST_TABLE");

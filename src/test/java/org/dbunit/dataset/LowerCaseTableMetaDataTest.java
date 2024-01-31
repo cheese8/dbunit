@@ -29,15 +29,12 @@ import org.dbunit.dataset.datatype.DataType;
  * @version $Revision$
  * @since Feb 17, 2002
  */
-public class LowerCaseTableMetaDataTest extends TestCase
-{
-    public LowerCaseTableMetaDataTest(String s)
-    {
+public class LowerCaseTableMetaDataTest extends TestCase {
+    public LowerCaseTableMetaDataTest(String s) {
         super(s);
     }
 
-    public void testGetTableName() throws Exception
-    {
+    public void testGetTableName() throws Exception {
         String original = "TABLE_NAME";
         String expected = original.toLowerCase();
 
@@ -47,12 +44,11 @@ public class LowerCaseTableMetaDataTest extends TestCase
         assertEquals("table name", expected, metaData.getTableName());
     }
 
-    public void testGetColumns() throws Exception
-    {
+    public void testGetColumns() throws Exception {
         Column[] columns = new Column[]{
-            new Column("NUMBER_COLUMN", DataType.NUMERIC, "qwerty", Column.NULLABLE),
-            new Column("STRING_COLUMN", DataType.VARCHAR, "toto", Column.NO_NULLS),
-            new Column("BOOLEAN_COLUMN", DataType.BOOLEAN),
+                new Column("NUMBER_COLUMN", DataType.NUMERIC, "qwerty", Column.NULLABLE),
+                new Column("STRING_COLUMN", DataType.VARCHAR, "toto", Column.NO_NULLS),
+                new Column("BOOLEAN_COLUMN", DataType.BOOLEAN),
         };
 
         ITableMetaData metaData = new LowerCaseTableMetaData(
@@ -60,8 +56,7 @@ public class LowerCaseTableMetaDataTest extends TestCase
 
         Column[] lowerColumns = metaData.getColumns();
         assertEquals("column count", columns.length, lowerColumns.length);
-        for (int i = 0; i < columns.length; i++)
-        {
+        for (int i = 0; i < columns.length; i++) {
             Column column = columns[i];
             Column lowerColumn = lowerColumns[i];
 
@@ -76,12 +71,11 @@ public class LowerCaseTableMetaDataTest extends TestCase
         assertEquals("key count", 0, metaData.getPrimaryKeys().length);
     }
 
-    public void testGetPrimaryKeys() throws Exception
-    {
+    public void testGetPrimaryKeys() throws Exception {
         Column[] columns = new Column[]{
-            new Column("NUMBER_COLUMN", DataType.NUMERIC, "qwerty", Column.NULLABLE),
-            new Column("STRING_COLUMN", DataType.VARCHAR, "toto", Column.NO_NULLS),
-            new Column("BOOLEAN_COLUMN", DataType.BOOLEAN),
+                new Column("NUMBER_COLUMN", DataType.NUMERIC, "qwerty", Column.NULLABLE),
+                new Column("STRING_COLUMN", DataType.VARCHAR, "toto", Column.NO_NULLS),
+                new Column("BOOLEAN_COLUMN", DataType.BOOLEAN),
         };
         String[] keyNames = new String[]{"Boolean_Column", "Number_Column"};
 
@@ -91,8 +85,7 @@ public class LowerCaseTableMetaDataTest extends TestCase
 
         Column[] keys = metaData.getPrimaryKeys();
         assertEquals("key count", keyNames.length, keys.length);
-        for (int i = 0; i < keys.length; i++)
-        {
+        for (int i = 0; i < keys.length; i++) {
             assertTrue("name not equals",
                     !keyNames[i].equals(keys[i].getColumnName()));
             assertEquals("key name", keyNames[i].toLowerCase(),

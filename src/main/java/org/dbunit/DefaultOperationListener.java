@@ -27,7 +27,7 @@ import org.dbunit.database.IDatabaseConnection;
 
 /**
  * Default implementation of the {@link IOperationListener}.
- * 
+ *
  * @author gommma (gommma AT users.sourceforge.net)
  * @author Last changed by: $Author$
  * @version $Revision$ $Date$
@@ -51,7 +51,7 @@ public class DefaultOperationListener implements IOperationListener {
     }
 
     private void closeConnection(IDatabaseConnection connection) {
-        log.debug("closeConnection(connection={}) - start",connection);
+        log.debug("closeConnection(connection={}) - start", connection);
         try {
             connection.close();
         } catch (SQLException e) {

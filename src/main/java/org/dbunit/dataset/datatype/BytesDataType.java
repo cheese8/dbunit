@@ -42,8 +42,7 @@ import java.util.regex.Pattern;
  * @version $Revision$ $Date$
  * @since 1.0 (Mar 20, 2002)
  */
-public class BytesDataType extends AbstractDataType
-{
+public class BytesDataType extends AbstractDataType {
 
     /**
      * Logger for this class
@@ -53,23 +52,19 @@ public class BytesDataType extends AbstractDataType
     private static final int MAX_URI_LENGTH = 256;
     private static final Pattern inputPattern = Pattern.compile("^\\[(.*?)](.*)");
 
-    public BytesDataType(String name, int sqlType)
-    {
+    public BytesDataType(String name, int sqlType) {
         super(name, sqlType, byte[].class, false);
     }
 
-    private byte[] toByteArray(InputStream in, int length) throws IOException
-    {
-        if (logger.isDebugEnabled())
-		{
-			logger.debug("toByteArray(in={}, length={}) - start", in, Integer.toString(length));
-		}
+    private byte[] toByteArray(InputStream in, int length) throws IOException {
+        if (logger.isDebugEnabled()) {
+            logger.debug("toByteArray(in={}, length={}) - start", in, Integer.toString(length));
+        }
 
         ByteArrayOutputStream out = new ByteArrayOutputStream(length);
         in = new BufferedInputStream(in);
         int i = in.read();
-        while (i != -1)
-        {
+        while (i != -1) {
             out.write(i);
             i = in.read();
         }
@@ -79,7 +74,7 @@ public class BytesDataType extends AbstractDataType
     public byte[] loadFile(String filename) throws IOException {
         // Not an URL, try as file name
         File file = new File(filename);
-        return toByteArray(new FileInputStream(file), (int)file.length());
+        return toByteArray(new FileInputStream(file), (int) file.length());
     }
 
     public byte[] loadURL(String urlAsString) throws IOException {
@@ -98,61 +93,50 @@ public class BytesDataType extends AbstractDataType
      *
      * @see org.dbunit.dataset.datatype.DataType#typeCast(java.lang.Object)
      */
-    public Object typeCast(Object value) throws TypeCastException
-    {
+    public Object typeCast(Object value) throws TypeCastException {
         logger.debug("typeCast(value={}) - start", value);
 
-        if (value == null || value == ITable.NO_VALUE)
-        {
+        if (value == null || value == ITable.NO_VALUE) {
             return null;
         }
 
-        if (value instanceof byte[])
-        {
+        if (value instanceof byte[]) {
             return value;
         }
 
-        if (value instanceof String)
-        {
+        if (value instanceof String) {
             String stringValue = (String) value;
 
             // If the string starts with <text [encoding id]>, it means that the user
             // intentionally wants to transform the text into a blob.
             //
             // Example of a valid string:  "<text UTF-8>This is a valid string with the accent 'é'"
-            if (isExtendedSyntax(stringValue))
-            {
+            if (isExtendedSyntax(stringValue)) {
                 Matcher matcher = inputPattern.matcher(stringValue);
-                if (matcher.matches())
-                {
+                if (matcher.matches()) {
                     String commandLine = matcher.group(1).toUpperCase();
                     stringValue = matcher.group(2);
 
                     String[] split = commandLine.split(" ");
                     String command = split[0];
 
-                    if (command.equals("TEXT"))
-                    {
+                    if (command.equals("TEXT")) {
                         String encoding = "UTF-8";  // Default
 
                         if (split.length > 1) {
                             encoding = split[1];
                         }
                         logger.debug("Data explicitly states that given string is text encoded "
-                            + encoding);
+                                + encoding);
                         try {
                             return stringValue.getBytes(encoding);
                         } catch (UnsupportedEncodingException unsupportedEncodingException) {
                             return "Error:  [text " + encoding + "] has an invalid encoding id.".getBytes();
                         }
-                    }
-                    else if (command.equals("BASE64"))
-                    {
+                    } else if (command.equals("BASE64")) {
                         logger.debug("Data explicitly states that given string is base46");
                         return Base64.decode(stringValue);
-                    }
-                    else if (command.equals("FILE"))
-                    {
+                    } else if (command.equals("FILE")) {
                         try {
                             logger.debug("Data explicitly states that given string is a file name");
                             return loadFile(stringValue);
@@ -161,9 +145,7 @@ public class BytesDataType extends AbstractDataType
                             logger.error(errMsg);
                             return ("Error:  " + errMsg).getBytes();
                         }
-                    }
-                    else if (command.equals("URL"))
-                    {
+                    } else if (command.equals("URL")) {
                         try {
                             logger.debug("Data explicitly states that given string is a URL");
                             return loadURL(stringValue);
@@ -177,88 +159,65 @@ public class BytesDataType extends AbstractDataType
             }
 
             // Assume not an uri if length greater than max uri length
-            if (stringValue.length() == 0 || stringValue.length() > MAX_URI_LENGTH)
-            {
-            	logger.debug("Assuming given string to be Base64 and not a URI");
+            if (stringValue.length() == 0 || stringValue.length() > MAX_URI_LENGTH) {
+                logger.debug("Assuming given string to be Base64 and not a URI");
                 return Base64.decode((String) value);
             }
 
-            try
-            {
-              	logger.debug("Assuming given string to be a URI");
-                try
-                {
+            try {
+                logger.debug("Assuming given string to be a URI");
+                try {
                     // Try value as URL
                     return loadURL(stringValue);
-                }
-                catch (MalformedURLException e1)
-                {
-                	logger.debug("Given string is not a valid URI - trying to resolve it as file...");
-                    try
-                    {
+                } catch (MalformedURLException e1) {
+                    logger.debug("Given string is not a valid URI - trying to resolve it as file...");
+                    try {
                         // Not an URL, try as file name
                         return loadFile(stringValue);
-                    }
-                    catch (FileNotFoundException e2)
-                    {
+                    } catch (FileNotFoundException e2) {
                         logger.debug("Assuming given string to be Base64 and not a URI or File");
                         // Not a file name either
                         byte[] decodedBytes = Base64.decode(stringValue);
-                        if(decodedBytes == null && stringValue.length() > 0) {
+                        if (decodedBytes == null && stringValue.length() > 0) {
                             // Ok, here the user has not specified the "[text ...]" tag, but
                             // it looks that its text that should be stored in the blob.  So
                             // we make a last attempt at doing so.
                             logger.debug("Assuming given string to be content of the blob, encoded with UTF-8.");
                             return stringValue.getBytes();
-                        }
-                        else
+                        } else
                             return decodedBytes;
                     }
                 }
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 throw new TypeCastException(value, this, e);
             }
         }
 
-        if (value instanceof Blob)
-        {
-            try
-            {
-                Blob blobValue = (Blob)value;
+        if (value instanceof Blob) {
+            try {
+                Blob blobValue = (Blob) value;
                 if (blobValue.length() == 0) {
                     return null;
                 }
-                return blobValue.getBytes(1, (int)blobValue.length());
-            }
-            catch (SQLException e)
-            {
+                return blobValue.getBytes(1, (int) blobValue.length());
+            } catch (SQLException e) {
                 throw new TypeCastException(value, this, e);
             }
         }
 
-        if (value instanceof URL)
-        {
-            try
-            {
-                return toByteArray(((URL)value).openStream(), 0);
-            }
-            catch (IOException e)
-            {
+        if (value instanceof URL) {
+            try {
+                return toByteArray(((URL) value).openStream(), 0);
+            } catch (IOException e) {
                 throw new TypeCastException(value, this, e);
             }
         }
 
-        if (value instanceof File)
-        {
-            try
-            {
-                File file = (File)value;
-                return toByteArray(new FileInputStream(file), (int)file.length());
-            }
-            catch (IOException e)
-            {
+        if (value instanceof File) {
+            try {
+                File file = (File) value;
+                return toByteArray(new FileInputStream(file), (int) file.length());
+            } catch (IOException e) {
                 throw new TypeCastException(value, this, e);
             }
         }
@@ -267,29 +226,23 @@ public class BytesDataType extends AbstractDataType
     }
 
 
-    protected int compareNonNulls(Object value1, Object value2) throws TypeCastException
-    {
+    protected int compareNonNulls(Object value1, Object value2) throws TypeCastException {
         logger.debug("compareNonNulls(value1={}, value2={}) - start", value1, value2);
 
-        try
-        {
-            byte[] value1cast = (byte[])typeCast(value1);
-            byte[] value2cast = (byte[])typeCast(value2);
+        try {
+            byte[] value1cast = (byte[]) typeCast(value1);
+            byte[] value2cast = (byte[]) typeCast(value2);
 
             return compare(value1cast, value2cast);
-        }
-        catch (ClassCastException e)
-        {
+        } catch (ClassCastException e) {
             throw new TypeCastException(e);
         }
     }
 
-    public int compare(byte[] v1, byte[] v2) throws TypeCastException
-    {
-        if (logger.isDebugEnabled())
-		{
-			logger.debug("compare(v1={}, v2={}) - start", v1, v2);
-		}
+    public int compare(byte[] v1, byte[] v2) throws TypeCastException {
+        if (logger.isDebugEnabled()) {
+            logger.debug("compare(v1={}, v2={}) - start", v1, v2);
+        }
 
         int len1 = v1.length;
         int len2 = v2.length;
@@ -297,29 +250,22 @@ public class BytesDataType extends AbstractDataType
         int i = 0;
         int j = 0;
 
-        if (i == j)
-        {
+        if (i == j) {
             int k = i;
             int lim = n + i;
-            while (k < lim)
-            {
+            while (k < lim) {
                 byte c1 = v1[k];
                 byte c2 = v2[k];
-                if (c1 != c2)
-                {
+                if (c1 != c2) {
                     return c1 - c2;
                 }
                 k++;
             }
-        }
-        else
-        {
-            while (n-- != 0)
-            {
+        } else {
+            while (n-- != 0) {
                 byte c1 = v1[i++];
                 byte c2 = v2[j++];
-                if (c1 != c2)
-                {
+                if (c1 != c2) {
                     return c1 - c2;
                 }
             }
@@ -328,27 +274,23 @@ public class BytesDataType extends AbstractDataType
     }
 
     public Object getSqlValue(int column, ResultSet resultSet)
-            throws SQLException, TypeCastException
-    {
-    	if(logger.isDebugEnabled())
-    		logger.debug("getSqlValue(column={}, resultSet={}) - start", new Integer(column), resultSet);
+            throws SQLException, TypeCastException {
+        if (logger.isDebugEnabled())
+            logger.debug("getSqlValue(column={}, resultSet={}) - start", new Integer(column), resultSet);
 
         byte[] value = resultSet.getBytes(column);
-        if (value == null || resultSet.wasNull())
-        {
+        if (value == null || resultSet.wasNull()) {
             return null;
         }
         return value;
     }
 
     public void setSqlValue(Object value, int column, PreparedStatement statement)
-            throws SQLException, TypeCastException
-    {
-    	if (logger.isDebugEnabled())
-    	{
-    		logger.debug("setSqlValue(value={}, column={}, statement={}) - start",
-        		new Object[]{value, new Integer(column), statement} );
-    	}
+            throws SQLException, TypeCastException {
+        if (logger.isDebugEnabled()) {
+            logger.debug("setSqlValue(value={}, column={}, statement={}) - start",
+                    new Object[]{value, new Integer(column), statement});
+        }
 
         super.setSqlValue(value, column, statement);
     }

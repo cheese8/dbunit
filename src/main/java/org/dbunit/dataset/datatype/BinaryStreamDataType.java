@@ -38,73 +38,62 @@ import java.sql.SQLException;
  * @version $Revision$ $Date$
  * @since Sep 12, 2004 (pre 2.3)
  */
-public class BinaryStreamDataType extends BytesDataType
-{
+public class BinaryStreamDataType extends BytesDataType {
 
     /**
      * Logger for this class
      */
     private static final Logger logger = LoggerFactory.getLogger(BinaryStreamDataType.class);
 
-    public BinaryStreamDataType(String name, int sqlType)
-    {
+    public BinaryStreamDataType(String name, int sqlType) {
         super(name, sqlType);
     }
 
     public Object getSqlValue(int column, ResultSet resultSet)
-            throws SQLException, TypeCastException
-    {
-    	if(logger.isDebugEnabled())
-    		logger.debug("getSqlValue(column={}, resultSet={}) - start", new Integer(column), resultSet);
+            throws SQLException, TypeCastException {
+        if (logger.isDebugEnabled())
+            logger.debug("getSqlValue(column={}, resultSet={}) - start", new Integer(column), resultSet);
 
         InputStream in = resultSet.getBinaryStream(column);
-        if (in == null || resultSet.wasNull())
-        {
+        if (in == null || resultSet.wasNull()) {
             return null;
         }
 
-        try
-        {
+        try {
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             byte[] buffer = new byte[32];
             int length = in.read(buffer);
-            while (length != -1)
-            {
+            while (length != -1) {
                 out.write(buffer, 0, length);
                 length = in.read(buffer);
             }
             return out.toByteArray();
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             throw new TypeCastException(e);
         }
     }
 
     /**
-     * Sets the given value on the given statement and therefore invokes 
+     * Sets the given value on the given statement and therefore invokes
      * {@link BytesDataType#typeCast(Object)}.
+     *
      * @see org.dbunit.dataset.datatype.BytesDataType#setSqlValue(java.lang.Object, int, java.sql.PreparedStatement)
      */
     public void setSqlValue(Object value, int column, PreparedStatement statement)
-            throws SQLException, TypeCastException
-    {
-    	if(logger.isDebugEnabled())
-    		logger.debug("setSqlValue(value={}, column={}, statement={}) - start",
-        		new Object[]{value, new Integer(column), statement} );
+            throws SQLException, TypeCastException {
+        if (logger.isDebugEnabled())
+            logger.debug("setSqlValue(value={}, column={}, statement={}) - start",
+                    new Object[]{value, new Integer(column), statement});
 
-        byte[] bytes = (byte[])typeCast(value);
-        if(value==null || bytes==null)
-        {
+        byte[] bytes = (byte[]) typeCast(value);
+        if (value == null || bytes == null) {
             logger.debug("Setting SQL column value to <null>");
             statement.setNull(column, getSqlType());
-        }
-        else
-        {
+        } else {
             ByteArrayInputStream in = new ByteArrayInputStream(bytes);
             statement.setBinaryStream(column, in, bytes.length);
         }
-        
+
     }
 
 }

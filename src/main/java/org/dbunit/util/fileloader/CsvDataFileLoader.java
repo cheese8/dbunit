@@ -35,17 +35,15 @@ import org.dbunit.dataset.csv.CsvURLDataSet;
  * @author Last changed by: $Author$
  * @version $Revision$ $Date$
  * @since <dbunit-version>
- * 
  */
 @NoArgsConstructor
 public class CsvDataFileLoader extends AbstractDataFileLoader {
 
     /**
      * Create new instance with replacement objects.
-     * 
-     * @param ro
-     *            The replacement objects for use with
-     *            {@link org.dbunit.dataset.ReplacementDataSet}.
+     *
+     * @param ro The replacement objects for use with
+     *           {@link org.dbunit.dataset.ReplacementDataSet}.
      */
     public CsvDataFileLoader(Map ro) {
         super(ro);
@@ -53,13 +51,11 @@ public class CsvDataFileLoader extends AbstractDataFileLoader {
 
     /**
      * Create new instance with replacement objects and replacement substrings.
-     * 
-     * @param ro
-     *            The replacement objects for use with
-     *            {@link org.dbunit.dataset.ReplacementDataSet}.
-     * @param rs
-     *            The replacement substrings for use with
-     *            {@link org.dbunit.dataset.ReplacementDataSet}.
+     *
+     * @param ro The replacement objects for use with
+     *           {@link org.dbunit.dataset.ReplacementDataSet}.
+     * @param rs The replacement substrings for use with
+     *           {@link org.dbunit.dataset.ReplacementDataSet}.
      */
     public CsvDataFileLoader(Map ro, Map rs, Map rf) {
         super(ro, rs, rf);

@@ -32,7 +32,7 @@ public class SqlLoaderControlParserException extends DatabaseUnitRuntimeExceptio
 
     /**
      * The Constructor.
-     * 
+     *
      * @param message the message
      */
     public SqlLoaderControlParserException(String message) {

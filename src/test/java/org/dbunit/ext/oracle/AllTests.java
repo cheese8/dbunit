@@ -25,13 +25,11 @@ import junit.framework.TestSuite;
 
 /**
  * @author Manuel Laflamme
- * @since Aug 13, 2003
  * @version $Revision$
+ * @since Aug 13, 2003
  */
-public class AllTests extends TestSuite
-{
-    public static Test suite()
-    {
+public class AllTests extends TestSuite {
+    public static Test suite() {
         TestSuite suite = new TestSuite();
         suite.addTest(new TestSuite(OracleDataTypeFactoryTest.class));
         suite.addTest(new TestSuite(Oracle10DataTypeFactoryTest.class));

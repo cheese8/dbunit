@@ -27,11 +27,10 @@ import org.dbunit.dataset.DataSetException;
  * Interface for reading a dataset using callback.
  *
  * @author Manuel Laflamme
- * @since Apr 17, 2003
  * @version $Revision$
+ * @since Apr 17, 2003
  */
-public interface IDataSetProducer
-{
+public interface IDataSetProducer {
     void setConsumer(IDataSetConsumer consumer) throws DataSetException;
 
     /**

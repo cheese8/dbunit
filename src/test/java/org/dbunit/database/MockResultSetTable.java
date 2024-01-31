@@ -29,53 +29,45 @@ import org.dbunit.dataset.ITableMetaData;
 
 /**
  * @author Manuel Laflamme
- * @since Apr 12, 2003
  * @version $Revision$
+ * @since Apr 12, 2003
  */
-public class MockResultSetTable implements IResultSetTable, Verifiable
-{
+public class MockResultSetTable implements IResultSetTable, Verifiable {
     private final ExpectationCounter _closeCalls =
             new ExpectationCounter("MockResultSetTable.close");
     private ITableMetaData _metaData;
 
-    public void setupTableMetaData(String tableName)
-    {
+    public void setupTableMetaData(String tableName) {
         _metaData = new DefaultTableMetaData(tableName, new Column[0]);
     }
 
-    public void setExpectedCloseCalls(int callsCount)
-    {
+    public void setExpectedCloseCalls(int callsCount) {
         _closeCalls.setExpected(callsCount);
     }
 
     ///////////////////////////////////////////////////////////////////////////
     // Verifiable interface
 
-    public void verify()
-    {
+    public void verify() {
         _closeCalls.verify();
     }
 
     ////////////////////////////////////////////////////////////////////////////
     // IResultSetTable interface
 
-    public Object getValue(int row, String column) throws DataSetException
-    {
+    public Object getValue(int row, String column) throws DataSetException {
         return null;
     }
 
-    public int getRowCount()
-    {
+    public int getRowCount() {
         return 0;
     }
 
-    public ITableMetaData getTableMetaData()
-    {
+    public ITableMetaData getTableMetaData() {
         return _metaData;
     }
 
-    public void close() throws DataSetException
-    {
+    public void close() throws DataSetException {
         _closeCalls.inc();
     }
 }

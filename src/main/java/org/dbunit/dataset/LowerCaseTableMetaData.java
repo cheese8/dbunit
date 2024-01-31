@@ -34,8 +34,7 @@ import org.slf4j.LoggerFactory;
  * @version $Revision$
  * @since Feb 14, 2003
  */
-public class LowerCaseTableMetaData extends AbstractTableMetaData
-{
+public class LowerCaseTableMetaData extends AbstractTableMetaData {
 
     /**
      * Logger for this class
@@ -47,46 +46,42 @@ public class LowerCaseTableMetaData extends AbstractTableMetaData
     private final Column[] _primaryKeys;
 
     public LowerCaseTableMetaData(String tableName, Column[] columns)
-            //throws DataSetException
+    //throws DataSetException
     {
         this(tableName, columns, new Column[0]);
     }
 
     public LowerCaseTableMetaData(String tableName, Column[] columns,
-            String[] primaryKeys) //throws DataSetException
+                                  String[] primaryKeys) //throws DataSetException
     {
-        this(tableName, columns, Columns.getColumns(primaryKeys, columns) );
+        this(tableName, columns, Columns.getColumns(primaryKeys, columns));
     }
 
-    public LowerCaseTableMetaData(ITableMetaData metaData) throws DataSetException
-    {
+    public LowerCaseTableMetaData(ITableMetaData metaData) throws DataSetException {
         this(metaData.getTableName(), metaData.getColumns(),
                 metaData.getPrimaryKeys());
     }
 
     public LowerCaseTableMetaData(String tableName, Column[] columns,
-            Column[] primaryKeys) //throws DataSetException
+                                  Column[] primaryKeys) //throws DataSetException
     {
         _tableName = tableName.toLowerCase();
         _columns = createLowerColumns(columns);
         _primaryKeys = createLowerColumns(primaryKeys);
     }
 
-    private Column[] createLowerColumns(Column[] columns)
-    {
+    private Column[] createLowerColumns(Column[] columns) {
         logger.debug("createLowerColumns(columns={}) - start", columns);
 
         Column[] lowerColumns = new Column[columns.length];
-        for (int i = 0; i < columns.length; i++)
-        {
+        for (int i = 0; i < columns.length; i++) {
             lowerColumns[i] = createLowerColumn(columns[i]);
         }
 
         return lowerColumns;
     }
 
-    private Column createLowerColumn(Column column)
-    {
+    private Column createLowerColumn(Column column) {
         logger.debug("createLowerColumn(column={}) - start", column);
 
         return new Column(
@@ -100,18 +95,15 @@ public class LowerCaseTableMetaData extends AbstractTableMetaData
     ////////////////////////////////////////////////////////////////////////////
     // ITableMetaData interface
 
-    public String getTableName()
-    {
+    public String getTableName() {
         return _tableName;
     }
 
-    public Column[] getColumns()
-    {
+    public Column[] getColumns() {
         return _columns;
     }
 
-    public Column[] getPrimaryKeys()
-    {
+    public Column[] getPrimaryKeys() {
         return _primaryKeys;
     }
 }

@@ -17,17 +17,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Base class for simple,  small classes 
+ * Base class for simple,  small classes
  * maintaining single values that are always accessed
  * and updated under synchronization. Since defining them for only
  * some types seemed too arbitrary, they exist for all basic types,
  * although it is hard to imagine uses for some.
  * <p>
- *   These classes mainly exist so that you do not have to go to the
- *   trouble of writing your own miscellaneous classes and methods
- *   in situations  including:
+ * These classes mainly exist so that you do not have to go to the
+ * trouble of writing your own miscellaneous classes and methods
+ * in situations  including:
  *  <ul>
- *   <li> When  you need or want to offload an instance 
+ *   <li> When  you need or want to offload an instance
  *    variable to use its own synchronization lock.
  *    When these objects are used to replace instance variables, they
  *    should almost always be declared as <code>final</code>. This
@@ -37,9 +37,9 @@ import org.slf4j.LoggerFactory;
  *    <li> When you need methods such as set, commit, or swap.
  *    Note however that
  *    the synchronization for these variables is <em>independent</em>
- *    of any other synchronization perfromed using other locks. 
+ *    of any other synchronization perfromed using other locks.
  *    So, they are not
- *    normally useful when accesses and updates among 
+ *    normally useful when accesses and updates among
  *    variables must be coordinated.
  *    For example, it would normally be a bad idea to make
  *    a Point class out of two SynchronizedInts, even those
@@ -74,20 +74,20 @@ import org.slf4j.LoggerFactory;
  * <b>Update methods</b><br>
  * Each class supports several kinds of update methods:
  * <ul>
- *   <li> A <code>set</code> method that sets to a new value and returns 
+ *   <li> A <code>set</code> method that sets to a new value and returns
  *    previous value. For example, for a SynchronizedBoolean b,
  *    <code>boolean old = b.set(true)</code> performs a test-and-set.
  * <p>
  *   <li> A  <code>commit</code> method that sets to new value only
  *    if currently holding a given value.
- * 
+ * <p>
  * For example, here is a class that uses an optimistic update
- * loop to recompute a count variable represented as a 
- * SynchronizedInt. 
+ * loop to recompute a count variable represented as a
+ * SynchronizedInt.
  *  <pre>
  *  class X {
  *    private final SynchronizedInt count = new SynchronizedInt(0);
- * 
+ *
  *    static final int MAX_RETRIES = 1000;
  *
  *    public boolean recomputeCount() throws InterruptedException {
@@ -96,7 +96,7 @@ import org.slf4j.LoggerFactory;
  *        int next = compute(current);
  *        if (count.commit(current, next))
  *          return true;
- *        else if (Thread.interrupted()) 
+ *        else if (Thread.interrupted())
  *          throw new InterruptedException();
  *      }
  *      return false;
@@ -105,7 +105,7 @@ import org.slf4j.LoggerFactory;
  *  }
  * </pre>
  * <p>
- *   <li>A <code>swap</code> method that atomically swaps with another 
+ *   <li>A <code>swap</code> method that atomically swaps with another
  *    object of the same class using a deadlock-avoidance strategy.
  * <p>
  *    <li> Update-in-place methods appropriate to the type. All
@@ -146,7 +146,7 @@ import org.slf4j.LoggerFactory;
  *     </ul>
  *   (If the action argument is null, these return immediately
  *   after the predicate holds.)
- *   Numerical types also support 
+ *   Numerical types also support
  *     <ul>
  *       <li> whenLess(value, action)
  *       <li> whenLessEqual(value, action)
@@ -177,7 +177,7 @@ import org.slf4j.LoggerFactory;
  *
  *
  * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]</p>
- * 
+ *
  * @author Doug Lea
  * @author Last changed by: $Author$
  * @version $Revision$ $Date$
@@ -190,33 +190,41 @@ public class SynchronizedVariable implements Executor {
      */
     private static final Logger logger = LoggerFactory.getLogger(SynchronizedVariable.class);
 
-  protected final Object lock_;
+    protected final Object lock_;
 
-  /** Create a SynchronizedVariable using the supplied lock **/
-  public SynchronizedVariable(Object lock) { lock_ = lock; }
-
-  /** Create a SynchronizedVariable using itself as the lock **/
-  public SynchronizedVariable() { lock_ = this; }
-
-  /**
-   * Return the lock used for all synchronization for this object
-   **/
-  public Object getLock() {
-    return lock_;
-  }
-
-  /**
-   * If current thread is not interrupted, execute the given command 
-   * within this object's lock
-   **/
-
-  public void execute(Runnable command) throws InterruptedException {
-    logger.debug("execute(command={}) - start", command);
-    if (Thread.interrupted()) {
-      throw new InterruptedException();
+    /**
+     * Create a SynchronizedVariable using the supplied lock
+     **/
+    public SynchronizedVariable(Object lock) {
+        lock_ = lock;
     }
-    synchronized (lock_) { 
-      command.run();
+
+    /**
+     * Create a SynchronizedVariable using itself as the lock
+     **/
+    public SynchronizedVariable() {
+        lock_ = this;
     }
-  }
+
+    /**
+     * Return the lock used for all synchronization for this object
+     **/
+    public Object getLock() {
+        return lock_;
+    }
+
+    /**
+     * If current thread is not interrupted, execute the given command
+     * within this object's lock
+     **/
+
+    public void execute(Runnable command) throws InterruptedException {
+        logger.debug("execute(command={}) - start", command);
+        if (Thread.interrupted()) {
+            throw new InterruptedException();
+        }
+        synchronized (lock_) {
+            command.run();
+        }
+    }
 }

@@ -53,8 +53,7 @@ public class CompositeOperation extends DatabaseOperation {
     /**
      * Creates a new composite operation combining the specified operations.
      */
-    public CompositeOperation(DatabaseOperation[] actions)
-    {
+    public CompositeOperation(DatabaseOperation[] actions) {
         this.actions = actions;
     }
 
@@ -64,7 +63,7 @@ public class CompositeOperation extends DatabaseOperation {
             action.execute(connection, dataSet);
         }
     }
-    
+
     public String toString() {
         return getClass().getName() + "[" + "actions=" + (this.actions == null ? "null" : Arrays.asList(this.actions).toString()) + "]";
     }

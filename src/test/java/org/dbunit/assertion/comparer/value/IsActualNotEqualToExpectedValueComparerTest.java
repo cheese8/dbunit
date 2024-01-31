@@ -10,14 +10,12 @@ import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.datatype.DataType;
 import org.junit.Test;
 
-public class IsActualNotEqualToExpectedValueComparerTest
-{
+public class IsActualNotEqualToExpectedValueComparerTest {
     private final IsActualNotEqualToExpectedValueComparer sut =
             new IsActualNotEqualToExpectedValueComparer();
 
     @Test
-    public void testIsExpected_AllNulls_False() throws DatabaseUnitException
-    {
+    public void testIsExpected_AllNulls_False() throws DatabaseUnitException {
         final ITable expectedTable = null;
         final ITable actualTable = null;
         final int rowNum = 0;
@@ -34,8 +32,7 @@ public class IsActualNotEqualToExpectedValueComparerTest
 
     @Test
     public void testIsExpected_NotEqualNumbers_True()
-            throws DatabaseUnitException
-    {
+            throws DatabaseUnitException {
         final ITable expectedTable = null;
         final ITable actualTable = null;
         final int rowNum = 0;
@@ -51,8 +48,7 @@ public class IsActualNotEqualToExpectedValueComparerTest
     }
 
     @Test
-    public void testGetFailPhrase() throws Exception
-    {
+    public void testGetFailPhrase() throws Exception {
         final String actual = sut.getFailPhrase();
 
         assertThat("Should have fail phrase.", actual, not(nullValue()));

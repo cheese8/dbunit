@@ -34,15 +34,14 @@ import org.slf4j.LoggerFactory;
 /**
  * Iterator used to iterate over a list of tables using a specific query for retrieving
  * data for every table.
- * 
+ *
  * @author Manuel Laflamme
  * @author gommma (gommma AT users.sourceforge.net)
  * @author Last changed by: $Author$
  * @version $Revision$ $Date$
  * @since 1.5.6 (Sep 15, 2003)
  */
-public class QueryTableIterator implements ITableIterator
-{
+public class QueryTableIterator implements ITableIterator {
 
     /**
      * Logger for this class
@@ -56,19 +55,18 @@ public class QueryTableIterator implements ITableIterator
 
     /**
      * @param tableEntries list of {@link TableEntry} objects
-     * @param connection The database connection needed to load data
+     * @param connection   The database connection needed to load data
      */
-    public QueryTableIterator(List tableEntries, IDatabaseConnection connection)
-    {
-    	if (tableEntries == null) {
-			throw new NullPointerException(
-					"The parameter 'tableEntries' must not be null");
-		}
-    	if (connection == null) {
-			throw new NullPointerException(
-					"The parameter 'connection' must not be null");
-		}
-    	
+    public QueryTableIterator(List tableEntries, IDatabaseConnection connection) {
+        if (tableEntries == null) {
+            throw new NullPointerException(
+                    "The parameter 'tableEntries' must not be null");
+        }
+        if (connection == null) {
+            throw new NullPointerException(
+                    "The parameter 'connection' must not be null");
+        }
+
         _tableEntries = tableEntries;
         _connection = connection;
         _currentTable = null;
@@ -80,15 +78,13 @@ public class QueryTableIterator implements ITableIterator
     /**
      * {@inheritDoc}
      */
-    public boolean next() throws DataSetException
-    {
+    public boolean next() throws DataSetException {
         logger.debug("next() - start");
 
         _index++;
 
         // Ensure previous table is closed
-        if (_currentTable != null)
-        {
+        if (_currentTable != null) {
             _currentTable.close();
             _currentTable = null;
         }
@@ -96,8 +92,7 @@ public class QueryTableIterator implements ITableIterator
         return _index < _tableEntries.size();
     }
 
-    public boolean nextWithoutClosing()
-    {
+    public boolean nextWithoutClosing() {
         _index++;
         _currentTable = null;
 
@@ -107,27 +102,20 @@ public class QueryTableIterator implements ITableIterator
     /**
      * {@inheritDoc}
      */
-    public ITableMetaData getTableMetaData() throws DataSetException
-    {
+    public ITableMetaData getTableMetaData() throws DataSetException {
         logger.debug("getTableMetaData() - start");
 
-        QueryDataSet.TableEntry entry = (QueryDataSet.TableEntry)_tableEntries.get(_index);
+        QueryDataSet.TableEntry entry = (QueryDataSet.TableEntry) _tableEntries.get(_index);
 
         // No query specified, use metadata from dataset
-        if (entry.getQuery() == null)
-        {
-            try
-            {
+        if (entry.getQuery() == null) {
+            try {
                 ITable table = _connection.createTable(entry.getTableName());
                 return table.getTableMetaData();
-            }
-            catch (SQLException e)
-            {
+            } catch (SQLException e) {
                 throw new DataSetException(e);
             }
-        }
-        else
-        {
+        } else {
             return getTable().getTableMetaData();
         }
     }
@@ -135,32 +123,24 @@ public class QueryTableIterator implements ITableIterator
     /**
      * {@inheritDoc}
      */
-    public ITable getTable() throws DataSetException
-    {
+    public ITable getTable() throws DataSetException {
         logger.debug("getTable() - start");
 
-        if (_currentTable == null)
-        {
-            try
-            {
-                QueryDataSet.TableEntry entry = (QueryDataSet.TableEntry)_tableEntries.get(_index);
+        if (_currentTable == null) {
+            try {
+                QueryDataSet.TableEntry entry = (QueryDataSet.TableEntry) _tableEntries.get(_index);
 
                 // No query specified, use table from dataset
-                if (entry.getQuery() == null)
-                {
-                    _currentTable = (IResultSetTable)_connection.createTable(entry.getTableName());
-                }
-                else
-                {
+                if (entry.getQuery() == null) {
+                    _currentTable = (IResultSetTable) _connection.createTable(entry.getTableName());
+                } else {
                     DatabaseConfig config = _connection.getConfig();
-                    IResultSetTableFactory factory = (IResultSetTableFactory)config.getProperty(
+                    IResultSetTableFactory factory = (IResultSetTableFactory) config.getProperty(
                             DatabaseConfig.PROPERTY_RESULTSET_TABLE_FACTORY);
 
                     _currentTable = factory.createTable(entry.getTableName(), entry.getQuery(), _connection);
                 }
-            }
-            catch (SQLException e)
-            {
+            } catch (SQLException e) {
                 throw new DataSetException(e);
             }
         }

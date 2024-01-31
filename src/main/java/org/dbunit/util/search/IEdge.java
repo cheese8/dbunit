@@ -26,25 +26,25 @@ package org.dbunit.util.search;
  * <code>ISearchCallback</code> can properly order the dependencies of a node
  * (so, typically, the implementations will compare the <code>getTo()</code>
  * node).
- * 
+ *
  * @author Felipe Leme (dbunit@felipeal.net)
  * @version $Revision$
  * @since Aug 25, 2005
  */
 public interface IEdge extends Comparable {
 
-  /**
-   * Get the node this edge originates from.
-   * 
-   * @return node this edge originates from.
-   */
-  Object getFrom();
+    /**
+     * Get the node this edge originates from.
+     *
+     * @return node this edge originates from.
+     */
+    Object getFrom();
 
-  /**
-   * Get the node this edge points to.
-   * 
-   * @return node this edge points to.
-   */
-  Object getTo();
+    /**
+     * Get the node this edge points to.
+     *
+     * @return node this edge points to.
+     */
+    Object getTo();
 
 }

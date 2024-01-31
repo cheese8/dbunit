@@ -29,10 +29,8 @@ import junit.framework.TestSuite;
  * @version $Revision$
  * @since Feb 19, 2002
  */
-public class AllTests extends TestSuite
-{
-    public static Test suite() throws Exception
-    {
+public class AllTests extends TestSuite {
+    public static Test suite() throws Exception {
         TestSuite suite = new TestSuite();
 
         suite.addTest(new TestSuite(AbstractBatchOperationIT.class));

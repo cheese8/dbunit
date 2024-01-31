@@ -27,18 +27,15 @@ import org.dbunit.operation.DatabaseOperation;
 
 /**
  * @author Manuel Laflamme
- * @since Apr 11, 2003
  * @version $Revision$
+ * @since Apr 11, 2003
  */
-public class CachedResultSetTableIT extends AbstractTableTest
-{
-    public CachedResultSetTableIT(String s)
-    {
+public class CachedResultSetTableIT extends AbstractTableTest {
+    public CachedResultSetTableIT(String s) {
         super(s);
     }
 
-    protected ITable createTable() throws Exception
-    {
+    protected ITable createTable() throws Exception {
         DatabaseEnvironment env = DatabaseEnvironment.getInstance();
         IDatabaseConnection connection = env.getConnection();
 
@@ -49,13 +46,11 @@ public class CachedResultSetTableIT extends AbstractTableTest
                 new ForwardOnlyResultSetTable("TEST_TABLE", selectStatement, connection));
     }
 
-    protected String convertString(String str) throws Exception
-    {
+    protected String convertString(String str) throws Exception {
         return DatabaseEnvironment.getInstance().convertString(str);
     }
 
-    public void testGetMissingValue() throws Exception
-    {
+    public void testGetMissingValue() throws Exception {
         // Do not test this!
     }
 }

@@ -14,30 +14,27 @@ import org.dbunit.dataset.datatype.DataType;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ConditionalSelectorMultiValueComparerTest
-{
+public class ConditionalSelectorMultiValueComparerTest {
     private static final Long VALUE_COMPARER_KEY = 1L;
 
     private final ValueComparerSelector valueComparerSelector1 =
             (expectedTable, actualTable, rowNum, columnName, dataType,
-                    expectedValue, actualValue,
-                    valueComparers) -> valueComparers.get(VALUE_COMPARER_KEY);
+             expectedValue, actualValue,
+             valueComparers) -> valueComparers.get(VALUE_COMPARER_KEY);
 
     private final Map<Object, ValueComparator> valueComparersEmpty =
             new HashMap<>();
     private final Map<Object, ValueComparator> valueComparers1 = new HashMap<>();
 
     @Before
-    public void setupValueComparerMap()
-    {
+    public void setupValueComparerMap() {
         valueComparers1.put(VALUE_COMPARER_KEY,
                 ValueComparers.isActualEqualToExpected);
     }
 
     @Test(expected = IllegalStateException.class)
     public void testDoCompare_NoValueComparers_IllegalState()
-            throws DatabaseUnitException
-    {
+            throws DatabaseUnitException {
         final Map<Object, ValueComparator> valueComparers = valueComparersEmpty;
         final ValueComparerSelector valueComparerSelector =
                 valueComparerSelector1;
@@ -59,8 +56,7 @@ public class ConditionalSelectorMultiValueComparerTest
 
     @Test
     public void testDoCompare_AllNull_NoFailMessage()
-            throws DatabaseUnitException
-    {
+            throws DatabaseUnitException {
         final Map<Object, ValueComparator> valueComparers = valueComparers1;
         final ValueComparerSelector valueComparerSelector =
                 valueComparerSelector1;
@@ -84,8 +80,7 @@ public class ConditionalSelectorMultiValueComparerTest
 
     @Test
     public void testDoCompare_ActualAndExpectedNotEqual_FailMessage()
-            throws DatabaseUnitException
-    {
+            throws DatabaseUnitException {
         final Map<Object, ValueComparator> valueComparers = valueComparers1;
         final ValueComparerSelector valueComparerSelector =
                 valueComparerSelector1;

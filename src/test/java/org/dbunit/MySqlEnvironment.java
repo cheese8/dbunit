@@ -29,26 +29,23 @@ import org.dbunit.ext.mysql.MySqlDataTypeFactory;
  * @version $Revision$
  * @since DbUnit 2.4.7
  */
-public class MySqlEnvironment extends DatabaseEnvironment
-{
-    public MySqlEnvironment(DatabaseProfile profile) throws Exception
-    {
+public class MySqlEnvironment extends DatabaseEnvironment {
+    public MySqlEnvironment(DatabaseProfile profile) throws Exception {
         super(profile);
     }
 
     @Override
-    protected void setupDatabaseConfig(DatabaseConfig config)
-    {
+    protected void setupDatabaseConfig(DatabaseConfig config) {
         config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new MySqlDataTypeFactory());
     }
 
     /**
      * Preserve case for MySQL
+     *
      * @see DatabaseEnvironment#convertString(String)
      */
     @Override
-    public String convertString(String str)
-    {
+    public String convertString(String str) {
         return str;
     }
 

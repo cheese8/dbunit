@@ -25,6 +25,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+
 import org.dbunit.util.RelativeDateTimeParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,14 +34,12 @@ import org.slf4j.LoggerFactory;
 /**
  * Data type that maps {@link java.sql.Types} objects to their
  * java counterparts. It also provides immutable constants for the most common data types.
- * 
- * @see <a href="http://java.sun.com/j2se/1.3/docs/guide/jdbc/getstart/mapping.html#table1">sun JDBC object mapping</a>
- * 
+ *
  * @author Manuel Laflamme
  * @version $Revision$
+ * @see <a href="http://java.sun.com/j2se/1.3/docs/guide/jdbc/getstart/mapping.html#table1">sun JDBC object mapping</a>
  */
-public abstract class DataType
-{
+public abstract class DataType {
 
     /**
      * Logger for this class
@@ -72,7 +71,7 @@ public abstract class DataType
     public static final DataType INTEGER = new IntegerDataType(
             "INTEGER", Types.INTEGER);
 
-//    public static final DataType BIGINT = new LongDataType();
+    //    public static final DataType BIGINT = new LongDataType();
     public static final DataType BIGINT = new BigIntegerDataType();
     /**
      * Auxiliary for the BIGINT type using a long. Is currently only
@@ -88,7 +87,7 @@ public abstract class DataType
             "DOUBLE", Types.DOUBLE);
 
     // To calculate consistent relative date and time.
-    public static final RelativeDateTimeParser RELATIVE_DATE_TIME_PARSER = new RelativeDateTimeParser(); 
+    public static final RelativeDateTimeParser RELATIVE_DATE_TIME_PARSER = new RelativeDateTimeParser();
     public static final DataType DATE = new DateDataType();
     public static final DataType TIME = new TimeDataType();
     public static final DataType TIMESTAMP = new TimestampDataType();
@@ -114,11 +113,11 @@ public abstract class DataType
             "LONGNVARCHAR", -16);
 
     private static final DataType[] TYPES = {
-        VARCHAR, CHAR, LONGVARCHAR, NCHAR, NVARCHAR, LONGNVARCHAR, CLOB, NUMERIC, DECIMAL, BOOLEAN, BIT, INTEGER,
-        TINYINT, SMALLINT, BIGINT, REAL, DOUBLE, FLOAT, DATE, TIME, TIMESTAMP,
-        VARBINARY, BINARY, LONGVARBINARY, BLOB,
-        //auxiliary types at the very end
-        BIGINT_AUX_LONG
+            VARCHAR, CHAR, LONGVARCHAR, NCHAR, NVARCHAR, LONGNVARCHAR, CLOB, NUMERIC, DECIMAL, BOOLEAN, BIT, INTEGER,
+            TINYINT, SMALLINT, BIGINT, REAL, DOUBLE, FLOAT, DATE, TIME, TIMESTAMP,
+            VARBINARY, BINARY, LONGVARBINARY, BLOB,
+            //auxiliary types at the very end
+            BIGINT_AUX_LONG
     };
 
     /**
@@ -132,8 +131,8 @@ public abstract class DataType
      * <p>
      * The two values are typecast to this DataType before being compared.
      *
-     * @throws TypeCastException  if the arguments' types prevent them from
-     * being compared by this Comparator.
+     * @throws TypeCastException if the arguments' types prevent them from
+     *                           being compared by this Comparator.
      */
     public abstract int compare(Object o1, Object o2) throws TypeCastException;
 
@@ -150,8 +149,7 @@ public abstract class DataType
     /**
      * Returns the SQL type name for user types (null for basic SQL types)
      */
-    public String getSqlTypeName()
-    {
+    public String getSqlTypeName() {
         return null;
     }
 
@@ -177,32 +175,27 @@ public abstract class DataType
      * Set the specified value to the specified prepared statement object.
      */
     public abstract void setSqlValue(Object value, int column,
-            PreparedStatement statement) throws SQLException, TypeCastException;
+                                     PreparedStatement statement) throws SQLException, TypeCastException;
 
     /**
      * Typecast the specified value to string.
      */
-    public static String asString(Object value) throws TypeCastException
-    {
+    public static String asString(Object value) throws TypeCastException {
         logger.debug("asString(value={}) - start", value);
 
-        return (String)DataType.VARCHAR.typeCast(value);
+        return (String) DataType.VARCHAR.typeCast(value);
     }
 
     /**
      * Returns the <code>DataType</code> corresponding to the specified Sql
      * type. See {@link java.sql.Types}.
-     *
      */
-    public static DataType forSqlType(int sqlType) throws DataTypeException
-    {
-    	if(logger.isDebugEnabled())
-    		logger.debug("forSqlType(sqlType={}) - start", new Integer(sqlType));
+    public static DataType forSqlType(int sqlType) throws DataTypeException {
+        if (logger.isDebugEnabled())
+            logger.debug("forSqlType(sqlType={}) - start", new Integer(sqlType));
 
-        for (int i = 0; i < TYPES.length; i++)
-        {
-            if (sqlType == TYPES[i].getSqlType())
-            {
+        for (int i = 0; i < TYPES.length; i++) {
+            if (sqlType == TYPES[i].getSqlType()) {
                 return TYPES[i];
             }
         }
@@ -216,15 +209,12 @@ public abstract class DataType
      *
      * @deprecated Should not be used anymore
      */
-    public static DataType forSqlTypeName(String sqlTypeName) throws DataTypeException
-    {
-    	if(logger.isDebugEnabled())
-    		logger.debug("forSqlTypeName(sqlTypeName=" + sqlTypeName + ") - start");
+    public static DataType forSqlTypeName(String sqlTypeName) throws DataTypeException {
+        if (logger.isDebugEnabled())
+            logger.debug("forSqlTypeName(sqlTypeName=" + sqlTypeName + ") - start");
 
-        for (int i = 0; i < TYPES.length; i++)
-        {
-            if (sqlTypeName.equals(TYPES[i].toString()))
-            {
+        for (int i = 0; i < TYPES.length; i++) {
+            if (sqlTypeName.equals(TYPES[i].toString())) {
                 return TYPES[i];
             }
         }
@@ -237,20 +227,16 @@ public abstract class DataType
      * runtime class. This method returns <code>DataType.UNKNOWN</code>
      * if the value is <code>null</code> or runtime class not recognized.
      */
-    public static DataType forObject(Object value)
-    {
+    public static DataType forObject(Object value) {
         logger.debug("forObject(value={}) - start", value);
 
-        if (value == null)
-        {
+        if (value == null) {
             return UNKNOWN;
         }
 
-        for (int i = 0; i < TYPES.length; i++)
-        {
+        for (int i = 0; i < TYPES.length; i++) {
             Class typeClass = TYPES[i].getTypeClass();
-            if (typeClass.isInstance(value))
-            {
+            if (typeClass.isInstance(value)) {
                 return TYPES[i];
             }
         }
@@ -261,14 +247,12 @@ public abstract class DataType
     /**
      * Performs a quick check to test if the specified string uses extended
      * syntax.
-     * 
-     * @param input
-     *            a string to check.
+     *
+     * @param input a string to check.
      * @return {@code true} if the input uses extended syntax; {@code false}
-     *         otherwise.
+     * otherwise.
      */
-    protected static boolean isExtendedSyntax(String input)
-    {
+    protected static boolean isExtendedSyntax(String input) {
         return !input.isEmpty() && input.charAt(0) == '[';
     }
 }
