@@ -11,8 +11,7 @@ import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 import org.junit.Test;
 
-public class XlsDataSetWriterTest
-{
+public class XlsDataSetWriterTest {
     private static final File OUTPUT_DIR = new File("target", "excel");
 
     private static final String INPUT_EXCEL_FILE =
@@ -28,8 +27,7 @@ public class XlsDataSetWriterTest
      */
     @Test
     public void testTimestampTzOffsets()
-            throws URISyntaxException, DataSetException, IOException
-    {
+            throws URISyntaxException, DataSetException, IOException {
         OUTPUT_DIR.mkdir();
 
         URL excelFileUrl = getClass().getResource(INPUT_EXCEL_FILE);

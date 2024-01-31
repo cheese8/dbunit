@@ -17,8 +17,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
 
-public class XlsTableTimezoneOffsetTest
-{
+public class XlsTableTimezoneOffsetTest {
     private static final String EXCEL_SPREADSHEET =
             "/excel/XlsTableTimezoneOffset.xlsx";
     private static final String TABLE_NAME = "xxx_tz_offset_test";
@@ -40,7 +39,7 @@ public class XlsTableTimezoneOffsetTest
      * offset different from 0), otherwise the test would succeed even if the
      * bug is still present. Thus, the precondition check makes sure that the
      * default time zone offset is not 0 and aborts the test if it is.
-     *
+     * <p>
      * To change the time zone offset to something other than 0, either change
      * your machine's system time zone setting, or use JVM parameter
      * '-Duser.timezone="Europe/Berlin"' (or any other valid timezone ID)
@@ -51,8 +50,7 @@ public class XlsTableTimezoneOffsetTest
     // long tzOffset = TimeZone.getDefault().getOffset(date.getTime());
     // date = new Date(date.getTime() + tzOffset);
     @Test
-    public void testTimestampTzOffsets() throws Exception
-    {
+    public void testTimestampTzOffsets() throws Exception {
         // uncomment to see available timezones
         // System.err.println(Arrays.toString(TimeZone.getAvailableIDs()));
 
@@ -80,31 +78,27 @@ public class XlsTableTimezoneOffsetTest
     }
 
     private void checkStringValue(int row, String column, String expected)
-            throws DataSetException
-    {
+            throws DataSetException {
         String failMsg = String.format(FAIL_MSG, row, column);
         String value = getValueAsString(row, column);
         collector.checkThat(failMsg, value, equalTo(expected));
     }
 
     private void checkDateValue(int row, String column, String expected)
-            throws DataSetException
-    {
+            throws DataSetException {
         String failMsg = String.format(FAIL_MSG, row, column);
         String value = getValueAsDate(row, column);
         collector.checkThat(failMsg, value, equalTo(expected));
     }
 
     private String getValueAsString(int row, String column)
-            throws DataSetException
-    {
+            throws DataSetException {
         Object value = table.getValue(row, column);
         return value.toString();
     }
 
     private String getValueAsDate(int row, String column)
-            throws DataSetException
-    {
+            throws DataSetException {
         return dateFormat.format(table.getValue(row, column));
     }
 }

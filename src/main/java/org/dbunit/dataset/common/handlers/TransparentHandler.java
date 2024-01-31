@@ -37,16 +37,17 @@ public class TransparentHandler extends AbstractPipelineComponent {
      */
     private static final Logger logger = LoggerFactory.getLogger(TransparentHandler.class);
 
-    private TransparentHandler() {}
+    private TransparentHandler() {
+    }
 
-    public static final PipelineComponent IGNORE () {
+    public static final PipelineComponent IGNORE() {
         logger.debug("IGNORE() - start");
 
         return createPipelineComponent(new TransparentHandler(), new IGNORE());
     }
 
     public boolean canHandle(char c) throws IllegalInputCharacterException {
-        if(logger.isDebugEnabled())
+        if (logger.isDebugEnabled())
             logger.debug("canHandle(c={}) - start", String.valueOf(c));
 
         return false;

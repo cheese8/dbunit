@@ -68,6 +68,7 @@ public class CachedDataSet extends AbstractDataSet implements IDataSetConsumer {
 
     /**
      * Creates a CachedDataSet that synchronously consume the specified producer.
+     *
      * @param caseSensitiveTableNames Whether case-sensitive table names should be used
      */
     public CachedDataSet(IDataSetProducer producer, boolean caseSensitiveTableNames) throws DataSetException {
@@ -103,8 +104,8 @@ public class CachedDataSet extends AbstractDataSet implements IDataSetConsumer {
         log.debug("endTable() - start");
         String tableName = activeTable.getTableMetaData().getTableName();
         // Check whether the table appeared once before
-        if(orderedTableNameMap.containsTable(tableName)) {
-            DefaultTable existingTable = (DefaultTable)orderedTableNameMap.get(tableName);
+        if (orderedTableNameMap.containsTable(tableName)) {
+            DefaultTable existingTable = (DefaultTable) orderedTableNameMap.get(tableName);
             // Add all newly collected rows to the existing table
             existingTable.addTableRows(activeTable);
         } else {

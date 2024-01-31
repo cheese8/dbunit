@@ -18,26 +18,22 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
- 
-package org.dbunit.dataset;
 
+package org.dbunit.dataset;
 
 
 /**
  * @author Manuel Laflamme
- * @since Apr 10, 2003
  * @version $Revision$
+ * @since Apr 10, 2003
  */
-public class CachedTable extends DefaultTable
-{
-    public CachedTable(ITable table) throws DataSetException
-    {
+public class CachedTable extends DefaultTable {
+    public CachedTable(ITable table) throws DataSetException {
         super(table.getTableMetaData());
         addTableRows(table);
     }
 
-    protected CachedTable(ITableMetaData metaData)
-    {
+    protected CachedTable(ITableMetaData metaData) {
         super(metaData);
     }
 }

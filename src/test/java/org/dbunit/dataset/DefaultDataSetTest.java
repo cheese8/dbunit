@@ -32,15 +32,12 @@ import java.io.FileReader;
  * @version $Revision$
  * @since Feb 22, 2002
  */
-public class DefaultDataSetTest extends AbstractDataSetTest
-{
-    public DefaultDataSetTest(String s)
-    {
+public class DefaultDataSetTest extends AbstractDataSetTest {
+    public DefaultDataSetTest(String s) {
         super(s);
     }
 
-    protected IDataSet createDataSet() throws Exception
-    {
+    protected IDataSet createDataSet() throws Exception {
         IDataSet dataSet = new XmlDataSet(
                 TestUtils.getFileReader("xml/dataSetTest.xml"));
         ITable[] tables = DataSetUtils.getTables(dataSet);
@@ -48,37 +45,33 @@ public class DefaultDataSetTest extends AbstractDataSetTest
         return new DefaultDataSet(tables);
     }
 
-    protected IDataSet createDuplicateDataSet() throws Exception
-    {
+    protected IDataSet createDuplicateDataSet() throws Exception {
         return createDuplicateDataSet(false);
     }
-    
-    protected IDataSet createMultipleCaseDuplicateDataSet() throws Exception 
-    {
+
+    protected IDataSet createMultipleCaseDuplicateDataSet() throws Exception {
         return createDuplicateDataSet(true);
     }
 
-    private IDataSet createDuplicateDataSet(boolean multipleCase) throws AmbiguousTableNameException 
-    {
+    private IDataSet createDuplicateDataSet(boolean multipleCase) throws AmbiguousTableNameException {
         ITable[] tables = super.createDuplicateTables(multipleCase);
         return new DefaultDataSet(tables);
     }
 
-    public void testAddTableThenReadBackAndDoItAgainDataSet() throws Exception
-    {
-    	String tableName1 = "TEST_TABLE";
-    	String tableName2 = "SECOND_TABLE";
+    public void testAddTableThenReadBackAndDoItAgainDataSet() throws Exception {
+        String tableName1 = "TEST_TABLE";
+        String tableName2 = "SECOND_TABLE";
         DefaultDataSet dataSet = new DefaultDataSet();
-        
+
         DefaultTable table1 = new DefaultTable(tableName1);
         dataSet.addTable(table1);
         assertEquals(table1, dataSet.getTable(tableName1));
-        
+
         DefaultTable table2 = new DefaultTable(tableName2);
         dataSet.addTable(table2);
         assertEquals(table2, dataSet.getTable(tableName2));
     }
-    
+
 }
 
 

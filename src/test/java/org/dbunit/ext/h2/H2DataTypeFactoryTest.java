@@ -32,20 +32,16 @@ import java.sql.Types;
  * @version $Revision$ $Date$
  * @since 2.2.1
  */
-public class H2DataTypeFactoryTest extends AbstractDataTypeFactoryTest
-{
-    public H2DataTypeFactoryTest(String s)
-    {
+public class H2DataTypeFactoryTest extends AbstractDataTypeFactoryTest {
+    public H2DataTypeFactoryTest(String s) {
         super(s);
     }
 
-    public IDataTypeFactory createFactory() throws Exception
-    {
+    public IDataTypeFactory createFactory() throws Exception {
         return new H2DataTypeFactory();
     }
 
-    public void testCreateBooleanDataType() throws Exception
-    {
+    public void testCreateBooleanDataType() throws Exception {
         int sqlType = Types.BIT;
         String sqlTypeName = "BOOLEAN";
 

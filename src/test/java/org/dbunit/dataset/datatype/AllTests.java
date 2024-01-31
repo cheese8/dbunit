@@ -28,10 +28,8 @@ import junit.framework.TestSuite;
  * @author Manuel Laflamme
  * @version $Revision$
  */
-public class AllTests extends TestSuite
-{
-    public static Test suite()
-    {
+public class AllTests extends TestSuite {
+    public static Test suite() {
         TestSuite suite = new TestSuite();
         suite.addTest(new TestSuite(BooleanDataTypeTest.class));
         suite.addTest(new TestSuite(BigIntegerDataTypeTest.class));

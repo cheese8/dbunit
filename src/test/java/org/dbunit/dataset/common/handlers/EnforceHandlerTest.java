@@ -31,9 +31,9 @@ import junit.framework.TestCase;
 public class EnforceHandlerTest extends TestCase {
     Pipeline pipeline;
 
-    public void testOwnAnEnforcedHandler () {
+    public void testOwnAnEnforcedHandler() {
         PipelineComponent enforced = AllHandler.ACCEPT();
-        EnforceHandler enforceHandler = (EnforceHandler)EnforceHandler.ENFORCE(enforced);
+        EnforceHandler enforceHandler = (EnforceHandler) EnforceHandler.ENFORCE(enforced);
         pipeline.putFront(enforceHandler);
 
         assertTrue(true);
@@ -41,28 +41,30 @@ public class EnforceHandlerTest extends TestCase {
         assertSame("enforced pipeline should be the same of the enforcing one", enforceHandler.getPipeline(), enforced.getPipeline());
     }
 
-    public void testThrowExceptionWhenEnforcedDoesNotHandle () throws PipelineException, IllegalInputCharacterException {
+    public void testThrowExceptionWhenEnforcedDoesNotHandle() throws PipelineException, IllegalInputCharacterException {
         PipelineComponent enforceHandler = EnforceHandler.ENFORCE(new MockHandler());
         pipeline.putFront(enforceHandler);
         try {
             enforceHandler.handle('x');
-            fail ("Enforce handler should have thrown an exception");
-        } catch (IllegalInputCharacterException illEx) {}
+            fail("Enforce handler should have thrown an exception");
+        } catch (IllegalInputCharacterException illEx) {
+        }
 
     }
 
-    public void testDontRemoveItselfOnException () throws PipelineException, IllegalInputCharacterException {
+    public void testDontRemoveItselfOnException() throws PipelineException, IllegalInputCharacterException {
         PipelineComponent enforceHandler = EnforceHandler.ENFORCE(new MockHandler());
         pipeline.putFront(enforceHandler);
         try {
             pipeline.handle('x');
-            fail ("Enforce handler should have thrown an exception");
-        } catch (IllegalInputCharacterException illEx) {}
+            fail("Enforce handler should have thrown an exception");
+        } catch (IllegalInputCharacterException illEx) {
+        }
 
         assertSame(pipeline.removeFront(), enforceHandler);
     }
 
-    public void testRemoveItselfAfterEnforcing () throws PipelineException, IllegalInputCharacterException {
+    public void testRemoveItselfAfterEnforcing() throws PipelineException, IllegalInputCharacterException {
         PipelineComponent enforceHandler = EnforceHandler.ENFORCE(AllHandler.ACCEPT());
         pipeline.putFront(enforceHandler);
         pipeline.handle('\"');
@@ -72,10 +74,10 @@ public class EnforceHandlerTest extends TestCase {
         assertEquals("\"", pipeline.getProducts().get(0));
     }
 
-    public void testEnforceOneBetweenMany () throws PipelineException, IllegalInputCharacterException {
+    public void testEnforceOneBetweenMany() throws PipelineException, IllegalInputCharacterException {
         PipelineComponent pass = SeparatorHandler.ACCEPT();
         PipelineComponent accept = AllHandler.ACCEPT();
-        EnforceHandler enforceHandler = (EnforceHandler)EnforceHandler.ENFORCE(new PipelineComponent [] {pass, accept});
+        EnforceHandler enforceHandler = (EnforceHandler) EnforceHandler.ENFORCE(new PipelineComponent[]{pass, accept});
         pipeline.putFront(enforceHandler);
 
         pipeline.handle('\"');

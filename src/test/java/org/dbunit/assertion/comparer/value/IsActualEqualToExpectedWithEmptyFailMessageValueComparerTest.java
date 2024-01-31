@@ -9,14 +9,12 @@ import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.datatype.DataType;
 import org.junit.Test;
 
-public class IsActualEqualToExpectedWithEmptyFailMessageValueComparerTest
-{
+public class IsActualEqualToExpectedWithEmptyFailMessageValueComparerTest {
     private final IsActualEqualToExpectedWithEmptyFailMessageValueComparer sut =
             new IsActualEqualToExpectedWithEmptyFailMessageValueComparer();
 
     @Test
-    public void testIsExpected_AllNulls_True() throws DatabaseUnitException
-    {
+    public void testIsExpected_AllNulls_True() throws DatabaseUnitException {
         final ITable expectedTable = null;
         final ITable actualTable = null;
         final int rowNum = 0;
@@ -32,8 +30,7 @@ public class IsActualEqualToExpectedWithEmptyFailMessageValueComparerTest
 
     @Test
     public void testIsExpected_ActualEqualToExpected_True()
-            throws DatabaseUnitException
-    {
+            throws DatabaseUnitException {
         final ITable expectedTable = null;
         final ITable actualTable = null;
         final int rowNum = 0;
@@ -50,8 +47,7 @@ public class IsActualEqualToExpectedWithEmptyFailMessageValueComparerTest
 
     @Test
     public void testIsExpected_ActualGreaterThanExpected_False()
-            throws DatabaseUnitException
-    {
+            throws DatabaseUnitException {
         final ITable expectedTable = null;
         final ITable actualTable = null;
         final int rowNum = 0;
@@ -69,8 +65,7 @@ public class IsActualEqualToExpectedWithEmptyFailMessageValueComparerTest
 
     @Test
     public void testIsExpected_ActualLessThanExpected_False()
-            throws DatabaseUnitException
-    {
+            throws DatabaseUnitException {
         final ITable expectedTable = null;
         final ITable actualTable = null;
         final int rowNum = 0;
@@ -86,8 +81,7 @@ public class IsActualEqualToExpectedWithEmptyFailMessageValueComparerTest
     }
 
     @Test
-    public void testGetFailPhrase()
-    {
+    public void testGetFailPhrase() {
         final String actual = sut.getFailPhrase();
 
         assertThat(
@@ -97,8 +91,7 @@ public class IsActualEqualToExpectedWithEmptyFailMessageValueComparerTest
     }
 
     @Test
-    public void testMakeFailMessage() throws Exception
-    {
+    public void testMakeFailMessage() throws Exception {
         final Object expectedValue = null;
         final Object actualValue = null;
         final String actual = sut.makeFailMessage(expectedValue, actualValue);

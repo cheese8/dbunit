@@ -71,7 +71,7 @@ public class ImportedAndExportedKeysSearchCallbackFilteredByPKs extends Imported
     }
 
     protected IEdge newEdge(ResultSet rs, int type, String from, String to, String fkColumn, String pkColumn) {
-		log.debug("newEdge(rs={}, type={}, from={}, to={}, fkColumn={}, pkColumn={}) - start", rs, type, from, to, fkColumn, pkColumn);
+        log.debug("newEdge(rs={}, type={}, from={}, to={}, fkColumn={}, pkColumn={}) - start", rs, type, from, to, fkColumn, pkColumn);
         ForeignKeyRelationshipEdge edge = createFKEdge(rs, type, from, to, fkColumn, pkColumn);
         pksFilter.edgeAdded(edge);
         return edge;

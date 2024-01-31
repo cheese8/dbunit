@@ -28,10 +28,8 @@ import junit.framework.TestSuite;
  * @version $Revision$
  * @since Nov 5, 2005
  */
-public class AllTests extends TestSuite
-{
-    public static Test suite() throws Exception
-    {
+public class AllTests extends TestSuite {
+    public static Test suite() throws Exception {
         TestSuite suite = new TestSuite();
         suite.addTest(new TestSuite(CollectionsHelperTest.class));
         suite.addTest(new TestSuite(QualifiedTableNameTest.class));

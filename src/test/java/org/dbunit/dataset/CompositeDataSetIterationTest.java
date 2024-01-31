@@ -39,65 +39,66 @@ import java.sql.Connection;
 
 /**
  * Test Case for issue #1721870
+ *
  * @author Sebastien Le Callonnec
  * @version $Revision$
  * @since Mar 11, 2008
  */
 public class CompositeDataSetIterationTest extends TestCase {
 
-	private Connection jdbcConnection;
-	private final String sqlFile = "hypersonic_simple_dataset.sql"; 
-	private IDatabaseConnection connection;
+    private Connection jdbcConnection;
+    private final String sqlFile = "hypersonic_simple_dataset.sql";
+    private IDatabaseConnection connection;
 
-	protected void setUp() throws Exception {
-		super.setUp();
-		this.jdbcConnection = HypersonicEnvironment.createJdbcConnection("mem:tempdb");
-		DdlExecutor.executeDdlFile(TestUtils.getFile("sql/" + sqlFile), jdbcConnection);
-		this.connection = new DatabaseConnection(jdbcConnection);
-		DatabaseConfig config = connection.getConfig();
-	    config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY,
-	            new HsqldbDataTypeFactory());
-	}
-	
-	  protected void tearDown() throws Exception {
-		super.tearDown();
+    protected void setUp() throws Exception {
+        super.setUp();
+        this.jdbcConnection = HypersonicEnvironment.createJdbcConnection("mem:tempdb");
+        DdlExecutor.executeDdlFile(TestUtils.getFile("sql/" + sqlFile), jdbcConnection);
+        this.connection = new DatabaseConnection(jdbcConnection);
+        DatabaseConfig config = connection.getConfig();
+        config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY,
+                new HsqldbDataTypeFactory());
+    }
 
-		HypersonicEnvironment.shutdown(this.jdbcConnection);
-		this.jdbcConnection.close();
-	}
+    protected void tearDown() throws Exception {
+        super.tearDown();
 
-	public void testMe() throws Exception {
-		
-		// 1. QueryDataSet
-		QueryDataSet queryDataSet = new QueryDataSet(connection);
-		queryDataSet.addTable("B", "select * from B");
-		queryDataSet.addTable("C", "select * from C");
+        HypersonicEnvironment.shutdown(this.jdbcConnection);
+        this.jdbcConnection.close();
+    }
 
-		// 2. Hard-coded data set
-		DefaultDataSet plainDataSet = new DefaultDataSet();
+    public void testMe() throws Exception {
 
-		Column id   = new Column("id",   DataType.DOUBLE);
-		Column name = new Column("name", DataType.VARCHAR);
+        // 1. QueryDataSet
+        QueryDataSet queryDataSet = new QueryDataSet(connection);
+        queryDataSet.addTable("B", "select * from B");
+        queryDataSet.addTable("C", "select * from C");
 
-		Column[] cols = { id, name };
+        // 2. Hard-coded data set
+        DefaultDataSet plainDataSet = new DefaultDataSet();
 
-		DefaultTable aTable = new DefaultTable("D", cols);
-		Object[] row1 = { new Long(1), "D1" };
-		Object[] row2 = { new Long(2), "D2" };
+        Column id = new Column("id", DataType.DOUBLE);
+        Column name = new Column("name", DataType.VARCHAR);
 
-		aTable.addRow(row1);
-		aTable.addRow(row2);
+        Column[] cols = {id, name};
 
-		plainDataSet.addTable(aTable);
+        DefaultTable aTable = new DefaultTable("D", cols);
+        Object[] row1 = {new Long(1), "D1"};
+        Object[] row2 = {new Long(2), "D2"};
 
-		// 3. Composite
-		CompositeDataSet compositeDataSet = new CompositeDataSet(queryDataSet, plainDataSet);
+        aTable.addRow(row1);
+        aTable.addRow(row2);
 
-		// 4. Write
-		try {
-			FlatXmlDataSet.write(compositeDataSet, new FileOutputStream("target/full.xml"));
-		} catch (Exception e) {
-			fail(e.getMessage());
-		}
-	}
+        plainDataSet.addTable(aTable);
+
+        // 3. Composite
+        CompositeDataSet compositeDataSet = new CompositeDataSet(queryDataSet, plainDataSet);
+
+        // 4. Write
+        try {
+            FlatXmlDataSet.write(compositeDataSet, new FileOutputStream("target/full.xml"));
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+    }
 }

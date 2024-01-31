@@ -42,33 +42,27 @@ import org.dbunit.dataset.LowerCaseDataSet;
  * @version $Revision$
  * @since Feb 18, 2002
  */
-public class DeleteAllOperationIT extends AbstractDatabaseIT
-{
-    public DeleteAllOperationIT(String s)
-    {
+public class DeleteAllOperationIT extends AbstractDatabaseIT {
+    public DeleteAllOperationIT(String s) {
         super(s);
     }
-    
-    protected void setUp() throws Exception
-    {
+
+    protected void setUp() throws Exception {
         super.setUp();
 
         DatabaseOperation.CLEAN_INSERT.execute(connection,
                 getEnvironment().getInitDataSet());
     }
 
-    protected DatabaseOperation getDeleteAllOperation()
-    {
+    protected DatabaseOperation getDeleteAllOperation() {
         return new DeleteAllOperation();
     }
 
-    protected String getExpectedStament(String tableName)
-    {
+    protected String getExpectedStament(String tableName) {
         return "delete from " + tableName;
     }
 
-    public void testMockExecute() throws Exception
-    {
+    public void testMockExecute() throws Exception {
         String schemaName = "schema";
         String tableName = "table";
         String expected = getExpectedStament(schemaName + "." + tableName);
@@ -100,11 +94,10 @@ public class DeleteAllOperationIT extends AbstractDatabaseIT
         connection.verify();
     }
 
-    public void testExecuteWithEscapedNames() throws Exception
-    {
+    public void testExecuteWithEscapedNames() throws Exception {
         String schemaName = "schema";
         String tableName = "table";
-        String expected = getExpectedStament("'" + schemaName + "'.'" + tableName +"'");
+        String expected = getExpectedStament("'" + schemaName + "'.'" + tableName + "'");
 
         IDataSet dataSet = new DefaultDataSet(new DefaultTable(tableName));
 
@@ -135,8 +128,7 @@ public class DeleteAllOperationIT extends AbstractDatabaseIT
         connection.verify();
     }
 
-    public void testExecute() throws Exception
-    {
+    public void testExecute() throws Exception {
         IDataSet databaseDataSet = connection.createDataSet();
         IDataSet dataSet = AbstractDataSetTest.removeExtraTestTables(
                 databaseDataSet);
@@ -144,8 +136,7 @@ public class DeleteAllOperationIT extends AbstractDatabaseIT
         testExecute(dataSet);
     }
 
-    public void testExecuteEmpty() throws Exception
-    {
+    public void testExecuteEmpty() throws Exception {
         IDataSet databaseDataSet = connection.createDataSet();
         IDataSet dataSet = AbstractDataSetTest.removeExtraTestTables(
                 databaseDataSet);
@@ -153,8 +144,7 @@ public class DeleteAllOperationIT extends AbstractDatabaseIT
         testExecute(new EmptyTableDataSet(dataSet));
     }
 
-    public void testExecuteCaseInsentive() throws Exception
-    {
+    public void testExecuteCaseInsentive() throws Exception {
         IDataSet dataSet = AbstractDataSetTest.removeExtraTestTables(
                 connection.createDataSet());
 
@@ -167,8 +157,7 @@ public class DeleteAllOperationIT extends AbstractDatabaseIT
 
     Need something like getDefaultTables or something that is totally cross dbms.
     */
-    private void testExecute(IDataSet dataSet) throws Exception
-    {
+    private void testExecute(IDataSet dataSet) throws Exception {
         //dataSet = dataSet);
         ITable[] tablesBefore = DataSetUtils.getTables(AbstractDataSetTest.removeExtraTestTables(connection.createDataSet()));
         getDeleteAllOperation().execute(connection, dataSet);
@@ -176,27 +165,23 @@ public class DeleteAllOperationIT extends AbstractDatabaseIT
 
         assertTrue("table count > 0", tablesBefore.length > 0);
         assertEquals("table count", tablesBefore.length, tablesAfter.length);
-        for (int i = 0; i < tablesBefore.length; i++)
-        {
+        for (int i = 0; i < tablesBefore.length; i++) {
             ITable table = tablesBefore[i];
             String name = table.getTableMetaData().getTableName();
 
-            if (!name.toUpperCase().startsWith("EMPTY"))
-            {
+            if (!name.toUpperCase().startsWith("EMPTY")) {
                 assertTrue(name + " before", table.getRowCount() > 0);
             }
         }
 
-        for (int i = 0; i < tablesAfter.length; i++)
-        {
+        for (int i = 0; i < tablesAfter.length; i++) {
             ITable table = tablesAfter[i];
             String name = table.getTableMetaData().getTableName();
             assertEquals(name + " after " + i, 0, table.getRowCount());
         }
     }
 
-    public void testExecuteWithEmptyDataset() throws Exception
-    {
+    public void testExecuteWithEmptyDataset() throws Exception {
         getDeleteAllOperation().execute(
                 connection, new DefaultDataSet(new ITable[0]));
     }

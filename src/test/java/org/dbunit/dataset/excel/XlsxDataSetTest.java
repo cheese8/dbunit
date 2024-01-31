@@ -25,19 +25,16 @@ import org.dbunit.testutil.TestUtils;
 
 /**
  * @author Kazuhito Miura
- * @since 2015/01/27
  * @version $Revision$
+ * @since 2015/01/27
  */
-public class XlsxDataSetTest extends XlsDataSetTest
-{
-    public XlsxDataSetTest(String s)
-    {
+public class XlsxDataSetTest extends XlsDataSetTest {
+    public XlsxDataSetTest(String s) {
         super(s);
     }
 
     @Override
-    protected IDataSet createDataSet() throws Exception
-    {
+    protected IDataSet createDataSet() throws Exception {
         return new XlsDataSet(TestUtils.getFile("xml/dataSetTest.xlsx"));
     }
 

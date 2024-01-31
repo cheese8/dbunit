@@ -28,26 +28,21 @@ import org.dbunit.dataset.DataSetException;
  * @version $Revision$
  */
 
-public class DataTypeException extends DataSetException
-{
+public class DataTypeException extends DataSetException {
 
-    public DataTypeException()
-    {
+    public DataTypeException() {
         super();
     }
 
-    public DataTypeException(String msg)
-    {
+    public DataTypeException(String msg) {
         super(msg);
     }
 
-    public DataTypeException(Throwable e)
-    {
+    public DataTypeException(Throwable e) {
         super(e);
     }
 
-    public DataTypeException(String msg, Throwable e)
-    {
+    public DataTypeException(String msg, Throwable e) {
         super(msg, e);
     }
 }

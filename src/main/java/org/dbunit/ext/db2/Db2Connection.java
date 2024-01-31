@@ -30,7 +30,7 @@ import java.sql.Connection;
 /**
  * Database connection for DB2 that pre-configures all properties required to successfully
  * use dbunit with DB2.
- * 
+ *
  * @author Federico Spinazzi
  * @author Last changed by: $Author$
  * @version $Revision$ $Date$

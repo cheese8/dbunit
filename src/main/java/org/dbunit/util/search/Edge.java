@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Basic implementation of the {@link IEdge} interface.
- * 
+ *
  * @author Felipe Leme (dbunit@felipeal.net)
  * @author Last changed by: $Author$
  * @version $Revision$ $Date$
@@ -69,10 +69,11 @@ public class Edge implements IEdge {
     }
 
     /**
-     * Compares this edge to the given one using 
-     * the <code>{@link #getFrom()}</code> nodes first. 
+     * Compares this edge to the given one using
+     * the <code>{@link #getFrom()}</code> nodes first.
      * If those are equal the <code>{@link #getTo()}}</code>
      * is used for comparison.
+     *
      * @see java.lang.Comparable#compareTo(java.lang.Object)
      */
     public int compareTo(Object o) {
@@ -80,7 +81,7 @@ public class Edge implements IEdge {
 
         Edge otherEdge = (Edge) o;
         int result = this.nodeFrom.compareTo(otherEdge.getFrom());
-        if ( result == 0 ) {
+        if (result == 0) {
             result = this.nodeTo.compareTo(otherEdge.getTo());
         }
         return result;

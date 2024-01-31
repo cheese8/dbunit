@@ -53,7 +53,7 @@ import org.xml.sax.ext.LexicalHandler;
 
 /**
  * Produces a DataSet from a flat DTD.
- *
+ * <p>
  * Only external DTDs are supported and for the root element only the following
  * declarations are supported.
  * <ul>
@@ -63,19 +63,18 @@ import org.xml.sax.ext.LexicalHandler;
  * </ul>
  * Combinations of sequences and choices are not support nor are #PCDATA or
  * EMPTY declarations.
- * 
+ *
  * @author Manuel Laflamme
  * @author Last changed by: $Author$
  * @version $Revision$ $Date$
  * @since Apr 27, 2003
  */
-public class FlatDtdProducer implements IDataSetProducer, EntityResolver, DeclHandler, LexicalHandler
-{
+public class FlatDtdProducer implements IDataSetProducer, EntityResolver, DeclHandler, LexicalHandler {
     /**
      * Constant for the value {@value}
      */
     public static final String REQUIRED = "#REQUIRED";
-    
+
     /**
      * Constant for the value {@value}
      */
@@ -95,8 +94,8 @@ public class FlatDtdProducer implements IDataSetProducer, EntityResolver, DeclHa
 
     private static final String XML_CONTENT =
             "<?xml version=\"1.0\"?>" +
-            "<!DOCTYPE dataset SYSTEM \"urn:/dummy.dtd\">" +
-            "<dataset/>";
+                    "<!DOCTYPE dataset SYSTEM \"urn:/dummy.dtd\">" +
+                    "<dataset/>";
     private static final String DECL_HANDLER_PROPERTY_NAME =
             "http://xml.org/sax/properties/declaration-handler";
     private static final String LEXICAL_HANDLER_PROPERTY_NAME =
@@ -109,48 +108,40 @@ public class FlatDtdProducer implements IDataSetProducer, EntityResolver, DeclHa
     private String _rootModel;
     private final Map _columnListMap = new HashMap();
 
-    public FlatDtdProducer()
-    {
+    public FlatDtdProducer() {
     }
 
-    public FlatDtdProducer(InputSource inputSource)
-    {
+    public FlatDtdProducer(InputSource inputSource) {
         _inputSource = inputSource;
     }
 
     public static void setDeclHandler(XMLReader xmlReader, DeclHandler handler)
-            throws SAXNotRecognizedException, SAXNotSupportedException
-    {
+            throws SAXNotRecognizedException, SAXNotSupportedException {
         logger.debug("setDeclHandler(xmlReader={}, handler={}) - start", xmlReader, handler);
         xmlReader.setProperty(DECL_HANDLER_PROPERTY_NAME, handler);
     }
 
     public static void setLexicalHandler(XMLReader xmlReader, LexicalHandler handler)
-            throws SAXNotRecognizedException, SAXNotSupportedException
-    {
+            throws SAXNotRecognizedException, SAXNotSupportedException {
         logger.debug("setLexicalHandler(xmlReader={}, handler={}) - start", xmlReader, handler);
         xmlReader.setProperty(LEXICAL_HANDLER_PROPERTY_NAME, handler);
     }
 
-    private List createColumnList()
-    {
+    private List createColumnList() {
         return new LinkedList();
     }
 
     ////////////////////////////////////////////////////////////////////////////
     // IDataSetProducer interface
 
-    public void setConsumer(IDataSetConsumer consumer) throws DataSetException
-    {
+    public void setConsumer(IDataSetConsumer consumer) throws DataSetException {
         _consumer = consumer;
     }
 
-    public void produce() throws DataSetException
-    {
+    public void produce() throws DataSetException {
         logger.debug("produce() - start");
 
-        try
-        {
+        try {
             SAXParser saxParser = SAXParserFactory.newInstance().newSAXParser();
             XMLReader xmlReader = saxParser.getXMLReader();
 
@@ -158,25 +149,16 @@ public class FlatDtdProducer implements IDataSetProducer, EntityResolver, DeclHa
             setLexicalHandler(xmlReader, this);
             xmlReader.setEntityResolver(this);
             xmlReader.parse(new InputSource(new StringReader(XML_CONTENT)));
-        }
-        catch (ParserConfigurationException e)
-        {
+        } catch (ParserConfigurationException e) {
             throw new DataSetException(e);
-        }
-        catch (SAXException e)
-        {
+        } catch (SAXException e) {
             Exception exception = e.getException() == null ? e : e.getException();
-            if(exception instanceof DataSetException)
-            {
-                throw (DataSetException)exception;
-            }
-            else
-            {
+            if (exception instanceof DataSetException) {
+                throw (DataSetException) exception;
+            } else {
                 throw new DataSetException(exception);
             }
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             throw new DataSetException(e);
         }
     }
@@ -185,60 +167,50 @@ public class FlatDtdProducer implements IDataSetProducer, EntityResolver, DeclHa
     // EntityResolver interface
 
     public InputSource resolveEntity(String publicId, String systemId)
-            throws SAXException
-    {
+            throws SAXException {
         return _inputSource;
     }
 
     ////////////////////////////////////////////////////////////////////////////
     // DeclHandler interface
 
-    public void elementDecl(String name, String model) throws SAXException
-    {
+    public void elementDecl(String name, String model) throws SAXException {
         logger.debug("elementDecl(name={}, model={}) - start", name, model);
 
         // Root element
-        if (name.equals(_rootName))
-        {
+        if (name.equals(_rootName)) {
             // The root model defines the table sequence. Keep it for later used!
             _rootModel = model;
-        }
-        else if (!_columnListMap.containsKey(name))
-        {
+        } else if (!_columnListMap.containsKey(name)) {
             _columnListMap.put(name, createColumnList());
         }
     }
 
     public void attributeDecl(String elementName, String attributeName,
-            String type, String mode, String value) throws SAXException
-    {
-    	if (logger.isDebugEnabled())
-    	{
-    		logger.debug("attributeDecl(elementName={}, attributeName={}, type={}, mode={}, value={}) - start",
-    				new Object[]{ elementName, attributeName, type, mode, value });
-    	}
+                              String type, String mode, String value) throws SAXException {
+        if (logger.isDebugEnabled()) {
+            logger.debug("attributeDecl(elementName={}, attributeName={}, type={}, mode={}, value={}) - start",
+                    new Object[]{elementName, attributeName, type, mode, value});
+        }
 
         // Each element attribute represent a table column
         Column.Nullable nullable = (REQUIRED.equals(mode)) ?
                 Column.NO_NULLS : Column.NULLABLE;
         Column column = new Column(attributeName, DataType.UNKNOWN, nullable);
 
-        if (!_columnListMap.containsKey(elementName))
-        {
+        if (!_columnListMap.containsKey(elementName)) {
             _columnListMap.put(elementName, createColumnList());
         }
-        List columnList = (List)_columnListMap.get(elementName);
+        List columnList = (List) _columnListMap.get(elementName);
         columnList.add(column);
     }
 
-    public void internalEntityDecl(String name, String value) throws SAXException
-    {
+    public void internalEntityDecl(String name, String value) throws SAXException {
         // Not used!
     }
 
     public void externalEntityDecl(String name, String publicId,
-            String systemId) throws SAXException
-    {
+                                   String systemId) throws SAXException {
         // Not used!
     }
 
@@ -246,49 +218,37 @@ public class FlatDtdProducer implements IDataSetProducer, EntityResolver, DeclHa
     // LexicalHandler interface
 
     public void startDTD(String name, String publicId, String systemId)
-            throws SAXException
-    {
-    	if (logger.isDebugEnabled())
-    	{
-    		logger.debug("startDTD(name={}, publicId={}, systemId={}) - start",
-    				new Object[]{ name, publicId, systemId });
-    	}
+            throws SAXException {
+        if (logger.isDebugEnabled()) {
+            logger.debug("startDTD(name={}, publicId={}, systemId={}) - start",
+                    new Object[]{name, publicId, systemId});
+        }
 
-        try
-        {
+        try {
             _rootName = name;
             _consumer.startDataSet();
-        }
-        catch (DataSetException e)
-        {
+        } catch (DataSetException e) {
             throw new SAXException(e);
         }
     }
 
-    public void endDTD() throws SAXException
-    {
+    public void endDTD() throws SAXException {
         logger.debug("endDTD() - start");
 
-        try
-        {
-            if(_rootModel == null)
-            {
+        try {
+            if (_rootModel == null) {
                 logger.info("The rootModel is null. Cannot add tables.");
-            }
-            else
-            {
-                if (ANY.equalsIgnoreCase(_rootModel))
-                {
+            } else {
+                if (ANY.equalsIgnoreCase(_rootModel)) {
                     Iterator i = _columnListMap.keySet().iterator();
                     while (i.hasNext()) {
                         String tableName = (String) i.next();
                         addTable(tableName);
                     }
-                }
-                else {
+                } else {
                     // Remove enclosing model parenthesis
                     String rootModel = _rootModel.substring(1, _rootModel.length() - 1);
-    
+
                     // Parse the root element model to determine the table sequence.
                     // Support all sequence or choices model but not the mix of both.
                     String delim = (rootModel.indexOf(",") != -1) ? "," : "|";
@@ -302,33 +262,28 @@ public class FlatDtdProducer implements IDataSetProducer, EntityResolver, DeclHa
             }
 
             _consumer.endDataSet();
-        }
-        catch (DataSetException e)
-        {
+        } catch (DataSetException e) {
             throw new SAXException(e);
         }
     }
-    
-    private void addTable(String tableName) throws DataSetException
-    {
+
+    private void addTable(String tableName) throws DataSetException {
         Column[] columns = getColumns(tableName);
         _consumer.startTable(new DefaultTableMetaData(tableName, columns));
         _consumer.endTable();
     }
 
-    private Column[] getColumns(String tableName) throws DataSetException 
-    {
-        List columnList = (List)_columnListMap.get(tableName);
-        if(columnList==null){
+    private Column[] getColumns(String tableName) throws DataSetException {
+        List columnList = (List) _columnListMap.get(tableName);
+        if (columnList == null) {
             throw new DataSetException("ELEMENT/ATTRIBUTE declaration for '" + tableName + "' is missing. " +
                     "Every table must have an element describing the table.");
         }
-        Column[] columns = (Column[])columnList.toArray(new Column[0]);
+        Column[] columns = (Column[]) columnList.toArray(new Column[0]);
         return columns;
     }
 
-    protected String cleanupTableName(String tableName)
-    {
+    protected String cleanupTableName(String tableName) {
         String cleaned = tableName;
         // Remove beginning parenthesis.
         while (cleaned.startsWith("(")) {
@@ -344,28 +299,23 @@ public class FlatDtdProducer implements IDataSetProducer, EntityResolver, DeclHa
         return cleaned;
     }
 
-    public void startEntity(String name) throws SAXException
-    {
+    public void startEntity(String name) throws SAXException {
         // Not used!
     }
 
-    public void endEntity(String name) throws SAXException
-    {
+    public void endEntity(String name) throws SAXException {
         // Not used!
     }
 
-    public void startCDATA() throws SAXException
-    {
+    public void startCDATA() throws SAXException {
         // Not used!
     }
 
-    public void endCDATA() throws SAXException
-    {
+    public void endCDATA() throws SAXException {
         // Not used!
     }
 
-    public void comment(char ch[], int start, int length) throws SAXException
-    {
+    public void comment(char ch[], int start, int length) throws SAXException {
         // Not used!
     }
 }

@@ -28,10 +28,8 @@ import junit.framework.TestSuite;
  * @author Manuel Laflamme
  * @version $Revision$
  */
-public class AllTests extends TestSuite
-{
-    public static Test suite()
-    {
+public class AllTests extends TestSuite {
+    public static Test suite() {
         TestSuite suite = new TestSuite();
         suite.addTest(org.dbunit.dataset.common.handlers.AllTests.suite());
         suite.addTest(org.dbunit.dataset.datatype.AllTests.suite());

@@ -28,11 +28,9 @@ import junit.framework.TestCase;
  * @version $Revision$
  */
 
-public abstract class AbstractDataTypeTest extends TestCase
-{
+public abstract class AbstractDataTypeTest extends TestCase {
 
-    public AbstractDataTypeTest(String name)
-    {
+    public AbstractDataTypeTest(String name) {
         super(name);
     }
 
@@ -57,7 +55,9 @@ public abstract class AbstractDataTypeTest extends TestCase
     public abstract void testAsString() throws Exception;
 
     public abstract void testCompareEquals() throws Exception;
+
     public abstract void testCompareDifferent() throws Exception;
+
     public abstract void testCompareInvalid() throws Exception;
 
     public abstract void testGetSqlValue() throws Exception;

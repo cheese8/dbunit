@@ -49,7 +49,7 @@ public class JdbcDatabaseTester extends AbstractDatabaseTester {
      * Username and Password are set to null.
      *
      * @param driverClass the classname of the JDBC driver to use
-     * @param url the connection url
+     * @param url         the connection url
      */
     public JdbcDatabaseTester(String driverClass, String url) {
         this(driverClass, url, null, null);
@@ -59,10 +59,10 @@ public class JdbcDatabaseTester extends AbstractDatabaseTester {
      * Creates a new JdbcDatabaseTester with the specified properties.
      *
      * @param driverClass the classname of the JDBC driver to use
-     * @param url the connection url
-     * @param username a username that can has access to the database - can be <code>null</code>
-     * @param password the user's password - can be <code>null</code>
-     * @param schema the database schema to be tested - can be <code>null</code>
+     * @param url         the connection url
+     * @param username    a username that can has access to the database - can be <code>null</code>
+     * @param password    the user's password - can be <code>null</code>
+     * @param schema      the database schema to be tested - can be <code>null</code>
      * @throws ClassNotFoundException If the given <code>driverClass</code> was not found
      * @since 2.4.3
      */

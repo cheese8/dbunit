@@ -34,41 +34,35 @@ import java.util.regex.Pattern;
  * in the form of {@code uuid'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'}, where the
  * x's are the actual string value of the UUID, hex-encoded. Example:
  * </p>
- * 
+ *
  * <pre>
  *     &lt;company id="uuid'791ae85a-d8d0-11e2-8c43-50e549c9b654'" name="ACME"/&gt;
  * </pre>
- * 
+ *
  * @author Timur Strekalov
  */
-public class UuidAwareBytesDataType extends BytesDataType
-{
+public class UuidAwareBytesDataType extends BytesDataType {
     /**
      * The regular expression for a hexadecimal UUID representation.
      */
     private static final Pattern UUID_RE =
             Pattern.compile("uuid'([0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12})'");
 
-    UuidAwareBytesDataType(final String name, final int sqlType)
-    {
+    UuidAwareBytesDataType(final String name, final int sqlType) {
         super(name, sqlType);
     }
 
     @Override
-    public Object typeCast(final Object value) throws TypeCastException
-    {
+    public Object typeCast(final Object value) throws TypeCastException {
         return super.typeCast(uuidAwareValueOf(value));
     }
 
-    private static Object uuidAwareValueOf(final Object value)
-    {
-        if (value instanceof String)
-        {
+    private static Object uuidAwareValueOf(final Object value) {
+        if (value instanceof String) {
             final String s = (String) value;
             final Matcher m = UUID_RE.matcher(s);
 
-            if (m.find())
-            {
+            if (m.find()) {
                 final UUID uuid = UUID.fromString(m.group(1));
                 return uuidToBytes(uuid);
             }
@@ -77,12 +71,11 @@ public class UuidAwareBytesDataType extends BytesDataType
         return value;
     }
 
-    private static byte[] uuidToBytes(final UUID uuid)
-    {
+    private static byte[] uuidToBytes(final UUID uuid) {
         final long msb = uuid.getMostSignificantBits();
         final long lsb = uuid.getLeastSignificantBits();
 
-        return new byte[] {extractByte(msb, 0), extractByte(msb, 1),
+        return new byte[]{extractByte(msb, 0), extractByte(msb, 1),
                 extractByte(msb, 2), extractByte(msb, 3), extractByte(msb, 4),
                 extractByte(msb, 5), extractByte(msb, 6), extractByte(msb, 7),
                 extractByte(lsb, 0), extractByte(lsb, 1), extractByte(lsb, 2),
@@ -90,8 +83,7 @@ public class UuidAwareBytesDataType extends BytesDataType
                 extractByte(lsb, 6), extractByte(lsb, 7)};
     }
 
-    private static byte extractByte(final long value, final int byteIndex)
-    {
+    private static byte extractByte(final long value, final int byteIndex) {
         return (byte) (value >> (56 - byteIndex * 8) & 0xff);
     }
 }

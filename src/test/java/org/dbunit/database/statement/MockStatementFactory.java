@@ -32,17 +32,17 @@ import java.sql.SQLException;
  * @version $Revision$
  * @since Mar 16, 2002
  */
-public class MockStatementFactory implements IStatementFactory, Verifiable
-{
+public class MockStatementFactory implements IStatementFactory, Verifiable {
     private IBatchStatement _batchStatement = null;
-//    private IPreparedBatchStatement _preparedBatchStatement = null;
+    //    private IPreparedBatchStatement _preparedBatchStatement = null;
     private ExpectationCounter _createStatementCalls =
-            new ExpectationCounter("MockStatementFactory.createBatchStatement");;
+            new ExpectationCounter("MockStatementFactory.createBatchStatement");
+    ;
     private ExpectationCounter _createPreparedStatementCalls =
-            new ExpectationCounter("MockStatementFactory.createPreparedBatchStatement");;
+            new ExpectationCounter("MockStatementFactory.createPreparedBatchStatement");
+    ;
 
-    public void setupStatement(IBatchStatement batchStatement)
-    {
+    public void setupStatement(IBatchStatement batchStatement) {
         _batchStatement = batchStatement;
     }
 
@@ -51,13 +51,11 @@ public class MockStatementFactory implements IStatementFactory, Verifiable
 //        _preparedBatchStatement = preparedBatchStatement;
 //    }
 
-    public void setExpectedCreateStatementCalls(int callsCount)
-    {
+    public void setExpectedCreateStatementCalls(int callsCount) {
         _createStatementCalls.setExpected(callsCount);
     }
 
-    public void setExpectedCreatePreparedStatementCalls(int callsCount)
-    {
+    public void setExpectedCreatePreparedStatementCalls(int callsCount) {
         _createPreparedStatementCalls.setExpected(callsCount);
     }
 
@@ -65,8 +63,7 @@ public class MockStatementFactory implements IStatementFactory, Verifiable
     ////////////////////////////////////////////////////////////////////////////
     // Verifiable interface
 
-    public void verify()
-    {
+    public void verify() {
         _createStatementCalls.verify();
         _createPreparedStatementCalls.verify();
     }
@@ -75,15 +72,13 @@ public class MockStatementFactory implements IStatementFactory, Verifiable
     // IStatementFactory interface
 
     public IBatchStatement createBatchStatement(IDatabaseConnection connection)
-            throws SQLException
-    {
+            throws SQLException {
         _createStatementCalls.inc();
         return _batchStatement;
     }
 
     public IPreparedBatchStatement createPreparedBatchStatement(String sql,
-            IDatabaseConnection connection) throws SQLException
-    {
+                                                                IDatabaseConnection connection) throws SQLException {
         _createPreparedStatementCalls.inc();
         return new BatchStatementDecorator(sql, _batchStatement);
     }

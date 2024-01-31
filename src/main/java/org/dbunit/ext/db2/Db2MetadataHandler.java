@@ -31,7 +31,7 @@ import org.dbunit.util.SQLHelper;
 /**
  * Customized MetadataHandler for DB2 as match Columns of {@link DefaultMetadataHandler}
  * fails with a RuntimeException.
- * 
+ *
  * @author gommma (gommma AT users.sourceforge.net)
  * @author Last changed by: $Author$
  * @version $Revision$ $Date$
@@ -55,6 +55,7 @@ public class Db2MetadataHandler extends DefaultMetadataHandler {
      * This problem is taken into account by this metadata handler.
      * <p>
      * {@inheritDoc}
+     *
      * @see org.dbunit.database.DefaultMetadataHandler#matches(java.sql.ResultSet, java.lang.String, java.lang.String, java.lang.String, java.lang.String, boolean)
      */
     public boolean matches(ResultSet columnsResultSet, String catalog, String schema, String table, String column, boolean caseSensitive) throws SQLException {

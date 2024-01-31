@@ -29,67 +29,56 @@ import org.dbunit.dataset.datatype.TypeCastException;
 
 import junit.framework.TestCase;
 
-public class DateTimeOffsetTypeTest extends TestCase
-{
+public class DateTimeOffsetTypeTest extends TestCase {
     private DateTimeOffsetType type;
 
     @Override
-    protected void setUp() throws Exception
-    {
+    protected void setUp() throws Exception {
         super.setUp();
 
         type = new DateTimeOffsetType();
     }
 
-    public void testTypeCastWithNull() throws TypeCastException
-    {
+    public void testTypeCastWithNull() throws TypeCastException {
         final Object result = type.typeCast(null);
         assertNull(result);
     }
 
-    public void testTypeCastWithOffsetDateTime() throws TypeCastException
-    {
+    public void testTypeCastWithOffsetDateTime() throws TypeCastException {
         final Object result = type.typeCast(OffsetDateTime.MIN);
         assertSame(OffsetDateTime.MIN, result);
     }
 
-    public void testTypeCastWithValidTemporalAccessor() throws TypeCastException
-    {
+    public void testTypeCastWithValidTemporalAccessor() throws TypeCastException {
         final ZonedDateTime now = ZonedDateTime.now();
         final Object result = type.typeCast(now);
         assertEquals(now.toOffsetDateTime(), result);
     }
 
     public void testTypeCastWithInvalidTemporalAccessor()
-            throws TypeCastException
-    {
-        try
-        {
+            throws TypeCastException {
+        try {
             type.typeCast(LocalDateTime.now());
             fail("Should not be possible to convert due to insufficient information");
-        } catch (final TypeCastException e)
-        {
+        } catch (final TypeCastException e) {
         }
     }
 
-    public void testTypeCastWithISO_8601_String() throws TypeCastException
-    {
+    public void testTypeCastWithISO_8601_String() throws TypeCastException {
         final Object result = type.typeCast("2000-01-01T01:00:00Z");
         assertEquals(OffsetDateTime.of(2000, 1, 1, 1, 0, 0, 0, ZoneOffset.UTC),
                 result);
     }
 
     public void testTypeCastWithSqlServerStringWithoutNanos()
-            throws TypeCastException
-    {
+            throws TypeCastException {
         final Object result = type.typeCast("2000-01-01 01:00:00 +00:00");
         assertEquals(OffsetDateTime.of(2000, 1, 1, 1, 0, 0, 0, ZoneOffset.UTC),
                 result);
     }
 
     public void testTypeCastWithSqlServerStringWithNanos()
-            throws TypeCastException
-    {
+            throws TypeCastException {
         final Object result =
                 type.typeCast("2000-01-01 01:00:00.123000 +00:00");
         assertEquals(
@@ -97,14 +86,11 @@ public class DateTimeOffsetTypeTest extends TestCase
                 result);
     }
 
-    public void testTypeCastWithInvalidObject() throws TypeCastException
-    {
-        try
-        {
+    public void testTypeCastWithInvalidObject() throws TypeCastException {
+        try {
             type.typeCast(new Object());
             fail("Should not be possible to convert due to invalid string format");
-        } catch (final TypeCastException e)
-        {
+        } catch (final TypeCastException e) {
         }
     }
 }

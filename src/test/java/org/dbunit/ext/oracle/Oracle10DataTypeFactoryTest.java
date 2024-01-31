@@ -26,23 +26,19 @@ import org.dbunit.dataset.datatype.IDataTypeFactory;
 
 /**
  * @author gommma
- * @since 2.3.0
  * @version $Revision$
+ * @since 2.3.0
  */
-public class Oracle10DataTypeFactoryTest extends OracleDataTypeFactoryTest
-{
-    public Oracle10DataTypeFactoryTest(String s)
-    {
+public class Oracle10DataTypeFactoryTest extends OracleDataTypeFactoryTest {
+    public Oracle10DataTypeFactoryTest(String s) {
         super(s);
     }
 
-    public IDataTypeFactory createFactory() throws Exception
-    {
+    public IDataTypeFactory createFactory() throws Exception {
         return new Oracle10DataTypeFactory();
     }
 
-    public void testCreateBlobDataType() throws Exception
-    {
+    public void testCreateBlobDataType() throws Exception {
         int sqlType = Types.BLOB;
         String sqlTypeName = "BLOB";
 
@@ -51,8 +47,7 @@ public class Oracle10DataTypeFactoryTest extends OracleDataTypeFactoryTest
         assertSame("type", expected, actual);
     }
 
-    public void testCreateClobDataType() throws Exception
-    {
+    public void testCreateClobDataType() throws Exception {
         int sqlType = Types.CLOB;
         String sqlTypeName = "CLOB";
 

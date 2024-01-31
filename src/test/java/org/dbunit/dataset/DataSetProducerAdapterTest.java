@@ -31,21 +31,18 @@ import java.io.File;
 
 /**
  * @author Manuel Laflamme
- * @since Apr 17, 2003
  * @version $Revision$
+ * @since Apr 17, 2003
  */
-public class DataSetProducerAdapterTest extends AbstractProducerTest
-{
+public class DataSetProducerAdapterTest extends AbstractProducerTest {
     private static final File DATASET_FILE =
             TestUtils.getFile("xml/flatXmlProducerTest.xml");
 
-    public DataSetProducerAdapterTest(String s)
-    {
+    public DataSetProducerAdapterTest(String s) {
         super(s);
     }
 
-    protected IDataSetProducer createProducer() throws Exception
-    {
+    protected IDataSetProducer createProducer() throws Exception {
         FlatXmlDataSet dataSet = new FlatXmlDataSetBuilder().build(DATASET_FILE);
         return new DataSetProducerAdapter(dataSet);
     }

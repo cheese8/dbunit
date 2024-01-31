@@ -84,12 +84,10 @@ public class DatabaseEnvironment {
      * Simply create "hsqldb-dbunit.properties" under "src/test/resources".
      *
      * @return Merged DbUnit and System properties.
-     * @throws IOException
-     *             Thrown if an error occurs when attempting to read
-     *             "hsqldb-dbunit.properties".
+     * @throws IOException Thrown if an error occurs when attempting to read
+     *                     "hsqldb-dbunit.properties".
      */
-    protected static Properties getProperties() throws IOException
-    {
+    protected static Properties getProperties() throws IOException {
         final Properties properties = System.getProperties();
 
         final String profileName = properties.getProperty(DatabaseProfile.DATABASE_PROFILE);
@@ -103,13 +101,11 @@ public class DatabaseEnvironment {
     }
 
     protected static void loadDbunitPropertiesFromFile(
-            final Properties properties) throws IOException
-    {
+            final Properties properties) throws IOException {
         final InputStream inputStream =
                 DatabaseEnvironment.class.getClassLoader()
                         .getResourceAsStream(DBUNIT_PROPERTIES_FILENAME);
-        if (inputStream != null)
-        {
+        if (inputStream != null) {
             logger.info("Loaded properties from file '{}'",
                     DBUNIT_PROPERTIES_FILENAME);
             properties.load(inputStream);
@@ -117,10 +113,8 @@ public class DatabaseEnvironment {
         }
     }
 
-    public static DatabaseEnvironment getInstance() throws Exception
-    {
-        if (INSTANCE == null)
-        {
+    public static DatabaseEnvironment getInstance() throws Exception {
+        if (INSTANCE == null) {
             final DatabaseProfile profile = new DatabaseProfile(getProperties());
 
             final String activeProfile = profile.getActiveProfile();
@@ -180,23 +174,19 @@ public class DatabaseEnvironment {
                 profile.getProfileMultilineSupport(), true);
     }
 
-    public DatabaseEnvironment(final DatabaseProfile profile) throws Exception
-    {
+    public DatabaseEnvironment(final DatabaseProfile profile) throws Exception {
         this(profile, null);
     }
 
-    public IDatabaseConnection getConnection() throws Exception
-    {
+    public IDatabaseConnection getConnection() throws Exception {
         // First check if the current connection is still valid and open
         // The connection may have been closed by a consumer
-        if (_connection != null && _connection.getConnection().isClosed())
-        {
+        if (_connection != null && _connection.getConnection().isClosed()) {
             // Reset the member so that a new connection will be created
             _connection = null;
         }
 
-        if (_connection == null)
-        {
+        if (_connection == null) {
             final String name = _profile.getDriverClass();
             Class.forName(name);
             final Connection connection =
@@ -208,27 +198,22 @@ public class DatabaseEnvironment {
         return _connection;
     }
 
-    protected void setupDatabaseConfig(final DatabaseConfig config)
-    {
+    protected void setupDatabaseConfig(final DatabaseConfig config) {
         // Override in subclasses as necessary.
     }
 
-    public IDatabaseTester getDatabaseTester()
-    {
+    public IDatabaseTester getDatabaseTester() {
         return _databaseTester;
     }
 
-    public void closeConnection() throws Exception
-    {
-        if (_connection != null)
-        {
+    public void closeConnection() throws Exception {
+        if (_connection != null) {
             _connection.close();
             _connection = null;
         }
     }
 
-    public IDataSet getInitDataSet() throws Exception
-    {
+    public IDataSet getInitDataSet() throws Exception {
         return _dataSet;
     }
 
@@ -236,8 +221,7 @@ public class DatabaseEnvironment {
         return _profile;
     }
 
-    public boolean support(final TestFeature feature)
-    {
+    public boolean support(final TestFeature feature) {
         final String[] unsupportedFeatures = _profile.getUnsupportedFeatures();
         for (final String unsupportedFeature : unsupportedFeatures) {
             if (feature.toString().equals(unsupportedFeature)) {
@@ -254,18 +238,15 @@ public class DatabaseEnvironment {
      * identifiers to uppercase. PostgreSQL converts identifiers to lowercase.
      * MySQL preserves case.
      *
-     * @param str
-     *            The identifier.
+     * @param str The identifier.
      * @return The identifier converted according to database rules.
      */
-    public String convertString(final String str)
-    {
+    public String convertString(final String str) {
         return str == null ? null : str.toUpperCase();
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return getClass().getName() + "[" +
                 "_profile=" + _profile +
                 ", _connection=" + _connection +

@@ -32,44 +32,34 @@ import org.dbunit.DatabaseEnvironment;
  * @author John Hurst (john.b.hurst@gmail.com)
  * @since 2.4.8
  */
-public class TestUtils
-{
-    private static String getProfileName() throws Exception
-    {
+public class TestUtils {
+    private static String getProfileName() throws Exception {
         return DatabaseEnvironment.getInstance().getProfile().getActiveProfile();
     }
 
-    public static String getFileName(String fileName)
-    {
+    public static String getFileName(String fileName) {
         return "src/test/resources/" + fileName;
     }
 
-    public static File getFile(String fileName)
-    {
+    public static File getFile(String fileName) {
         return new File(getFileName(fileName));
     }
 
-    public static File getFileForDatabaseEnvironment(String originalFileName) throws Exception
-    {
+    public static File getFileForDatabaseEnvironment(String originalFileName) throws Exception {
         String profilePath = originalFileName.replace(".", "-" + getProfileName() + ".");
         File profileFile = new File(profilePath);
-        if (profileFile.exists())
-        {
+        if (profileFile.exists()) {
             return profileFile;
-        }
-        else
-        {
+        } else {
             return new File(originalFileName);
         }
     }
 
-    public static FileReader getFileReader(String fileName) throws FileNotFoundException
-    {
+    public static FileReader getFileReader(String fileName) throws FileNotFoundException {
         return new FileReader(getFileName(fileName));
     }
 
-    public static FileInputStream getFileInputStream(String fileName) throws FileNotFoundException
-    {
+    public static FileInputStream getFileInputStream(String fileName) throws FileNotFoundException {
         return new FileInputStream(getFileName(fileName));
     }
 

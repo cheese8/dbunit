@@ -28,20 +28,17 @@ import java.io.FileReader;
 
 /**
  * @author Manuel Laflamme
- * @since Mar 9, 2003
  * @version $Revision$
+ * @since Mar 9, 2003
  */
 public abstract class AbstractTableFilterTest
-        extends AbstractTest
-{
+        extends AbstractTest {
 
-    public AbstractTableFilterTest(String s)
-    {
+    public AbstractTableFilterTest(String s) {
         super(s);
     }
 
-    protected IDataSet createDataSet() throws Exception
-    {
+    protected IDataSet createDataSet() throws Exception {
         IDataSet dataSet1 = new XmlDataSet(
                 TestUtils.getFileReader("xml/dataSetTest.xml"));
         IDataSet dataSet2 = new DefaultDataSet(
@@ -53,8 +50,7 @@ public abstract class AbstractTableFilterTest
         return dataSet;
     }
 
-    protected IDataSet createDuplicateDataSet() throws Exception
-    {
+    protected IDataSet createDuplicateDataSet() throws Exception {
         IDataSet dataSet1 = new XmlDataSet(
                 TestUtils.getFileReader("xml/xmlDataSetDuplicateTest.xml"));
         IDataSet dataSet2 = new DefaultDataSet(

@@ -53,27 +53,24 @@ import org.dbunit.testutil.TestUtils;
  * @version $Revision$
  * @since Feb 19, 2002
  */
-public class InsertOperationIT extends AbstractDatabaseIT
-{
-    public InsertOperationIT(String s)
-    {
+public class InsertOperationIT extends AbstractDatabaseIT {
+    public InsertOperationIT(String s) {
         super(s);
     }
 
-    public void testMockExecute() throws Exception
-    {
+    public void testMockExecute() throws Exception {
         String schemaName = "schema";
         String tableName = "table";
         String[] expected = {
-            "insert into schema.table (c1, c2, c3) values ('toto', 1234, 'false')",
-            "insert into schema.table (c1, c2, c3) values ('qwerty', 123.45, 'true')",
+                "insert into schema.table (c1, c2, c3) values ('toto', 1234, 'false')",
+                "insert into schema.table (c1, c2, c3) values ('qwerty', 123.45, 'true')",
         };
 
         // setup table
         Column[] columns = new Column[]{
-            new Column("c1", DataType.VARCHAR),
-            new Column("c2", DataType.NUMERIC),
-            new Column("c3", DataType.BOOLEAN),
+                new Column("c1", DataType.VARCHAR),
+                new Column("c2", DataType.NUMERIC),
+                new Column("c3", DataType.BOOLEAN),
         };
         DefaultTable table = new DefaultTable(tableName, columns);
         table.addRow(new Object[]{"toto", "1234", Boolean.FALSE});
@@ -110,8 +107,8 @@ public class InsertOperationIT extends AbstractDatabaseIT
         String tableName = "table";
 
         Column[] columns = new Column[]{
-            new Column("c3", DataType.VARCHAR),
-            new Column("c4", DataType.NUMERIC),
+                new Column("c3", DataType.VARCHAR),
+                new Column("c4", DataType.NUMERIC),
         };
         DefaultTable table = new DefaultTable(tableName, columns);
         table.addRow(new Object[]{"", "1"});
@@ -138,12 +135,12 @@ public class InsertOperationIT extends AbstractDatabaseIT
         try {
             new InsertOperation().execute(connection, dataSet);
             fail("Update should not succedd");
-        } catch(IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             // ignore
         } finally {
-	        statement.verify();
-	        factory.verify();
-	        connection.verify();
+            statement.verify();
+            factory.verify();
+            connection.verify();
         }
     }
 
@@ -156,8 +153,8 @@ public class InsertOperationIT extends AbstractDatabaseIT
         };
 
         Column[] columns = new Column[]{
-            new Column("c3", DataType.VARCHAR),
-            new Column("c4", DataType.NUMERIC),
+                new Column("c3", DataType.VARCHAR),
+                new Column("c4", DataType.NUMERIC),
         };
         DefaultTable table = new DefaultTable(tableName, columns);
         table.addRow(new Object[]{"not-empty", "1"});
@@ -194,14 +191,14 @@ public class InsertOperationIT extends AbstractDatabaseIT
         String schemaName = "schema";
         String tableName = "table";
         String[] expected = {
-            String.format("insert into %s.%s (c3, c4) values ('not-empty', 1)", schemaName, tableName),
-            String.format("insert into %s.%s (c3, c4) values (NULL, 2)", schemaName, tableName),
-            String.format("insert into %s.%s (c3, c4) values ('', 3)", schemaName, tableName),
+                String.format("insert into %s.%s (c3, c4) values ('not-empty', 1)", schemaName, tableName),
+                String.format("insert into %s.%s (c3, c4) values (NULL, 2)", schemaName, tableName),
+                String.format("insert into %s.%s (c3, c4) values ('', 3)", schemaName, tableName),
         };
 
         Column[] columns = new Column[]{
-            new Column("c3", DataType.VARCHAR),
-            new Column("c4", DataType.NUMERIC),
+                new Column("c3", DataType.VARCHAR),
+                new Column("c4", DataType.NUMERIC),
         };
         DefaultTable table = new DefaultTable(tableName, columns);
         table.addRow(new Object[]{"not-empty", "1"});
@@ -235,14 +232,13 @@ public class InsertOperationIT extends AbstractDatabaseIT
         connection.verify();
     }
 
-    public void testExecuteUnknownColumn() throws Exception
-    {
+    public void testExecuteUnknownColumn() throws Exception {
         String tableName = "table";
 
         // setup table
         Column[] columns = new Column[]{
-            new Column("column", DataType.VARCHAR),
-            new Column("unknown", DataType.VARCHAR),
+                new Column("column", DataType.VARCHAR),
+                new Column("unknown", DataType.VARCHAR),
         };
         DefaultTable table = new DefaultTable(tableName, columns);
         table.addRow();
@@ -252,7 +248,7 @@ public class InsertOperationIT extends AbstractDatabaseIT
 
         IDataSet databaseDataSet = new DefaultDataSet(
                 new DefaultTable(tableName, new Column[]{
-                    new Column("column", DataType.VARCHAR),
+                        new Column("column", DataType.VARCHAR),
                 }));
 
         // setup mock objects
@@ -271,13 +267,10 @@ public class InsertOperationIT extends AbstractDatabaseIT
         connection.setExpectedCloseCalls(0);
 
         // execute operation
-        try
-        {
+        try {
             new InsertOperation().execute(connection, insertDataset);
             fail("Should not be here!");
-        }
-        catch (NoSuchColumnException e)
-        {
+        } catch (NoSuchColumnException e) {
 
         }
 
@@ -286,23 +279,22 @@ public class InsertOperationIT extends AbstractDatabaseIT
         connection.verify();
     }
 
-    public void testExecuteIgnoreNone() throws Exception
-    {
+    public void testExecuteIgnoreNone() throws Exception {
         String schemaName = "schema";
         String tableName = "table";
         String[] expected = {
-            "insert into schema.table (c1, c2, c3) values ('toto', 1234, 'false')",
-            "insert into schema.table (c2, c3) values (123.45, 'true')",
-            "insert into schema.table (c1, c2, c3) values ('qwerty1', 1, 'true')",
-            "insert into schema.table (c1, c2, c3) values ('qwerty2', 2, 'false')",
-            "insert into schema.table (c3) values ('false')",
+                "insert into schema.table (c1, c2, c3) values ('toto', 1234, 'false')",
+                "insert into schema.table (c2, c3) values (123.45, 'true')",
+                "insert into schema.table (c1, c2, c3) values ('qwerty1', 1, 'true')",
+                "insert into schema.table (c1, c2, c3) values ('qwerty2', 2, 'false')",
+                "insert into schema.table (c3) values ('false')",
         };
 
         // setup table
         Column[] columns = new Column[]{
-            new Column("c1", DataType.VARCHAR),
-            new Column("c2", DataType.NUMERIC),
-            new Column("c3", DataType.BOOLEAN),
+                new Column("c1", DataType.VARCHAR),
+                new Column("c2", DataType.NUMERIC),
+                new Column("c3", DataType.BOOLEAN),
         };
         DefaultTable table = new DefaultTable(tableName, columns);
         table.addRow(new Object[]{"toto", "1234", Boolean.FALSE});
@@ -391,20 +383,19 @@ public class InsertOperationIT extends AbstractDatabaseIT
 //        connection.verify();
 //    }
 
-    public void testExecuteWithEscapedNames() throws Exception
-    {
+    public void testExecuteWithEscapedNames() throws Exception {
         String schemaName = "schema";
         String tableName = "table";
         String[] expected = {
-            "insert into 'schema'.'table' ('c1', 'c2', 'c3') values ('toto', 1234, 'false')",
-            "insert into 'schema'.'table' ('c1', 'c2', 'c3') values ('qwerty', 123.45, 'true')",
+                "insert into 'schema'.'table' ('c1', 'c2', 'c3') values ('toto', 1234, 'false')",
+                "insert into 'schema'.'table' ('c1', 'c2', 'c3') values ('qwerty', 123.45, 'true')",
         };
 
         // setup table
         Column[] columns = new Column[]{
-            new Column("c1", DataType.VARCHAR),
-            new Column("c2", DataType.NUMERIC),
-            new Column("c3", DataType.BOOLEAN),
+                new Column("c1", DataType.VARCHAR),
+                new Column("c2", DataType.NUMERIC),
+                new Column("c3", DataType.BOOLEAN),
         };
         DefaultTable table = new DefaultTable(tableName, columns);
         table.addRow(new Object[]{"toto", "1234", Boolean.FALSE});
@@ -438,8 +429,7 @@ public class InsertOperationIT extends AbstractDatabaseIT
         connection.verify();
     }
 
-    public void testExecuteWithEmptyTable() throws Exception
-    {
+    public void testExecuteWithEmptyTable() throws Exception {
         Column[] columns = {new Column("c1", DataType.VARCHAR)};
         ITable table = new DefaultTable(new DefaultTableMetaData(
                 "name", columns, columns));
@@ -461,12 +451,10 @@ public class InsertOperationIT extends AbstractDatabaseIT
         connection.verify();
     }
 
-    public void testInsertClob() throws Exception
-    {
+    public void testInsertClob() throws Exception {
         // execute this test only if the target database support CLOB
         DatabaseEnvironment environment = DatabaseEnvironment.getInstance();
-        if (environment.support(TestFeature.CLOB))
-        {
+        if (environment.support(TestFeature.CLOB)) {
             String tableName = "CLOB_TABLE";
 
             Reader in = new FileReader(TestUtils.getFile("xml/clobInsertTest.xml"));
@@ -482,12 +470,10 @@ public class InsertOperationIT extends AbstractDatabaseIT
         }
     }
 
-    public void testInsertBlob() throws Exception
-    {
+    public void testInsertBlob() throws Exception {
         // execute this test only if the target database support BLOB
         DatabaseEnvironment environment = DatabaseEnvironment.getInstance();
-        if (environment.support(TestFeature.BLOB))
-        {
+        if (environment.support(TestFeature.BLOB)) {
             String tableName = "BLOB_TABLE";
 
             Reader in = new FileReader(TestUtils.getFile("xml/blobInsertTest.xml"));
@@ -503,12 +489,10 @@ public class InsertOperationIT extends AbstractDatabaseIT
         }
     }
 
-    public void testInsertSdoGeometry() throws Exception
-    {
+    public void testInsertSdoGeometry() throws Exception {
         // execute this test only if the target database supports SDO_GEOMETRY
         DatabaseEnvironment environment = DatabaseEnvironment.getInstance();
-        if (environment.support(TestFeature.SDO_GEOMETRY))
-        {
+        if (environment.support(TestFeature.SDO_GEOMETRY)) {
             String tableName = "SDO_GEOMETRY_TABLE";
 
             Reader in = new FileReader(TestUtils.getFile("xml/sdoGeometryInsertTest.xml"));
@@ -524,12 +508,10 @@ public class InsertOperationIT extends AbstractDatabaseIT
         }
     }
 
-    public void testInsertXmlType() throws Exception
-    {
+    public void testInsertXmlType() throws Exception {
         // execute this test only if the target database support CLOB
         DatabaseEnvironment environment = DatabaseEnvironment.getInstance();
-        if (environment.support(TestFeature.XML_TYPE))
-        {
+        if (environment.support(TestFeature.XML_TYPE)) {
             String tableName = "XML_TYPE_TABLE";
 
             Reader in = new FileReader(TestUtils.getFile("xml/xmlTypeInsertTest.xml"));
@@ -545,8 +527,7 @@ public class InsertOperationIT extends AbstractDatabaseIT
         }
     }
 
-    public void testMissingColumns() throws Exception
-    {
+    public void testMissingColumns() throws Exception {
         Reader in = TestUtils.getFileReader("xml/missingColumnTest.xml");
         IDataSet xmlDataSet = new XmlDataSet(in);
 
@@ -555,24 +536,20 @@ public class InsertOperationIT extends AbstractDatabaseIT
         ITable[] tablesAfter = DataSetUtils.getTables(connection.createDataSet());
 
         // verify tables before
-        for (int i = 0; i < tablesBefore.length; i++)
-        {
+        for (int i = 0; i < tablesBefore.length; i++) {
             ITable table = tablesBefore[i];
             String tableName = table.getTableMetaData().getTableName();
-            if (tableName.startsWith("EMPTY"))
-            {
+            if (tableName.startsWith("EMPTY")) {
                 assertEquals(tableName + " before", 0, table.getRowCount());
             }
         }
 
         // verify tables after
-        for (int i = 0; i < tablesAfter.length; i++)
-        {
+        for (int i = 0; i < tablesAfter.length; i++) {
             ITable databaseTable = tablesAfter[i];
             String tableName = databaseTable.getTableMetaData().getTableName();
 
-            if (tableName.startsWith("EMPTY"))
-            {
+            if (tableName.startsWith("EMPTY")) {
                 Column[] columns = databaseTable.getTableMetaData().getColumns();
                 ITable xmlTable = xmlDataSet.getTable(tableName);
 
@@ -581,8 +558,7 @@ public class InsertOperationIT extends AbstractDatabaseIT
                         databaseTable.getRowCount());
 
                 // for each table row
-                for (int j = 0; j < databaseTable.getRowCount(); j++)
-                {
+                for (int j = 0; j < databaseTable.getRowCount(); j++) {
                     // verify first column values
                     Object expected = xmlTable.getValue(j, columns[0].getColumnName());
                     Object actual = databaseTable.getValue(j, columns[0].getColumnName());
@@ -591,8 +567,7 @@ public class InsertOperationIT extends AbstractDatabaseIT
                             expected, actual);
 
                     // all remaining columns should be null except mssql server timestamp column which is of type binary.
-                    for (int k = 1; k < columns.length; k++)
-                    {
+                    for (int k = 1; k < columns.length; k++) {
                         String columnName = columns[k].getColumnName();
                         assertEquals(tableName + "." + columnName,
                                 null, databaseTable.getValue(j, columnName));
@@ -603,106 +578,94 @@ public class InsertOperationIT extends AbstractDatabaseIT
 
     }
 
-    public void testDefaultValues() throws Exception
-    {
+    public void testDefaultValues() throws Exception {
         String schemaName = "schema";
         String tableName = "table";
         String[] expected = {
-            "insert into schema.table (c1, c3, c4) values (NULL, NULL, NULL)"
+                "insert into schema.table (c1, c3, c4) values (NULL, NULL, NULL)"
         };
-  
+
         // setup table
         Column[] columns = new Column[]{
-            new Column("c1", DataType.NUMERIC, Column.NO_NULLS), // Disallow null, no default
-            new Column("c2", DataType.NUMERIC, DataType.NUMERIC.toString(), Column.NO_NULLS, "2"), // Disallow null, default
-            new Column("c3", DataType.NUMERIC, Column.NULLABLE), // Allow null, no default
-            new Column("c4", DataType.NUMERIC, DataType.NUMERIC.toString(), Column.NULLABLE, "4"), // Allow null, default
+                new Column("c1", DataType.NUMERIC, Column.NO_NULLS), // Disallow null, no default
+                new Column("c2", DataType.NUMERIC, DataType.NUMERIC.toString(), Column.NO_NULLS, "2"), // Disallow null, default
+                new Column("c3", DataType.NUMERIC, Column.NULLABLE), // Allow null, no default
+                new Column("c4", DataType.NUMERIC, DataType.NUMERIC.toString(), Column.NULLABLE, "4"), // Allow null, default
         };
         DefaultTable table = new DefaultTable(tableName, columns);
         table.addRow(new Object[]{null, null, null, null});
         IDataSet dataSet = new DefaultDataSet(table);
-  
+
         // setup mock objects
         MockBatchStatement statement = new MockBatchStatement();
         statement.addExpectedBatchStrings(expected);
         statement.setExpectedExecuteBatchCalls(1);
         statement.setExpectedClearBatchCalls(1);
         statement.setExpectedCloseCalls(1);
-  
+
         MockStatementFactory factory = new MockStatementFactory();
         factory.setExpectedCreatePreparedStatementCalls(1);
         factory.setupStatement(statement);
-  
+
         MockDatabaseConnection connection = new MockDatabaseConnection();
         connection.setupDataSet(dataSet);
         connection.setupSchema(schemaName);
         connection.setupStatementFactory(factory);
         connection.setExpectedCloseCalls(0);
-  
+
         // execute operation
         new InsertOperation().execute(connection, dataSet);
-  
+
         statement.verify();
         factory.verify();
         connection.verify();
     }
 
-    public void testExecute() throws Exception
-    {
+    public void testExecute() throws Exception {
         Reader in = TestUtils.getFileReader("xml/insertOperationTest.xml");
         IDataSet dataSet = new XmlDataSet(in);
 
         testExecute(dataSet);
     }
 
-    public void testExecuteCaseInsensitive() throws Exception
-    {
+    public void testExecuteCaseInsensitive() throws Exception {
         Reader in = TestUtils.getFileReader("xml/insertOperationTest.xml");
         IDataSet dataSet = new XmlDataSet(in);
 
         testExecute(new LowerCaseDataSet(dataSet));
     }
 
-    public void testExecuteForwardOnly() throws Exception
-    {
+    public void testExecuteForwardOnly() throws Exception {
         Reader in = TestUtils.getFileReader("xml/insertOperationTest.xml");
         IDataSet dataSet = new XmlDataSet(in);
 
         testExecute(new ForwardOnlyDataSet(dataSet));
     }
 
-    private void testExecute(IDataSet dataSet) throws Exception, SQLException
-    {
+    private void testExecute(IDataSet dataSet) throws Exception, SQLException {
         ITable[] tablesBefore = DataSetUtils.getTables(connection.createDataSet());
         DatabaseOperation.INSERT.execute(connection, dataSet);
         ITable[] tablesAfter = DataSetUtils.getTables(connection.createDataSet());
 
         assertEquals("table count", tablesBefore.length, tablesAfter.length);
-        for (int i = 0; i < tablesBefore.length; i++)
-        {
+        for (int i = 0; i < tablesBefore.length; i++) {
             ITable table = tablesBefore[i];
             String name = table.getTableMetaData().getTableName();
 
 
-            if (name.startsWith("EMPTY"))
-            {
+            if (name.startsWith("EMPTY")) {
                 assertEquals(name + "before", 0, table.getRowCount());
             }
         }
 
-        for (int i = 0; i < tablesAfter.length; i++)
-        {
+        for (int i = 0; i < tablesAfter.length; i++) {
             ITable table = tablesAfter[i];
             String name = table.getTableMetaData().getTableName();
 
-            if (name.startsWith("EMPTY"))
-            {
-                if (dataSet instanceof ForwardOnlyDataSet)
-                {
+            if (name.startsWith("EMPTY")) {
+                if (dataSet instanceof ForwardOnlyDataSet) {
                     assertTrue(name, table.getRowCount() > 0);
-                }
-                else
-                {
+                } else {
                     SortedTable expectedTable = new SortedTable(
                             dataSet.getTable(name), dataSet.getTable(name).getTableMetaData());
                     SortedTable actualTable = new SortedTable(table);

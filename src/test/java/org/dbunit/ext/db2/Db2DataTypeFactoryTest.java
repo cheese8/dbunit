@@ -28,23 +28,19 @@ import java.sql.Types;
 
 /**
  * @author Manuel Laflamme
- * @since Aug 13, 2003
  * @version $Revision$
+ * @since Aug 13, 2003
  */
-public class Db2DataTypeFactoryTest extends AbstractDataTypeFactoryTest
-{
-    public Db2DataTypeFactoryTest(String s)
-    {
+public class Db2DataTypeFactoryTest extends AbstractDataTypeFactoryTest {
+    public Db2DataTypeFactoryTest(String s) {
         super(s);
     }
 
-    public IDataTypeFactory createFactory() throws Exception
-    {
+    public IDataTypeFactory createFactory() throws Exception {
         return new Db2DataTypeFactory();
     }
 
-    public void testCreateXmlVarcharDataType() throws Exception
-    {
+    public void testCreateXmlVarcharDataType() throws Exception {
         DataType expected = Db2DataTypeFactory.DB2XML_XMLVARCHAR;
         int sqlType = Types.DISTINCT;
         String sqlTypeName = "DB2XML.XMLVARCHAR";
@@ -53,8 +49,7 @@ public class Db2DataTypeFactoryTest extends AbstractDataTypeFactoryTest
         assertSame("type", expected, actual);
     }
 
-    public void testCreateXmlClobDataType() throws Exception
-    {
+    public void testCreateXmlClobDataType() throws Exception {
         DataType expected = Db2DataTypeFactory.DB2XML_XMLCLOB;
         int sqlType = Types.DISTINCT;
         String sqlTypeName = "DB2XML.XMLCLOB";
@@ -63,8 +58,7 @@ public class Db2DataTypeFactoryTest extends AbstractDataTypeFactoryTest
         assertSame("type", expected, actual);
     }
 
-    public void testCreateXmlFileDataType() throws Exception
-    {
+    public void testCreateXmlFileDataType() throws Exception {
         DataType expected = Db2DataTypeFactory.DB2XML_XMLFILE;
         int sqlType = Types.DISTINCT;
         String sqlTypeName = "DB2XML.XMLFILE";

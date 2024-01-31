@@ -35,13 +35,13 @@ import org.dbunit.dataset.DataSetException;
  * {@link DatabaseDataSourceConnection} constructor.
  * 3) Enable the qualified table name support (see How-to documentation).
  * </p>
- * 
+ *
  * <p>
  * Another common reason for this exception to be thrown is when an XML file
  * contains the same table multiple times whereas a different table is between
  * the definition of the duplicate table.
  * </p>
- * 
+ *
  * @author Manuel Laflamme
  * @author Last changed by: $Author$
  * @version $Revision$ $Date$

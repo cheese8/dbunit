@@ -34,31 +34,31 @@ import java.util.Properties;
  */
 @NoArgsConstructor
 public abstract class JndiBasedDBTestCase extends DBTestCase {
-   public JndiBasedDBTestCase(String name) {
-      super(name);
-   }
+    public JndiBasedDBTestCase(String name) {
+        super(name);
+    }
 
-   /**
-    * Creates a new IDatabaseTester.<br>
-    * Default implementation returns a {@link JndiDatabaseTester} configured
-    * with the values returned from {@link #getJNDIProperties()} and
-    * {@link #getLookupName()}.
-    */
-   protected IDatabaseTester newDatabaseTester() {
-      return new JndiDatabaseTester(getJNDIProperties(), getLookupName());
-   }
+    /**
+     * Creates a new IDatabaseTester.<br>
+     * Default implementation returns a {@link JndiDatabaseTester} configured
+     * with the values returned from {@link #getJNDIProperties()} and
+     * {@link #getLookupName()}.
+     */
+    protected IDatabaseTester newDatabaseTester() {
+        return new JndiDatabaseTester(getJNDIProperties(), getLookupName());
+    }
 
-   /**
-    * Returns the JNDI lookup name for the test DataSource.
-    */
-   protected abstract String getLookupName();
+    /**
+     * Returns the JNDI lookup name for the test DataSource.
+     */
+    protected abstract String getLookupName();
 
-   /**
-    * Returns the JNDI properties to use.<br>
-    * Subclasses must override this method to provide customized JNDI
-    * properties. Default implementation returns an empty Properties object.
-    */
-   protected Properties getJNDIProperties() {
-      return new Properties();
-   }
+    /**
+     * Returns the JNDI properties to use.<br>
+     * Subclasses must override this method to provide customized JNDI
+     * properties. Default implementation returns an empty Properties object.
+     */
+    protected Properties getJNDIProperties() {
+        return new Properties();
+    }
 }

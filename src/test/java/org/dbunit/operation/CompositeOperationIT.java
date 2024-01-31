@@ -35,15 +35,12 @@ import java.io.Reader;
  * @version $Revision$
  * @since Feb 19, 2002
  */
-public class CompositeOperationIT extends AbstractDatabaseIT
-{
-    public CompositeOperationIT(String s)
-    {
+public class CompositeOperationIT extends AbstractDatabaseIT {
+    public CompositeOperationIT(String s) {
         super(s);
     }
 
-    public void testExecute() throws Exception
-    {
+    public void testExecute() throws Exception {
         String tableName = "PK_TABLE";
         String columnName = "PK0";
         Reader in = new FileReader(

@@ -39,6 +39,6 @@ public class PostgresqlEnvironment extends DatabaseEnvironment {
     }
 
     public String convertString(String str) {
-      return str == null ? null : str.toLowerCase();
+        return str == null ? null : str.toLowerCase();
     }
 }

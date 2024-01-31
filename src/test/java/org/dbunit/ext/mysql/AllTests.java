@@ -25,13 +25,11 @@ import junit.framework.TestSuite;
 
 /**
  * @author Manuel Laflamme
- * @since Sep 3, 2003
  * @version $Revision$
+ * @since Sep 3, 2003
  */
-public class AllTests extends TestSuite
-{
-    public static Test suite()
-    {
+public class AllTests extends TestSuite {
+    public static Test suite() {
         TestSuite suite = new TestSuite();
         suite.addTest(new TestSuite(MySqlDataTypeFactoryTest.class));
         return suite;

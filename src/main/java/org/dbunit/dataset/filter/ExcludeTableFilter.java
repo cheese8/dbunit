@@ -32,11 +32,10 @@ import org.dbunit.dataset.DataSetException;
  * dataset and support duplicate table names.
  *
  * @author Manuel Laflamme
- * @since Mar 7, 2003
  * @version $Revision$
+ * @since Mar 7, 2003
  */
-public class ExcludeTableFilter extends AbstractTableFilter implements ITableFilter
-{
+public class ExcludeTableFilter extends AbstractTableFilter implements ITableFilter {
 
     /**
      * Logger for this class
@@ -49,17 +48,14 @@ public class ExcludeTableFilter extends AbstractTableFilter implements ITableFil
      * Create a new empty ExcludeTableFilter. Use {@link #excludeTable} to hide
      * some tables.
      */
-    public ExcludeTableFilter()
-    {
+    public ExcludeTableFilter() {
     }
 
     /**
      * Create a new ExcludeTableFilter which prevent access to specified tables.
      */
-    public ExcludeTableFilter(String[] tableNames)
-    {
-        for (int i = 0; i < tableNames.length; i++)
-        {
+    public ExcludeTableFilter(String[] tableNames) {
+        for (int i = 0; i < tableNames.length; i++) {
             String tableName = tableNames[i];
             excludeTable(tableName);
         }
@@ -71,15 +67,13 @@ public class ExcludeTableFilter extends AbstractTableFilter implements ITableFil
      * '*' matches zero or more characters,
      * '?' matches one character.
      */
-    public void excludeTable(String patternName)
-    {
+    public void excludeTable(String patternName) {
         logger.debug("excludeTable(patternName=" + patternName + ") - start");
 
         _patternMatcher.addPattern(patternName);
     }
 
-    public boolean isEmpty()
-    {
+    public boolean isEmpty() {
         logger.debug("isEmpty() - start");
 
         return _patternMatcher.isEmpty();
@@ -88,8 +82,7 @@ public class ExcludeTableFilter extends AbstractTableFilter implements ITableFil
     ////////////////////////////////////////////////////////////////////////////
     // ITableFilter interface
 
-    public boolean isValidName(String tableName) throws DataSetException
-    {
+    public boolean isValidName(String tableName) throws DataSetException {
         logger.debug("isValidName(tableName=" + tableName + ") - start");
 
         return !_patternMatcher.accept(tableName);

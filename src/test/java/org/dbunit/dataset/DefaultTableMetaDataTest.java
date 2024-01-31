@@ -29,53 +29,46 @@ import org.dbunit.dataset.datatype.DataType;
  * @version $Revision$
  * @since Feb 17, 2002
  */
-public class DefaultTableMetaDataTest extends TestCase
-{
-    public DefaultTableMetaDataTest(String s)
-    {
+public class DefaultTableMetaDataTest extends TestCase {
+    public DefaultTableMetaDataTest(String s) {
         super(s);
     }
 
     protected ITableMetaData createMetaData(String tableName,
-            Column[] columns, String[] keyNames) throws Exception
-    {
+                                            Column[] columns, String[] keyNames) throws Exception {
         return new DefaultTableMetaData(
-                        tableName, columns, keyNames);
+                tableName, columns, keyNames);
     }
 
-    public void testGetTableName() throws Exception
-    {
+    public void testGetTableName() throws Exception {
         String expected = "tableName";
         ITableMetaData metaData = createMetaData(expected, null, null);
 
         assertEquals("table name", expected, metaData.getTableName());
     }
 
-    public void testGetColumns() throws Exception
-    {
+    public void testGetColumns() throws Exception {
         Column[] columns = new Column[]{
-            new Column("numberColumn", DataType.NUMERIC),
-            new Column("stringColumn", DataType.VARCHAR),
-            new Column("booleanColumn", DataType.BOOLEAN),
+                new Column("numberColumn", DataType.NUMERIC),
+                new Column("stringColumn", DataType.VARCHAR),
+                new Column("booleanColumn", DataType.BOOLEAN),
         };
 
         ITableMetaData metaData = createMetaData("toto", columns, null);
 
         assertEquals("column count", columns.length, metaData.getColumns().length);
-        for (int i = 0; i < columns.length; i++)
-        {
+        for (int i = 0; i < columns.length; i++) {
             Column column = columns[i];
             assertEquals("columns" + i, column, metaData.getColumns()[i]);
         }
         assertEquals("key count", 0, metaData.getPrimaryKeys().length);
     }
 
-    public void testGetPrimaryKeys() throws Exception
-    {
+    public void testGetPrimaryKeys() throws Exception {
         Column[] columns = new Column[]{
-            new Column("numberColumn", DataType.NUMERIC),
-            new Column("stringColumn", DataType.VARCHAR),
-            new Column("booleanColumn", DataType.BOOLEAN),
+                new Column("numberColumn", DataType.NUMERIC),
+                new Column("stringColumn", DataType.VARCHAR),
+                new Column("booleanColumn", DataType.BOOLEAN),
         };
         String[] keyNames = new String[]{"booleanColumn", "numberColumn"};
 
@@ -84,18 +77,16 @@ public class DefaultTableMetaDataTest extends TestCase
 
         Column[] keys = metaData.getPrimaryKeys();
         assertEquals("key count", keyNames.length, keys.length);
-        for (int i = 0; i < keys.length; i++)
-        {
+        for (int i = 0; i < keys.length; i++) {
             assertEquals("key name", keyNames[i], keys[i].getColumnName());
         }
     }
 
-    public void testGetPrimaryKeysColumnDontMatch() throws Exception
-    {
+    public void testGetPrimaryKeysColumnDontMatch() throws Exception {
         Column[] columns = new Column[]{
-            new Column("numberColumn", DataType.NUMERIC),
-            new Column("stringColumn", DataType.VARCHAR),
-            new Column("booleanColumn", DataType.BOOLEAN),
+                new Column("numberColumn", DataType.NUMERIC),
+                new Column("stringColumn", DataType.VARCHAR),
+                new Column("booleanColumn", DataType.BOOLEAN),
         };
         String[] keyNames = new String[]{"invalidColumn"};
 

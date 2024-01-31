@@ -30,76 +30,64 @@ import junit.framework.TestCase;
  * @version $Revision$
  * @since 2.3.0
  */
-public class ColumnsTest extends TestCase
-{
-    public void testGetColumn() throws Exception
-    {
+public class ColumnsTest extends TestCase {
+    public void testGetColumn() throws Exception {
         Column[] columns = new Column[]{
-            new Column("c0", DataType.UNKNOWN),
-            new Column("c1", DataType.UNKNOWN),
-            new Column("c2", DataType.UNKNOWN),
-            new Column("c3", DataType.UNKNOWN),
-            new Column("c4", DataType.UNKNOWN),
+                new Column("c0", DataType.UNKNOWN),
+                new Column("c1", DataType.UNKNOWN),
+                new Column("c2", DataType.UNKNOWN),
+                new Column("c3", DataType.UNKNOWN),
+                new Column("c4", DataType.UNKNOWN),
         };
 
-        for (int i = 0; i < columns.length; i++)
-        {
+        for (int i = 0; i < columns.length; i++) {
             assertEquals("find column same", columns[i],
                     Columns.getColumn("c" + i, columns));
         }
     }
 
-    public void testGetColumnCaseInsensitive() throws Exception
-    {
+    public void testGetColumnCaseInsensitive() throws Exception {
         Column[] columns = new Column[]{
-            new Column("c0", DataType.UNKNOWN),
-            new Column("C1", DataType.UNKNOWN),
-            new Column("c2", DataType.UNKNOWN),
-            new Column("C3", DataType.UNKNOWN),
-            new Column("c4", DataType.UNKNOWN),
+                new Column("c0", DataType.UNKNOWN),
+                new Column("C1", DataType.UNKNOWN),
+                new Column("c2", DataType.UNKNOWN),
+                new Column("C3", DataType.UNKNOWN),
+                new Column("c4", DataType.UNKNOWN),
         };
 
-        for (int i = 0; i < columns.length; i++)
-        {
+        for (int i = 0; i < columns.length; i++) {
             assertEquals("find column same", columns[i],
                     Columns.getColumn("c" + i, columns));
         }
     }
 
-    public void testGetColumnValidated() throws Exception
-    {
+    public void testGetColumnValidated() throws Exception {
         Column[] columns = new Column[]{
                 new Column("c0", DataType.UNKNOWN),
                 new Column("C1", DataType.UNKNOWN),
                 new Column("c2", DataType.UNKNOWN),
         };
-        for (int i = 0; i < columns.length; i++)
-        {
+        for (int i = 0; i < columns.length; i++) {
             assertEquals("find column same", columns[i],
                     Columns.getColumnValidated("c" + i, columns, "TableABC"));
         }
     }
-    
-    public void testGetColumnValidatedColumnNotFound() throws Exception
-    {
+
+    public void testGetColumnValidatedColumnNotFound() throws Exception {
         Column[] columns = new Column[]{
                 new Column("c0", DataType.UNKNOWN),
                 new Column("C1", DataType.UNKNOWN),
                 new Column("c2", DataType.UNKNOWN),
         };
-        try 
-        {
+        try {
             Columns.getColumnValidated("A1", columns, "TableABC");
             fail("Should not be able to get a validated column that does not exist");
-        }
-        catch(NoSuchColumnException expected)
-        {
+        } catch (NoSuchColumnException expected) {
             assertEquals("TableABC.A1", expected.getMessage());
         }
     }
 
-    public void testGetColumnDiff_NoDifference() throws Exception
-    {
+    public void testGetColumnDiff_NoDifference() throws Exception {
         Column[] expectedColumns = new Column[]{
                 new Column("c0", DataType.UNKNOWN),
                 new Column("c1", DataType.UNKNOWN),
@@ -110,7 +98,7 @@ public class ColumnsTest extends TestCase
         };
         ITableMetaData metaDataExpected = createMetaData(expectedColumns);
         ITableMetaData metaDataActual = createMetaData(actualColumns);
-        
+
         // Create the difference
         ColumnDiff diff = new ColumnDiff(metaDataExpected, metaDataActual);
         assertEquals(false, diff.hasDifference());
@@ -119,9 +107,8 @@ public class ColumnsTest extends TestCase
         assertEquals("no difference found", diff.getMessage());
     }
 
-    public void testGetColumnDiffDifferentOrder_NoDifference() throws Exception
-    {
-    	// order [c0, c1]
+    public void testGetColumnDiffDifferentOrder_NoDifference() throws Exception {
+        // order [c0, c1]
         Column[] expectedColumns = new Column[]{
                 new Column("c0", DataType.UNKNOWN),
                 new Column("c1", DataType.UNKNOWN),
@@ -133,7 +120,7 @@ public class ColumnsTest extends TestCase
         };
         ITableMetaData metaDataExpected = createMetaData(expectedColumns);
         ITableMetaData metaDataActual = createMetaData(actualColumnsDifferentOrder);
-        
+
         // Create the difference
         ColumnDiff diff = new ColumnDiff(metaDataExpected, metaDataActual);
         assertEquals(false, diff.hasDifference());
@@ -142,9 +129,8 @@ public class ColumnsTest extends TestCase
         assertEquals("no difference found", diff.getMessage());
     }
 
-    
-    public void testGetColumnDiff_Difference() throws Exception
-    {
+
+    public void testGetColumnDiff_Difference() throws Exception {
         Column[] expectedColumns = new Column[]{
                 new Column("c0", DataType.UNKNOWN),
                 new Column("c2", DataType.UNKNOWN),
@@ -156,7 +142,7 @@ public class ColumnsTest extends TestCase
         };
         ITableMetaData metaDataExpected = createMetaData(expectedColumns);
         ITableMetaData metaDataActual = createMetaData(actualColumns);
-        
+
         // Create the difference
         ColumnDiff diff = new ColumnDiff(metaDataExpected, metaDataActual);
         assertEquals(true, diff.hasDifference());
@@ -171,11 +157,9 @@ public class ColumnsTest extends TestCase
     }
 
 
-    
-    private ITableMetaData createMetaData(Column[] columns)
-    {
-    	DefaultTableMetaData tableMetaData = new DefaultTableMetaData("MY_TABLE", columns);
-    	return tableMetaData;
+    private ITableMetaData createMetaData(Column[] columns) {
+        DefaultTableMetaData tableMetaData = new DefaultTableMetaData("MY_TABLE", columns);
+        return tableMetaData;
     }
 
 }

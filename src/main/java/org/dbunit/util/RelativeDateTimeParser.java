@@ -64,8 +64,7 @@ import java.util.regex.Pattern;
  * <li><code>[now+1d 10:00]</code> : 10 o'clock tomorrow.</li>
  * </ul>
  */
-public class RelativeDateTimeParser
-{
+public class RelativeDateTimeParser {
     private static final Pattern inputPattern = Pattern.compile(
             "^\\[[nN][oO][wW]\\s*(([-+][0-9]+[yMdhms]\\s*)*)([0-9:]*)?\\]$");
     private static final int GROUP_DIFFS = 1;
@@ -116,8 +115,7 @@ public class RelativeDateTimeParser
         return datetime;
     }
 
-    public Clock getClock()
-    {
+    public Clock getClock() {
         return clock;
     }
 
@@ -138,25 +136,24 @@ public class RelativeDateTimeParser
 
     private static TemporalUnit resolveUnit(char c) {
         switch (c) {
-        case 'y':
-            return ChronoUnit.YEARS;
-        case 'M':
-            return ChronoUnit.MONTHS;
-        case 'd':
-            return ChronoUnit.DAYS;
-        case 'h':
-            return ChronoUnit.HOURS;
-        case 'm':
-            return ChronoUnit.MINUTES;
-        case 's':
-            return ChronoUnit.SECONDS;
-        default:
-            throw new IllegalArgumentException("'" + c + "' is not a valid unit. It has to be one of 'yMdhms'.");
+            case 'y':
+                return ChronoUnit.YEARS;
+            case 'M':
+                return ChronoUnit.MONTHS;
+            case 'd':
+                return ChronoUnit.DAYS;
+            case 'h':
+                return ChronoUnit.HOURS;
+            case 'm':
+                return ChronoUnit.MINUTES;
+            case 's':
+                return ChronoUnit.SECONDS;
+            default:
+                throw new IllegalArgumentException("'" + c + "' is not a valid unit. It has to be one of 'yMdhms'.");
         }
     }
 
-    private void cacheLocalDateTime(Clock clock)
-    {
+    private void cacheLocalDateTime(Clock clock) {
         this.now = LocalDateTime.now(clock);
     }
 }

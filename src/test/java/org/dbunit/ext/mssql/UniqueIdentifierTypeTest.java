@@ -58,7 +58,7 @@ public class UniqueIdentifierTypeTest extends TestCase {
      * @throws SQLException
      */
     public void testGetSqlValueWithBadValue() throws SQLException {
-        resultSet.addExpectedIndexedValues(new String[] { existingUuid.toString() + "Z" });
+        resultSet.addExpectedIndexedValues(new String[]{existingUuid.toString() + "Z"});
 
         try {
             uuidType.getSqlValue(1, resultSet);
@@ -76,7 +76,7 @@ public class UniqueIdentifierTypeTest extends TestCase {
      * @throws TypeCastException
      */
     public void testGetValue() throws TypeCastException, SQLException {
-        resultSet.addExpectedIndexedValues(new String[] { existingUuid.toString() });
+        resultSet.addExpectedIndexedValues(new String[]{existingUuid.toString()});
 
         UUID result = (UUID) uuidType.getSqlValue(1, resultSet);
 

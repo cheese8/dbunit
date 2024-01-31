@@ -35,5 +35,5 @@ import org.dbunit.database.IDatabaseConnection;
 @AllArgsConstructor
 @Getter
 public class DefaultDatabaseTester extends AbstractDatabaseTester {
-  final IDatabaseConnection connection;
+    final IDatabaseConnection connection;
 }

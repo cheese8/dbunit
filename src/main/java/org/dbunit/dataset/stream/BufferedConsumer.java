@@ -37,7 +37,7 @@ import org.dbunit.dataset.xml.FlatXmlDataSet;
  * This provides the possibility to append new {@link Column}s on
  * the fly which is needed for the column sensing feature in
  * {@link FlatXmlDataSet}.
- * 
+ *
  * @author gommma (gommma AT users.sourceforge.net)
  * @author Last changed by: $Author$
  * @version $Revision$ $Date$
@@ -45,122 +45,112 @@ import org.dbunit.dataset.xml.FlatXmlDataSet;
  */
 public class BufferedConsumer implements IDataSetConsumer {
 
-	private IDataSetConsumer _wrappedConsumer;
-	
-	/**
-	 * The table which is currently active
-	 */
-	private TableBuffer _activeTable;
-	/**
-	 * List that stores all {@link TableBuffer}s in a sorted fashion so that the 
-	 * table that was added first will also be flushed first when the {@link IDataSetConsumer}
-	 * is finally invoked.
-	 */
-	private List _tableBuffers = new ArrayList();
-	/**
-	 * Map that stores the table names as key and the {@link TableBuffer} as value
-	 */
-	private Map _tableNames = new HashMap();
-	
-	
-	/**
-	 * @param wrappedConsumer The consumer that is wrapped
-	 */
-	public BufferedConsumer(IDataSetConsumer wrappedConsumer) 
-	{
-		if (wrappedConsumer == null) {
-			throw new NullPointerException(
-					"The parameter '_wrappedConsumer' must not be null");
-		}
-		this._wrappedConsumer = wrappedConsumer;
-	}
-	
-	public void startDataSet() throws DataSetException 
-	{
-		this._wrappedConsumer.startDataSet();
-	}
+    private IDataSetConsumer _wrappedConsumer;
 
-	public void endDataSet() throws DataSetException 
-	{
-	    // Flush out the whole collected dataset
-	    
+    /**
+     * The table which is currently active
+     */
+    private TableBuffer _activeTable;
+    /**
+     * List that stores all {@link TableBuffer}s in a sorted fashion so that the
+     * table that was added first will also be flushed first when the {@link IDataSetConsumer}
+     * is finally invoked.
+     */
+    private List _tableBuffers = new ArrayList();
+    /**
+     * Map that stores the table names as key and the {@link TableBuffer} as value
+     */
+    private Map _tableNames = new HashMap();
+
+
+    /**
+     * @param wrappedConsumer The consumer that is wrapped
+     */
+    public BufferedConsumer(IDataSetConsumer wrappedConsumer) {
+        if (wrappedConsumer == null) {
+            throw new NullPointerException(
+                    "The parameter '_wrappedConsumer' must not be null");
+        }
+        this._wrappedConsumer = wrappedConsumer;
+    }
+
+    public void startDataSet() throws DataSetException {
+        this._wrappedConsumer.startDataSet();
+    }
+
+    public void endDataSet() throws DataSetException {
+        // Flush out the whole collected dataset
+
         // Start the table with the final metadata
-	    for (Iterator iterator = _tableBuffers.iterator(); iterator.hasNext();) {
-	        TableBuffer entry = (TableBuffer) iterator.next();
-	        ITableMetaData metaData = (ITableMetaData) entry.getMetaData();
-            
-	        this._wrappedConsumer.startTable(metaData);
-	        
-	        List dataRows = (List) entry.getDataRows();
-	        for (Iterator dataIterator = dataRows.iterator(); dataIterator.hasNext();) {
-	            Object[] rowValues = (Object[]) dataIterator.next();
-	            this._wrappedConsumer.row(rowValues);
-	        }
+        for (Iterator iterator = _tableBuffers.iterator(); iterator.hasNext(); ) {
+            TableBuffer entry = (TableBuffer) iterator.next();
+            ITableMetaData metaData = (ITableMetaData) entry.getMetaData();
+
+            this._wrappedConsumer.startTable(metaData);
+
+            List dataRows = (List) entry.getDataRows();
+            for (Iterator dataIterator = dataRows.iterator(); dataIterator.hasNext(); ) {
+                Object[] rowValues = (Object[]) dataIterator.next();
+                this._wrappedConsumer.row(rowValues);
+            }
             // Clear the row data for this table finally
             dataRows.clear();
-	        
-	        this._wrappedConsumer.endTable();
+
+            this._wrappedConsumer.endTable();
         }
 
-	    // Finally notify consumer of the end of this DataSet
-		this._wrappedConsumer.endDataSet();
-	}
+        // Finally notify consumer of the end of this DataSet
+        this._wrappedConsumer.endDataSet();
+    }
 
-	public void row(Object[] values) throws DataSetException 
-	{
-		// Just collect/buffer the row
-	    this._activeTable.getDataRows().add(values);
-	}
+    public void row(Object[] values) throws DataSetException {
+        // Just collect/buffer the row
+        this._activeTable.getDataRows().add(values);
+    }
 
-	public void startTable(ITableMetaData metaData) throws DataSetException 
-	{
-		// Do nothing here - we will buffer all data in the "row" method in order to write
-		// them in the "endTable" method
-	    if(_tableNames.containsKey(metaData.getTableName()))
-	    {
-	        this._activeTable = (TableBuffer) _tableNames.get(metaData.getTableName());
-	        // overwrite the metadata with the new one which potentially contains new columns
-	        this._activeTable.setMetaData(metaData);
-	    }
-	    else
-	    {
-	        _activeTable = new TableBuffer(metaData);
+    public void startTable(ITableMetaData metaData) throws DataSetException {
+        // Do nothing here - we will buffer all data in the "row" method in order to write
+        // them in the "endTable" method
+        if (_tableNames.containsKey(metaData.getTableName())) {
+            this._activeTable = (TableBuffer) _tableNames.get(metaData.getTableName());
+            // overwrite the metadata with the new one which potentially contains new columns
+            this._activeTable.setMetaData(metaData);
+        } else {
+            _activeTable = new TableBuffer(metaData);
 
             _tableBuffers.add(_activeTable);// add to the sorted list
             _tableNames.put(metaData.getTableName(), _activeTable);// add to the name map
-	    }
-	}
+        }
+    }
 
-	public void endTable() throws DataSetException 
-	{
-		if(this._activeTable == null) {
-			throw new IllegalStateException("The field _activeMetaData must not be null at this stage");
-		}
+    public void endTable() throws DataSetException {
+        if (this._activeTable == null) {
+            throw new IllegalStateException("The field _activeMetaData must not be null at this stage");
+        }
 
-		Column[] columns = this._activeTable.getMetaData().getColumns();
-		int finalColumnCount = columns.length;
+        Column[] columns = this._activeTable.getMetaData().getColumns();
+        int finalColumnCount = columns.length;
 
-		int rowCount = this._activeTable.getDataRows().size();
-		// Fill up columns that were potentially missing in this row
-		for (int i=0; i < rowCount; i++) {
-			// Note that this only works when new columns are always added at the end to the _activeMetaData
-			Object[] rowValues = (Object[]) this._activeTable.getDataRows().get(i);
-			// If this row has less columns than final metaData, fill it up with "null"s so that it matches the length
-			if(rowValues.length < finalColumnCount) {
-				Object[] newRowValues = new Object[finalColumnCount];
-				// Put in original values and leave all missing columns on "null"
-				System.arraycopy(rowValues, 0, newRowValues, 0, rowValues.length);
-				this._activeTable.getDataRows().set(i, newRowValues);
-			}
-		}
-	}
+        int rowCount = this._activeTable.getDataRows().size();
+        // Fill up columns that were potentially missing in this row
+        for (int i = 0; i < rowCount; i++) {
+            // Note that this only works when new columns are always added at the end to the _activeMetaData
+            Object[] rowValues = (Object[]) this._activeTable.getDataRows().get(i);
+            // If this row has less columns than final metaData, fill it up with "null"s so that it matches the length
+            if (rowValues.length < finalColumnCount) {
+                Object[] newRowValues = new Object[finalColumnCount];
+                // Put in original values and leave all missing columns on "null"
+                System.arraycopy(rowValues, 0, newRowValues, 0, rowValues.length);
+                this._activeTable.getDataRows().set(i, newRowValues);
+            }
+        }
+    }
 
-	
-	private static class TableBuffer
-	{
-	    private ITableMetaData metaData;
-	    private final ArrayList dataRows;
-	    
+
+    private static class TableBuffer {
+        private ITableMetaData metaData;
+        private final ArrayList dataRows;
+
         public TableBuffer(ITableMetaData metaData) {
             this(metaData, new ArrayList());
         }
@@ -183,5 +173,5 @@ public class BufferedConsumer implements IDataSetConsumer {
             return dataRows;
         }
 
-	}
+    }
 }

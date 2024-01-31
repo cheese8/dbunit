@@ -30,11 +30,10 @@ import org.slf4j.LoggerFactory;
  * dataset and support duplicate table names.
  *
  * @author Manuel Laflamme
- * @since Mar 7, 2003
  * @version $Revision$
+ * @since Mar 7, 2003
  */
-public class IncludeTableFilter extends AbstractTableFilter implements ITableFilter
-{
+public class IncludeTableFilter extends AbstractTableFilter implements ITableFilter {
 
     /**
      * Logger for this class
@@ -47,17 +46,14 @@ public class IncludeTableFilter extends AbstractTableFilter implements ITableFil
      * Create a new empty IncludeTableFilter. Use {@link #includeTable} to allow
      * access to some tables.
      */
-    public IncludeTableFilter()
-    {
+    public IncludeTableFilter() {
     }
 
     /**
      * Create a new IncludeTableFilter which allow access to specified tables.
      */
-    public IncludeTableFilter(String[] tableNames)
-    {
-        for (int i = 0; i < tableNames.length; i++)
-        {
+    public IncludeTableFilter(String[] tableNames) {
+        for (int i = 0; i < tableNames.length; i++) {
             String tableName = tableNames[i];
             includeTable(tableName);
         }
@@ -69,15 +65,13 @@ public class IncludeTableFilter extends AbstractTableFilter implements ITableFil
      * '*' matches zero or more characters,
      * '?' matches one character.
      */
-    public void includeTable(String patternName)
-    {
+    public void includeTable(String patternName) {
         logger.debug("includeTable(patternName={} - start", patternName);
 
         _patternMatcher.addPattern(patternName);
     }
 
-    public boolean isEmpty()
-    {
+    public boolean isEmpty() {
         logger.debug("isEmpty() - start");
 
         return _patternMatcher.isEmpty();
@@ -86,8 +80,7 @@ public class IncludeTableFilter extends AbstractTableFilter implements ITableFil
     ////////////////////////////////////////////////////////////////////////////
     // ITableFilter interface
 
-    public boolean isValidName(String tableName)
-    {
+    public boolean isValidName(String tableName) {
         logger.debug("isValidName(tableName={}) - start", tableName);
 
         return _patternMatcher.accept(tableName);

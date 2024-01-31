@@ -32,9 +32,9 @@ import org.dbunit.dataset.datatype.TypeCastException;
  * <code>UniqueIdentifierType</code> provides support for the "uniqueidentifier" column in Microsoft SQLServer
  * databases. It users the {@link UUID}
  *
+ * @version $Revision$
  * @Author Darryl L. Pierce <dpierce@redhat.com>
  * @Since 02 February 2011
- * @version $Revision$
  */
 public class UniqueIdentifierType extends AbstractDataType {
     static final String UNIQUE_IDENTIFIER_TYPE = "uniqueidentifier";
@@ -62,12 +62,10 @@ public class UniqueIdentifierType extends AbstractDataType {
 
     @Override
     public void setSqlValue(Object value, int column, PreparedStatement statement) throws SQLException,
-    TypeCastException {
-        if (value == null)
-        {
+            TypeCastException {
+        if (value == null) {
             statement.setObject(column, null);
-        } else
-        {
+        } else {
             statement.setObject(column, value.toString());
         }
     }

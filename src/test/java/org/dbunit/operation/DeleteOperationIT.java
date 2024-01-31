@@ -47,29 +47,26 @@ import java.io.Reader;
  * @version $Revision$
  * @since Feb 19, 2002
  */
-public class DeleteOperationIT extends AbstractDatabaseIT
-{
-    public DeleteOperationIT(String s)
-    {
+public class DeleteOperationIT extends AbstractDatabaseIT {
+    public DeleteOperationIT(String s) {
         super(s);
     }
 
-    public void testMockExecute() throws Exception
-    {
+    public void testMockExecute() throws Exception {
         String schemaName = "schema";
         String tableName1 = "table1";
         String tableName2 = "table2";
         String[] expected = {
-            "delete from schema.table2 where c2 = 1234 and c1 = 'toto'",
-            "delete from schema.table2 where c2 = 123.45 and c1 = 'qwerty'",
-            "delete from schema.table1 where c2 = 1234 and c1 = 'toto'",
-            "delete from schema.table1 where c2 = 123.45 and c1 = 'qwerty'",
+                "delete from schema.table2 where c2 = 1234 and c1 = 'toto'",
+                "delete from schema.table2 where c2 = 123.45 and c1 = 'qwerty'",
+                "delete from schema.table1 where c2 = 1234 and c1 = 'toto'",
+                "delete from schema.table1 where c2 = 123.45 and c1 = 'qwerty'",
         };
 
         Column[] columns = new Column[]{
-            new Column("c1", DataType.VARCHAR),
-            new Column("c2", DataType.NUMERIC),
-            new Column("c3", DataType.BOOLEAN),
+                new Column("c1", DataType.VARCHAR),
+                new Column("c2", DataType.NUMERIC),
+                new Column("c3", DataType.BOOLEAN),
         };
         String[] primaryKeys = {"c2", "c1"};
 
@@ -107,19 +104,18 @@ public class DeleteOperationIT extends AbstractDatabaseIT
         connection.verify();
     }
 
-    public void testExecuteWithEscapedNames() throws Exception
-    {
+    public void testExecuteWithEscapedNames() throws Exception {
         String schemaName = "schema";
         String tableName = "table";
         String[] expected = {
-            "delete from [schema].[table] where [c2] = 123.45 and [c1] = 'qwerty'",
-            "delete from [schema].[table] where [c2] = 1234 and [c1] = 'toto'",
+                "delete from [schema].[table] where [c2] = 123.45 and [c1] = 'qwerty'",
+                "delete from [schema].[table] where [c2] = 1234 and [c1] = 'toto'",
         };
 
         Column[] columns = new Column[]{
-            new Column("c1", DataType.VARCHAR),
-            new Column("c2", DataType.NUMERIC),
-            new Column("c3", DataType.BOOLEAN),
+                new Column("c1", DataType.VARCHAR),
+                new Column("c2", DataType.NUMERIC),
+                new Column("c3", DataType.BOOLEAN),
         };
         String[] primaryKeys = {"c2", "c1"};
 
@@ -156,8 +152,7 @@ public class DeleteOperationIT extends AbstractDatabaseIT
         connection.verify();
     }
 
-    public void testExecuteWithEmptyTable() throws Exception
-    {
+    public void testExecuteWithEmptyTable() throws Exception {
         Column[] columns = {new Column("c1", DataType.VARCHAR)};
         ITable table = new DefaultTable(new DefaultTableMetaData(
                 "name", columns, columns));
@@ -179,23 +174,18 @@ public class DeleteOperationIT extends AbstractDatabaseIT
         connection.verify();
     }
 
-    public void testExecuteAndNoPrimaryKey() throws Exception
-    {
+    public void testExecuteAndNoPrimaryKey() throws Exception {
         IDataSet dataSet = connection.createDataSet();
         ITableMetaData metaData = dataSet.getTableMetaData("TEST_TABLE");
-        try
-        {
+        try {
             new DeleteOperation().getOperationData(
                     metaData, null, connection);
             fail("Should throw a NoPrimaryKeyException");
-        }
-        catch (NoPrimaryKeyException e)
-        {
+        } catch (NoPrimaryKeyException e) {
         }
     }
 
-    public void testExecute() throws Exception
-    {
+    public void testExecute() throws Exception {
         Reader in = new FileReader(
                 TestUtils.getFile("xml/deleteOperationTest.xml"));
         IDataSet dataSet = new XmlDataSet(in);
@@ -204,8 +194,7 @@ public class DeleteOperationIT extends AbstractDatabaseIT
 
     }
 
-    public void testExecuteCaseInsensitive() throws Exception
-    {
+    public void testExecuteCaseInsensitive() throws Exception {
         Reader in = new FileReader(
                 TestUtils.getFile("xml/deleteOperationTest.xml"));
         IDataSet dataSet = new XmlDataSet(in);
@@ -213,8 +202,7 @@ public class DeleteOperationIT extends AbstractDatabaseIT
         testExecute(new LowerCaseDataSet(dataSet));
     }
 
-    private void testExecute(IDataSet dataSet) throws Exception
-    {
+    private void testExecute(IDataSet dataSet) throws Exception {
         String tableName = "PK_TABLE";
         String columnName = "PK0";
 

@@ -27,7 +27,6 @@ import org.dbunit.dataset.datatype.IntegerDataType;
 import java.sql.Types;
 
 /**
- *
  * @author Jarvis Cochrane (jarvis@cochrane.com.au)
  * @author Roberto Lo Giacco (rlogiacco@users.sourceforge.ent)
  * @author Martin Gollogly (zemertz@gmail.com)
@@ -93,9 +92,9 @@ public class PostgresqlDataTypeFactoryTest extends TestCase {
 
     public void testCreateEnumType() throws Exception {
 
-        PostgresqlDataTypeFactory instance = new PostgresqlDataTypeFactory(){
+        PostgresqlDataTypeFactory instance = new PostgresqlDataTypeFactory() {
             public boolean isEnumType(String sqlTypeName) {
-                if(sqlTypeName.equalsIgnoreCase("abc_enum")){
+                if (sqlTypeName.equalsIgnoreCase("abc_enum")) {
                     return true;
                 }
                 return false;
@@ -108,7 +107,7 @@ public class PostgresqlDataTypeFactoryTest extends TestCase {
 
         DataType result = instance.createDataType(sqlType, sqlTypeName);
         assertTrue(result instanceof GenericEnumType);
-        assertEquals("abc_enum", ((GenericEnumType)result).getSqlTypeName());
+        assertEquals("abc_enum", ((GenericEnumType) result).getSqlTypeName());
     }
 
     public void testCreateDefaultType() throws Exception {

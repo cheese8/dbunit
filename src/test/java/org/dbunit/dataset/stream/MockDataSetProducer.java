@@ -28,59 +28,49 @@ import org.dbunit.dataset.datatype.DataType;
 
 /**
  * @author Manuel Laflamme
- * @since Jun 12, 2003
  * @version $Revision$
+ * @since Jun 12, 2003
  */
-public class MockDataSetProducer implements IDataSetProducer
-{
+public class MockDataSetProducer implements IDataSetProducer {
     private int _tableCount;
     private int _columnCount;
     private int _rowCount;
     private IDataSetConsumer _consumer = new DefaultConsumer();
 
-    public void setupTableCount(int tableCount)
-    {
+    public void setupTableCount(int tableCount) {
         _tableCount = tableCount;
     }
 
-    public void setupColumnCount(int columnCount)
-    {
+    public void setupColumnCount(int columnCount) {
         _columnCount = columnCount;
     }
 
-    public void setupRowCount(int rowCount)
-    {
+    public void setupRowCount(int rowCount) {
         _rowCount = rowCount;
     }
 
     ////////////////////////////////////////////////////////////////////////////
     // IDataSetProducer interface
 
-    public void setConsumer(IDataSetConsumer consumer) throws DataSetException
-    {
+    public void setConsumer(IDataSetConsumer consumer) throws DataSetException {
         _consumer = consumer;
     }
 
-    public void produce() throws DataSetException
-    {
+    public void produce() throws DataSetException {
         _consumer.startDataSet();
-        for (int i = 0; i < _tableCount; i++)
-        {
+        for (int i = 0; i < _tableCount; i++) {
             String tableName = "TABLE" + i;
             Column[] columns = new Column[_columnCount];
-            for (int j = 0; j < columns.length; j++)
-            {
+            for (int j = 0; j < columns.length; j++) {
                 columns[j] = new Column("COLUMN" + j, DataType.UNKNOWN);
             }
             ITableMetaData metaData = new DefaultTableMetaData(tableName, columns);
 
             _consumer.startTable(metaData);
 
-            for (int j = 0; j < _rowCount; j++)
-            {
+            for (int j = 0; j < _rowCount; j++) {
                 Object[] values = new Object[_columnCount];
-                for (int k = 0; k < values.length; k++)
-                {
+                for (int k = 0; k < values.length; k++) {
                     values[k] = j + "," + k;
                 }
                 _consumer.row(values);

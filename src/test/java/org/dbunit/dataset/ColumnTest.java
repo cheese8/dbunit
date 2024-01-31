@@ -31,31 +31,26 @@ import java.sql.DatabaseMetaData;
  * @version $Revision$
  * @since Feb 17, 2002
  */
-public class ColumnTest extends TestCase
-{
-    public ColumnTest(String s)
-    {
+public class ColumnTest extends TestCase {
+    public ColumnTest(String s) {
         super(s);
     }
 
-    public void testGetColumnName() throws Exception
-    {
+    public void testGetColumnName() throws Exception {
         String expected = "columnName";
         Column column = new Column(expected, DataType.REAL);
 
         assertEquals("column name", expected, column.getColumnName());
     }
 
-    public void testGetDataType() throws Exception
-    {
+    public void testGetDataType() throws Exception {
         DataType expected = DataType.DATE;
         Column column = new Column(expected.toString(), expected);
 
         assertEquals("data type", expected, column.getDataType());
     }
 
-    public void testNullableValue() throws Exception
-    {
+    public void testNullableValue() throws Exception {
         assertEquals("nullable", Column.NULLABLE,
                 Column.nullableValue(DatabaseMetaData.columnNullable));
 
@@ -66,13 +61,10 @@ public class ColumnTest extends TestCase
                 Column.nullableValue(DatabaseMetaData.columnNullableUnknown));
 
 
-        try
-        {
+        try {
             Column.nullableValue(12345);
             fail("Should throw an IllegalArgumentException");
-        }
-        catch (IllegalArgumentException e)
-        {
+        } catch (IllegalArgumentException e) {
         }
 
     }

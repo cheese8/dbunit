@@ -50,7 +50,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Parser which parses Oracle SQLLoader files.
- * 
+ *
  * @author Stephan Strittmatter (stritti AT users.sourceforge.net)
  * @author Last changed by: $Author$
  * @version $Revision$ $Date$
@@ -59,8 +59,10 @@ import org.slf4j.LoggerFactory;
 public class SqlLoaderControlParserImpl implements SqlLoaderControlParser {
 
     public static final char SEPARATOR_CHAR = ';';
-    
-    /** The pipeline. */
+
+    /**
+     * The pipeline.
+     */
     private Pipeline pipeline;
 
     private String tableName;
@@ -76,7 +78,7 @@ public class SqlLoaderControlParserImpl implements SqlLoaderControlParser {
      */
     private static final Logger logger = LoggerFactory.getLogger(SqlLoaderControlParserImpl.class);
 
-    
+
     /**
      * The Constructor.
      */
@@ -91,10 +93,10 @@ public class SqlLoaderControlParserImpl implements SqlLoaderControlParser {
      */
     private void resetThePipeline() {
         logger.debug("resetThePipeline() - start");
-        
+
         this.pipeline = new Pipeline();
         this.pipeline.getPipelineConfig().setSeparatorChar(SEPARATOR_CHAR);
-        
+
         //TODO add this.fieldEnclosure
         getPipeline().putFront(SeparatorHandler.ENDPIECE());
         getPipeline().putFront(EscapeHandler.ACCEPT());
@@ -108,14 +110,11 @@ public class SqlLoaderControlParserImpl implements SqlLoaderControlParser {
 
     /**
      * Parse.
-     * 
+     *
      * @param csv the csv
-     * 
      * @return the list
-     * 
      * @throws IllegalInputCharacterException the illegal input character exception
-     * @throws PipelineException the pipeline exception
-     * 
+     * @throws PipelineException              the pipeline exception
      * @see org.dbunit.dataset.sqlloader.SqlLoaderControlParser#parse(java.lang.String)
      */
     public List parse(String csv) throws PipelineException, IllegalInputCharacterException {
@@ -134,14 +133,11 @@ public class SqlLoaderControlParserImpl implements SqlLoaderControlParser {
 
     /**
      * Parse.
-     * 
+     *
      * @param url the URL
-     * 
      * @return the list
-     * 
-     * @throws IOException the IO exception
+     * @throws IOException                     the IO exception
      * @throws SqlLoaderControlParserException the oracle control parser exception
-     * 
      * @see org.dbunit.dataset.sqlloader.SqlLoaderControlParser#parse(java.net.URL)
      */
     public List parse(URL url) throws IOException, SqlLoaderControlParserException {
@@ -151,18 +147,15 @@ public class SqlLoaderControlParserImpl implements SqlLoaderControlParser {
 
     /**
      * Parse.
-     * 
+     *
      * @param controlFile the source
-     * 
      * @return the list of column names as Strings
-     * 
-     * @throws IOException the IO exception
+     * @throws IOException                     the IO exception
      * @throws SqlLoaderControlParserException the oracle control parser exception
      * @see org.dbunit.dataset.sqlloader.SqlLoaderControlParser#parse(java.io.File)
      */
-    public List parse(File controlFile) 
-    throws IOException, SqlLoaderControlParserException 
-    {
+    public List parse(File controlFile)
+            throws IOException, SqlLoaderControlParserException {
         logger.debug("parse(controlFile={}) - start", controlFile);
 
         FileInputStream fis = new FileInputStream(controlFile);
@@ -179,8 +172,8 @@ public class SqlLoaderControlParserImpl implements SqlLoaderControlParser {
 
         if (parseForRegexp(lines, "(LOAD\\sDATA).*") != null) {
 
-        	String fileName = parseForRegexp(lines, ".*INFILE\\s'(.*?)'.*");
-        	File dataFile = resolveFile(controlFile.getParentFile(), fileName);
+            String fileName = parseForRegexp(lines, ".*INFILE\\s'(.*?)'.*");
+            File dataFile = resolveFile(controlFile.getParentFile(), fileName);
 
             this.tableName = parseForRegexp(lines, ".*INTO\\sTABLE\\s(.*?)\\s.*");
 
@@ -190,54 +183,50 @@ public class SqlLoaderControlParserImpl implements SqlLoaderControlParser {
 
             if (parseForRegexp(lines, ".*(TRAILING NULLCOLS).*") != "") {
                 this.hasTrailingNullCols = true;
-            }
-            else {
+            } else {
                 this.hasTrailingNullCols = false;
             }
-            
+
             List rows = new ArrayList();
             List columnList = parseColumns(lines, rows);
 
             LineNumberReader lineNumberReader =
-                new LineNumberReader(new InputStreamReader(new FileInputStream(dataFile)));
+                    new LineNumberReader(new InputStreamReader(new FileInputStream(dataFile)));
             try {
                 parseTheData(columnList, lineNumberReader, rows);
-            }
-            finally {
+            } finally {
                 lineNumberReader.close();
             }
 
             return rows;
-        }
-        else {
+        } else {
             throw new SqlLoaderControlParserException("Control file "
                     + controlFile + " not starting using 'LOAD DATA'");
         }
     }
 
     private File resolveFile(File parentDir, String fileName) {
-    	// Initially assume that we have an absolute fileName
-    	File dataFile = new File(fileName);
-    	
-    	// If fileName was not absolute build it using the given parent
-    	if(!dataFile.isAbsolute()) {
-    		fileName = fileName.replaceAll("\\\\", "/");
-    		// remove "./" characters from name at the beginning if needed
-    		if(fileName.startsWith("./")){
-    			fileName = fileName.substring(2);
-    		}
-    		// remove "." character from name at the beginning if needed
-    		if(fileName.startsWith(".")){
-    			fileName = fileName.substring(1);
-    		}
-    		dataFile = new File(parentDir, fileName);
-    	}
-    	return dataFile;
-	}
+        // Initially assume that we have an absolute fileName
+        File dataFile = new File(fileName);
 
-	protected String parseForRegexp(String controlFileContent, String regexp) 
-    throws IOException 
-    {
+        // If fileName was not absolute build it using the given parent
+        if (!dataFile.isAbsolute()) {
+            fileName = fileName.replaceAll("\\\\", "/");
+            // remove "./" characters from name at the beginning if needed
+            if (fileName.startsWith("./")) {
+                fileName = fileName.substring(2);
+            }
+            // remove "." character from name at the beginning if needed
+            if (fileName.startsWith(".")) {
+                fileName = fileName.substring(1);
+            }
+            dataFile = new File(parentDir, fileName);
+        }
+        return dataFile;
+    }
+
+    protected String parseForRegexp(String controlFileContent, String regexp)
+            throws IOException {
         logger.debug("parseForRegexp(controlFileContent={}, regexp={}) - start", controlFileContent, regexp);
 
         if (controlFileContent == null) {
@@ -251,34 +240,30 @@ public class SqlLoaderControlParserImpl implements SqlLoaderControlParser {
             String inFileLine = matches.group(1);
 
             return inFileLine;
-        }
-        else {
+        } else {
             return null;
         }
     }
 
     /**
      * parse the first line of data from the given source.
-     * 
-     * @param rows the rows
+     *
+     * @param rows             the rows
      * @param lineNumberReader the line number reader
-     * @param controlFile the source
-     * 
+     * @param controlFile      the source
      * @return the list of column names as Strings
-     * 
-     * @throws IOException the IO exception
+     * @throws IOException                     the IO exception
      * @throws SqlLoaderControlParserException the oracle control parser exception
      */
     private List parseColumns(String controlFileContent, List rows) throws IOException,
-    SqlLoaderControlParserException 
-    {
+            SqlLoaderControlParserException {
         logger.debug("parseColumns(controlFileContent={}, rows={}) - start", controlFileContent, rows);
 
         List columnList;
 
         final Pattern pattern =
-            Pattern
-            .compile(".*FIELDS\\s.*\\(\\n(.*?)\\n\\)", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+                Pattern
+                        .compile(".*FIELDS\\s.*\\(\\n(.*?)\\n\\)", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
         final Matcher matches = pattern.matcher(controlFileContent);
 
         if (matches.find()) {
@@ -301,9 +286,7 @@ public class SqlLoaderControlParserImpl implements SqlLoaderControlParser {
 
             //columnsInFirstLine = parse(firstLine);
             rows.add(columnList);
-        }
-
-        else {
+        } else {
             columnList = null;
         }
 
@@ -312,20 +295,18 @@ public class SqlLoaderControlParserImpl implements SqlLoaderControlParser {
 
     /**
      * Parses the the data.
-     * 
-     * @param rows the rows
-     * @param columnList the columns in first line
+     *
+     * @param rows             the rows
+     * @param columnList       the columns in first line
      * @param lineNumberReader the line number reader
-     * 
-     * @throws IOException the IO exception
+     * @throws IOException                     the IO exception
      * @throws SqlLoaderControlParserException the oracle control parser exception
      */
     private void parseTheData(final List columnList, LineNumberReader lineNumberReader, List rows)
-    throws IOException, SqlLoaderControlParserException 
-    {
-        if(logger.isDebugEnabled())
-            logger.debug("parseTheData(columnList={}, lineNumberReader={}, rows={}) - start", 
-                    new Object[] {columnList, lineNumberReader, rows} );
+            throws IOException, SqlLoaderControlParserException {
+        if (logger.isDebugEnabled())
+            logger.debug("parseTheData(columnList={}, lineNumberReader={}, rows={}) - start",
+                    new Object[]{columnList, lineNumberReader, rows});
 
         int nColumns = columnList.size();
         List columns;
@@ -336,22 +317,19 @@ public class SqlLoaderControlParserImpl implements SqlLoaderControlParser {
 
     /**
      * Collect expected number of columns.
-     * 
+     *
      * @param expectedNumberOfColumns the expected number of columns
-     * @param lineNumberReader the line number reader
-     * 
+     * @param lineNumberReader        the line number reader
      * @return the list
-     * 
-     * @throws IOException the IO exception
+     * @throws IOException                     the IO exception
      * @throws SqlLoaderControlParserException the oracle control parser exception
      */
     private List collectExpectedNumberOfColumns(
             int expectedNumberOfColumns,
-            LineNumberReader lineNumberReader) throws IOException, SqlLoaderControlParserException 
-    {
-        if(logger.isDebugEnabled())
-            logger.debug("collectExpectedNumberOfColumns(expectedNumberOfColumns={}, lineNumberReader={}) - start", 
-                String.valueOf(expectedNumberOfColumns), lineNumberReader);
+            LineNumberReader lineNumberReader) throws IOException, SqlLoaderControlParserException {
+        if (logger.isDebugEnabled())
+            logger.debug("collectExpectedNumberOfColumns(expectedNumberOfColumns={}, lineNumberReader={}) - start",
+                    String.valueOf(expectedNumberOfColumns), lineNumberReader);
 
         String anotherLine = lineNumberReader.readLine();
         if (anotherLine == null) {
@@ -367,8 +345,7 @@ public class SqlLoaderControlParserImpl implements SqlLoaderControlParser {
                 buffer.append(anotherLine);
                 columns = parse(buffer.toString());
                 columnsCollectedSoFar = columns.size();
-            }
-            catch (IllegalStateException e) {
+            } catch (IllegalStateException e) {
                 resetThePipeline();
                 anotherLine = lineNumberReader.readLine();
                 if (anotherLine == null) {
@@ -381,19 +358,18 @@ public class SqlLoaderControlParserImpl implements SqlLoaderControlParser {
                 break;
             }
         }
-        
+
         if (columnsCollectedSoFar != expectedNumberOfColumns) {
             if (this.hasTrailingNullCols) {
                 columns.add(SqlLoaderControlProducer.NULL);
-            }
-            else {
+            } else {
 
                 String message =
-                    new StringBuffer("Expected ")
-                        .append(expectedNumberOfColumns).append(" columns on line ")
-                        .append(lineNumberReader.getLineNumber()).append(", got ")
-                        .append(columnsCollectedSoFar).append(". Offending line: ").append(buffer)
-                        .toString();
+                        new StringBuffer("Expected ")
+                                .append(expectedNumberOfColumns).append(" columns on line ")
+                                .append(lineNumberReader.getLineNumber()).append(", got ")
+                                .append(columnsCollectedSoFar).append(". Offending line: ").append(buffer)
+                                .toString();
                 throw new SqlLoaderControlParserException(message);
             }
         }
@@ -402,26 +378,23 @@ public class SqlLoaderControlParserImpl implements SqlLoaderControlParser {
 
     /**
      * Gets the pipeline.
-     * 
+     *
      * @return the pipeline
      */
-    Pipeline getPipeline() 
-    {
+    Pipeline getPipeline() {
         return this.pipeline;
     }
 
     /**
      * Sets the pipeline.
-     * 
+     *
      * @param pipeline the pipeline
      */
-    void setPipeline(Pipeline pipeline) 
-    {
+    void setPipeline(Pipeline pipeline) {
         this.pipeline = pipeline;
     }
 
-    public String getTableName() 
-    {
+    public String getTableName() {
         return this.tableName;
     }
 }

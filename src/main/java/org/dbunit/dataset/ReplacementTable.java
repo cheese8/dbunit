@@ -34,11 +34,10 @@ import java.util.regex.Pattern;
  * with replacement values.
  *
  * @author Manuel Laflamme
- * @since Mar 17, 2003
  * @version $Revision$
+ * @since Mar 17, 2003
  */
-public class ReplacementTable implements ITable
-{
+public class ReplacementTable implements ITable {
 
     /**
      * Logger for this class
@@ -62,14 +61,12 @@ public class ReplacementTable implements ITable
      *
      * @param table the decorated table
      */
-    public ReplacementTable(ITable table)
-    {
+    public ReplacementTable(ITable table) {
         this(table, new HashMap(), new HashMap(), new HashMap(), null, null);
     }
 
     public ReplacementTable(ITable table, Map objectMap, Map substringMap, Map functionMap,
-            String startDelimiter, String endDelimiter)
-    {
+                            String startDelimiter, String endDelimiter) {
         _table = table;
         _objectMap = objectMap;
         _substringMap = substringMap;
@@ -81,25 +78,23 @@ public class ReplacementTable implements ITable
     /**
      * Setting this property to true indicates that when no replacement
      * is found for a delimited substring the replacement will fail fast.
-     * 
+     *
      * @param strictReplacement true if replacement should be strict
      */
-    public void setStrictReplacement(boolean strictReplacement) 
-    {
-    	if(logger.isDebugEnabled())
-    		logger.debug("setStrictReplacement(strictReplacement={}) - start", String.valueOf(strictReplacement));
-    	
+    public void setStrictReplacement(boolean strictReplacement) {
+        if (logger.isDebugEnabled())
+            logger.debug("setStrictReplacement(strictReplacement={}) - start", String.valueOf(strictReplacement));
+
         this._strictReplacement = strictReplacement;
     }
-    
+
     /**
      * Add a new Object replacement mapping.
      *
-     * @param originalObject the object to replace
+     * @param originalObject    the object to replace
      * @param replacementObject the replacement object
      */
-    public void addReplacementObject(Object originalObject, Object replacementObject)
-    {
+    public void addReplacementObject(Object originalObject, Object replacementObject) {
         logger.debug("addReplacementObject(originalObject={}, replacementObject={}) - start", originalObject, replacementObject);
 
         _objectMap.put(originalObject, replacementObject);
@@ -108,16 +103,14 @@ public class ReplacementTable implements ITable
     /**
      * Add a new substring replacement mapping.
      *
-     * @param originalSubstring the substring to replace
+     * @param originalSubstring    the substring to replace
      * @param replacementSubstring the replacement substring
      */
     public void addReplacementSubstring(String originalSubstring,
-            String replacementSubstring)
-    {
+                                        String replacementSubstring) {
         logger.debug("addReplacementSubstring(originalSubstring={}, replacementSubstring={}) - start", originalSubstring, replacementSubstring);
 
-        if (originalSubstring == null || replacementSubstring == null)
-        {
+        if (originalSubstring == null || replacementSubstring == null) {
             throw new NullPointerException();
         }
 
@@ -127,11 +120,10 @@ public class ReplacementTable implements ITable
     /**
      * Add a new function replacement mapping.
      *
-     * @param originalObject the object to replace
+     * @param originalObject      the object to replace
      * @param replacementFunction the replacement function
      */
-    public void addReplacementFunction(Object originalObject, ReplacementFunction replacementFunction)
-    {
+    public void addReplacementFunction(Object originalObject, ReplacementFunction replacementFunction) {
         logger.debug("addReplacementFunction(originalObject={}, replacementFunction={}) - start", originalObject, replacementFunction);
 
         _functionMap.put(originalObject, replacementFunction);
@@ -140,12 +132,10 @@ public class ReplacementTable implements ITable
     /**
      * Sets substring delimiters.
      */
-    public void setSubstringDelimiters(String startDelimiter, String endDelimiter)
-    {
+    public void setSubstringDelimiters(String startDelimiter, String endDelimiter) {
         logger.debug("setSubstringDelimiters(startDelimiter={}, endDelimiter={}) - start", startDelimiter, endDelimiter);
 
-        if (startDelimiter == null || endDelimiter == null)
-        {
+        if (startDelimiter == null || endDelimiter == null) {
             throw new NullPointerException();
         }
 
@@ -158,73 +148,60 @@ public class ReplacementTable implements ITable
      */
     private void replaceAll(StringBuffer text, String source, String target) {
         int index = 0;
-        while((index = text.toString().indexOf(source, index)) != -1)
-        {
-            text.replace(index, index+source.length(), target);
+        while ((index = text.toString().indexOf(source, index)) != -1) {
+            text.replace(index, index + source.length(), target);
             index += target.length();
         }
     }
-    
+
     private String replaceStrings(String value, String lDelim, String rDelim) {
         StringBuffer buffer = new StringBuffer(value);
 
-        for (Iterator it = _substringMap.entrySet().iterator(); it.hasNext();)
-        {
-            Map.Entry entry = (Map.Entry)it.next();
-            String original = (String)entry.getKey();
-            String replacement = (String)entry.getValue();
+        for (Iterator it = _substringMap.entrySet().iterator(); it.hasNext(); ) {
+            Map.Entry entry = (Map.Entry) it.next();
+            String original = (String) entry.getKey();
+            String replacement = (String) entry.getValue();
             replaceAll(buffer, lDelim + original + rDelim, replacement);
         }
 
-        return buffer == null ? value : buffer.toString();        
+        return buffer == null ? value : buffer.toString();
     }
-    
-    private String replaceSubstrings(String value)
-    {
+
+    private String replaceSubstrings(String value) {
         return replaceStrings(value, "", "");
-    }    
+    }
 
     /**
      * @throws DataSetException when stringReplacement fails
      */
-    private String replaceDelimitedSubstrings(String value) throws DataSetException
-    {
+    private String replaceDelimitedSubstrings(String value) throws DataSetException {
         StringBuffer buffer = null;
 
         int startIndex = 0;
         int endIndex = 0;
         int lastEndIndex = 0;
-        for(;;)
-        {
+        for (; ; ) {
             startIndex = value.indexOf(_startDelim, lastEndIndex);
-            if (startIndex != -1)
-            {
+            if (startIndex != -1) {
                 endIndex = value.indexOf(_endDelim, startIndex + _startDelim.length());
-                if (endIndex != -1)
-                {
-                    if (buffer == null)
-                    {
+                if (endIndex != -1) {
+                    if (buffer == null) {
                         buffer = new StringBuffer();
                     }
 
                     String substring = value.substring(
                             startIndex + _startDelim.length(), endIndex);
-                    if (_substringMap.containsKey(substring))
-                    {
+                    if (_substringMap.containsKey(substring)) {
                         buffer.append(value.substring(lastEndIndex, startIndex));
                         buffer.append(_substringMap.get(substring));
-                    }
-                    else if (_strictReplacement)
-                    {
+                    } else if (_strictReplacement) {
                         throw new DataSetException(
                                 "Strict Replacement was set to true, but no"
-                                + " replacement was found for substring '" 
-                                + substring + "' in the value '" + value + "'");
-                    }
-                    else
-                    {
+                                        + " replacement was found for substring '"
+                                        + substring + "' in the value '" + value + "'");
+                    } else {
                         logger.debug("Did not find a replacement map entry for substring={}. " +
-                        		"Leaving original value there.", substring);
+                                "Leaving original value there.", substring);
                         buffer.append(value.substring(
                                 lastEndIndex, endIndex + _endDelim.length()));
                     }
@@ -234,10 +211,8 @@ public class ReplacementTable implements ITable
             }
 
             // No more delimited substring
-            if (startIndex == -1 || endIndex == -1)
-            {
-                if (buffer != null)
-                {
+            if (startIndex == -1 || endIndex == -1) {
+                if (buffer != null) {
                     buffer.append(value.substring(lastEndIndex));
                 }
                 break;
@@ -250,26 +225,22 @@ public class ReplacementTable implements ITable
     ////////////////////////////////////////////////////////////////////////
     // ITable interface
 
-    public ITableMetaData getTableMetaData()
-    {
+    public ITableMetaData getTableMetaData() {
         return _table.getTableMetaData();
     }
 
-    public int getRowCount()
-    {
+    public int getRowCount() {
         return _table.getRowCount();
     }
 
-    public Object getValue(int row, String column) throws DataSetException
-    {
-        if(logger.isDebugEnabled())
+    public Object getValue(int row, String column) throws DataSetException {
+        if (logger.isDebugEnabled())
             logger.debug("getValue(row={}, columnName={}) - start", Integer.toString(row), column);
 
         Object value = _table.getValue(row, column);
 
         // Object replacement
-        if (_objectMap.containsKey(value))
-        {
+        if (_objectMap.containsKey(value)) {
             return _objectMap.get(value);
         }
 
@@ -279,11 +250,10 @@ public class ReplacementTable implements ITable
             Matcher m = pattern.matcher(valueStr);
             if (!m.find()) {
                 // Substring replacement
-                if (_startDelim != null && _endDelim != null)
-                {
+                if (_startDelim != null && _endDelim != null) {
                     return replaceDelimitedSubstrings(valueStr);
                 }
-                return replaceSubstrings((String)value);
+                return replaceSubstrings((String) value);
             } else {
                 String functionName = m.group(1);
                 String parameter = m.group(2);
@@ -298,17 +268,16 @@ public class ReplacementTable implements ITable
         return value;
     }
 
-    public String toString()
-    {
-    	StringBuffer sb = new StringBuffer();
-    	sb.append(getClass().getName()).append("[");
-    	sb.append("_strictReplacement=").append(_strictReplacement);
-    	sb.append(", _table=").append(_table);
-    	sb.append(", _objectMap=").append(_objectMap);
-    	sb.append(", _substringMap=").append(_substringMap);
-    	sb.append(", _startDelim=").append(_startDelim);
-    	sb.append(", _endDelim=").append(_endDelim);
-    	sb.append("]");
-    	return sb.toString();
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+        sb.append(getClass().getName()).append("[");
+        sb.append("_strictReplacement=").append(_strictReplacement);
+        sb.append(", _table=").append(_table);
+        sb.append(", _objectMap=").append(_objectMap);
+        sb.append(", _substringMap=").append(_substringMap);
+        sb.append(", _startDelim=").append(_startDelim);
+        sb.append(", _endDelim=").append(_endDelim);
+        sb.append("]");
+        return sb.toString();
     }
 }

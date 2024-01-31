@@ -36,33 +36,34 @@ import org.dbunit.database.IDatabaseConnection;
  */
 public class DataSourceDatabaseTester extends AbstractDatabaseTester {
 
-	private final DataSource dataSource;
+    private final DataSource dataSource;
 
-	/**
-	 * Creates a new DataSourceDatabaseTester with the specified DataSource.
-	 *
-	 * @param dataSource the DataSource to pull connections from
-	 */
-	public DataSourceDatabaseTester(DataSource dataSource) {
-		super();
-		assert dataSource != null;
-		this.dataSource = dataSource;
-	}
-
-	/**
-     * Creates a new DataSourceDatabaseTester with the specified DataSource and schema name.
+    /**
+     * Creates a new DataSourceDatabaseTester with the specified DataSource.
+     *
      * @param dataSource the DataSource to pull connections from
-	 * @param schema The schema name to be used for new dbunit connections
-	 * @since 2.4.5
-	 */
-	public DataSourceDatabaseTester(DataSource dataSource, String schema) {
+     */
+    public DataSourceDatabaseTester(DataSource dataSource) {
+        super();
+        assert dataSource != null;
+        this.dataSource = dataSource;
+    }
+
+    /**
+     * Creates a new DataSourceDatabaseTester with the specified DataSource and schema name.
+     *
+     * @param dataSource the DataSource to pull connections from
+     * @param schema     The schema name to be used for new dbunit connections
+     * @since 2.4.5
+     */
+    public DataSourceDatabaseTester(DataSource dataSource, String schema) {
         super(schema);
-		assert dataSource != null;
+        assert dataSource != null;
         this.dataSource = dataSource;
     }
 
     public IDatabaseConnection getConnection() throws Exception {
-		assert dataSource != null;
-		return new DatabaseConnection(dataSource.getConnection(), getSchema());
-	}
+        assert dataSource != null;
+        return new DatabaseConnection(dataSource.getConnection(), getSchema());
+    }
 }

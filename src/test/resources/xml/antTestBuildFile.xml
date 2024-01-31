@@ -32,13 +32,15 @@
     </target>
 
     <target name="no-db-url">
-        <dbunit driver="${dbunit.profile.driverClass}" userid="${dbunit.profile.user}" password="${dbunit.profile.password}">
+        <dbunit driver="${dbunit.profile.driverClass}" userid="${dbunit.profile.user}"
+                password="${dbunit.profile.password}">
             <operation type="CLEAN_INSERT" src="${testDataSet}"/>
         </dbunit>
     </target>
 
     <target name="no-userid">
-        <dbunit driver="${dbunit.profile.driverClass}" url="${dbunit.profile.url}" password="${dbunit.profile.password}">
+        <dbunit driver="${dbunit.profile.driverClass}" url="${dbunit.profile.url}"
+                password="${dbunit.profile.password}">
             <operation type="CLEAN_INSERT" src="${testDataSet}"/>
         </dbunit>
     </target>
@@ -50,13 +52,15 @@
     </target>
 
     <target name="invalid-db-info">
-        <dbunit driver="${dbunit.profile.driverClass}" url="jdbc:foobar://localhost/dbunittest" userid="${dbunit.profile.user}" password="${dbunit.profile.password}">
+        <dbunit driver="${dbunit.profile.driverClass}" url="jdbc:foobar://localhost/dbunittest"
+                userid="${dbunit.profile.user}" password="${dbunit.profile.password}">
             <operation type="CLEAN_INSERT" src="${testDataSet}"/>
         </dbunit>
     </target>
 
     <target name="set-format-xml">
-        <dbunit driver="${dbunit.profile.driverClass}" url="${dbunit.profile.url}" userid="${dbunit.profile.user}" password="${dbunit.profile.password}">
+        <dbunit driver="${dbunit.profile.driverClass}" url="${dbunit.profile.url}" userid="${dbunit.profile.user}"
+                password="${dbunit.profile.password}">
             <operation type="INSERT" src="${testDataSet}" format="XML"/>
         </dbunit>
     </target>

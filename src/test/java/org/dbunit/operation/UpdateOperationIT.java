@@ -52,45 +52,38 @@ import org.dbunit.testutil.TestUtils;
  * @version $Revision$
  * @since Feb 19, 2002
  */
-public class UpdateOperationIT extends AbstractDatabaseIT
-{
-    public UpdateOperationIT(String s)
-    {
+public class UpdateOperationIT extends AbstractDatabaseIT {
+    public UpdateOperationIT(String s) {
         super(s);
     }
 
     ////////////////////////////////////////////////////////////////////////////
     //
 
-    protected IDataSet getDataSet() throws Exception
-    {
+    protected IDataSet getDataSet() throws Exception {
         IDataSet dataSet = super.getDataSet();
 
         DatabaseEnvironment environment = DatabaseEnvironment.getInstance();
-        if (environment.support(TestFeature.BLOB))
-        {
+        if (environment.support(TestFeature.BLOB)) {
             dataSet = new CompositeDataSet(
                     new FlatXmlDataSetBuilder().build(TestUtils.getFile("xml/blobInsertTest.xml")),
                     dataSet);
         }
 
-        if (environment.support(TestFeature.CLOB))
-        {
+        if (environment.support(TestFeature.CLOB)) {
             dataSet = new CompositeDataSet(
                     new FlatXmlDataSetBuilder().build(TestUtils.getFile("xml/clobInsertTest.xml")),
                     dataSet);
         }
 
-        if (environment.support(TestFeature.SDO_GEOMETRY))
-        {
+        if (environment.support(TestFeature.SDO_GEOMETRY)) {
             dataSet = new CompositeDataSet(
                     new FlatXmlDataSetBuilder().build(TestUtils.getFile("xml/sdoGeometryInsertTest.xml")),
                     dataSet
             );
         }
 
-        if (environment.support(TestFeature.XML_TYPE))
-        {
+        if (environment.support(TestFeature.XML_TYPE)) {
             dataSet = new CompositeDataSet(
                     new FlatXmlDataSetBuilder().build(TestUtils.getFile("xml/xmlTypeInsertTest.xml")),
                     dataSet);
@@ -102,20 +95,19 @@ public class UpdateOperationIT extends AbstractDatabaseIT
     ////////////////////////////////////////////////////////////////////////////
     //
 
-    public void testMockExecute() throws Exception
-    {
+    public void testMockExecute() throws Exception {
         String schemaName = "schema";
         String tableName = "table";
         String[] expected = {
-            "update schema.table set c2 = 1234, c3 = 'false' where c4 = 0 and c1 = 'toto'",
-            "update schema.table set c2 = 123.45, c3 = NULL where c4 = 0 and c1 = 'qwerty'",
+                "update schema.table set c2 = 1234, c3 = 'false' where c4 = 0 and c1 = 'toto'",
+                "update schema.table set c2 = 123.45, c3 = NULL where c4 = 0 and c1 = 'qwerty'",
         };
 
         Column[] columns = new Column[]{
-            new Column("c1", DataType.VARCHAR),
-            new Column("c2", DataType.NUMERIC),
-            new Column("c3", DataType.VARCHAR),
-            new Column("c4", DataType.NUMERIC),
+                new Column("c1", DataType.VARCHAR),
+                new Column("c2", DataType.NUMERIC),
+                new Column("c3", DataType.VARCHAR),
+                new Column("c4", DataType.NUMERIC),
         };
         String[] primaryKeys = {"c4", "c1"};
         DefaultTable table = new DefaultTable(new DefaultTableMetaData(
@@ -154,8 +146,8 @@ public class UpdateOperationIT extends AbstractDatabaseIT
         String tableName = "table";
 
         Column[] columns = new Column[]{
-            new Column("c3", DataType.VARCHAR),
-            new Column("c4", DataType.NUMERIC),
+                new Column("c3", DataType.VARCHAR),
+                new Column("c4", DataType.NUMERIC),
         };
         String[] primaryKeys = {"c4"};
         DefaultTable table = new DefaultTable(new DefaultTableMetaData(
@@ -184,12 +176,12 @@ public class UpdateOperationIT extends AbstractDatabaseIT
         try {
             new UpdateOperation().execute(connection, dataSet);
             fail("Update should not succedd");
-        } catch(IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             // ignore
         } finally {
-	        statement.verify();
-	        factory.verify();
-	        connection.verify();
+            statement.verify();
+            factory.verify();
+            connection.verify();
         }
     }
 
@@ -202,8 +194,8 @@ public class UpdateOperationIT extends AbstractDatabaseIT
         };
 
         Column[] columns = new Column[]{
-            new Column("c3", DataType.VARCHAR),
-            new Column("c4", DataType.NUMERIC),
+                new Column("c3", DataType.VARCHAR),
+                new Column("c4", DataType.NUMERIC),
         };
         String[] primaryKeys = {"c4"};
         DefaultTable table = new DefaultTable(new DefaultTableMetaData(
@@ -242,14 +234,14 @@ public class UpdateOperationIT extends AbstractDatabaseIT
         String schemaName = "schema";
         String tableName = "table";
         String[] expected = {
-            String.format("update %s.%s set c3 = 'not-empty' where c4 = 1", schemaName, tableName),
-            String.format("update %s.%s set c3 = NULL where c4 = 2", schemaName, tableName),
-            String.format("update %s.%s set c3 = '' where c4 = 3", schemaName, tableName),
+                String.format("update %s.%s set c3 = 'not-empty' where c4 = 1", schemaName, tableName),
+                String.format("update %s.%s set c3 = NULL where c4 = 2", schemaName, tableName),
+                String.format("update %s.%s set c3 = '' where c4 = 3", schemaName, tableName),
         };
 
         Column[] columns = new Column[]{
-            new Column("c3", DataType.VARCHAR),
-            new Column("c4", DataType.NUMERIC),
+                new Column("c3", DataType.VARCHAR),
+                new Column("c4", DataType.NUMERIC),
         };
         String[] primaryKeys = {"c4"};
         DefaultTable table = new DefaultTable(new DefaultTableMetaData(
@@ -285,20 +277,19 @@ public class UpdateOperationIT extends AbstractDatabaseIT
         connection.verify();
     }
 
-    public void testExecuteWithEscapedName() throws Exception
-    {
+    public void testExecuteWithEscapedName() throws Exception {
         String schemaName = "schema";
         String tableName = "table";
         String[] expected = {
-            "update [schema].[table] set [c2] = 1234, [c3] = 'false' where [c4] = 0 and [c1] = 'toto'",
-            "update [schema].[table] set [c2] = 123.45, [c3] = NULL where [c4] = 0 and [c1] = 'qwerty'",
+                "update [schema].[table] set [c2] = 1234, [c3] = 'false' where [c4] = 0 and [c1] = 'toto'",
+                "update [schema].[table] set [c2] = 123.45, [c3] = NULL where [c4] = 0 and [c1] = 'qwerty'",
         };
 
         Column[] columns = new Column[]{
-            new Column("c1", DataType.VARCHAR),
-            new Column("c2", DataType.NUMERIC),
-            new Column("c3", DataType.VARCHAR),
-            new Column("c4", DataType.NUMERIC),
+                new Column("c1", DataType.VARCHAR),
+                new Column("c2", DataType.NUMERIC),
+                new Column("c3", DataType.VARCHAR),
+                new Column("c4", DataType.NUMERIC),
         };
         String[] primaryKeys = {"c4", "c1"};
         DefaultTable table = new DefaultTable(new DefaultTableMetaData(
@@ -334,8 +325,7 @@ public class UpdateOperationIT extends AbstractDatabaseIT
         connection.verify();
     }
 
-    public void testExecuteWithEmptyTable() throws Exception
-    {
+    public void testExecuteWithEmptyTable() throws Exception {
         Column[] columns = {new Column("c1", DataType.VARCHAR)};
         ITable table = new DefaultTable(new DefaultTableMetaData(
                 "name", columns, columns));
@@ -357,12 +347,10 @@ public class UpdateOperationIT extends AbstractDatabaseIT
         connection.verify();
     }
 
-    public void testUpdateClob() throws Exception
-    {
+    public void testUpdateClob() throws Exception {
         // execute this test only if the target database support CLOB
         DatabaseEnvironment environment = DatabaseEnvironment.getInstance();
-        if (environment.support(TestFeature.CLOB))
-        {
+        if (environment.support(TestFeature.CLOB)) {
             String tableName = "CLOB_TABLE";
 
             {
@@ -386,12 +374,10 @@ public class UpdateOperationIT extends AbstractDatabaseIT
         }
     }
 
-    public void testUpdateBlob() throws Exception
-    {
+    public void testUpdateBlob() throws Exception {
         // execute this test only if the target database support BLOB
         DatabaseEnvironment environment = DatabaseEnvironment.getInstance();
-        if (environment.support(TestFeature.BLOB))
-        {
+        if (environment.support(TestFeature.BLOB)) {
             String tableName = "BLOB_TABLE";
 
             {
@@ -421,12 +407,10 @@ public class UpdateOperationIT extends AbstractDatabaseIT
         }
     }
 
-    public void testUpdateSdoGeometry() throws Exception
-    {
+    public void testUpdateSdoGeometry() throws Exception {
         // execute this test only if the target database supports SDO_GEOMETRY
         DatabaseEnvironment environment = DatabaseEnvironment.getInstance();
-        if (environment.support(TestFeature.SDO_GEOMETRY))
-        {
+        if (environment.support(TestFeature.SDO_GEOMETRY)) {
             String tableName = "SDO_GEOMETRY_TABLE";
 
             {
@@ -450,12 +434,10 @@ public class UpdateOperationIT extends AbstractDatabaseIT
         }
     }
 
-    public void testUpdateXmlType() throws Exception
-    {
+    public void testUpdateXmlType() throws Exception {
         // execute this test only if the target database support XML_TYPE
         DatabaseEnvironment environment = DatabaseEnvironment.getInstance();
-        if (environment.support(TestFeature.XML_TYPE))
-        {
+        if (environment.support(TestFeature.XML_TYPE)) {
             String tableName = "XML_TYPE_TABLE";
 
             {
@@ -479,8 +461,7 @@ public class UpdateOperationIT extends AbstractDatabaseIT
         }
     }
 
-    public void testExecute() throws Exception
-    {
+    public void testExecute() throws Exception {
         Reader in = new FileReader(
                 TestUtils.getFile("xml/updateOperationTest.xml"));
         IDataSet dataSet = new XmlDataSet(in);
@@ -489,8 +470,7 @@ public class UpdateOperationIT extends AbstractDatabaseIT
 
     }
 
-    public void testExecuteCaseInsensitive() throws Exception
-    {
+    public void testExecuteCaseInsensitive() throws Exception {
         Reader in = new FileReader(
                 TestUtils.getFile("xml/updateOperationTest.xml"));
         IDataSet dataSet = new XmlDataSet(in);
@@ -498,8 +478,7 @@ public class UpdateOperationIT extends AbstractDatabaseIT
         testExecute(new LowerCaseDataSet(dataSet));
     }
 
-    public void testExecuteForwardOnly() throws Exception
-    {
+    public void testExecuteForwardOnly() throws Exception {
         Reader in = new FileReader(
                 TestUtils.getFile("xml/updateOperationTest.xml"));
         IDataSet dataSet = new XmlDataSet(in);
@@ -507,8 +486,7 @@ public class UpdateOperationIT extends AbstractDatabaseIT
         testExecute(new ForwardOnlyDataSet(dataSet));
     }
 
-    public void testExecuteAndNoPrimaryKeys() throws Exception
-    {
+    public void testExecuteAndNoPrimaryKeys() throws Exception {
         String tableName = "TEST_TABLE";
 
         Reader reader = TestUtils.getFileReader("xml/updateOperationNoPKTest.xml");
@@ -517,13 +495,10 @@ public class UpdateOperationIT extends AbstractDatabaseIT
         // verify table before
         assertEquals("row count before", 6, connection.getRowCount(tableName));
 
-        try
-        {
+        try {
             DatabaseOperation.REFRESH.execute(connection, dataSet);
             fail("Should not be here!");
-        }
-        catch (NoPrimaryKeyException e)
-        {
+        } catch (NoPrimaryKeyException e) {
 
         }
 
@@ -531,8 +506,7 @@ public class UpdateOperationIT extends AbstractDatabaseIT
         assertEquals("row count before", 6, connection.getRowCount(tableName));
     }
 
-    private void testExecute(IDataSet dataSet) throws Exception
-    {
+    private void testExecute(IDataSet dataSet) throws Exception {
         String tableName = "PK_TABLE";
         String[] columnNames = {"PK0", "PK1", "PK2", "NORMAL0", "NORMAL1"};
         int modifiedRow = 1;
@@ -545,11 +519,9 @@ public class UpdateOperationIT extends AbstractDatabaseIT
 
         ITable tableAfter = createOrderedTable(tableName, columnNames[0]);
         assertEquals("row count after", 3, tableAfter.getRowCount());
-        for (int i = 0; i < tableAfter.getRowCount(); i++)
-        {
+        for (int i = 0; i < tableAfter.getRowCount(); i++) {
             // verify modified row
-            if (i == modifiedRow)
-            {
+            if (i == modifiedRow) {
                 assertEquals("PK0", "1",
                         tableAfter.getValue(i, "PK0").toString());
                 assertEquals("PK1", "1",
@@ -562,10 +534,8 @@ public class UpdateOperationIT extends AbstractDatabaseIT
                         tableAfter.getValue(i, "NORMAL1").toString());
             }
             // all other row must be equals than before update
-            else
-            {
-                for (int j = 0; j < columnNames.length; j++)
-                {
+            else {
+                for (int j = 0; j < columnNames.length; j++) {
                     String name = columnNames[j];
                     Object valueAfter = tableAfter.getValue(i, name);
                     Object valueBefore = tableBefore.getValue(i, name);

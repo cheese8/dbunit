@@ -41,7 +41,7 @@ public class CachedResultSetTableFactory implements IResultSetTableFactory {
         ForwardOnlyResultSetTable resultSetTable = new ForwardOnlyResultSetTable(metaData, connection);
         return new CachedResultSetTable(resultSetTable);
     }
-    
+
     public IResultSetTable createTable(String tableName, PreparedStatement preparedStatement, IDatabaseConnection connection) throws SQLException, DataSetException {
         // Reuse method from ForwardOnly factory
         ForwardOnlyResultSetTable table = new ForwardOnlyResultSetTableFactory().createForwardOnlyResultSetTable(tableName, preparedStatement, connection);

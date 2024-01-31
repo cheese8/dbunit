@@ -27,24 +27,19 @@ package org.dbunit.dataset;
  * @version $Revision$
  * @since Feb 17, 2002
  */
-public class NoSuchTableException extends DataSetException
-{
-    public NoSuchTableException()
-    {
+public class NoSuchTableException extends DataSetException {
+    public NoSuchTableException() {
     }
 
-    public NoSuchTableException(String msg)
-    {
+    public NoSuchTableException(String msg) {
         super(msg);
     }
 
-    public NoSuchTableException(String msg, Throwable e)
-    {
+    public NoSuchTableException(String msg, Throwable e) {
         super(msg, e);
     }
 
-    public NoSuchTableException(Throwable e)
-    {
+    public NoSuchTableException(Throwable e) {
         super(e);
     }
 }

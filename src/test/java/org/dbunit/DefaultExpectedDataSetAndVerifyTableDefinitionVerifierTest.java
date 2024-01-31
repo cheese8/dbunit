@@ -10,8 +10,7 @@ import org.junit.Test;
 
 // TODO always passes on same counts, fix prod to always verify table names
 
-public class DefaultExpectedDataSetAndVerifyTableDefinitionVerifierTest
-{
+public class DefaultExpectedDataSetAndVerifyTableDefinitionVerifierTest {
     private static final ITable TABLE_1 = new DefaultTable("TABLE_1");
     private static final ITable TABLE_2 = new DefaultTable("TABLE_2");
 
@@ -21,8 +20,7 @@ public class DefaultExpectedDataSetAndVerifyTableDefinitionVerifierTest
             new DefaultExpectedDataSetAndVerifyTableDefinitionVerifier();
 
     @Test
-    public void testVerify_VtdMatchesExpected_Success() throws DataSetException
-    {
+    public void testVerify_VtdMatchesExpected_Success() throws DataSetException {
         final VerifyTableDefinition[] verifyTableDefinitions =
                 makeVerifyTableDefinitions_MatchingExpected();
         final IDataSet expectedDataSet = new DefaultDataSet(TABLE_1, TABLE_2);
@@ -32,8 +30,7 @@ public class DefaultExpectedDataSetAndVerifyTableDefinitionVerifierTest
 
     @Test(expected = DataSetException.class)
     public void testVerify_VtdLessThanExpected_Exception()
-            throws DataSetException
-    {
+            throws DataSetException {
         final VerifyTableDefinition[] verifyTableDefinitions =
                 makeVerifyTableDefinitions_LessThanExpected();
         final IDataSet expectedDataSet = new DefaultDataSet(TABLE_1, TABLE_2);
@@ -42,8 +39,7 @@ public class DefaultExpectedDataSetAndVerifyTableDefinitionVerifierTest
     }
 
     @Test
-    public void testVerify_VtdMoreThanExpected_Success() throws DataSetException
-    {
+    public void testVerify_VtdMoreThanExpected_Success() throws DataSetException {
         final VerifyTableDefinition[] verifyTableDefinitions =
                 makeVerifyTableDefinitions_MoreThanExpected();
         final IDataSet expectedDataSet = new DefaultDataSet(TABLE_1, TABLE_2);
@@ -51,8 +47,7 @@ public class DefaultExpectedDataSetAndVerifyTableDefinitionVerifierTest
         sut.verify(verifyTableDefinitions, expectedDataSet, DATABASE_CONFIG);
     }
 
-    private VerifyTableDefinition[] makeVerifyTableDefinitions_MatchingExpected()
-    {
+    private VerifyTableDefinition[] makeVerifyTableDefinitions_MatchingExpected() {
         final String[] excludeColumns = new String[0];
 
         final VerifyTableDefinition testTable =
@@ -64,8 +59,7 @@ public class DefaultExpectedDataSetAndVerifyTableDefinitionVerifierTest
         return tables;
     }
 
-    private VerifyTableDefinition[] makeVerifyTableDefinitions_LessThanExpected()
-    {
+    private VerifyTableDefinition[] makeVerifyTableDefinitions_LessThanExpected() {
         final String[] excludeColumns = new String[0];
 
         final VerifyTableDefinition testTable =
@@ -75,8 +69,7 @@ public class DefaultExpectedDataSetAndVerifyTableDefinitionVerifierTest
         return tables;
     }
 
-    private VerifyTableDefinition[] makeVerifyTableDefinitions_MoreThanExpected()
-    {
+    private VerifyTableDefinition[] makeVerifyTableDefinitions_MoreThanExpected() {
         final String[] excludeColumns = new String[0];
 
         final VerifyTableDefinition testTable =

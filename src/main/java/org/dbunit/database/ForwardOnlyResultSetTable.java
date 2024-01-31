@@ -30,8 +30,8 @@ import java.sql.SQLException;
 
 /**
  * @author Manuel Laflamme
- * @since Apr 10, 2003
  * @version $Revision$
+ * @since Apr 10, 2003
  */
 public class ForwardOnlyResultSetTable extends AbstractResultSetTable {
     private int lastRow = -1;
@@ -49,8 +49,7 @@ public class ForwardOnlyResultSetTable extends AbstractResultSetTable {
         super(tableName, selectStatement, connection);
     }
 
-    public int getRowCount()
-    {
+    public int getRowCount() {
         throw new UnsupportedOperationException();
     }
 

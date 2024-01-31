@@ -31,7 +31,7 @@ import org.dbunit.dataset.IDataSet;
 /**
  * Defines a dbUnit data file loader supporting replacement objects and
  * substrings with {@link org.dbunit.dataset.ReplacementDataSet}.
- * 
+ *
  * @author Jeff Jensen jeffjensen AT users.sourceforge.net
  * @author Last changed by: $Author$
  * @version $Revision$ $Date$
@@ -43,28 +43,23 @@ public interface DataFileLoader {
      * dataset. If filename == null or "", then returns an empty
      * {@link org.dbunit.dataset.DefaultDataSet}. The type of dbUnit dataset
      * created is delegated to the implementing subclass.
-     * 
-     * @param fileName
-     *            The dbUnit file to load, in the format for the loader
-     *            implementation and fully qualified name with package syntax.
+     *
+     * @param fileName The dbUnit file to load, in the format for the loader
+     *                 implementation and fully qualified name with package syntax.
      * @return The dbUnit dataset of the specified file.
-     * @throws DatabaseUnitRuntimeException
-     *             DataSetException wrapped in a DatabaseUnitRuntimeException
-     *             when file load errors occur.
+     * @throws DatabaseUnitRuntimeException DataSetException wrapped in a DatabaseUnitRuntimeException
+     *                                      when file load errors occur.
      */
     IDataSet load(String fileName);
 
     /**
      * Load the specified URL file into a dbUnit dataset. The type of dbUnit
      * dataset created is delegated to the implementing subclass.
-     * 
-     * @param url
-     *            The dbUnit data file url.
+     *
+     * @param url The dbUnit data file url.
      * @return dbUnit dataset of the corresponding input file type.
-     * @throws DataSetException
-     *             On data errors.
-     * @throws IOException
-     *             On file errors.
+     * @throws DataSetException On data errors.
+     * @throws IOException      On file errors.
      * @since 2.4.8
      */
     IDataSet loadDataSet(URL url) throws DataSetException, IOException;
@@ -72,9 +67,8 @@ public interface DataFileLoader {
     /**
      * Add the specified replacement objects to existing ones for use with
      * {@link org.dbunit.dataset.ReplacementDataSet}.
-     * 
-     * @param replacementObjects
-     *            The replacement objects to include.
+     *
+     * @param replacementObjects The replacement objects to include.
      * @since 2.4.8
      */
     void addReplacementObjects(Map replacementObjects);
@@ -82,9 +76,8 @@ public interface DataFileLoader {
     /**
      * Add the specified replacement substrings to existing ones for use with
      * {@link org.dbunit.dataset.ReplacementDataSet}.
-     * 
-     * @param replacementSubstrings
-     *            The replacement substrings to include.
+     *
+     * @param replacementSubstrings The replacement substrings to include.
      * @since 2.4.8
      */
     void addReplacementSubstrings(Map replacementSubstrings);
@@ -93,8 +86,7 @@ public interface DataFileLoader {
      * Add the specified replacement substrings to existing ones for use with
      * {@link org.dbunit.dataset.ReplacementDataSet}.
      *
-     * @param replacementFunctions
-     *            The replacement substrings to include.
+     * @param replacementFunctions The replacement substrings to include.
      * @since 2.4.8
      */
     void addReplacementFunctions(Map replacementFunctions);
@@ -102,7 +94,7 @@ public interface DataFileLoader {
     /**
      * Remove all existing replacement objects, resetting to none so no object
      * replacements occur.
-     * 
+     *
      * @since 2.4.8
      */
     void removeAllReplacementObjects();
@@ -110,7 +102,7 @@ public interface DataFileLoader {
     /**
      * Remove all existing replacement substring objects, resetting to none so
      * no substring replacements occur.
-     * 
+     *
      * @since 2.4.8
      */
     void removeAllReplacementSubstrings();

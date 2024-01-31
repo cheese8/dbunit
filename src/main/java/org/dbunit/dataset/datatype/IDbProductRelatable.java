@@ -29,14 +29,14 @@ import java.util.Collection;
  * @author John Hurst
  * @author Last changed by: $Author: $
  * @version $Revision:$ $Date:$
- * @since 2.4.6 (Septemeber 11, 2009)
  * @see IDataTypeFactory
+ * @since 2.4.6 (Septemeber 11, 2009)
  */
-public interface IDbProductRelatable
-{
-  /**
-   * Returns a set of Strings representing database product names that this object relates to.
-   * @return Set of Strings.
-   */
-  public Collection getValidDbProducts();
+public interface IDbProductRelatable {
+    /**
+     * Returns a set of Strings representing database product names that this object relates to.
+     *
+     * @return Set of Strings.
+     */
+    public Collection getValidDbProducts();
 }

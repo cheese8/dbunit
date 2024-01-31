@@ -31,12 +31,10 @@ import java.util.concurrent.Callable;
  * @version $Revision$
  * @since Feb 18, 2002
  */
-public class DerbyEnvironment extends DatabaseEnvironment
-{
+public class DerbyEnvironment extends DatabaseEnvironment {
 
-	public DerbyEnvironment(DatabaseProfile profile) throws Exception
-	{
-		super(profile, new Callable<Void>() {
+    public DerbyEnvironment(DatabaseProfile profile) throws Exception {
+        super(profile, new Callable<Void>() {
             public Void call() throws Exception {
                 // Delete the old database if exists before creating a new one in "getConnection()"
                 // The name of the db is specified in the profile.properties and is created on the fly
@@ -46,7 +44,7 @@ public class DerbyEnvironment extends DatabaseEnvironment
                 return null;
             }
         });
-	}
+    }
 }
 
 

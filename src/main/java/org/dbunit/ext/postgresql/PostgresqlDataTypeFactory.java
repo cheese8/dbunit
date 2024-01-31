@@ -41,8 +41,7 @@ import java.util.Collection;
  * @author Martin Gollogly (zemertz@gmail.com)
  * @since 2.4.5 (Apr 27, 2009)
  */
-public class PostgresqlDataTypeFactory extends DefaultDataTypeFactory
-{
+public class PostgresqlDataTypeFactory extends DefaultDataTypeFactory {
     /**
      * Logger for this class
      */
@@ -52,57 +51,45 @@ public class PostgresqlDataTypeFactory extends DefaultDataTypeFactory
      * Database product names supported.
      */
     private static final Collection DATABASE_PRODUCTS =
-            Arrays.asList(new String[] {"PostgreSQL"});
+            Arrays.asList(new String[]{"PostgreSQL"});
 
     /**
      * @see org.dbunit.dataset.datatype.IDbProductRelatable#getValidDbProducts()
      */
     @Override
-    public Collection getValidDbProducts()
-    {
+    public Collection getValidDbProducts() {
         return DATABASE_PRODUCTS;
     }
 
-    public static Collection getDatabaseProducts()
-    {
+    public static Collection getDatabaseProducts() {
         return DATABASE_PRODUCTS;
     }
 
     @Override
     public DataType createDataType(final int sqlType, final String sqlTypeName)
-            throws DataTypeException
-    {
+            throws DataTypeException {
         logger.debug("createDataType(sqlType={}, sqlTypeName={})",
                 String.valueOf(sqlType), sqlTypeName);
 
-        if (sqlType == Types.OTHER)
-        {
+        if (sqlType == Types.OTHER) {
             // Treat Postgresql UUID types as VARCHARS
-            if ("uuid".equals(sqlTypeName))
-            {
+            if ("uuid".equals(sqlTypeName)) {
                 return new UuidType();
-            } else if ("interval".equals(sqlTypeName))
-            {
+            } else if ("interval".equals(sqlTypeName)) {
                 return new IntervalType();
-            } else if ("inet".equals(sqlTypeName))
-            {
+            } else if ("inet".equals(sqlTypeName)) {
                 return new InetType();
-            } else if ("geometry".equals(sqlTypeName))
-            {
+            } else if ("geometry".equals(sqlTypeName)) {
                 return new GeometryType();
-            } else if ("citext".equals(sqlTypeName))
-            {
+            } else if ("citext".equals(sqlTypeName)) {
                 return new CitextType();
-            } else
-            {
+            } else {
                 // Finally check whether the user defined a custom datatype
-                if (isEnumType(sqlTypeName))
-                {
-                    if (logger.isDebugEnabled())
-                    {
+                if (isEnumType(sqlTypeName)) {
+                    if (logger.isDebugEnabled()) {
                         logger.debug(
                                 "Custom enum type used for sqlTypeName {} (sqlType '{}')",
-                                new Object[] {sqlTypeName,
+                                new Object[]{sqlTypeName,
                                         new Integer(sqlType)});
                     }
                     return new GenericEnumType(sqlTypeName);
@@ -121,15 +108,13 @@ public class PostgresqlDataTypeFactory extends DefaultDataTypeFactory
      * class.</b> Override this method if you have a custom enum type in the
      * database and want to map it via dbunit.
      *
-     * @param sqlTypeName
-     *            The sql type name for which users can specify a custom data
-     *            type.
+     * @param sqlTypeName The sql type name for which users can specify a custom data
+     *                    type.
      * @return <code>null</code> if the given type name is not a custom type
-     *         which is the default implementation.
+     * which is the default implementation.
      * @since 2.4.6
      */
-    public boolean isEnumType(final String sqlTypeName)
-    {
+    public boolean isEnumType(final String sqlTypeName) {
         return false;
     }
 }

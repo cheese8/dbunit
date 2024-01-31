@@ -33,28 +33,24 @@ import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.datatype.DataType;
 
 /**
- *
  * @author Manuel Laflamme
  * @version $Revision$
  * @since Sep 8, 2003$
  */
-public class FlatXmlWriterTest extends TestCase
-{
-    public FlatXmlWriterTest(String name)
-    {
+public class FlatXmlWriterTest extends TestCase {
+    public FlatXmlWriterTest(String name) {
         super(name);
     }
 
-    public void testWrite() throws Exception
-    {
+    public void testWrite() throws Exception {
         String expectedOutput =
                 "<dataset>\n" +
-                "  <TABLE1 COL0=\"t1v1\" COL1=\"t1v2\"/>\n" +
-                "  <TABLE2 COL0=\"t2v1\" COL1=\"t2v2\"/>\n" +
-                "</dataset>\n";
+                        "  <TABLE1 COL0=\"t1v1\" COL1=\"t1v2\"/>\n" +
+                        "  <TABLE2 COL0=\"t2v1\" COL1=\"t2v2\"/>\n" +
+                        "</dataset>\n";
 
         IDataSet dataSet = XmlDataSetWriterTest.getDefaultDataSet();
-        
+
         StringWriter stringWriter = new StringWriter();
         FlatXmlWriter xmlWriter = new FlatXmlWriter(stringWriter);
         xmlWriter.write(dataSet);
@@ -63,13 +59,12 @@ public class FlatXmlWriterTest extends TestCase
         assertEquals("output", expectedOutput, actualOutput);
     }
 
-    public void testWriteWithDocType() throws Exception
-    {
+    public void testWriteWithDocType() throws Exception {
         String expectedOutput =
                 "<!DOCTYPE dataset SYSTEM \"dataset.dtd\">\n" +
-                "<dataset>\n" +
-                "  <TABLE1 COL0=\"t1v1\" COL1=\"t1v2\"/>\n" +
-                "</dataset>\n";
+                        "<dataset>\n" +
+                        "  <TABLE1 COL0=\"t1v1\" COL1=\"t1v2\"/>\n" +
+                        "</dataset>\n";
 
         IDataSet dataSet = XmlDataSetWriterTest.getMinimalDataSet();
 
@@ -82,15 +77,14 @@ public class FlatXmlWriterTest extends TestCase
         assertEquals("output", expectedOutput, actualOutput);
     }
 
-    public void testWriteExcludeEmptyTable() throws Exception
-    {
+    public void testWriteExcludeEmptyTable() throws Exception {
         String expectedOutput =
                 "<dataset>\n" +
-                "  <TEST_TABLE COL0=\"value\"/>\n" +
-                "</dataset>\n";
+                        "  <TEST_TABLE COL0=\"value\"/>\n" +
+                        "</dataset>\n";
 
         IDataSet dataSet = getEmptyTableDataSet();
-        
+
         StringWriter stringWriter = new StringWriter();
         FlatXmlWriter datasetWriter = new FlatXmlWriter(stringWriter);
         datasetWriter.setIncludeEmptyTable(false);
@@ -99,14 +93,13 @@ public class FlatXmlWriterTest extends TestCase
         String actualOutput = stringWriter.toString();
         assertEquals("output", expectedOutput, actualOutput);
     }
-               
-    public void testWriteIncludeEmptyTable() throws Exception
-    {
+
+    public void testWriteIncludeEmptyTable() throws Exception {
         String expectedOutput =
                 "<dataset>\n" +
-                "  <TEST_TABLE COL0=\"value\"/>\n" +
-                "  <EMPTY_TABLE/>\n" +
-                "</dataset>\n";
+                        "  <TEST_TABLE COL0=\"value\"/>\n" +
+                        "  <EMPTY_TABLE/>\n" +
+                        "</dataset>\n";
 
         IDataSet dataSet = getEmptyTableDataSet();
 
@@ -119,19 +112,18 @@ public class FlatXmlWriterTest extends TestCase
         assertEquals("output", expectedOutput, actualOutput);
     }
 
-    public void testWriteNullValue() throws Exception
-    {
+    public void testWriteNullValue() throws Exception {
         String expectedOutput =
                 "<dataset>\n" +
-                "  <TEST_TABLE COL0=\"c0r0\" COL1=\"c1r0\"/>\n" +
-                "  <TEST_TABLE COL0=\"c0r1\"/>\n" +
-                "</dataset>\n";
+                        "  <TEST_TABLE COL0=\"c0r0\" COL1=\"c1r0\"/>\n" +
+                        "  <TEST_TABLE COL0=\"c0r1\"/>\n" +
+                        "</dataset>\n";
 
         String col0 = "COL0";
         String col1 = "COL1";
         Column[] columns = new Column[]{
-            new Column(col0, DataType.UNKNOWN),
-            new Column(col1, DataType.UNKNOWN)
+                new Column(col0, DataType.UNKNOWN),
+                new Column(col1, DataType.UNKNOWN)
         };
 
         DefaultTable table = new DefaultTable("TEST_TABLE", columns);
@@ -149,13 +141,12 @@ public class FlatXmlWriterTest extends TestCase
         String actualOutput = stringWriter.toString();
         assertEquals("output", expectedOutput, actualOutput);
     }
-    
-    public void testWritePrettyPrintDisabled() throws Exception
-    {
+
+    public void testWritePrettyPrintDisabled() throws Exception {
         String expectedOutput =
                 "<dataset>" +
-                "<TABLE1 COL0=\"t1v1\" COL1=\"t1v2\"/>" +
-                "</dataset>";
+                        "<TABLE1 COL0=\"t1v1\" COL1=\"t1v2\"/>" +
+                        "</dataset>";
 
         IDataSet dataSet = XmlDataSetWriterTest.getMinimalDataSet();
 
@@ -168,12 +159,11 @@ public class FlatXmlWriterTest extends TestCase
         assertEquals("output", expectedOutput, actualOutput);
     }
 
-    
-    public static IDataSet getEmptyTableDataSet() throws DataSetException 
-    {
+
+    public static IDataSet getEmptyTableDataSet() throws DataSetException {
         String col0 = "COL0";
         Column[] columns = new Column[]{
-            new Column(col0, DataType.UNKNOWN),
+                new Column(col0, DataType.UNKNOWN),
         };
 
         DefaultTable table1 = new DefaultTable("TEST_TABLE", columns);

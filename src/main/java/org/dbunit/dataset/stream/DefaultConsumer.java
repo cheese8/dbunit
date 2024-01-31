@@ -28,8 +28,8 @@ import org.dbunit.dataset.ITableMetaData;
  * {@link org.dbunit.dataset.stream.IDataSetConsumer} interface.
  *
  * @author Manuel Laflamme
- * @since Apr 29, 2003
  * @version $Revision$
+ * @since Apr 29, 2003
  */
 public class DefaultConsumer implements IDataSetConsumer {
     public void startDataSet() throws DataSetException {

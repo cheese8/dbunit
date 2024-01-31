@@ -31,31 +31,26 @@ import java.io.FileReader;
 
 /**
  * @author Manuel Laflamme
- * @since Apr 11, 2003
  * @version $Revision$
+ * @since Apr 11, 2003
  */
-public class StreamingTableTest extends ForwardOnlyTableTest
-{
+public class StreamingTableTest extends ForwardOnlyTableTest {
     private static final String TEST_TABLE = "TEST_TABLE";
 
-    public StreamingTableTest(String s)
-    {
+    public StreamingTableTest(String s) {
         super(s);
     }
 
-    protected ITable createTable() throws Exception
-    {
+    protected ITable createTable() throws Exception {
         FileReader reader = new FileReader(FlatXmlDataSetTest.DATASET_FILE);
 
 //        IDataSetProducer source = new DataSetProducerAdapter(new FlatXmlDataSet(reader));
         IDataSetProducer source = new FlatXmlProducer(new InputSource(reader));
         ITableIterator iterator = new StreamingDataSet(source).iterator();
-        while(iterator.next())
-        {
+        while (iterator.next()) {
             ITable table = iterator.getTable();
             String tableName = table.getTableMetaData().getTableName();
-            if (tableName.equals(TEST_TABLE))
-            {
+            if (tableName.equals(TEST_TABLE)) {
                 return table;
             }
         }

@@ -29,15 +29,12 @@ import org.dbunit.database.MockDatabaseConnection;
  * @version $Revision$
  * @since Mar 6, 2002
  */
-public class CloseConnectionOperationIT extends AbstractDatabaseIT
-{
-    public CloseConnectionOperationIT(String s)
-    {
+public class CloseConnectionOperationIT extends AbstractDatabaseIT {
+    public CloseConnectionOperationIT(String s) {
         super(s);
     }
 
-    public void testMockExecute() throws Exception
-    {
+    public void testMockExecute() throws Exception {
         // setup mock objects
         MockDatabaseOperation operation = new MockDatabaseOperation();
         operation.setExpectedExecuteCalls(1);

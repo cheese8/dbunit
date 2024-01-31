@@ -30,16 +30,13 @@ import junit.framework.TestCase;
  * @version $Revision$ $Date$
  * @since 2.4.0
  */
-public class StringIgnoreCaseDataTypeTest extends TestCase
-{
+public class StringIgnoreCaseDataTypeTest extends TestCase {
 
-    public StringIgnoreCaseDataTypeTest(String name) 
-    {
+    public StringIgnoreCaseDataTypeTest(String name) {
         super(name);
     }
 
-    public void testCompareIgnoreCase() throws Exception
-    {
+    public void testCompareIgnoreCase() throws Exception {
         StringIgnoreCaseDataType type = new StringIgnoreCaseDataType("VARCHAR", Types.VARCHAR);
         String value1 = "hello";
         String value2 = "hElLo";

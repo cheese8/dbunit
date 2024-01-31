@@ -27,8 +27,8 @@ import org.dbunit.dataset.ITableMetaData;
  * Receive notification of the content of a dataset.
  *
  * @author Manuel Laflamme
- * @since Apr 17, 2003
  * @version $Revision$
+ * @since Apr 17, 2003
  */
 public interface IDataSetConsumer {
     /**
@@ -48,6 +48,7 @@ public interface IDataSetConsumer {
      * at the beginning of every table in the dataset; there will be a
      * corresponding {@link #endDataSet} event for every <code>startTable</code>
      * event (even when the table is empty).
+     *
      * @param metaData the table metadata
      */
     void startTable(ITableMetaData metaData) throws DataSetException;
@@ -60,6 +61,7 @@ public interface IDataSetConsumer {
     /**
      * Receive notification of a table row. This method is invoked to report
      * each row of a table.
+     *
      * @param values The row values.
      */
     void row(Object[] values) throws DataSetException;

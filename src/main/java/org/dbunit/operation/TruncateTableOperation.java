@@ -42,16 +42,15 @@ import java.sql.SQLException;
  * support TRUNCATE_TABLE TABLE statement.
  *
  * @author Manuel Laflamme
- * @since Apr 10, 2003
  * @version $Revision$
  * @see DeleteAllOperation
+ * @since Apr 10, 2003
  */
 @Slf4j
 @NoArgsConstructor
 public class TruncateTableOperation extends DeleteAllOperation {
 
-    protected String getDeleteAllCommand()
-    {
+    protected String getDeleteAllCommand() {
         return "truncate table ";
     }
 

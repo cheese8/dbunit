@@ -26,16 +26,14 @@ import java.sql.SQLException;
 
 /**
  * @author Manuel Laflamme
- * @since Aug 11, 2003
  * @version $Revision$
+ * @since Aug 11, 2003
  */
-public class ExtendedMockMultiRowResultSet extends MockMultiRowResultSet
-{
+public class ExtendedMockMultiRowResultSet extends MockMultiRowResultSet {
     /**
      * Always returns false.
      */
-    public boolean wasNull() throws SQLException
-    {
+    public boolean wasNull() throws SQLException {
         return false;
     }
 }

@@ -45,46 +45,38 @@ import org.junit.Test;
  * @version $Revision$ $Date$
  * @since Feb 17, 2002
  */
-public class XmlDataSetTest extends AbstractDataSetTest
-{
-    public XmlDataSetTest(String s)
-    {
+public class XmlDataSetTest extends AbstractDataSetTest {
+    public XmlDataSetTest(String s) {
         super(s);
     }
 
     @Override
-    protected IDataSet createDataSet() throws Exception
-    {
+    protected IDataSet createDataSet() throws Exception {
         Reader in = new FileReader(TestUtils.getFile("xml/dataSetTest.xml"));
         return new XmlDataSet(in);
     }
 
     @Override
-    protected IDataSet createDuplicateDataSet() throws Exception
-    {
+    protected IDataSet createDuplicateDataSet() throws Exception {
         InputStream in = new FileInputStream(
                 TestUtils.getFile("xml/xmlDataSetDuplicateTest.xml"));
         return new XmlDataSet(in);
     }
 
     @Override
-    protected IDataSet createMultipleCaseDuplicateDataSet() throws Exception
-    {
+    protected IDataSet createMultipleCaseDuplicateDataSet() throws Exception {
         InputStream in = new FileInputStream(TestUtils
                 .getFile("xml/xmlDataSetDuplicateMultipleCaseTest.xml"));
         return new XmlDataSet(in);
     }
 
-    public void testWrite() throws Exception
-    {
+    public void testWrite() throws Exception {
         IDataSet expectedDataSet = createDataSet();
         File tempFile = File.createTempFile("dataSetTest", ".xml");
-        try
-        {
+        try {
             OutputStream out = new FileOutputStream(tempFile);
 
-            try
-            {
+            try {
                 // write dataset in temp file
                 XmlDataSet.write(expectedDataSet, out);
 
@@ -101,8 +93,7 @@ public class XmlDataSetTest extends AbstractDataSetTest
                 ITable[] expected = DataSetUtils.getTables(expectedDataSet);
                 ITable[] actual = DataSetUtils.getTables(actualDataSet);
                 assertEquals("table count", expected.length, actual.length);
-                for (int i = 0; i < expected.length; i++)
-                {
+                for (int i = 0; i < expected.length; i++) {
                     String expectedName =
                             expected[i].getTableMetaData().getTableName();
                     String actualName =
@@ -112,12 +103,10 @@ public class XmlDataSetTest extends AbstractDataSetTest
                     assertTrue("not same instance", expected[i] != actual[i]);
                     Assertion.assertEquals(expected[i], actual[i]);
                 }
-            } finally
-            {
+            } finally {
                 out.close();
             }
-        } finally
-        {
+        } finally {
             tempFile.delete();
         }
     }
@@ -131,8 +120,7 @@ public class XmlDataSetTest extends AbstractDataSetTest
      */
     // @Override
     @Override
-    public void testCreateDuplicateDataSet() throws Exception
-    {
+    public void testCreateDuplicateDataSet() throws Exception {
         IDataSet dataSet = createDuplicateDataSet();
         ITable[] tables = dataSet.getTables();
         assertEquals(2, tables.length);
@@ -153,8 +141,7 @@ public class XmlDataSetTest extends AbstractDataSetTest
      */
     // @Override
     @Override
-    public void testCreateMultipleCaseDuplicateDataSet() throws Exception
-    {
+    public void testCreateMultipleCaseDuplicateDataSet() throws Exception {
         IDataSet dataSet = createMultipleCaseDuplicateDataSet();
         ITable[] tables = dataSet.getTables();
         assertEquals(2, tables.length);
@@ -167,8 +154,7 @@ public class XmlDataSetTest extends AbstractDataSetTest
     }
 
     @Test
-    public void testCreate_$InTableName_Success() throws DataSetException
-    {
+    public void testCreate_$InTableName_Success() throws DataSetException {
         final String fileName = "/xml/dataSet$Test.xml";
         final String tableName = "TEST_TA$BLE";
 

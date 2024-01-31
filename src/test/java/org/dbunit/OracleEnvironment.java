@@ -34,25 +34,21 @@ import org.dbunit.ext.oracle.OracleDataTypeFactory;
  * @version $Revision$
  * @since May 2, 2002
  */
-public class OracleEnvironment extends DatabaseEnvironment
-{
-    public OracleEnvironment(DatabaseProfile profile) throws Exception
-    {
+public class OracleEnvironment extends DatabaseEnvironment {
+    public OracleEnvironment(DatabaseProfile profile) throws Exception {
         super(profile);
     }
 
-    protected void setupDatabaseConfig(DatabaseConfig config)
-    {
+    protected void setupDatabaseConfig(DatabaseConfig config) {
         config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new OracleDataTypeFactory());
     }
 
-    public IDataSet getInitDataSet() throws Exception
-    {
+    public IDataSet getInitDataSet() throws Exception {
         ITable[] extraTables = {
-            new DefaultTable("CLOB_TABLE"),
-            new DefaultTable("BLOB_TABLE"),
-            new DefaultTable("SDO_GEOMETRY_TABLE"),
-            new DefaultTable("XML_TYPE_TABLE"),
+                new DefaultTable("CLOB_TABLE"),
+                new DefaultTable("BLOB_TABLE"),
+                new DefaultTable("SDO_GEOMETRY_TABLE"),
+                new DefaultTable("XML_TYPE_TABLE"),
         };
 
         return new CompositeDataSet(super.getInitDataSet(),

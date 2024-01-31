@@ -26,169 +26,137 @@ import java.sql.SQLException;
 
 /**
  * @author Manuel Laflamme
- * @since Aug 11, 2003
  * @version $Revision$
+ * @since Aug 11, 2003
  */
-public class ExtendedMockSingleRowResultSet extends MockSingleRowResultSet
-{
+public class ExtendedMockSingleRowResultSet extends MockSingleRowResultSet {
     private Object _lastValue = null;
 
-    public Object getObject(String s) throws SQLException
-    {
+    public Object getObject(String s) throws SQLException {
         Object object = super.getObject(s);
         _lastValue = object;
         return object;
     }
 
-    public Object getObject(int i) throws SQLException
-    {
+    public Object getObject(int i) throws SQLException {
         Object object = super.getObject(i);
         _lastValue = object;
         return object;
     }
 
-    public boolean getBoolean(int i) throws SQLException
-    {
+    public boolean getBoolean(int i) throws SQLException {
         Object object = getObject(i);
-        if (object == null)
-        {
+        if (object == null) {
             return false;
         }
         return super.getBoolean(i);
     }
 
-    public boolean getBoolean(String s) throws SQLException
-    {
+    public boolean getBoolean(String s) throws SQLException {
         Object object = getObject(s);
-        if (object == null)
-        {
+        if (object == null) {
             return false;
         }
         return super.getBoolean(s);
     }
 
-    public byte getByte(int i) throws SQLException
-    {
+    public byte getByte(int i) throws SQLException {
         Object object = getObject(i);
-        if (object == null)
-        {
+        if (object == null) {
             return 0;
         }
         return super.getByte(i);
     }
 
-    public byte getByte(String s) throws SQLException
-    {
+    public byte getByte(String s) throws SQLException {
         Object object = getObject(s);
-        if (object == null)
-        {
+        if (object == null) {
             return 0;
         }
         return super.getByte(s);
     }
 
-    public double getDouble(int i) throws SQLException
-    {
+    public double getDouble(int i) throws SQLException {
         Object object = getObject(i);
-        if (object == null)
-        {
+        if (object == null) {
             return 0;
         }
         return super.getDouble(i);
     }
 
-    public double getDouble(String s) throws SQLException
-    {
+    public double getDouble(String s) throws SQLException {
         Object object = getObject(s);
-        if (object == null)
-        {
+        if (object == null) {
             return 0;
         }
         return super.getDouble(s);
     }
 
-    public float getFloat(int i) throws SQLException
-    {
+    public float getFloat(int i) throws SQLException {
         Object object = getObject(i);
-        if (object == null)
-        {
+        if (object == null) {
             return 0;
         }
         return super.getFloat(i);
     }
 
-    public float getFloat(String s) throws SQLException
-    {
+    public float getFloat(String s) throws SQLException {
         Object object = getObject(s);
-        if (object == null)
-        {
+        if (object == null) {
             return 0;
         }
         return super.getFloat(s);
     }
 
-    public int getInt(int i) throws SQLException
-    {
+    public int getInt(int i) throws SQLException {
         Object object = getObject(i);
-        if (object == null)
-        {
+        if (object == null) {
             return 0;
         }
         return super.getInt(i);
     }
 
-    public int getInt(String s) throws SQLException
-    {
+    public int getInt(String s) throws SQLException {
         Object object = getObject(s);
-        if (object == null)
-        {
+        if (object == null) {
             return 0;
         }
         return super.getInt(s);
     }
 
-    public long getLong(int i) throws SQLException
-    {
+    public long getLong(int i) throws SQLException {
         Object object = getObject(i);
-        if (object == null)
-        {
+        if (object == null) {
             return 0;
         }
         return super.getLong(i);
     }
 
-    public long getLong(String s) throws SQLException
-    {
+    public long getLong(String s) throws SQLException {
         Object object = getObject(s);
-        if (object == null)
-        {
+        if (object == null) {
             return 0;
         }
         return super.getLong(s);
     }
 
-    public short getShort(String s) throws SQLException
-    {
+    public short getShort(String s) throws SQLException {
         Object object = getObject(s);
-        if (object == null)
-        {
+        if (object == null) {
             return 0;
         }
         return super.getShort(s);
     }
 
-    public short getShort(int i) throws SQLException
-    {
+    public short getShort(int i) throws SQLException {
         Object object = getObject(i);
-        if (object == null)
-        {
+        if (object == null) {
             return 0;
         }
         return super.getShort(i);
     }
 
-    public boolean wasNull() throws SQLException
-    {
+    public boolean wasNull() throws SQLException {
         return _lastValue == null;
     }
 }

@@ -13,7 +13,7 @@ import java.util.Collection;
  * Testcases loader for JAXB.
  */
 public final class TestcasesLoader {
-    
+
     /**
      * Load testcases from XML.
      *
@@ -34,8 +34,8 @@ public final class TestcasesLoader {
         TestcasesLoader loader = new TestcasesLoader();
         Testcases root = loader.load("operation-test-file.xml");
         //IDatabaseConnection connection = root.getJdbcConfig();
-        Collection<Testcase> testcases =  root.getTestcases();
-        for(Testcase entity : testcases) {
+        Collection<Testcase> testcases = root.getTestcases();
+        for (Testcase entity : testcases) {
             //Operation operation = (Operation) entity;
             //operation.execute(connection);
         }

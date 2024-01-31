@@ -10,14 +10,12 @@ import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.datatype.DataType;
 import org.junit.Test;
 
-public class IsActualGreaterThanExpectedValueComparerTest
-{
+public class IsActualGreaterThanExpectedValueComparerTest {
     private final IsActualGreaterThanExpectedValueComparer sut =
             new IsActualGreaterThanExpectedValueComparer();
 
     @Test
-    public void testIsExpected_AllNulls_False() throws DatabaseUnitException
-    {
+    public void testIsExpected_AllNulls_False() throws DatabaseUnitException {
         final ITable expectedTable = null;
         final ITable actualTable = null;
         final int rowNum = 0;
@@ -33,8 +31,7 @@ public class IsActualGreaterThanExpectedValueComparerTest
 
     @Test
     public void testIsExpected_ActualEqualToExpected_False()
-            throws DatabaseUnitException
-    {
+            throws DatabaseUnitException {
         final ITable expectedTable = null;
         final ITable actualTable = null;
         final int rowNum = 0;
@@ -51,8 +48,7 @@ public class IsActualGreaterThanExpectedValueComparerTest
 
     @Test
     public void testIsExpected_ActualGreaterThanExpected_True()
-            throws DatabaseUnitException
-    {
+            throws DatabaseUnitException {
         final ITable expectedTable = null;
         final ITable actualTable = null;
         final int rowNum = 0;
@@ -69,8 +65,7 @@ public class IsActualGreaterThanExpectedValueComparerTest
 
     @Test
     public void testIsExpected_ActualLessThanExpected_False()
-            throws DatabaseUnitException
-    {
+            throws DatabaseUnitException {
         final ITable expectedTable = null;
         final ITable actualTable = null;
         final int rowNum = 0;
@@ -86,8 +81,7 @@ public class IsActualGreaterThanExpectedValueComparerTest
     }
 
     @Test
-    public void testGetFailPhrase() throws Exception
-    {
+    public void testGetFailPhrase() throws Exception {
         final String actual = sut.getFailPhrase();
 
         assertThat("Should have fail phrase.", actual, not(nullValue()));

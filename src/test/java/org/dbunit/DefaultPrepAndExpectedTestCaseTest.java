@@ -17,8 +17,7 @@ import com.mockobjects.sql.MockConnection;
 
 import junit.framework.TestCase;
 
-public class DefaultPrepAndExpectedTestCaseTest extends TestCase
-{
+public class DefaultPrepAndExpectedTestCaseTest extends TestCase {
     private static final String PREP_DATA_FILE_NAME =
             "/xml/flatXmlDataSetTest.xml";
     private static final String EXP_DATA_FILE_NAME =
@@ -30,13 +29,11 @@ public class DefaultPrepAndExpectedTestCaseTest extends TestCase
             new DefaultPrepAndExpectedTestCase(dataFileLoader, databaseTester);
 
     @Override
-    protected void setUp() throws Exception
-    {
+    protected void setUp() throws Exception {
         super.setUp();
     }
 
-    public void testConfigureTest() throws Exception
-    {
+    public void testConfigureTest() throws Exception {
         final String[] prepDataFiles = {PREP_DATA_FILE_NAME};
         final String[] expectedDataFiles = {EXP_DATA_FILE_NAME};
         final VerifyTableDefinition[] tables = {};
@@ -53,13 +50,11 @@ public class DefaultPrepAndExpectedTestCaseTest extends TestCase
         Assertion.assertEquals(expExpDs, tc.getExpectedDataset());
     }
 
-    public void testPreTest() throws Exception
-    {
+    public void testPreTest() throws Exception {
         // TODO implement test
     }
 
-    public void testRunTest() throws Exception
-    {
+    public void testRunTest() throws Exception {
         final VerifyTableDefinition[] tables = {};
         final String[] prepDataFiles = {};
         final String[] expectedDataFiles = {};
@@ -74,44 +69,36 @@ public class DefaultPrepAndExpectedTestCaseTest extends TestCase
         assertTrue("Did not receive expected value from runTest().", actual);
     }
 
-    public void testPostTest()
-    {
+    public void testPostTest() {
         // TODO implement test
     }
 
-    public void testPostTest_false()
-    {
+    public void testPostTest_false() {
         // TODO implement test
     }
 
-    public void testSetupData()
-    {
+    public void testSetupData() {
         // TODO implement test
     }
 
-    public void testVerifyData()
-    {
+    public void testVerifyData() {
         // TODO implement test
     }
 
-    public void testVerifyDataITableITableStringArrayStringArray()
-    {
+    public void testVerifyDataITableITableStringArrayStringArray() {
         // TODO implement test
     }
 
-    public void testCleanupData()
-    {
+    public void testCleanupData() {
         // TODO implement test
     }
 
-    public void testMakeCompositeDataSet()
-    {
+    public void testMakeCompositeDataSet() {
         // TODO implement test
     }
 
     // TODO implement test - doesn't test anything yet
-    public void testApplyColumnFiltersBothNull() throws DataSetException
-    {
+    public void testApplyColumnFiltersBothNull() throws DataSetException {
         final ITable table = new DefaultTable("test_table");
         final String[] excludeColumns = null;
         final String[] includeColumns = null;
@@ -119,22 +106,19 @@ public class DefaultPrepAndExpectedTestCaseTest extends TestCase
     }
 
     // TODO implement test - doesn't test anything yet
-    public void testApplyColumnFiltersBothNotNull() throws DataSetException
-    {
+    public void testApplyColumnFiltersBothNotNull() throws DataSetException {
         final ITable table = new DefaultTable("test_table");
         final String[] excludeColumns = {"COL1"};
         final String[] includeColumns = {"COL2"};
         tc.applyColumnFilters(table, excludeColumns, includeColumns);
     }
 
-    private IDatabaseTester makeDatabaseTester()
-    {
+    private IDatabaseTester makeDatabaseTester() {
         final IDatabaseConnection databaseConnection = makeDatabaseConnection();
         return new DefaultDatabaseTester(databaseConnection);
     }
 
-    protected IDatabaseConnection makeDatabaseConnection()
-    {
+    protected IDatabaseConnection makeDatabaseConnection() {
         final MockConnection mockConnection = new MockConnection();
 
         final MockStatementFactory mockStatementFactory =

@@ -12,11 +12,9 @@ import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.datatype.DataType;
 import org.junit.Test;
 
-public class IsActualWithinToleranceOfExpectedTimestampValueComparerTest
-{
+public class IsActualWithinToleranceOfExpectedTimestampValueComparerTest {
     @Test
-    public void testIsExpected_AllNull_True() throws DatabaseUnitException
-    {
+    public void testIsExpected_AllNull_True() throws DatabaseUnitException {
         final long lowToleranceValueInMillis = 0;
         final long highToleranceValueInMillis = 0;
         final IsActualWithinToleranceOfExpectedTimestampValueComparer sut =
@@ -39,8 +37,7 @@ public class IsActualWithinToleranceOfExpectedTimestampValueComparerTest
 
     @Test
     public void testIsExpected_ActualNullExpectedNotNull_False()
-            throws DatabaseUnitException
-    {
+            throws DatabaseUnitException {
         final long lowToleranceValueInMillis = 0;
         final long highToleranceValueInMillis = 0;
         final IsActualWithinToleranceOfExpectedTimestampValueComparer sut =
@@ -64,8 +61,7 @@ public class IsActualWithinToleranceOfExpectedTimestampValueComparerTest
 
     @Test
     public void testIsExpected_WithinToleranceMiddle_True()
-            throws DatabaseUnitException
-    {
+            throws DatabaseUnitException {
         final long lowToleranceValueInMillis = 500;
         final long highToleranceValueInMillis = 1500;
         final IsActualWithinToleranceOfExpectedTimestampValueComparer sut =
@@ -91,8 +87,7 @@ public class IsActualWithinToleranceOfExpectedTimestampValueComparerTest
 
     @Test
     public void testIsExpected_WithinToleranceMatchLow_True()
-            throws DatabaseUnitException
-    {
+            throws DatabaseUnitException {
         final long lowToleranceValueInMillis = 500;
         final long highToleranceValueInMillis = 1500;
         final IsActualWithinToleranceOfExpectedTimestampValueComparer sut =
@@ -122,8 +117,7 @@ public class IsActualWithinToleranceOfExpectedTimestampValueComparerTest
 
     @Test
     public void testIsExpected_WithinToleranceMatchHigh_True()
-            throws DatabaseUnitException
-    {
+            throws DatabaseUnitException {
         final long lowToleranceValueInMillis = 500;
         final long highToleranceValueInMillis = 1500;
         final IsActualWithinToleranceOfExpectedTimestampValueComparer sut =
@@ -152,8 +146,7 @@ public class IsActualWithinToleranceOfExpectedTimestampValueComparerTest
     }
 
     @Test
-    public void testIsTolerant_DiffTimeNotInRangeLow_False()
-    {
+    public void testIsTolerant_DiffTimeNotInRangeLow_False() {
         final long lowToleranceValueInMillis = 200;
         final long highToleranceValueInMillis = 400;
         final IsActualWithinToleranceOfExpectedTimestampValueComparer sut =
@@ -168,8 +161,7 @@ public class IsActualWithinToleranceOfExpectedTimestampValueComparerTest
     }
 
     @Test
-    public void testIsTolerant_DiffTimeNotInRangeHigh_False()
-    {
+    public void testIsTolerant_DiffTimeNotInRangeHigh_False() {
         final long lowToleranceValueInMillis = 200;
         final long highToleranceValueInMillis = 400;
         final IsActualWithinToleranceOfExpectedTimestampValueComparer sut =
@@ -184,8 +176,7 @@ public class IsActualWithinToleranceOfExpectedTimestampValueComparerTest
     }
 
     @Test
-    public void testIsTolerant_DiffTimeInRange_True()
-    {
+    public void testIsTolerant_DiffTimeInRange_True() {
         final long lowToleranceValueInMillis = 200;
         final long highToleranceValueInMillis = 400;
         final IsActualWithinToleranceOfExpectedTimestampValueComparer sut =
@@ -201,8 +192,7 @@ public class IsActualWithinToleranceOfExpectedTimestampValueComparerTest
     }
 
     @Test
-    public void testGetFailPhrase() throws Exception
-    {
+    public void testGetFailPhrase() throws Exception {
         final long lowToleranceValueInMillis = 500;
         final long highToleranceValueInMillis = 1500;
         final IsActualWithinToleranceOfExpectedTimestampValueComparer sut =
@@ -215,8 +205,7 @@ public class IsActualWithinToleranceOfExpectedTimestampValueComparerTest
     }
 
     @Test
-    public void testStringExpectedTimestampActual() throws DatabaseUnitException
-    {
+    public void testStringExpectedTimestampActual() throws DatabaseUnitException {
         final long lowToleranceValueInMillis = 500;
         final long highToleranceValueInMillis = 1500;
         final IsActualWithinToleranceOfExpectedTimestampValueComparer sut =

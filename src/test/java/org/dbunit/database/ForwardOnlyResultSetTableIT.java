@@ -30,18 +30,15 @@ import org.dbunit.operation.DatabaseOperation;
 
 /**
  * @author Manuel Laflamme
- * @since Apr 11, 2003
  * @version $Revision$
+ * @since Apr 11, 2003
  */
-public class ForwardOnlyResultSetTableIT extends ForwardOnlyTableTest
-{
-    public ForwardOnlyResultSetTableIT(String s)
-    {
+public class ForwardOnlyResultSetTableIT extends ForwardOnlyTableTest {
+    public ForwardOnlyResultSetTableIT(String s) {
         super(s);
     }
 
-    protected ITable createTable() throws Exception
-    {
+    protected ITable createTable() throws Exception {
         DatabaseEnvironment env = DatabaseEnvironment.getInstance();
         IDatabaseConnection connection = env.getConnection();
 
@@ -51,25 +48,22 @@ public class ForwardOnlyResultSetTableIT extends ForwardOnlyTableTest
         return new ForwardOnlyResultSetTable("TEST_TABLE", selectStatement, connection);
     }
 
-    protected String convertString(String str) throws Exception
-    {
+    protected String convertString(String str) throws Exception {
         return DatabaseEnvironment.getInstance().convertString(str);
     }
 
-    public void testGetMissingValue() throws Exception
-    {
+    public void testGetMissingValue() throws Exception {
         // Do not test this!
     }
 
-    public void testGetValueOnLastRowIsClosingResultSet() throws Exception
-    {
+    public void testGetValueOnLastRowIsClosingResultSet() throws Exception {
         String tableName = "TABLE";
         String[] columnNames = {"C0"};
 //        String[] columnNames = {"C0", "C1", "C2"};
         Object[][] expectedValues = new Object[][]{
-            new Object[]{"1", "2", "3"},
-            new Object[]{"4", "5", "6"},
-            new Object[]{"7", "8", "9"},
+                new Object[]{"1", "2", "3"},
+                new Object[]{"4", "5", "6"},
+                new Object[]{"7", "8", "9"},
         };
 
         // Setup resultset
@@ -84,14 +78,11 @@ public class ForwardOnlyResultSetTableIT extends ForwardOnlyTableTest
                 new ForwardOnlyResultSetTable(metaData, resultSet);
 
         // Exercise getValue()
-        try
-        {
+        try {
             Column[] columns = table.getTableMetaData().getColumns();
 
-            for (int i = 0; ; i++)
-            {
-                for (int j = 0; j < columns.length; j++)
-                {
+            for (int i = 0; ; i++) {
+                for (int j = 0; j < columns.length; j++) {
                     String columnName = columns[j].getColumnName();
                     Object actualValue = table.getValue(i, columnName);
                     Object expectedValue = expectedValues[i][j];
@@ -100,9 +91,7 @@ public class ForwardOnlyResultSetTableIT extends ForwardOnlyTableTest
 
                 }
             }
-        }
-        catch(RowOutOfBoundsException e)
-        {
+        } catch (RowOutOfBoundsException e) {
             // end of table
         }
 

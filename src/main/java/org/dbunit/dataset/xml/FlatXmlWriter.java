@@ -61,8 +61,8 @@ public class FlatXmlWriter implements IDataSetConsumer {
 
     /**
      * @param outputStream The stream to which the XML will be written.
-     * @param encoding The encoding to be used for the {@link XmlWriter}.
-     * Can be null. See {@link XmlWriter#XmlWriter(OutputStream, String)}.
+     * @param encoding     The encoding to be used for the {@link XmlWriter}.
+     *                     Can be null. See {@link XmlWriter#XmlWriter(OutputStream, String)}.
      */
     public FlatXmlWriter(OutputStream outputStream, String encoding) throws UnsupportedEncodingException {
         xmlWriter = new XmlWriter(outputStream, encoding);
@@ -81,16 +81,18 @@ public class FlatXmlWriter implements IDataSetConsumer {
 
     /**
      * Enable or disable pretty print of the XML.
-     * @param enabled <code>true</code> to enable pretty print (which is the default). 
-     * <code>false</code> otherwise.
+     *
+     * @param enabled <code>true</code> to enable pretty print (which is the default).
+     *                <code>false</code> otherwise.
      * @since 2.4
      */
     public void setPrettyPrint(boolean enabled) {
         xmlWriter.enablePrettyPrint(enabled);
     }
-    
+
     /**
      * Writes the given {@link IDataSet} using this writer.
+     *
      * @param dataSet The {@link IDataSet} to be written
      */
     public void write(IDataSet dataSet) throws DataSetException {

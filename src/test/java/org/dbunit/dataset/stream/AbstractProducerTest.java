@@ -26,54 +26,45 @@ import org.dbunit.dataset.datatype.DataType;
 
 /**
  * @author Manuel Laflamme
- * @since Apr 29, 2003
  * @version $Revision$
+ * @since Apr 29, 2003
  */
-public abstract class AbstractProducerTest extends TestCase
-{
+public abstract class AbstractProducerTest extends TestCase {
     private static final String[] TABLE_NAMES = {
-        "DUPLICATE_TABLE",
-        "SECOND_TABLE",
-        "TEST_TABLE",
-        "NOT_NULL_TABLE",
-        "EMPTY_TABLE",
+            "DUPLICATE_TABLE",
+            "SECOND_TABLE",
+            "TEST_TABLE",
+            "NOT_NULL_TABLE",
+            "EMPTY_TABLE",
     };
 
-    public AbstractProducerTest(String s)
-    {
+    public AbstractProducerTest(String s) {
         super(s);
     }
 
-    protected String[] getExpectedNames() throws Exception
-    {
-        return (String[])TABLE_NAMES.clone();
+    protected String[] getExpectedNames() throws Exception {
+        return (String[]) TABLE_NAMES.clone();
     }
 
-    protected int[] getExpectedRowCount() throws Exception
-    {
-        return new int[] {1, 2, 3, 1, 0};
+    protected int[] getExpectedRowCount() throws Exception {
+        return new int[]{1, 2, 3, 1, 0};
     }
 
-    protected String getNotNullTableName() throws Exception
-    {
+    protected String getNotNullTableName() throws Exception {
         return "NOT_NULL_TABLE";
     }
 
-    protected Column[] createExpectedColumns(Column.Nullable nullable) throws Exception
-    {
+    protected Column[] createExpectedColumns(Column.Nullable nullable) throws Exception {
         Column[] columns = new Column[4];
-        for (int i = 0; i < columns.length; i++)
-        {
+        for (int i = 0; i < columns.length; i++) {
             columns[i] = new Column("COLUMN" + i, DataType.UNKNOWN, nullable);
         }
         return columns;
     }
 
-    protected Object[] createExpectedRow(int row) throws Exception
-    {
+    protected Object[] createExpectedRow(int row) throws Exception {
         Object[] values = new Object[4];
-        for (int i = 0; i < values.length; i++)
-        {
+        for (int i = 0; i < values.length; i++) {
             values[i] = "row " + row + " col " + i;
         }
         return values;
@@ -81,23 +72,20 @@ public abstract class AbstractProducerTest extends TestCase
 
     protected abstract IDataSetProducer createProducer() throws Exception;
 
-    public void testProduce() throws Exception
-    {
+    public void testProduce() throws Exception {
         // Setup consumer
         MockDataSetConsumer consumer = new MockDataSetConsumer();
         consumer.addExpectedStartDataSet();
         String[] expectedNames = getExpectedNames();
         int[] rowCounts = getExpectedRowCount();
-        for (int i = 0; i < expectedNames.length; i++)
-        {
+        for (int i = 0; i < expectedNames.length; i++) {
             String expectedName = expectedNames[i];
             Column.Nullable nullable = expectedName.equals(getNotNullTableName()) ?
                     Column.NO_NULLS : Column.NULLABLE;
             Column[] expectedColumns = createExpectedColumns(nullable);
 
             consumer.addExpectedStartTable(expectedName, expectedColumns);
-            for (int j = 0; j < rowCounts[i]; j++)
-            {
+            for (int j = 0; j < rowCounts[i]; j++) {
                 consumer.addExpectedRow(expectedName, createExpectedRow(j));
             }
             consumer.addExpectedEndTable(expectedName);
@@ -113,8 +101,7 @@ public abstract class AbstractProducerTest extends TestCase
         consumer.verify();
     }
 
-    public void testProduceWithoutConsumer() throws Exception
-    {
+    public void testProduceWithoutConsumer() throws Exception {
         IDataSetProducer producer = createProducer();
         producer.produce();
     }

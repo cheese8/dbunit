@@ -44,25 +44,22 @@ public class FlatDtdWriter //implements IDataSetConsumer
     private static final Logger logger = LoggerFactory.getLogger(FlatDtdWriter.class);
 
     public static final ContentModel SEQUENCE = new SequenceModel();
-    public static final ContentModel CHOICE   = new ChoiceModel();
+    public static final ContentModel CHOICE = new ChoiceModel();
 
     private Writer _writer;
     private ContentModel _contentModel;
 
-    public FlatDtdWriter(Writer writer)
-    {
+    public FlatDtdWriter(Writer writer) {
         _writer = writer;
         _contentModel = SEQUENCE;
     }
 
-    public void setContentModel(ContentModel contentModel)
-    {
+    public void setContentModel(ContentModel contentModel) {
         logger.debug("setContentModel(contentModel={}) - start", contentModel);
         _contentModel = contentModel;
     }
 
-    public void write(IDataSet dataSet) throws DataSetException
-    {
+    public void write(IDataSet dataSet) throws DataSetException {
         logger.debug("write(dataSet={}) - start", dataSet);
 
         PrintWriter printOut = new PrintWriter(_writer);
@@ -70,16 +67,14 @@ public class FlatDtdWriter //implements IDataSetConsumer
 
         // dataset element
         printOut.print("<!ELEMENT dataset (\n");
-        for (int i = 0; i < tableNames.length; i++)
-        {
+        for (int i = 0; i < tableNames.length; i++) {
             _contentModel.write(printOut, tableNames[i], i, tableNames.length);
         }
         printOut.print(")>\n");
         printOut.print("\n");
 
         // tables
-        for (int i = 0; i < tableNames.length; i++)
-        {
+        for (int i = 0; i < tableNames.length; i++) {
             // table element
             String tableName = tableNames[i];
             printOut.print("<!ELEMENT ");
@@ -92,17 +87,13 @@ public class FlatDtdWriter //implements IDataSetConsumer
             printOut.print("\n");
             // Add the columns
             Column[] columns = dataSet.getTableMetaData(tableName).getColumns();
-            for (int j = 0; j < columns.length; j++)
-            {
+            for (int j = 0; j < columns.length; j++) {
                 Column column = columns[j];
                 printOut.print("    ");
                 printOut.print(column.getColumnName());
-                if (column.getNullable() == Column.NO_NULLS  && column.getDefaultValue() == null)
-                {
+                if (column.getNullable() == Column.NO_NULLS && column.getDefaultValue() == null) {
                     printOut.print(" CDATA " + FlatDtdProducer.REQUIRED + "\n");
-                }
-                else
-                {
+                } else {
                     printOut.print(" CDATA " + FlatDtdProducer.IMPLIED + "\n");
                 }
             }
@@ -119,59 +110,51 @@ public class FlatDtdWriter //implements IDataSetConsumer
      * @version $Revision$ $Date$
      * @since Jun 13, 2003
      */
-    public static abstract class ContentModel
-    {
+    public static abstract class ContentModel {
         private final String _name;
 
-        private ContentModel(String name)
-        {
+        private ContentModel(String name) {
             _name = name;
         }
 
-        public String toString()
-        {
+        public String toString() {
             return _name;
         }
 
         public abstract void write(PrintWriter writer, String tableName,
-                int tableIndex, int tableCount);
+                                   int tableIndex, int tableCount);
     }
 
-    
+
     /**
      * @author Manuel Laflamme
      * @author Last changed by: $Author$
      * @version $Revision$ $Date$
      * @since Jun 13, 2003
      */
-    public static class SequenceModel extends ContentModel
-    {
+    public static class SequenceModel extends ContentModel {
 
         /**
          * Logger for this class
          */
         private static final Logger logger = LoggerFactory.getLogger(SequenceModel.class);
 
-        private SequenceModel()
-        {
+        private SequenceModel() {
             super("sequence");
         }
 
-        public void write(PrintWriter writer, String tableName, int tableIndex, int tableCount)
-        {
-        	if (logger.isDebugEnabled())
-        	{
-        		logger.debug("write(writer={}, tableName={}, tableIndex={}, tableCount={}) - start",
-        				new Object[]{ writer, tableName, String.valueOf(tableIndex), String.valueOf(tableCount)});
-        	}
+        public void write(PrintWriter writer, String tableName, int tableIndex, int tableCount) {
+            if (logger.isDebugEnabled()) {
+                logger.debug("write(writer={}, tableName={}, tableIndex={}, tableCount={}) - start",
+                        new Object[]{writer, tableName, String.valueOf(tableIndex), String.valueOf(tableCount)});
+            }
 
             boolean last = (tableIndex + 1) == tableCount;
 
             writer.print("    ");
             writer.print(tableName);
             writer.print("*");
-            if (!last)
-            {
+            if (!last) {
                 writer.print(",\n");
             }
         }
@@ -183,46 +166,36 @@ public class FlatDtdWriter //implements IDataSetConsumer
      * @version $Revision$ $Date$
      * @since Jun 13, 2003
      */
-    public static class ChoiceModel extends ContentModel
-    {
+    public static class ChoiceModel extends ContentModel {
 
         /**
          * Logger for this class
          */
         private static final Logger logger = LoggerFactory.getLogger(ChoiceModel.class);
 
-        private ChoiceModel()
-        {
+        private ChoiceModel() {
             super("sequence");
         }
 
-        public void write(PrintWriter writer, String tableName, int tableIndex, int tableCount)
-        {
-        	if (logger.isDebugEnabled())
-        	{
-        		logger.debug("write(writer={}, tableName={}, tableIndex={}, tableCount={}) - start",
-        				new Object[]{ writer, tableName, String.valueOf(tableIndex), String.valueOf(tableCount)});
-        	}
+        public void write(PrintWriter writer, String tableName, int tableIndex, int tableCount) {
+            if (logger.isDebugEnabled()) {
+                logger.debug("write(writer={}, tableName={}, tableIndex={}, tableCount={}) - start",
+                        new Object[]{writer, tableName, String.valueOf(tableIndex), String.valueOf(tableCount)});
+            }
 
             boolean first = tableIndex == 0;
             boolean last = (tableIndex + 1) == tableCount;
 
-            if (first)
-            {
+            if (first) {
                 writer.print("   (");
-            }
-            else
-            {
+            } else {
                 writer.print("    ");
             }
             writer.print(tableName);
 
-            if (!last)
-            {
+            if (!last) {
                 writer.print("|\n");
-            }
-            else
-            {
+            } else {
                 writer.print(")*");
             }
         }

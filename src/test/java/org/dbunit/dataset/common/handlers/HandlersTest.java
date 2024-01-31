@@ -38,7 +38,7 @@ public class HandlersTest extends TestCase {
 
         String words = ",, ,";
 
-        feed (pipeline, words);
+        feed(pipeline, words);
 
         assertEquals(4, pipeline.getProducts().size());
 
@@ -56,14 +56,14 @@ public class HandlersTest extends TestCase {
 
         String words = "Today: Hello , World!";
 
-        feed (pipeline, words);
+        feed(pipeline, words);
 
         assertEquals(2, pipeline.getProducts().size());
         assertEquals("Today: Hello ", pipeline.getProducts().get(0));
         assertEquals("World!", pipeline.getProducts().get(1));
     }
 
-    public void testQuotedFieldWithEscapedCharacterAssembler () throws PipelineException, IllegalInputCharacterException {
+    public void testQuotedFieldWithEscapedCharacterAssembler() throws PipelineException, IllegalInputCharacterException {
         pipeline.putFront(SeparatorHandler.ENDPIECE());
         pipeline.putFront(IsAlnumHandler.ACCEPT());
         pipeline.putFront(WhitespacesHandler.IGNORE());
@@ -71,13 +71,13 @@ public class HandlersTest extends TestCase {
 
         String words = " \"Hello, \\\"World!\" ";
 
-        feed (pipeline, words);
+        feed(pipeline, words);
 
         assertEquals(1, pipeline.getProducts().size());
         assertEquals("Hello, \"World!", pipeline.getProducts().get(0).toString());
     }
 
-    public void testUnquotedFieldWithEscapedCharacterAssembler () throws PipelineException, IllegalInputCharacterException {
+    public void testUnquotedFieldWithEscapedCharacterAssembler() throws PipelineException, IllegalInputCharacterException {
         pipeline.putFront(SeparatorHandler.ENDPIECE());
         pipeline.putFront(EscapeHandler.ACCEPT());
         pipeline.putFront(IsAlnumHandler.QUOTE());
@@ -86,13 +86,13 @@ public class HandlersTest extends TestCase {
 
         String words = "Hello \\\"World!";
 
-        feed (pipeline, words);
+        feed(pipeline, words);
 
         assertEquals(1, pipeline.getProducts().size());
         assertEquals("Hello \\\"World!", pipeline.getProducts().get(0).toString());
     }
 
-    public void testEscapedFieldAssembler () throws PipelineException, IllegalInputCharacterException {
+    public void testEscapedFieldAssembler() throws PipelineException, IllegalInputCharacterException {
         String words = "\"He\"llo, \"World, !\", \\\"St. James O\"Connor";
 
         pipeline.putFront(SeparatorHandler.ENDPIECE());
@@ -103,7 +103,7 @@ public class HandlersTest extends TestCase {
         pipeline.putFront(WhitespacesHandler.IGNORE());
         pipeline.putFront(TransparentHandler.IGNORE());
 
-        feed (pipeline, words);
+        feed(pipeline, words);
 
         assertEquals(3, pipeline.getProducts().size());
         assertEquals("Hello", pipeline.getProducts().get(0));
@@ -134,7 +134,7 @@ public class HandlersTest extends TestCase {
 
         String words = " \"Hello, World!\" ";
 
-        feed (pipeline, words);
+        feed(pipeline, words);
 
         assertEquals(1, pipeline.getProducts().size());
         assertEquals("Hello, World!", pipeline.getProducts().get(0).toString());
@@ -149,7 +149,7 @@ public class HandlersTest extends TestCase {
 
         String words = "\"Hello\", \"oh my\", \"ehm. oh yeah. World!\", \" craa azy \"";
 
-        feed (pipeline, words);
+        feed(pipeline, words);
 
         assertEquals(4, pipeline.getProducts().size());
 
@@ -186,6 +186,7 @@ public class HandlersTest extends TestCase {
 
     /**
      * Test the handling of a sequence of empty, unquoted and quoted fields
+     *
      * @throws IllegalInputCharacterException
      * @throws PipelineException
      */
@@ -201,7 +202,7 @@ public class HandlersTest extends TestCase {
         pipeline.putFront(WhitespacesHandler.IGNORE());
         pipeline.putFront(TransparentHandler.IGNORE());
 
-        feed (pipeline, words);
+        feed(pipeline, words);
 
         //dump(pipeline.getProducts());
 
@@ -225,7 +226,7 @@ public class HandlersTest extends TestCase {
         }
     }
 
-    public void testEscapeHandler () throws PipelineException, IllegalInputCharacterException {
+    public void testEscapeHandler() throws PipelineException, IllegalInputCharacterException {
         String accepted = "\\\"";
 
         EscapeHandler escapeHandler = (EscapeHandler) EscapeHandler.ESCAPE();
@@ -255,7 +256,7 @@ public class HandlersTest extends TestCase {
         PipelineComponent acceptHandler = IsAlnumHandler.ACCEPT();
         pipeline.putFront(acceptHandler);
         acceptHelper(accepted, acceptHandler);
-        
+
         PipelineComponent ignoreHandler = IsAlnumHandler.IGNORE();
         pipeline.putFront(ignoreHandler);
         acceptHelper(accepted, ignoreHandler);

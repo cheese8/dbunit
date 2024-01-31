@@ -25,27 +25,27 @@ import org.dbunit.DatabaseUnitException;
 
 /**
  * Base class for exceptions during the search.
- * 
+ *
  * @author Felipe Leme (dbunit@felipeal.net)
  * @version $Revision$
  * @since Aug 25, 2005
  */
 public class SearchException extends DatabaseUnitException {
-  
-  private static final long serialVersionUID = -8369726048539373231L;
 
-  public SearchException() {
-  }
+    private static final long serialVersionUID = -8369726048539373231L;
 
-  public SearchException(String msg) {
-    super(msg);
-  }
+    public SearchException() {
+    }
 
-  public SearchException(String msg, Throwable e) {
-    super(msg, e);
-  }
+    public SearchException(String msg) {
+        super(msg);
+    }
 
-  public SearchException(Throwable e) {
-    super(e);
-  }
+    public SearchException(String msg, Throwable e) {
+        super(msg, e);
+    }
+
+    public SearchException(Throwable e) {
+        super(e);
+    }
 }

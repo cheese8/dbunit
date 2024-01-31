@@ -27,10 +27,9 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 /**
- *
  * @author manuel.laflamme
- * @since Jul 17, 2003
  * @version $Revision$
+ * @since Jul 17, 2003
  */
 public interface IResultSetTableFactory {
     IResultSetTable createTable(String tableName, String selectStatement, IDatabaseConnection connection) throws SQLException, DataSetException;
@@ -39,6 +38,7 @@ public interface IResultSetTableFactory {
 
     /**
      * Creates a table from a preparedStatement
+     *
      * @param tableName
      * @param preparedStatement
      * @param connection

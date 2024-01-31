@@ -153,14 +153,14 @@ public class Pipeline implements Handler {
     }
 
     public boolean canHandle(char c) throws IllegalInputCharacterException {
-        if(logger.isDebugEnabled())
+        if (logger.isDebugEnabled())
             logger.debug("canHandle(c={}) - start", String.valueOf(c));
 
         return true;
     }
 
     public void handle(char c) throws IllegalInputCharacterException, PipelineException {
-        if(logger.isDebugEnabled())
+        if (logger.isDebugEnabled())
             logger.debug("handle(c={}) - start", String.valueOf(c));
 
         ((Handler) getComponents().getFirst()).handle(c);
@@ -197,8 +197,9 @@ public class Pipeline implements Handler {
         //thePieceIsDone();
     }
 
-    
+
     private PipelineConfig pipelineConfig = new PipelineConfig();
+
     public PipelineConfig getPipelineConfig() {
         return pipelineConfig;
     }

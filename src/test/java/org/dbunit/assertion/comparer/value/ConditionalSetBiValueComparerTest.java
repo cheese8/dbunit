@@ -14,13 +14,10 @@ import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.datatype.DataType;
 import org.junit.Test;
 
-public class ConditionalSetBiValueComparerTest
-{
-    private ValueFactory<Long> valueFactory1 = new ValueFactory<Long>()
-    {
+public class ConditionalSetBiValueComparerTest {
+    private ValueFactory<Long> valueFactory1 = new ValueFactory<Long>() {
         public Long make(final ITable table, final int rowNum)
-                throws DataSetException
-        {
+                throws DataSetException {
             return 1L;
         }
     };
@@ -30,8 +27,7 @@ public class ConditionalSetBiValueComparerTest
 
     @Test
     public void testDoCompare_InValuesAllNulls_NullFailMessage()
-            throws DatabaseUnitException
-    {
+            throws DatabaseUnitException {
         final ValueFactory<Long> actualValueFactory = valueFactory1;
         final Set<Long> values = values1;
         final ValueComparator inValuesValueComparator =
@@ -59,8 +55,7 @@ public class ConditionalSetBiValueComparerTest
 
     @Test
     public void testDoCompare_InValuesActualEqualToExpected_NullFailMessage()
-            throws DatabaseUnitException
-    {
+            throws DatabaseUnitException {
         final ValueFactory<Long> actualValueFactory = valueFactory1;
         final Set<Long> values = values1;
         final ValueComparator inValuesValueComparator =
@@ -89,8 +84,7 @@ public class ConditionalSetBiValueComparerTest
 
     @Test
     public void testDoCompare_InValuesActualGreaterThanExpected_FailMessage()
-            throws DatabaseUnitException
-    {
+            throws DatabaseUnitException {
         final ValueFactory<Long> actualValueFactory = valueFactory1;
         final Set<Long> values = values1;
         final ValueComparator inValuesValueComparator =
@@ -119,8 +113,7 @@ public class ConditionalSetBiValueComparerTest
 
     @Test
     public void testDoCompare_InValuesActualLessThanExpected_FailMessage()
-            throws DatabaseUnitException
-    {
+            throws DatabaseUnitException {
         final ValueFactory<Long> actualValueFactory = valueFactory1;
         final Set<Long> values = values1;
         final ValueComparator inValuesValueComparator =
@@ -149,8 +142,7 @@ public class ConditionalSetBiValueComparerTest
 
     @Test
     public void testDoCompare_NotInValuesActualEqualToExpected_FailMessage()
-            throws DatabaseUnitException
-    {
+            throws DatabaseUnitException {
         final ValueFactory<Long> actualValueFactory = valueFactory1;
         final Set<Long> values = values2;
         final ValueComparator inValuesValueComparator =

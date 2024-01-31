@@ -10,14 +10,12 @@ import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.datatype.DataType;
 import org.junit.Test;
 
-public class IsActualLessThanOrEqualToExpectedValueComparerTest
-{
+public class IsActualLessThanOrEqualToExpectedValueComparerTest {
     private final IsActualLessThanOrEqualToExpectedValueComparer sut =
             new IsActualLessThanOrEqualToExpectedValueComparer();
 
     @Test
-    public void testIsExpected_AllNulls_True() throws DatabaseUnitException
-    {
+    public void testIsExpected_AllNulls_True() throws DatabaseUnitException {
         final ITable expectedTable = null;
         final ITable actualTable = null;
         final int rowNum = 0;
@@ -33,8 +31,7 @@ public class IsActualLessThanOrEqualToExpectedValueComparerTest
 
     @Test
     public void testIsExpected_ActualEqualToExpected_True()
-            throws DatabaseUnitException
-    {
+            throws DatabaseUnitException {
         final ITable expectedTable = null;
         final ITable actualTable = null;
         final int rowNum = 0;
@@ -51,8 +48,7 @@ public class IsActualLessThanOrEqualToExpectedValueComparerTest
 
     @Test
     public void testIsExpected_ActualGreaterThanExpected_False()
-            throws DatabaseUnitException
-    {
+            throws DatabaseUnitException {
         final ITable expectedTable = null;
         final ITable actualTable = null;
         final int rowNum = 0;
@@ -70,8 +66,7 @@ public class IsActualLessThanOrEqualToExpectedValueComparerTest
 
     @Test
     public void testIsExpected_ActualLessThanExpected_True()
-            throws DatabaseUnitException
-    {
+            throws DatabaseUnitException {
         final ITable expectedTable = null;
         final ITable actualTable = null;
         final int rowNum = 0;
@@ -87,8 +82,7 @@ public class IsActualLessThanOrEqualToExpectedValueComparerTest
     }
 
     @Test
-    public void testGetFailPhrase() throws Exception
-    {
+    public void testGetFailPhrase() throws Exception {
         final String actual = sut.getFailPhrase();
 
         assertThat("Should have fail phrase.", actual, not(nullValue()));

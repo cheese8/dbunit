@@ -26,38 +26,36 @@ import org.slf4j.LoggerFactory;
 
 /**
  * A table that filters some columns out from the original table.
- * 
+ *
  * @author gommma (gommma AT users.sourceforge.net)
  * @author Last changed by: $Author$
  * @version $Revision$ $Date$
  * @since 2.4.0
  */
-public class ColumnFilterTable implements ITable 
-{
-    /** 
-     * logger 
+public class ColumnFilterTable implements ITable {
+    /**
+     * logger
      */
     private final Logger logger = LoggerFactory.getLogger(ColumnFilterTable.class);
 
-    /** 
-     * reference to the original table being wrapped 
+    /**
+     * reference to the original table being wrapped
      */
     private final ITable originalTable;
-    
+
     /**
      * The filtered table metadata
      */
     private final ITableMetaData tableMetaData;
 
-    
+
     /**
-     * @param table The table from which some columns should be filtered
+     * @param table        The table from which some columns should be filtered
      * @param columnFilter The filter defining which columns to be filtered
      * @throws DataSetException
      */
-    public ColumnFilterTable(ITable table, IColumnFilter columnFilter) 
-    throws DataSetException
-    {
+    public ColumnFilterTable(ITable table, IColumnFilter columnFilter)
+            throws DataSetException {
         if (columnFilter == null) {
             throw new NullPointerException(
                     "The parameter 'columnFilter' must not be null");
@@ -66,41 +64,36 @@ public class ColumnFilterTable implements ITable
             throw new NullPointerException(
                     "The parameter 'table' must not be null");
         }
-        
+
         this.tableMetaData = new FilteredTableMetaData(
                 table.getTableMetaData(), columnFilter);
         this.originalTable = table;
     }
 
-    
-    public int getRowCount() 
-    {
+
+    public int getRowCount() {
         logger.debug("getRowCount() - start");
         return this.originalTable.getRowCount();
     }
 
-    public ITableMetaData getTableMetaData() 
-    {
+    public ITableMetaData getTableMetaData() {
         logger.debug("getTableMetaData() - start");
         return this.tableMetaData;
     }
 
-    public Object getValue(int row, String column) throws DataSetException 
-    {
-        if(logger.isDebugEnabled())
+    public Object getValue(int row, String column) throws DataSetException {
+        if (logger.isDebugEnabled())
             logger.debug("getValue(row={}, columnName={}) - start", Integer.toString(row), column);
 
         return this.originalTable.getValue(row, column);
     }
 
-    public ITableMetaData getOriginalMetaData() 
-    {
+    public ITableMetaData getOriginalMetaData() {
         logger.debug("getOriginalMetaData() - start");
         return this.originalTable.getTableMetaData();
     }
 
-    public String toString() 
-    {
-    	return this.originalTable.toString();
+    public String toString() {
+        return this.originalTable.toString();
     }
 }

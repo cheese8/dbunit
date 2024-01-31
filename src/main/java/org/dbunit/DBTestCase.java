@@ -37,28 +37,28 @@ import org.dbunit.database.IDatabaseConnection;
  */
 @Slf4j
 public abstract class DBTestCase extends DatabaseTestCase {
-  public DBTestCase() {
-    super();
-  }
+    public DBTestCase() {
+        super();
+    }
 
-  public DBTestCase(String name) {
-    super(name);
-  }
+    public DBTestCase(String name) {
+        super(name);
+    }
 
-  protected final IDatabaseConnection getConnection() throws Exception {
-      final IDatabaseTester databaseTester = getDatabaseTester();
-      assertNotNull( "DatabaseTester is not set", databaseTester);
-      IDatabaseConnection connection = databaseTester.getConnection();
-      // Ensure that users have the possibility to configure the connection's configuration
-      setUpDatabaseConfig(connection.getConfig());
-      return connection;
- }
+    protected final IDatabaseConnection getConnection() throws Exception {
+        final IDatabaseTester databaseTester = getDatabaseTester();
+        assertNotNull("DatabaseTester is not set", databaseTester);
+        IDatabaseConnection connection = databaseTester.getConnection();
+        // Ensure that users have the possibility to configure the connection's configuration
+        setUpDatabaseConfig(connection.getConfig());
+        return connection;
+    }
 
-  /**
-   * Creates a new IDatabaseTester.
-   * Default implementation returns a {@link PropertiesBasedJdbcDatabaseTester}.
-   */
-  protected IDatabaseTester newDatabaseTester() throws Exception {
-      return new PropertiesBasedJdbcDatabaseTester();
-  }
+    /**
+     * Creates a new IDatabaseTester.
+     * Default implementation returns a {@link PropertiesBasedJdbcDatabaseTester}.
+     */
+    protected IDatabaseTester newDatabaseTester() throws Exception {
+        return new PropertiesBasedJdbcDatabaseTester();
+    }
 }

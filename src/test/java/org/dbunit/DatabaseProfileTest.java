@@ -30,10 +30,10 @@ import junit.framework.TestCase;
  * @since 2.3.0
  */
 public class DatabaseProfileTest extends TestCase {
-	public void testPropertyUnsupportedFeaturesIsMissing() {
-		Properties props = new Properties();
-		DatabaseProfile profile = new DatabaseProfile(props);
-		String[] unsupported = profile.getUnsupportedFeatures();
-		assertEquals(0, unsupported.length);
-	}
+    public void testPropertyUnsupportedFeaturesIsMissing() {
+        Properties props = new Properties();
+        DatabaseProfile profile = new DatabaseProfile(props);
+        String[] unsupported = profile.getUnsupportedFeatures();
+        assertEquals(0, unsupported.length);
+    }
 }

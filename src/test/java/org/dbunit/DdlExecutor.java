@@ -50,14 +50,11 @@ public final class DdlExecutor {
     /**
      * Execute DDL from the file (by name) against the given {@link Connection},
      * dispatches to executeDdlFile and passes false for ignoreErrors.
-     * 
-     * @param ddlFileName
-     *            The name of the DDL file to execute.
-     * @param connection
-     *            The {@link Connection} to execute the DDL against.
-     * @param multiLineSupport
-     *            If this DataSource supports passing in all the lines at once
-     *            or if it needs to separate on ';'.
+     *
+     * @param ddlFileName      The name of the DDL file to execute.
+     * @param connection       The {@link Connection} to execute the DDL against.
+     * @param multiLineSupport If this DataSource supports passing in all the lines at once
+     *                         or if it needs to separate on ';'.
      * @throws Exception
      */
     public static void execute(final String ddlFileName, final Connection connection, final boolean multiLineSupport) throws Exception {
@@ -67,16 +64,12 @@ public final class DdlExecutor {
     /**
      * Execute DDL from the file (by name) against the given {@link Connection},
      * dispatches to executeDdlFile.
-     * 
-     * @param ddlFileName
-     *            The name of the DDL file to execute.
-     * @param connection
-     *            The {@link Connection} to execute the DDL against.
-     * @param multiLineSupport
-     *            If this DataSource supports passing in all the lines at once
-     *            or if it needs to separate on ';'.
-     * @param ignoreErrors
-     *            Set this to true if you want syntax errors to be ignored.
+     *
+     * @param ddlFileName      The name of the DDL file to execute.
+     * @param connection       The {@link Connection} to execute the DDL against.
+     * @param multiLineSupport If this DataSource supports passing in all the lines at once
+     *                         or if it needs to separate on ';'.
+     * @param ignoreErrors     Set this to true if you want syntax errors to be ignored.
      * @throws Exception
      */
     public static void execute(final String ddlFileName, final Connection connection, final boolean multiLineSupport, final boolean ignoreErrors) throws Exception {
@@ -87,11 +80,9 @@ public final class DdlExecutor {
     /**
      * Executes DDL from the {@link File} against the given {@link Connection}.
      * Retrieves the multiLineSupport parameter from the profile.
-     * 
-     * @param ddlFile
-     *            The {@link File} object of the DDL file to execute.
-     * @param connection
-     *            The {@link Connection} to execute the DDL against.
+     *
+     * @param ddlFile    The {@link File} object of the DDL file to execute.
+     * @param connection The {@link Connection} to execute the DDL against.
      * @throws Exception
      */
     public static void executeDdlFile(final File ddlFile, final Connection connection) throws Exception {
@@ -104,14 +95,11 @@ public final class DdlExecutor {
      * Executes DDL from the {@link File} against the given {@link Connection}.
      * Retrieves the multiLineSupport parameter from the profile and passes
      * false for ignoreErrors.
-     * 
-     * @param ddlFile
-     *            The {@link File} object of the DDL file to execute.
-     * @param connection
-     *            The {@link Connection} to execute the DDL against.
-     * @param multiLineSupport
-     *            If this DataSource supports passing in all the lines at once
-     *            or if it needs to separate on ';'.
+     *
+     * @param ddlFile          The {@link File} object of the DDL file to execute.
+     * @param connection       The {@link Connection} to execute the DDL against.
+     * @param multiLineSupport If this DataSource supports passing in all the lines at once
+     *                         or if it needs to separate on ';'.
      * @throws Exception
      */
     public static void executeDdlFile(final File ddlFile, final Connection connection, final boolean multiLineSupport) throws Exception {
@@ -120,16 +108,12 @@ public final class DdlExecutor {
 
     /**
      * Execute DDL from the {@link File} against the given {@link Connection}.
-     * 
-     * @param ddlFile
-     *            The {@link File} object of the DDL file to execute.
-     * @param connection
-     *            The {@link Connection} to execute the DDL against.
-     * @param multiLineSupport
-     *            If this DataSource supports passing in all the lines at once
-     *            or if it needs to separate on ';'.
-     * @param ignoreErrors
-     *            Set this to true if you want syntax errors to be ignored.
+     *
+     * @param ddlFile          The {@link File} object of the DDL file to execute.
+     * @param connection       The {@link Connection} to execute the DDL against.
+     * @param multiLineSupport If this DataSource supports passing in all the lines at once
+     *                         or if it needs to separate on ';'.
+     * @param ignoreErrors     Set this to true if you want syntax errors to be ignored.
      * @throws Exception
      */
     public static void executeDdlFile(final File ddlFile, final Connection connection, final boolean multiLineSupport, final boolean ignoreErrors) throws Exception {
@@ -152,10 +136,8 @@ public final class DdlExecutor {
      * Execute an un-prepared SQL statement against the given
      * {@link Connection}, passes false to ignoreErrors.
      *
-     * @param connection
-     *            The {@link Connection} to execute against
-     * @param sql
-     *            The SQL {@link String} to execute
+     * @param connection The {@link Connection} to execute against
+     * @param sql        The SQL {@link String} to execute
      * @throws SQLException
      */
     public static void executeSql(final Connection connection, final String sql) throws SQLException {
@@ -166,12 +148,9 @@ public final class DdlExecutor {
      * Execute an un-prepared SQL statement against the given
      * {@link Connection}.
      *
-     * @param connection
-     *            The {@link Connection} to execute against
-     * @param sql
-     *            The SQL {@link String} to execute
-     * @param ignoreErrors
-     *            Set this to true if you want syntax errors to be ignored.
+     * @param connection   The {@link Connection} to execute against
+     * @param sql          The SQL {@link String} to execute
+     * @param ignoreErrors Set this to true if you want syntax errors to be ignored.
      * @throws SQLException
      */
     public static void executeSql(final Connection connection, final String sql, final boolean ignoreErrors) throws SQLException {

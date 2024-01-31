@@ -36,64 +36,49 @@ import org.dbunit.dataset.ITableMetaData;
 
 /**
  * @author Manuel Laflamme
- * @since Feb 22, 2003
  * @version $Revision$
+ * @since Feb 22, 2003
  */
-public class XlsTableWriteTest extends XlsTableTest
-{
-    public XlsTableWriteTest(String s)
-    {
+public class XlsTableWriteTest extends XlsTableTest {
+    public XlsTableWriteTest(String s) {
         super(s);
     }
 
-    protected IDataSet createDataSet() throws Exception
-    {
+    protected IDataSet createDataSet() throws Exception {
         File tempFile = File.createTempFile("tableWriteTest", ".xls");
 //        System.out.println(tempFile.getAbsoluteFile());
         OutputStream out = new FileOutputStream(tempFile);
-        try
-        {
+        try {
             // write source dataset in temp file
-            try
-            {
+            try {
                 XlsDataSet.write(super.createDataSet(), out);
-            }
-            finally
-            {
+            } finally {
                 out.close();
             }
 
             // load new dataset from temp file
             InputStream in = new FileInputStream(tempFile);
-            try
-            {
+            try {
                 return new XlsDataSet(in);
-            }
-            finally
-            {
+            } finally {
                 in.close();
             }
-        }
-        finally
-        {
+        } finally {
             tempFile.delete();
         }
     }
 
-    public void testGetValue() throws Exception
-    {
+    public void testGetValue() throws Exception {
         super.testGetValue();
     }
 
 
-    public void testWriteMultipleTable() throws Exception
-    {
+    public void testWriteMultipleTable() throws Exception {
         int tableCount = 5;
         ITable sourceTable = super.createTable();
 
         ITable[] tables = new ITable[tableCount];
-        for (int i = 0; i < tables.length; i++)
-        {
+        for (int i = 0; i < tables.length; i++) {
             ITableMetaData metaData = new DefaultTableMetaData("table" + i,
                     sourceTable.getTableMetaData().getColumns());
             tables[i] = new CompositeTable(metaData, sourceTable);
@@ -102,40 +87,30 @@ public class XlsTableWriteTest extends XlsTableTest
         IDataSet dataSet = new DefaultDataSet(tables);
         File tempFile = File.createTempFile("tableWriteTest", ".xls");
         OutputStream out = new FileOutputStream(tempFile);
-        try
-        {
+        try {
             // write DefaultTable in temp file
-            try
-            {
+            try {
                 XlsDataSet.write(dataSet, out);
-            }
-            finally
-            {
+            } finally {
                 out.close();
             }
 
             // load new dataset from temp file
             FileInputStream in = new FileInputStream(tempFile);
-            try
-            {
+            try {
                 XlsDataSet dataSet2 = new XlsDataSet(in);
 
                 // verify each table
-                for (int i = 0; i < tables.length; i++)
-                {
+                for (int i = 0; i < tables.length; i++) {
                     ITable table = tables[i];
                     Assertion.assertEquals(table,
                             dataSet2.getTable(dataSet2.getTableNames()[i]));
                 }
-            }
-            finally
-            {
+            } finally {
                 in.close();
             }
 
-        }
-        finally
-        {
+        } finally {
             tempFile.delete();
         }
     }

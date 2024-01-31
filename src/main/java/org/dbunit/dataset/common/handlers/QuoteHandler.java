@@ -40,7 +40,6 @@ public class QuoteHandler extends AbstractPipelineComponent {
     public static final char QUOTE_CHAR = '"';
 
 
-    
     private QuoteHandler() {
     }
 
@@ -69,7 +68,7 @@ public class QuoteHandler extends AbstractPipelineComponent {
     }
 
     public boolean canHandle(char c) throws IllegalInputCharacterException {
-        if(logger.isDebugEnabled())
+        if (logger.isDebugEnabled())
             logger.debug("canHandle(c={}) - start", String.valueOf(c));
 
         if (c == QUOTE_CHAR) {
@@ -87,7 +86,7 @@ public class QuoteHandler extends AbstractPipelineComponent {
         private static final Logger logger = LoggerFactory.getLogger(QUOTE.class);
 
         public void helpWith(char c) {
-            if(logger.isDebugEnabled())
+            if (logger.isDebugEnabled())
                 logger.debug("helpWith(c={}) - start", String.valueOf(c));
 
             getHandler().getPipeline().putFront(SeparatorHandler.ACCEPT());
@@ -108,7 +107,7 @@ public class QuoteHandler extends AbstractPipelineComponent {
         private static final Logger logger = LoggerFactory.getLogger(UNQUOTE.class);
 
         public void helpWith(char c) {
-            if(logger.isDebugEnabled())
+            if (logger.isDebugEnabled())
                 logger.debug("helpWith(c={}) - start", String.valueOf(c));
 
             try {

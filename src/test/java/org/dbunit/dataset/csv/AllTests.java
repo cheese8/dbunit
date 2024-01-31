@@ -28,15 +28,13 @@ import junit.framework.TestSuite;
  * Created By:   fede
  * Date:         10-mar-2004
  * Time:         10.52.00
- *
+ * <p>
  * Last Checkin: $Author$
  * Date:         $Date$
  * Revision:     $Revision$
  */
-public class AllTests extends TestSuite
-{
-    public static Test suite()
-    {
+public class AllTests extends TestSuite {
+    public static Test suite() {
         TestSuite suite = new TestSuite();
         suite.addTest(new TestSuite(CsvParserTest.class));
         suite.addTest(new TestSuite(CsvProducerTest.class));
@@ -44,7 +42,7 @@ public class AllTests extends TestSuite
         suite.addTest(new TestSuite(CsvDataSetTest.class));
         suite.addTest(new TestSuite(CsvURLDataSetTest.class));
         suite.addTest(new TestSuite(CsvURLProducerTest.class));
-        
+
         return suite;
     }
 }

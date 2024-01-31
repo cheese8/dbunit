@@ -36,17 +36,15 @@ import org.dbunit.dataset.excel.XlsDataSet;
  * @author Last changed by: $Author$
  * @version $Revision$ $Date$
  * @since 2.4.8
- * 
  */
 @NoArgsConstructor
 public class XlsDataFileLoader extends AbstractDataFileLoader {
 
     /**
      * Create new instance with replacement objects.
-     * 
-     * @param ro
-     *            The replacement objects for use with
-     *            {@link org.dbunit.dataset.ReplacementDataSet}.
+     *
+     * @param ro The replacement objects for use with
+     *           {@link org.dbunit.dataset.ReplacementDataSet}.
      */
     public XlsDataFileLoader(Map ro) {
         super(ro);
@@ -54,13 +52,11 @@ public class XlsDataFileLoader extends AbstractDataFileLoader {
 
     /**
      * Create new instance with replacement objects and replacement substrings.
-     * 
-     * @param ro
-     *            The replacement objects for use with
-     *            {@link org.dbunit.dataset.ReplacementDataSet}.
-     * @param rs
-     *            The replacement substrings for use with
-     *            {@link org.dbunit.dataset.ReplacementDataSet}.
+     *
+     * @param ro The replacement objects for use with
+     *           {@link org.dbunit.dataset.ReplacementDataSet}.
+     * @param rs The replacement substrings for use with
+     *           {@link org.dbunit.dataset.ReplacementDataSet}.
      */
     public XlsDataFileLoader(Map ro, Map rs, Map rf) {
         super(ro, rs, rf);

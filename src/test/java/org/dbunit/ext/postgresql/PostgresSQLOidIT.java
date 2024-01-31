@@ -15,41 +15,35 @@ import java.sql.Types;
 
 import static org.junit.Assert.assertArrayEquals;
 
-public class PostgresSQLOidIT extends TestCase
-{
+public class PostgresSQLOidIT extends TestCase {
     private IDatabaseConnection _connection;
 
- // @formatter:off
-    private static final String xmlData ="<?xml version=\"1.0\"?>" +
+    // @formatter:off
+    private static final String xmlData = "<?xml version=\"1.0\"?>" +
             "<dataset>" +
             "<T2 DATA=\"[NULL]\" />" +
             "<T2 DATA=\"\\[text UTF-8](Anything)\" />" +
             "</dataset>";
- // @formatter:on
+    // @formatter:on
 
-    protected void setUp() throws Exception
-    {
+    protected void setUp() throws Exception {
         super.setUp();
         // Load active postgreSQL profile and connection from Maven pom.xml.
         _connection = DatabaseEnvironment.getInstance().getConnection();
     }
 
-    protected void tearDown() throws Exception
-    {
+    protected void tearDown() throws Exception {
         super.tearDown();
-        if (_connection != null)
-        {
+        if (_connection != null) {
             _connection.close();
             _connection = null;
         }
     }
 
-    public void testOk()
-    {
+    public void testOk() {
     }
 
-    public void xtestOidDataType() throws Exception
-    {
+    public void xtestOidDataType() throws Exception {
         final String testTable = "t2";
         assertNotNull("didn't get a connection", _connection);
         DatabaseConfig config = _connection.getConfig();
@@ -63,8 +57,7 @@ public class PostgresSQLOidIT extends TestCase
         stat.execute("CREATE TABLE " + testTable + "(DATA OID);");
         stat.close();
 
-        try
-        {
+        try {
             ReplacementDataSet dataSet =
                     new ReplacementDataSet(new FlatXmlDataSetBuilder()
                             .build(new InputSource(new StringReader(xmlData))));
@@ -76,8 +69,7 @@ public class PostgresSQLOidIT extends TestCase
             ITableMetaData itmd = ids.getTableMetaData(testTable);
             Column[] cols = itmd.getColumns();
             ids = _connection.createDataSet();
-            for (Column col : cols)
-            {
+            for (Column col : cols) {
                 assertEquals(Types.BIGINT, col.getDataType().getSqlType());
                 assertEquals("oid", col.getSqlTypeName());
             }
@@ -88,8 +80,7 @@ public class PostgresSQLOidIT extends TestCase
             assertNull(it.getValue(0, "DATA"));
             assertArrayEquals("\\[text UTF-8](Anything)".getBytes(),
                     (byte[]) it.getValue(1, "DATA"));
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             assertEquals("DatabaseOperation.CLEAN_INSERT... no exception",
                     "" + e);
         }

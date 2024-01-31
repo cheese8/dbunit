@@ -37,7 +37,7 @@ import org.xml.sax.InputSource;
 
 /**
  * Utility that provides some general methods for working with {@link File} objects.
- * 
+ *
  * @author gommma
  * @version $Revision$
  * @since 2.3.0
@@ -45,66 +45,69 @@ import org.xml.sax.InputSource;
 @Slf4j
 public class FileHelper {
 
-	private FileHelper(){}
-	
-	/**
+    private FileHelper() {
+    }
+
+    /**
      * Recursively deletes the given directory
+     *
+     * @param directory   The directory to delete
+     * @param failOnError If an exception should be thrown in case the deletion did not work.
+     */
+    public static void deleteDirectory(File directory, boolean failOnError) {
+        boolean success = deleteDirectory(directory);
+        if (!success) {
+            throw new RuntimeException("Failed to delete directory " + directory);
+        }
+    }
+
+    /**
+     * Recursively deletes the given directory
+     *
      * @param directory The directory to delete
-	 * @param failOnError If an exception should be thrown in case the deletion did not work.
-	 */
-	public static void deleteDirectory(File directory, boolean failOnError) {
-	    boolean success = deleteDirectory(directory);
-	    if (!success) {
-	        throw new RuntimeException("Failed to delete directory " + directory);
-	    }
-	}
+     * @return <code>true</code> if the deletion was successfully.
+     */
+    public static boolean deleteDirectory(File directory) {
+        if (!directory.isDirectory()) {
+            log.warn("The directory '" + directory + "' does not exist. Will return without delete.");
+            return false;
+        }
 
-	/**
-	 * Recursively deletes the given directory
-	 * @param directory The directory to delete
-	 * @return <code>true</code> if the deletion was successfully.
-	 */
-	public static boolean deleteDirectory(File directory) {
-		if (!directory.isDirectory()) {
-			log.warn("The directory '" + directory + "' does not exist. Will return without delete.");
-			return false;
-		}
-		
-		// First we must delete all files in the directory
-		File[] containedFiles = directory.listFiles();
-		for (int i = 0; i < containedFiles.length; i++) {
-			File currentFile = containedFiles[i];
-			if(currentFile.isDirectory()) {
-				// First delete children recursively
-				deleteDirectory(currentFile);
-			} else {
-				// Delete the file itself
-				boolean success = currentFile.delete();
-				if(!success){
-					log.warn("Failed to delete file '" + currentFile + "'");
-				}
-			}		
-		}
-		// Finally delete the directory itself
-		boolean success = directory.delete();
-		if (!success) {
-			log.warn("Failed to delete file '" + directory + "'");
-		}
-		return success;
-	}
+        // First we must delete all files in the directory
+        File[] containedFiles = directory.listFiles();
+        for (int i = 0; i < containedFiles.length; i++) {
+            File currentFile = containedFiles[i];
+            if (currentFile.isDirectory()) {
+                // First delete children recursively
+                deleteDirectory(currentFile);
+            } else {
+                // Delete the file itself
+                boolean success = currentFile.delete();
+                if (!success) {
+                    log.warn("Failed to delete file '" + currentFile + "'");
+                }
+            }
+        }
+        // Finally delete the directory itself
+        boolean success = directory.delete();
+        if (!success) {
+            log.warn("Failed to delete file '" + directory + "'");
+        }
+        return success;
+    }
 
-	public static InputSource createInputSource(File file) throws MalformedURLException {
+    public static InputSource createInputSource(File file) throws MalformedURLException {
         String uri = file.getAbsoluteFile().toURI().toURL().toString();
         InputSource source = new InputSource(uri);
         return source;
-	}
+    }
 
     /**
      * Copy file.
-     * 
-     * @param srcFile the src file
+     *
+     * @param srcFile  the src file
      * @param destFile the dest file
-     * @throws IOException 
+     * @throws IOException
      */
     public static void copyFile(File srcFile, File destFile) throws IOException {
         log.debug("copyFile(srcFile={}, destFile={}) - start", srcFile, destFile);
@@ -128,7 +131,7 @@ public class FileHelper {
     /**
      * Get a list of Strings from a given file.
      * Uses the default encoding of the current platform.
-     * 
+     *
      * @param theFile the file to be read
      * @return a list of Strings, each one representing one line from the given file
      * @throws IOException

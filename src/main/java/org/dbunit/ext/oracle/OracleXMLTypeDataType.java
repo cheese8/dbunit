@@ -33,30 +33,25 @@ import oracle.jdbc.OraclePreparedStatement;
 import oracle.jdbc.OracleResultSet;
 
 /**
- *
  * TODO UnitTests are completely missing
- * 
+ *
  * @author Phil Barr
  * @author Last changed by: $Author$
  * @version $Revision$ $Date$
  * @since 2.4.0
  */
-public class OracleXMLTypeDataType extends BlobDataType
-{
-    OracleXMLTypeDataType()
-    {
+public class OracleXMLTypeDataType extends BlobDataType {
+    OracleXMLTypeDataType() {
         super("SQLXML", Types.SQLXML);
     }
 
     @Override
     public Object getSqlValue(int column, ResultSet resultSet)
-            throws SQLException, TypeCastException
-    {
+            throws SQLException, TypeCastException {
         byte[] data = null;
         OracleResultSet oracleResultSet = (OracleResultSet) resultSet;
         SQLXML sqlXml = oracleResultSet.getSQLXML(column);
-        if (sqlXml != null)
-        {
+        if (sqlXml != null) {
             data = sqlXml.getString().getBytes();
         }
 
@@ -66,8 +61,7 @@ public class OracleXMLTypeDataType extends BlobDataType
 
     @Override
     public void setSqlValue(Object value, int column,
-            PreparedStatement statement) throws SQLException, TypeCastException
-    {
+                            PreparedStatement statement) throws SQLException, TypeCastException {
         OraclePreparedStatement oraclePreparedStatement =
                 (OraclePreparedStatement) statement;
         SQLXML sqlXmlValue =
@@ -79,8 +73,7 @@ public class OracleXMLTypeDataType extends BlobDataType
     }
 
     @Override
-    public String getSqlTypeName()
-    {
+    public String getSqlTypeName() {
         return "SYS.XMLTYPE";
     }
 }

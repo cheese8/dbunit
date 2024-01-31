@@ -48,7 +48,7 @@ public class CompositeTable extends AbstractTable {
      */
     public CompositeTable(ITableMetaData metaData, ITable table) {
         _metaData = metaData;
-        _tables = new ITable[] {table};
+        _tables = new ITable[]{table};
     }
 
     /**
@@ -66,7 +66,7 @@ public class CompositeTable extends AbstractTable {
      */
     public CompositeTable(ITable table1, ITable table2) {
         _metaData = table1.getTableMetaData();
-        _tables = new ITable[] {table1, table2};
+        _tables = new ITable[]{table1, table2};
     }
 
     /**
@@ -78,7 +78,7 @@ public class CompositeTable extends AbstractTable {
         _metaData =
                 new DefaultTableMetaData(newName, metaData.getColumns(),
                         metaData.getPrimaryKeys());
-        _tables = new ITable[] {table};
+        _tables = new ITable[]{table};
     }
 
     // //////////////////////////////////////////////////////////////////////////

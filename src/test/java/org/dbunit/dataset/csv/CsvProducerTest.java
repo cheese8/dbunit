@@ -116,30 +116,29 @@ public class CsvProducerTest extends TestCase {
         final String fromAnt = "target/csv/from-ant";
         final File dir = new File(fromAnt);
         FileHelper.deleteDirectory(dir);
-        
+
         try {
             Export export = new Export();
             export.setFormat(FormatSupport.CSV.getFormat());
             export.setDest(dir);
-    
+
             Query query = new Query();
             query.setName("orders");
             query.setSql("select * from orders");
             export.addQuery(query);
-    
+
             Query query2 = new Query();
             query2.setName("orders_row");
             query2.setSql("select * from orders_row");
             export.addQuery(query2);
-    
+
             export.execute(getConnection());
-    
+
             final File ordersFile = new File(fromAnt + "/orders.csv");
             assertTrue("file '" + ordersFile.getAbsolutePath() + "' does not exists", ordersFile.exists());
             final File ordersRowFile = new File(fromAnt + "/orders_row.csv");
             assertTrue("file " + ordersRowFile + " does not exists", ordersRowFile.exists());
-        }
-        finally {
+        } finally {
             FileHelper.deleteDirectory(dir);
         }
     }
@@ -170,7 +169,8 @@ public class CsvProducerTest extends TestCase {
         try {
             statement.execute("DROP TABLE ORDERS");
             statement.execute("DROP TABLE ORDERS_ROW");
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         statement.execute("CREATE TABLE ORDERS (ID INTEGER, DESCRIPTION VARCHAR)");
         statement.execute("CREATE TABLE ORDERS_ROW (ID INTEGER, DESCRIPTION VARCHAR, QUANTITY INTEGER)");
         //statement.execute("delete from orders");

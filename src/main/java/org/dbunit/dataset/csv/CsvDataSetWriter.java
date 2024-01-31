@@ -44,8 +44,8 @@ import org.dbunit.dataset.stream.IDataSetConsumer;
 
 /**
  * @author fede
- * @since 24-set-2003 15.27.05
  * @version $Revision$
+ * @since 24-set-2003 15.27.05
  */
 public class CsvDataSetWriter implements IDataSetConsumer {
 
@@ -68,7 +68,9 @@ public class CsvDataSetWriter implements IDataSetConsumer {
     private ITableMetaData _activeMetaData;
     private String theDirectory;
     private static char testExport;
-    /** list of tables */
+    /**
+     * list of tables
+     */
     private List tableList;
 
     public CsvDataSetWriter(String theDirectory) {
@@ -91,7 +93,7 @@ public class CsvDataSetWriter implements IDataSetConsumer {
         logger.debug("startDataSet() - start");
 
         try {
-        	tableList = new LinkedList();
+            tableList = new LinkedList();
             new File(getTheDirectory()).mkdirs();
         } catch (Exception e) {
             throw new DataSetException("Error while creating the destination directory '" + getTheDirectory() + "'", e);
@@ -101,25 +103,23 @@ public class CsvDataSetWriter implements IDataSetConsumer {
     public void endDataSet() throws DataSetException {
         logger.debug("endDataSet() - start");
 
-    	// write out table ordering file
-    	File orderingFile = new File(getTheDirectory(), CsvDataSet.TABLE_ORDERING_FILE);
-    	
-    	PrintWriter pw = null;
-    	try {
-			pw = new PrintWriter(new FileWriter(orderingFile));
-			for (Iterator fileNames = tableList.iterator(); fileNames.hasNext();) {
-				String file = (String) fileNames.next();
-				pw.println(file);
-			}
-		} 
-    	catch (IOException e) {
-			throw new DataSetException("problems writing the table ordering file", e);
-		}
-    	finally {
-    	    if(pw != null){
-    	        pw.close();
-    	    }
-    	}
+        // write out table ordering file
+        File orderingFile = new File(getTheDirectory(), CsvDataSet.TABLE_ORDERING_FILE);
+
+        PrintWriter pw = null;
+        try {
+            pw = new PrintWriter(new FileWriter(orderingFile));
+            for (Iterator fileNames = tableList.iterator(); fileNames.hasNext(); ) {
+                String file = (String) fileNames.next();
+                pw.println(file);
+            }
+        } catch (IOException e) {
+            throw new DataSetException("problems writing the table ordering file", e);
+        } finally {
+            if (pw != null) {
+                pw.close();
+            }
+        }
     }
 
     public void startTable(ITableMetaData metaData) throws DataSetException {
@@ -208,7 +208,7 @@ public class CsvDataSetWriter implements IDataSetConsumer {
     protected static String escape(String stringValue) {
         logger.debug("escape(stringValue={}) - start", stringValue);
 
-        char [] array = stringValue.toCharArray();
+        char[] array = stringValue.toCharArray();
         testExport = QUOTE.toCharArray()[0];
         final char escape = ESCAPE.toCharArray()[0];
         StringBuffer buffer = new StringBuffer();

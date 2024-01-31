@@ -37,8 +37,7 @@ import junit.framework.TestCase;
  * @version $Revision$ $Date$
  * @since 2.4.0
  */
-public class ForeignKeyRelationshipEdgeTest extends TestCase
-{
+public class ForeignKeyRelationshipEdgeTest extends TestCase {
     private final ForeignKeyRelationshipEdge e1 =
             new ForeignKeyRelationshipEdge("table1", "table2", "fk_col",
                     "pk_col");
@@ -54,12 +53,10 @@ public class ForeignKeyRelationshipEdgeTest extends TestCase
 
     private final ForeignKeyRelationshipEdge equalSubclass =
             new ForeignKeyRelationshipEdge("table1", "table2", "fk_col",
-                    "pk_col")
-            {
+                    "pk_col") {
             };
 
-    public void testEqualsHashCode()
-    {
+    public void testEqualsHashCode() {
         // Use gsbase "EqualsTester" library for this - easier and less code for
         // equals/hashCode test
         new EqualsTester(e1, equal, notEqual1, equalSubclass);
@@ -67,8 +64,7 @@ public class ForeignKeyRelationshipEdgeTest extends TestCase
     }
 
     @Test
-    public void testCompareTo()
-    {
+    public void testCompareTo() {
         assertThat("Equal instances have different compareTo.",
                 e1.compareTo(equal), equalTo(0));
 

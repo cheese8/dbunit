@@ -36,32 +36,27 @@ import junitx.framework.StringAssert;
 
 /**
  * @author Manuel Laflamme
- * @since Apr 29, 2003
  * @version $Revision$
+ * @since Apr 29, 2003
  */
-public class FlatDtdProducerTest extends AbstractProducerTest
-{
+public class FlatDtdProducerTest extends AbstractProducerTest {
     private static final File DTD_FILE =
             TestUtils.getFile("dtd/flatDtdProducerTest.dtd");
 
-    public FlatDtdProducerTest(String s)
-    {
+    public FlatDtdProducerTest(String s) {
         super(s);
     }
 
-    protected IDataSetProducer createProducer() throws Exception
-    {
+    protected IDataSetProducer createProducer() throws Exception {
         InputSource source = new InputSource(new FileInputStream(DTD_FILE));
         return new FlatDtdProducer(source);
     }
 
-    protected int[] getExpectedRowCount() throws Exception
-    {
-        return new int[] {0, 0, 0, 0, 0, 0};
+    protected int[] getExpectedRowCount() throws Exception {
+        return new int[]{0, 0, 0, 0, 0, 0};
     }
 
-    public void testSequenceModel() throws Exception
-    {
+    public void testSequenceModel() throws Exception {
         // Setup consumer
         MockDataSetConsumer consumer = new MockDataSetConsumer();
         consumer.addExpectedStartDataSet();
@@ -73,8 +68,8 @@ public class FlatDtdProducerTest extends AbstractProducerTest
         // Setup producer
         String content =
                 "<!ELEMENT dataset (DUPLICATE_TABLE*,TEST_TABLE+,DUPLICATE_TABLE?)>" +
-                "<!ELEMENT TEST_TABLE EMPTY>" +
-                "<!ELEMENT DUPLICATE_TABLE EMPTY>";
+                        "<!ELEMENT TEST_TABLE EMPTY>" +
+                        "<!ELEMENT DUPLICATE_TABLE EMPTY>";
         InputSource source = new InputSource(new StringReader(content));
         FlatDtdProducer producer = new FlatDtdProducer(source);
         producer.setConsumer(consumer);
@@ -84,8 +79,7 @@ public class FlatDtdProducerTest extends AbstractProducerTest
         consumer.verify();
     }
 
-    public void testChoicesModel() throws Exception
-    {
+    public void testChoicesModel() throws Exception {
         // Setup consumer
         MockDataSetConsumer consumer = new MockDataSetConsumer();
         consumer.addExpectedStartDataSet();
@@ -96,8 +90,8 @@ public class FlatDtdProducerTest extends AbstractProducerTest
         // Setup producer
         String content =
                 "<!ELEMENT dataset (TEST_TABLE|SECOND_TABLE)>" +
-                "<!ELEMENT TEST_TABLE EMPTY>" +
-                "<!ELEMENT SECOND_TABLE EMPTY>";
+                        "<!ELEMENT TEST_TABLE EMPTY>" +
+                        "<!ELEMENT SECOND_TABLE EMPTY>";
         InputSource source = new InputSource(new StringReader(content));
         FlatDtdProducer producer = new FlatDtdProducer(source);
         producer.setConsumer(consumer);
@@ -107,8 +101,7 @@ public class FlatDtdProducerTest extends AbstractProducerTest
         consumer.verify();
     }
 
-    public void testChoicesModel_ElementDeclarationForTableMissing() throws Exception
-    {
+    public void testChoicesModel_ElementDeclarationForTableMissing() throws Exception {
         // Setup consumer
         MockDataSetConsumer consumer = new MockDataSetConsumer();
 //        consumer.addExpectedStartDataSet();
@@ -123,22 +116,18 @@ public class FlatDtdProducerTest extends AbstractProducerTest
         producer.setConsumer(consumer);
 
         // Produce and verify consumer
-        try
-        {
+        try {
             producer.produce();
             fail("Should not be able to produce the dataset from an incomplete DTD");
-        }
-        catch(DataSetException expected)
-        {
+        } catch (DataSetException expected) {
             String expectedStartsWith = "ELEMENT/ATTRIBUTE declaration for '" + "SECOND_TABLE" + "' is missing. ";
             StringAssert.assertStartsWith(expectedStartsWith, expected.getMessage());
         }
 //        consumer.verify();
     }
 
-    
-    public void testAttrListBeforeParentElement() throws Exception
-    {
+
+    public void testAttrListBeforeParentElement() throws Exception {
         // Setup consumer
         MockDataSetConsumer consumer = new MockDataSetConsumer();
         consumer.addExpectedStartDataSet();
@@ -149,12 +138,12 @@ public class FlatDtdProducerTest extends AbstractProducerTest
         // Setup producer
         String content =
                 "<!ELEMENT dataset (TEST_TABLE)>" +
-                "<!ATTLIST TEST_TABLE " +
-                    "COLUMN0 CDATA #IMPLIED " +
-                    "COLUMN1 CDATA #IMPLIED " +
-                    "COLUMN2 CDATA #IMPLIED " +
-                    "COLUMN3 CDATA #IMPLIED>" +
-                "<!ELEMENT TEST_TABLE EMPTY>";
+                        "<!ATTLIST TEST_TABLE " +
+                        "COLUMN0 CDATA #IMPLIED " +
+                        "COLUMN1 CDATA #IMPLIED " +
+                        "COLUMN2 CDATA #IMPLIED " +
+                        "COLUMN3 CDATA #IMPLIED>" +
+                        "<!ELEMENT TEST_TABLE EMPTY>";
 
         InputSource source = new InputSource(new StringReader(content));
         FlatDtdProducer producer = new FlatDtdProducer(source);
@@ -164,7 +153,7 @@ public class FlatDtdProducerTest extends AbstractProducerTest
         producer.produce();
         consumer.verify();
     }
-    
+
     public void testCleanupTableName() throws Exception {
         // Setup consumer
         MockDataSetConsumer consumer = new MockDataSetConsumer();
@@ -173,13 +162,13 @@ public class FlatDtdProducerTest extends AbstractProducerTest
         consumer.addExpectedEmptyTableIgnoreColumns("TABLE_2");
         consumer.addExpectedEmptyTableIgnoreColumns("TABLE_3");
         consumer.addExpectedEndDataSet();
-        
+
         // Setup producer
         String content =
                 "<!ELEMENT dataset (TABLE_1,(TABLE_2,TABLE_3+)?)+>" +
-                "<!ELEMENT TABLE_1 EMPTY>" +
-                "<!ELEMENT TABLE_2 EMPTY>" +
-                "<!ELEMENT TABLE_3 EMPTY>";
+                        "<!ELEMENT TABLE_1 EMPTY>" +
+                        "<!ELEMENT TABLE_2 EMPTY>" +
+                        "<!ELEMENT TABLE_3 EMPTY>";
 
         InputSource source = new InputSource(new StringReader(content));
         FlatDtdProducer producer = new FlatDtdProducer(source);
@@ -189,17 +178,16 @@ public class FlatDtdProducerTest extends AbstractProducerTest
         producer.produce();
         consumer.verify();
     }
-    
-    public void testANYModel() throws Exception
-    {
+
+    public void testANYModel() throws Exception {
         // Setup consumer
         FlatDtdDataSet consumer = new FlatDtdDataSet();
 
         // Setup producer
         String content =
-            "<!ELEMENT dataset ANY>" +
-            "<!ELEMENT TEST_TABLE EMPTY>" +
-            "<!ELEMENT SECOND_TABLE EMPTY>";
+                "<!ELEMENT dataset ANY>" +
+                        "<!ELEMENT TEST_TABLE EMPTY>" +
+                        "<!ELEMENT SECOND_TABLE EMPTY>";
         InputSource source = new InputSource(new StringReader(content));
         FlatDtdProducer producer = new FlatDtdProducer(source);
         producer.setConsumer(consumer);
@@ -209,6 +197,6 @@ public class FlatDtdProducerTest extends AbstractProducerTest
         assertEquals(2, consumer.getTables().length);
         assertNotNull(consumer.getTable("TEST_TABLE"));
         assertNotNull(consumer.getTable("SECOND_TABLE"));
-    } 
-    
+    }
+
 }

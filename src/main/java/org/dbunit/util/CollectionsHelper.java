@@ -30,6 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Helper for collections-related methods.
  * <br>
+ *
  * @author Felipe Leme (dbunit@felipeal.net)
  * @author gommma (gommma AT users.sourceforge.net)
  * @author Last changed by: $Author$
@@ -40,11 +41,13 @@ import lombok.extern.slf4j.Slf4j;
 public class CollectionsHelper {
 
     // class is "static"
-    private CollectionsHelper() {}
+    private CollectionsHelper() {
+    }
 
     /**
      * Returns a Set from an array of objects.
      * Note the Iterator returned by this Set preserves the order of the array.
+     *
      * @param objects array of objects
      * @return Set with the elements of the array or null if entry is null
      */
@@ -59,7 +62,8 @@ public class CollectionsHelper {
 
     /**
      * Returns an array of Objects from a Set.
-     * @param set a Set 
+     *
+     * @param set a Set
      * @return array of Objects with the elements of the Set or null if set is null
      */
     public static Object[] setToObjects(Set set) {
@@ -73,6 +77,7 @@ public class CollectionsHelper {
 
     /**
      * Returns an array of Strings from a Set.
+     *
      * @param set a Set of Strings
      * @return array of Strings with the elements of the Set or null if set is null
      */
