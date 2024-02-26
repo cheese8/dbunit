@@ -16,7 +16,7 @@ import org.dbunit.dataset.datatype.TypeCastException;
  * @since 2.7.0
  */
 @Slf4j
-public class IsActualContainingExpectedStringValueComparer extends ValueComparerTemplateBase {
+public class IsActualContainingExpectedStringValueComparer extends AbstractValueComparatorTemplate {
     @Override
     protected boolean isExpected(final ITable expectedTable, final ITable actualTable, final int rowNum, final String columnName, final DataType dataType, final Object expectedValue, final Object actualValue) throws DatabaseUnitException {
         final boolean isExpected;

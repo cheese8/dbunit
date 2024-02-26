@@ -27,7 +27,7 @@ import org.dbunit.dataset.datatype.DataType;
  * @since 2.6.0
  */
 @Slf4j
-public class ConditionalSetBiValueComparer<T> extends ValueComparerBase {
+public class ConditionalSetBiValueComparer<T> extends AbstractValueComparator {
     private final ValueFactory<T> actualValueFactory;
     private final Set<T> values;
     private final ValueComparator inValuesValueComparator;

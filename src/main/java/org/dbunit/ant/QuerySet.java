@@ -110,21 +110,17 @@ public class QuerySet extends ProjectComponent {
     private final List<FilterSet> filterSets = new ArrayList<>();
 
     private final static String ERR_MSG = "Cannot specify 'id' and 'refid' attributes together in queryset.";
-
     public QuerySet() {
         super();
     }
-
     public void addQuery(Query query) {
         log.debug("addQuery(query={}) - start", query);
         queries.add(query);
     }
-
     public void addFilterSet(FilterSet filterSet) {
         log.debug("addFilterSet(filterSet={}) - start", filterSet);
         filterSets.add(filterSet);
     }
-
     public void setId(String string) {
         log.debug("setId(string={}) - start", string);
         if (refid != null) {
@@ -132,7 +128,6 @@ public class QuerySet extends ProjectComponent {
         }
         id = string;
     }
-
     public void setRefid(String string) {
         log.debug("setRefid(string={}) - start", string);
         if (id != null) {
@@ -140,7 +135,6 @@ public class QuerySet extends ProjectComponent {
         }
         refid = string;
     }
-
     public List<Query> getQueries() {
         log.debug("getQueries() - start");
         for (Query query : queries) {
@@ -148,31 +142,26 @@ public class QuerySet extends ProjectComponent {
         }
         return queries;
     }
-
     private void replaceTokens(Query query) {
         log.debug("replaceTokens(query={}) - start", query);
         for (FilterSet filterSet : filterSets) {
             query.setSql(filterSet.replaceTokens(query.getSql()));
         }
     }
-
     public void copyQueriesFrom(QuerySet referenced) {
         log.debug("copyQueriesFrom(referenced={}) - start", referenced);
         for (Query query : referenced.queries) {
             addQuery(query);
         }
     }
-
     public QueryDataSet getQueryDataSet(IDatabaseConnection connection) throws AmbiguousTableNameException {
         log.debug("getQueryDataSet(connection={}) - start", connection);
-
         //incorporate queries from referenced query-set
         String refid = getRefid();
         if (refid != null) {
             QuerySet referenced = (QuerySet) getProject().getReference(refid);
             copyQueriesFrom(referenced);
         }
-
         QueryDataSet partialDataSet = new QueryDataSet(connection);
         for (Query query : getQueries()) {
             partialDataSet.addTable(query.getName(), query.getSql());

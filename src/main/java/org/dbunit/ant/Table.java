@@ -37,7 +37,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Table {
     private String name;
-
     public String toString() {
         return "Table: name=" + name;
     }

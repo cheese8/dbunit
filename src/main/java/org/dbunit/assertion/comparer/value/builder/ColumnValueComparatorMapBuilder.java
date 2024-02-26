@@ -7,13 +7,12 @@ import java.util.Map;
 import org.dbunit.assertion.comparer.value.ValueComparator;
 
 /**
- * Convenience methods to help build the map of column name ->
- * {@link ValueComparator}.
+ * Convenience methods to help build the map of column name -> {@link ValueComparator}.
  *
  * @author Jeff Jensen
  * @since 2.6.0
  */
-public class ColumnValueComparerMapBuilder {
+public class ColumnValueComparatorMapBuilder {
     private final Map<String, ValueComparator> comparators = new HashMap<>();
 
     /**
@@ -21,7 +20,7 @@ public class ColumnValueComparerMapBuilder {
      *
      * @return this for fluent syntax.
      */
-    public ColumnValueComparerMapBuilder add(final String columnName, final ValueComparator valueComparator) {
+    public ColumnValueComparatorMapBuilder add(final String columnName, final ValueComparator valueComparator) {
         comparators.put(columnName, valueComparator);
         return this;
     }
