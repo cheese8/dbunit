@@ -23,7 +23,7 @@ import org.dbunit.dataset.datatype.TypeCastException;
  */
 @Slf4j
 @AllArgsConstructor
-public class IsActualWithinToleranceOfExpectedTimestampValueComparer extends ValueComparerTemplateBase {
+public class IsActualWithinToleranceOfExpectedTimestampValueComparer extends AbstractValueComparatorTemplate {
     public static final long ONE_SECOND_IN_MILLIS = 1000;
     public static final long ONE_MINUTE_IN_MILLIS = ONE_SECOND_IN_MILLIS * 60;
 

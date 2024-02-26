@@ -22,32 +22,32 @@ public class DefaultVerifyTableDefinitionVerifier implements VerifyTableDefiniti
         verify(tableName, columnExclusionFilters, columnValueComparators);
     }
 
-    public void verify(final String tableName, final String[] columnExclusionFilters, final Map<String, ValueComparator> columnValueComparers) {
+    public void verify(final String tableName, final String[] columnExclusionFilters, final Map<String, ValueComparator> columnValueComparators) {
         final boolean hasColumnExclusionFilters = hasColumnExclusionFilters(columnExclusionFilters);
-        final boolean hasColumnValueComparers = hasColumnValueComparers(columnValueComparers);
-        if (hasColumnExclusionFilters && hasColumnValueComparers) {
-            doVerify(tableName, columnExclusionFilters, columnValueComparers);
+        final boolean hasColumnValueComparators = hasColumnValueComparators(columnValueComparators);
+        if (hasColumnExclusionFilters && hasColumnValueComparators) {
+            doVerify(tableName, columnExclusionFilters, columnValueComparators);
         }
     }
 
     /**
-     * Verify the columnExclusionFilters and columnValueComparers agree.
+     * Verify the columnExclusionFilters and columnValueComparators agree.
      */
-    protected void doVerify(final String tableName, final String[] columnExclusionFilters, final Map<String, ValueComparator> columnValueComparers) {
+    protected void doVerify(final String tableName, final String[] columnExclusionFilters, final Map<String, ValueComparator> columnValueComparators) {
         for (final String columnName : columnExclusionFilters) {
             log.trace("doVerify: columnName={}", columnName);
-            failIfColumnValueComparersHaveExcludedColumn(tableName, columnName, columnValueComparers);
+            failIfColumnValueComparatorsHaveExcludedColumn(tableName, columnName, columnValueComparators);
         }
     }
 
-    protected void failIfColumnValueComparersHaveExcludedColumn(final String tableName, final String columnName, final Map<String, ValueComparator> columnValueComparers) {
-        final ValueComparator valueComparator = columnValueComparers.get(columnName);
+    protected void failIfColumnValueComparatorsHaveExcludedColumn(final String tableName, final String columnName, final Map<String, ValueComparator> columnValueComparators) {
+        final ValueComparator valueComparator = columnValueComparators.get(columnName);
         if (valueComparator == null) {
-            log.trace("failIfColumnValueComparersHaveExcludedColumn: config ok as no valueComparer found for excluded columnName={}", columnName);
+            log.trace("failIfColumnValueComparatorsHaveExcludedColumn: config ok as no valueComparer found for excluded columnName={}", columnName);
         } else {
             final String msg = String.format("Test setup conflict: table=%s, columnName=%s, has a VerifyTableDefinition column exclusion and a specific column ValueComparer=%s, " +
                     "to test the column, remove the exclusion to ignore the column, remove the ValueComparer", tableName, columnName, valueComparator);
-            log.error("failIfColumnValueComparersHaveExcludedColumn: {}", msg);
+            log.error("failIfColumnValueComparatorsHaveExcludedColumn: {}", msg);
             throw new IllegalStateException(msg);
         }
     }
@@ -60,10 +60,10 @@ public class DefaultVerifyTableDefinitionVerifier implements VerifyTableDefiniti
         return !isMissing;
     }
 
-    protected boolean hasColumnValueComparers(final Map<String, ValueComparator> columnValueComparers) {
-        final boolean isMissing = columnValueComparers == null || columnValueComparers.isEmpty();
+    protected boolean hasColumnValueComparators(final Map<String, ValueComparator> columnValueComparators) {
+        final boolean isMissing = columnValueComparators == null || columnValueComparators.isEmpty();
         if (isMissing) {
-            log.info("hasColumnValueComparers: no columnValueComparers specified");
+            log.info("hasColumnValueComparators: no columnValueComparators specified");
         }
         return !isMissing;
     }

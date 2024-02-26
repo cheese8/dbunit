@@ -6,25 +6,24 @@ import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.datatype.DataType;
 
 /**
- * Base class for {@link ValueComparator}s providing a template method and common
+ * Abstract class for {@link ValueComparator}s providing a template method and common
  * elements, mainly consistent log message and toString.
  *
  * @author Jeff Jensen
  * @since 2.6.0
  */
 @Slf4j
-public abstract class ValueComparerBase implements ValueComparator {
+public abstract class AbstractValueComparator implements ValueComparator {
     /**
      * Format String for consistent fail message; substitution strings are:
      * actual, fail phrase, expected.
      */
-    public static final String BASE_FAIL_MSG = "Actual value='%s' is %s expected value='%s'";
+    public static final String FAIL_MSG = "Actual value='%s' is %s expected value='%s'";
 
     /**
      * {@inheritDoc}
      * <p>
-     * This implementation calls
-     * {@link #doCompare(ITable, ITable, int, String, DataType, Object, Object)}.
+     * This implementation calls {@link #doCompare(ITable, ITable, int, String, DataType, Object, Object)}.
      */
     public String compare(final ITable expectedTable, final ITable actualTable, final int rowNum, final String columnName, final DataType dataType, final Object expectedValue, final Object actualValue) throws DatabaseUnitException {
         final String failMessage;
@@ -36,8 +35,7 @@ public abstract class ValueComparerBase implements ValueComparator {
     /**
      * Do the comparison and return a fail message or null if comparison passes.
      *
-     * @see ValueComparator#compare(ITable, ITable, int, String, DataType, Object,
-     * Object)
+     * @see ValueComparator#compare(ITable, ITable, int, String, DataType, Object, Object)
      */
     protected abstract String doCompare(final ITable expectedTable, final ITable actualTable, final int rowNum, final String columnName, final DataType dataType, final Object expectedValue, final Object actualValue) throws DatabaseUnitException;
 

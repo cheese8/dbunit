@@ -11,7 +11,7 @@ import org.dbunit.dataset.datatype.DataType;
  * @author Jeff Jensen
  * @since 2.6.0
  */
-public abstract class ValueComparerTemplateBase extends ValueComparerBase {
+public abstract class AbstractValueComparatorTemplate extends AbstractValueComparator {
     /**
      * {@inheritDoc}
      * <p>
@@ -37,7 +37,7 @@ public abstract class ValueComparerTemplateBase extends ValueComparerBase {
      */
     protected String makeFailMessage(final Object expectedValue, final Object actualValue) {
         final String failPhrase = getFailPhrase();
-        return String.format(BASE_FAIL_MSG, actualValue, failPhrase, expectedValue);
+        return String.format(FAIL_MSG, actualValue, failPhrase, expectedValue);
     }
 
     /**
@@ -46,7 +46,7 @@ public abstract class ValueComparerTemplateBase extends ValueComparerBase {
     protected abstract boolean isExpected(final ITable expectedTable, final ITable actualTable, final int rowNum, final String columnName, final DataType dataType, final Object expectedValue, final Object actualValue) throws DatabaseUnitException;
 
     /**
-     * @return The text snippet for substitution in {@link #BASE_FAIL_MSG}.
+     * @return The text snippet for substitution in {@link #FAIL_MSG}.
      */
     protected abstract String getFailPhrase();
 }
