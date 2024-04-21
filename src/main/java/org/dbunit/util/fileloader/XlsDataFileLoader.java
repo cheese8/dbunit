@@ -65,6 +65,7 @@ public class XlsDataFileLoader extends AbstractDataFileLoader {
     /**
      * {@inheritDoc}
      */
+
     public IDataSet loadDataSet(URL url) throws DataSetException,
             IOException {
         InputStream in = url.openStream();

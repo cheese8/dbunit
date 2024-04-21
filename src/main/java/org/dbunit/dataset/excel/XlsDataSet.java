@@ -20,15 +20,10 @@
  */
 package org.dbunit.dataset.excel;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 
-import org.apache.poi.EncryptedDocumentException;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
+import com.github.pjfanning.xlsx.SharedStringsImplementationType;
+import org.apache.poi.ss.usermodel.*;
 import org.dbunit.dataset.AbstractDataSet;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.DefaultTableIterator;
@@ -38,6 +33,7 @@ import org.dbunit.dataset.ITableIterator;
 import org.dbunit.dataset.OrderedTableNameMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.github.pjfanning.xlsx.StreamingReader;
 
 /**
  * This dataset implementation can read and write MS Excel documents. Each
@@ -57,12 +53,33 @@ public class XlsDataSet extends AbstractDataSet {
 
     private final OrderedTableNameMap _tables;
 
-
     /**
      * Creates a new XlsDataSet object that loads the specified Excel document.
      */
     public XlsDataSet(File file) throws IOException, DataSetException {
-        this(new FileInputStream(file));
+        _tables = super.createTableNameMap();
+        Workbook workbook = null;
+        try {
+            InputStream inputStream = new FileInputStream(file);
+            workbook = WorkbookFactory.create(inputStream);
+        }catch(Exception ex) {
+            try {
+                workbook = StreamingReader.builder()
+                        .rowCacheSize(100)    // number of rows to keep in memory (defaults to 10)
+                        .bufferSize(4096)     // buffer size (in bytes) to use when reading InputStream to file (defaults to 1024)
+                        .setSharedStringsImplementationType(SharedStringsImplementationType.POI_READ_ONLY)
+                        .open(file);
+            }catch(Exception e) {
+            }
+        }
+        if (workbook == null) {
+            throw new IOException();
+        }
+
+        for (Sheet sheet : workbook) {
+            ITable table = new XlsTable(sheet.getSheetName(), sheet);
+            _tables.add(table.getTableMetaData().getTableName(), table);
+        }
     }
 
     /**
@@ -71,12 +88,7 @@ public class XlsDataSet extends AbstractDataSet {
     public XlsDataSet(InputStream in) throws IOException, DataSetException {
         _tables = super.createTableNameMap();
 
-        Workbook workbook;
-        try {
-            workbook = WorkbookFactory.create(in);
-        } catch (EncryptedDocumentException e) {
-            throw new IOException(e);
-        }
+        Workbook workbook = WorkbookFactory.create(in);
 
         int sheetCount = workbook.getNumberOfSheets();
         for (int i = 0; i < sheetCount; i++) {

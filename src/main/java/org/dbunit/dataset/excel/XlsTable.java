@@ -23,11 +23,11 @@ package org.dbunit.dataset.excel;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.TimeZone;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import org.apache.commons.compress.utils.Lists;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CellType;
@@ -65,8 +65,10 @@ class XlsTable extends AbstractTable {
 
     public XlsTable(String sheetName, Sheet sheet) throws DataSetException {
         int rowCount = sheet.getLastRowNum();
-        if (rowCount >= 0 && sheet.getRow(0) != null) {
-            _metaData = createMetaData(sheetName, sheet.getRow(0));
+        Iterator<Row> rowIt = sheet.iterator();
+        List<Row> rows = Lists.newArrayList(rowIt);
+        if (rowCount >= 0 && rows.get(0) != null) {
+            _metaData = createMetaData(sheetName, rows.get(0));
         } else {
             _metaData = new DefaultTableMetaData(sheetName, new Column[0]);
         }
@@ -127,7 +129,9 @@ class XlsTable extends AbstractTable {
         assertValidRowIndex(row);
 
         int columnIndex = getColumnIndex(column);
-        Cell cell = _sheet.getRow(row + 1).getCell(columnIndex);
+        Iterator<Row> rowIt = _sheet.iterator();
+        List<Row> rows = Lists.newArrayList(rowIt);
+        Cell cell = rows.get(row + 1).getCell(columnIndex);
         if (cell == null) {
             return null;
         }
