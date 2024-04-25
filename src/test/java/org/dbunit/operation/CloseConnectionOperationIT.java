@@ -23,6 +23,7 @@ package org.dbunit.operation;
 
 import org.dbunit.AbstractDatabaseIT;
 import org.dbunit.database.MockDatabaseConnection;
+import org.dbunit.dataset.IDataSet;
 
 /**
  * @author Manuel Laflamme
@@ -43,7 +44,7 @@ public class CloseConnectionOperationIT extends AbstractDatabaseIT {
         connection.setExpectedCloseCalls(1);
 
         // execute operation
-        new CloseConnectionOperation(operation).execute(connection, null);
+        new CloseConnectionOperation(operation).execute(connection, (IDataSet)null);
 
         // verify
         operation.verify();

@@ -25,6 +25,7 @@ import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
 
+import java.io.File;
 import java.sql.SQLException;
 
 /**
@@ -91,7 +92,31 @@ public abstract class DatabaseOperation {
      * @param connection the database connection.
      * @param dataSet    the dataset to be used by this operation.
      */
-    public abstract void execute(IDatabaseConnection connection, IDataSet dataSet) throws DatabaseUnitException, SQLException;
+    public void execute(IDatabaseConnection connection, IDataSet dataSet) throws DatabaseUnitException, SQLException {
+
+    }
+
+    /**
+     * Executes this operation on the specified database using the specified
+     * dataset contents.
+     *
+     * @param connection the database connection.
+     * @param dataSet    the dataset to be used by this operation.
+     */
+    public void execute(IDatabaseConnection connection, File sqlFIle) throws DatabaseUnitException, SQLException {
+
+    }
+
+    /**
+     * Executes this operation on the specified database using the specified
+     * dataset contents.
+     *
+     * @param connection the database connection.
+     * @param dataSet    the dataset to be used by this operation.
+     */
+    public void execute(IDatabaseConnection connection, String sqlFIle) throws DatabaseUnitException, SQLException {
+
+    }
 
     private static class DummyOperation extends DatabaseOperation {
         @Override

@@ -31,6 +31,7 @@ import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ITableIterator;
 import org.dbunit.dataset.ITableMetaData;
 
+import java.io.File;
 import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
@@ -56,7 +57,32 @@ import java.util.Stack;
 @NoArgsConstructor
 public class ExecuteSqlOperation extends AbstractOperation {
 
+    @Override
     public void execute(IDatabaseConnection connection, IDataSet dataSet) throws DatabaseUnitException, SQLException {
+
+    }
+
+    public void execute(IDatabaseConnection connection, File dataSet) throws DatabaseUnitException, SQLException {
+        //log.debug("execute(connection={}, dataSet={}, scripts={}) - start", connection, dataSet, scripts);
+
+        DatabaseConfig databaseConfig = connection.getConfig();
+        IStatementFactory statementFactory = (IStatementFactory) databaseConfig.getProperty(DatabaseConfig.PROPERTY_STATEMENT_FACTORY);
+        IBatchStatement statement = statementFactory.createBatchStatement(connection);
+        try {
+            // delete tables once each in reverse order of seeing them.
+            //for(String each : scripts) {
+            //    String sql = each;
+            //    statement.addBatch(sql);
+            //    log.debug("Added SQL: {}", sql);
+            //}
+            statement.executeBatch();
+            statement.clearBatch();
+        } finally {
+            statement.close();
+        }
+    }
+
+    public void execute(IDatabaseConnection connection, String dataSet) throws DatabaseUnitException, SQLException {
         //log.debug("execute(connection={}, dataSet={}, scripts={}) - start", connection, dataSet, scripts);
 
         DatabaseConfig databaseConfig = connection.getConfig();
