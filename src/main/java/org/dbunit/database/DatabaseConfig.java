@@ -59,6 +59,8 @@ public class DatabaseConfig {
             "http://www.dbunit.org/properties/datatypeFactory";
     public static final String PROPERTY_ESCAPE_PATTERN =
             "http://www.dbunit.org/properties/escapePattern";
+    public static final String PROPERTY_DATABASE_TYPE =
+            "http://www.dbunit.org/properties/databaseType";
     public static final String PROPERTY_TABLE_TYPE =
             "http://www.dbunit.org/properties/tableType";
     public static final String PROPERTY_PRIMARY_KEY_FILTER =
@@ -96,6 +98,7 @@ public class DatabaseConfig {
             new ConfigProperty(PROPERTY_RESULTSET_TABLE_FACTORY, IResultSetTableFactory.class, false),
             new ConfigProperty(PROPERTY_DATATYPE_FACTORY, IDataTypeFactory.class, false),
             new ConfigProperty(PROPERTY_ESCAPE_PATTERN, String.class, true),
+            new ConfigProperty(PROPERTY_DATABASE_TYPE, String.class, true),
             new ConfigProperty(PROPERTY_TABLE_TYPE, String[].class, false),
             new ConfigProperty(PROPERTY_PRIMARY_KEY_FILTER, IColumnFilter.class, true),
             new ConfigProperty(PROPERTY_BATCH_SIZE, Integer.class, false),
@@ -132,6 +135,7 @@ public class DatabaseConfig {
     private static final CachedResultSetTableFactory RESULT_SET_TABLE_FACTORY =
             new CachedResultSetTableFactory();
     private static final String DEFAULT_ESCAPE_PATTERN = null;
+    private static final String DEFAULT_DATABASE_TYPE = null;
     private static final String[] DEFAULT_TABLE_TYPE = {"TABLE"};
     private static final Integer DEFAULT_BATCH_SIZE = 100;
     private static final Integer DEFAULT_FETCH_SIZE = 100;
@@ -151,6 +155,7 @@ public class DatabaseConfig {
         setProperty(PROPERTY_RESULTSET_TABLE_FACTORY, RESULT_SET_TABLE_FACTORY);
         setProperty(PROPERTY_DATATYPE_FACTORY, DEFAULT_DATA_TYPE_FACTORY);
         setProperty(PROPERTY_ESCAPE_PATTERN, DEFAULT_ESCAPE_PATTERN);
+        setProperty(PROPERTY_DATABASE_TYPE, DEFAULT_DATABASE_TYPE);
         setProperty(PROPERTY_TABLE_TYPE, DEFAULT_TABLE_TYPE);
         setProperty(PROPERTY_BATCH_SIZE, DEFAULT_BATCH_SIZE);
         setProperty(PROPERTY_FETCH_SIZE, DEFAULT_FETCH_SIZE);
