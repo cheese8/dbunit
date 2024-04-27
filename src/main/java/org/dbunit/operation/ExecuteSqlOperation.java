@@ -27,15 +27,10 @@ import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.database.statement.IBatchStatement;
 import org.dbunit.database.statement.IStatementFactory;
-import org.dbunit.dataset.IDataSet;
-import org.dbunit.dataset.ITableIterator;
-import org.dbunit.dataset.ITableMetaData;
+import org.dbunit.util.DdlExecutor;
 
 import java.io.File;
 import java.sql.SQLException;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Stack;
 
 /**
  * Deletes all rows of tables present in the specified dataset. If the dataset
@@ -57,48 +52,17 @@ import java.util.Stack;
 @NoArgsConstructor
 public class ExecuteSqlOperation extends AbstractOperation {
 
-    @Override
-    public void execute(IDatabaseConnection connection, IDataSet dataSet) throws DatabaseUnitException, SQLException {
-
-    }
-
-    public void execute(IDatabaseConnection connection, File dataSet) throws DatabaseUnitException, SQLException {
-        //log.debug("execute(connection={}, dataSet={}, scripts={}) - start", connection, dataSet, scripts);
-
-        DatabaseConfig databaseConfig = connection.getConfig();
-        IStatementFactory statementFactory = (IStatementFactory) databaseConfig.getProperty(DatabaseConfig.PROPERTY_STATEMENT_FACTORY);
-        IBatchStatement statement = statementFactory.createBatchStatement(connection);
+    public void execute(IDatabaseConnection connection, File file) throws DatabaseUnitException, SQLException {
+        log.debug("execute(connection={}, file={}) - start", connection, file);
         try {
-            // delete tables once each in reverse order of seeing them.
-            //for(String each : scripts) {
-            //    String sql = each;
-            //    statement.addBatch(sql);
-            //    log.debug("Added SQL: {}", sql);
-            //}
-            statement.executeBatch();
-            statement.clearBatch();
-        } finally {
-            statement.close();
+            DdlExecutor.executeDdlFile(file, connection.getConnection(), false, false);
+        } catch (Exception e) {
+            throw new SQLException(e);
         }
     }
 
-    public void execute(IDatabaseConnection connection, String dataSet) throws DatabaseUnitException, SQLException {
-        //log.debug("execute(connection={}, dataSet={}, scripts={}) - start", connection, dataSet, scripts);
-
-        DatabaseConfig databaseConfig = connection.getConfig();
-        IStatementFactory statementFactory = (IStatementFactory) databaseConfig.getProperty(DatabaseConfig.PROPERTY_STATEMENT_FACTORY);
-        IBatchStatement statement = statementFactory.createBatchStatement(connection);
-        try {
-            // delete tables once each in reverse order of seeing them.
-            //for(String each : scripts) {
-            //    String sql = each;
-            //    statement.addBatch(sql);
-            //    log.debug("Added SQL: {}", sql);
-            //}
-            statement.executeBatch();
-            statement.clearBatch();
-        } finally {
-            statement.close();
-        }
+    public void execute(IDatabaseConnection connection, String sql) throws DatabaseUnitException, SQLException {
+        log.debug("execute(connection={}, sql={}) - start", connection, sql);
+        DdlExecutor.executeSql(connection.getConnection(), sql);
     }
 }

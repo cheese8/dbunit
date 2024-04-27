@@ -13,7 +13,6 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
-import org.dbunit.DdlExecutor;
 import org.dbunit.H2Environment;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
@@ -21,6 +20,7 @@ import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.NoSuchTableException;
 import org.dbunit.ext.h2.H2DataTypeFactory;
 import org.dbunit.testutil.TestUtils;
+import org.dbunit.util.DdlExecutor;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -72,7 +72,7 @@ public class DatabaseDataSet_MultiSchemaTest {
         // create database and schemas for tests
         connectionDdl = H2Environment.createJdbcConnection(DATABASE);
         DdlExecutor.executeDdlFile(TestUtils.getFile(SETUP_DDL_FILE),
-                connectionDdl);
+                connectionDdl, false);
     }
 
     @AfterClass

@@ -22,7 +22,6 @@
 package org.dbunit.dataset;
 
 import junit.framework.TestCase;
-import org.dbunit.DdlExecutor;
 import org.dbunit.HypersonicEnvironment;
 import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.DatabaseConnection;
@@ -32,6 +31,7 @@ import org.dbunit.dataset.datatype.DataType;
 import org.dbunit.dataset.xml.FlatXmlDataSet;
 import org.dbunit.ext.hsqldb.HsqldbDataTypeFactory;
 import org.dbunit.testutil.TestUtils;
+import org.dbunit.util.DdlExecutor;
 
 import java.io.FileOutputStream;
 import java.sql.Connection;
@@ -53,7 +53,7 @@ public class CompositeDataSetIterationTest extends TestCase {
     protected void setUp() throws Exception {
         super.setUp();
         this.jdbcConnection = HypersonicEnvironment.createJdbcConnection("mem:tempdb");
-        DdlExecutor.executeDdlFile(TestUtils.getFile("sql/" + sqlFile), jdbcConnection);
+        DdlExecutor.executeDdlFile(TestUtils.getFile("sql/" + sqlFile), jdbcConnection, false);
         this.connection = new DatabaseConnection(jdbcConnection);
         DatabaseConfig config = connection.getConfig();
         config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY,

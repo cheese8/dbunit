@@ -29,7 +29,6 @@ import java.util.Locale;
 
 import org.dbunit.AbstractDatabaseIT;
 import org.dbunit.DatabaseEnvironment;
-import org.dbunit.DdlExecutor;
 import org.dbunit.HypersonicEnvironment;
 import org.dbunit.TestFeature;
 import org.dbunit.dataset.Column;
@@ -43,6 +42,7 @@ import org.dbunit.dataset.datatype.DataTypeException;
 import org.dbunit.dataset.datatype.DefaultDataTypeFactory;
 import org.dbunit.dataset.datatype.IDataTypeFactory;
 import org.dbunit.testutil.TestUtils;
+import org.dbunit.util.DdlExecutor;
 
 /**
  * @author Manuel Laflamme
@@ -249,7 +249,7 @@ public class DatabaseTableMetaDataIT extends AbstractDatabaseIT {
     public void testGetColumnsForTablesMatchingSamePattern() throws Exception {
         Connection jdbcConnection = HypersonicEnvironment.createJdbcConnection("tempdb");
         DdlExecutor.executeDdlFile(TestUtils.getFile("sql/hypersonic_dataset_pattern_test.sql"),
-                jdbcConnection);
+                jdbcConnection, false);
         IDatabaseConnection connection = new DatabaseConnection(jdbcConnection);
 
         try {
@@ -275,7 +275,7 @@ public class DatabaseTableMetaDataIT extends AbstractDatabaseIT {
     public void testCaseSensitive() throws Exception {
         Connection jdbcConnection = HypersonicEnvironment.createJdbcConnection("tempdb");
         DdlExecutor.executeDdlFile(TestUtils.getFile("sql/hypersonic_case_sensitive_test.sql"),
-                jdbcConnection);
+                jdbcConnection, false);
         IDatabaseConnection connection = new DatabaseConnection(jdbcConnection);
 
         try {

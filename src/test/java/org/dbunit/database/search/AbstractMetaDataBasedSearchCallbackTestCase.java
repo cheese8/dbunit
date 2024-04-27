@@ -26,13 +26,13 @@ import java.util.Set;
 import junit.framework.TestCase;
 import junitx.framework.ArrayAssert;
 
-import org.dbunit.DdlExecutor;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 
 import org.dbunit.HypersonicEnvironment;
 import org.dbunit.testutil.TestUtils;
 import org.dbunit.util.CollectionsHelper;
+import org.dbunit.util.DdlExecutor;
 import org.dbunit.util.search.DepthFirstSearch;
 import org.dbunit.util.search.ISearchCallback;
 
@@ -58,7 +58,7 @@ public abstract class AbstractMetaDataBasedSearchCallbackTestCase extends TestCa
         this.jdbcConnection = HypersonicEnvironment.createJdbcConnection("mem:tempdb");
         DdlExecutor.executeDdlFile(
                 TestUtils.getFile("sql/" + this.sqlFile),
-                this.jdbcConnection
+                this.jdbcConnection, false
         );
         this.connection = new DatabaseConnection(jdbcConnection);
     }

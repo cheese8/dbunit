@@ -12,6 +12,7 @@ import org.dbunit.ext.hsqldb.HsqldbDataTypeFactory;
 import org.dbunit.testutil.TestUtils;
 import org.dbunit.util.CollectionsHelper;
 
+import org.dbunit.util.DdlExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -73,7 +74,7 @@ public abstract class AbstractHSQLTestCase extends TestCase {
 
         this.jdbcConnection = HypersonicEnvironment.createJdbcConnection("mem:tempdb");
         DdlExecutor.executeDdlFile(TestUtils.getFile(
-                "sql/" + sqlFile), jdbcConnection);
+                "sql/" + sqlFile), jdbcConnection, false);
         this.connection = new DatabaseConnection(jdbcConnection);
         DatabaseConfig config = connection.getConfig();
         config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY,

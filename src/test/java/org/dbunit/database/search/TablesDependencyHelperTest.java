@@ -28,7 +28,6 @@ import java.util.TreeSet;
 import junit.framework.TestCase;
 import junitx.framework.ArrayAssert;
 
-import org.dbunit.DdlExecutor;
 import org.dbunit.HypersonicEnvironment;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
@@ -36,6 +35,7 @@ import org.dbunit.database.PrimaryKeyFilter.PkTableMap;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.NoSuchTableException;
 import org.dbunit.testutil.TestUtils;
+import org.dbunit.util.DdlExecutor;
 import org.dbunit.util.search.SearchException;
 
 /**
@@ -59,7 +59,7 @@ public class TablesDependencyHelperTest extends TestCase {
         this.jdbcConnection = HypersonicEnvironment.createJdbcConnection("mem:tempdb");
         for (int i = 0; i < sqlFileList.length; i++) {
             File sql = TestUtils.getFile("sql/" + sqlFileList[i]);
-            DdlExecutor.executeDdlFile(sql, this.jdbcConnection);
+            DdlExecutor.executeDdlFile(sql, this.jdbcConnection, false);
         }
         this.connection = new DatabaseConnection(jdbcConnection);
     }

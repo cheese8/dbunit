@@ -36,6 +36,7 @@ import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.XmlDataSet;
 import org.dbunit.testutil.TestUtils;
+import org.dbunit.util.DdlExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

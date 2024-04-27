@@ -22,6 +22,7 @@
 package org.dbunit;
 
 import org.dbunit.operation.DatabaseOperation;
+import org.dbunit.util.DdlExecutor;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -59,7 +60,7 @@ public class H2Environment extends DatabaseEnvironment {
     }
 
     public static void shutdown(Connection connection) throws SQLException {
-        DdlExecutor.executeSql(connection, "SHUTDOWN IMMEDIATELY");
+        DdlExecutor.executeSql(connection, "SHUTDOWN IMMEDIATELY", false);
     }
 
     public static void deleteFiles(final String filename) {

@@ -70,6 +70,10 @@ public abstract class DatabaseOperation {
      * @see CompositeOperation
      */
     public static final DatabaseOperation CLEAN_INSERT = new CompositeOperation(DELETE_ALL, INSERT);
+    /**
+     * @see ExecuteSqlOperation
+     */
+    public static final DatabaseOperation SQL = new ExecuteSqlOperation();
 
     /**
      * @see TransactionOperation
@@ -93,7 +97,6 @@ public abstract class DatabaseOperation {
      * @param dataSet    the dataset to be used by this operation.
      */
     public void execute(IDatabaseConnection connection, IDataSet dataSet) throws DatabaseUnitException, SQLException {
-
     }
 
     /**
@@ -101,10 +104,9 @@ public abstract class DatabaseOperation {
      * dataset contents.
      *
      * @param connection the database connection.
-     * @param dataSet    the dataset to be used by this operation.
+     * @param sql    the dataset to be used by this operation.
      */
-    public void execute(IDatabaseConnection connection, File sqlFIle) throws DatabaseUnitException, SQLException {
-
+    public void execute(IDatabaseConnection connection, File sql) throws DatabaseUnitException, SQLException {
     }
 
     /**
@@ -112,10 +114,9 @@ public abstract class DatabaseOperation {
      * dataset contents.
      *
      * @param connection the database connection.
-     * @param dataSet    the dataset to be used by this operation.
+     * @param sql    the dataset to be used by this operation.
      */
-    public void execute(IDatabaseConnection connection, String sqlFIle) throws DatabaseUnitException, SQLException {
-
+    public void execute(IDatabaseConnection connection, String sql) throws DatabaseUnitException, SQLException {
     }
 
     private static class DummyOperation extends DatabaseOperation {

@@ -23,7 +23,6 @@ package org.dbunit.database;
 import java.sql.Connection;
 import java.util.Arrays;
 
-import org.dbunit.DdlExecutor;
 import org.dbunit.H2Environment;
 import org.dbunit.HypersonicEnvironment;
 import org.dbunit.dataset.FilteredDataSet;
@@ -32,6 +31,7 @@ import org.dbunit.dataset.filter.ITableFilter;
 import org.dbunit.testutil.TestUtils;
 
 import junit.framework.TestCase;
+import org.dbunit.util.DdlExecutor;
 
 /**
  * @author Manuel Laflamme
@@ -69,7 +69,7 @@ public class DatabaseSequenceFilterTest extends TestCase {
                 {"D", "A", "F", "C", "G", "E", "H", "B",};
 
         DdlExecutor.executeDdlFile(
-                TestUtils.getFile("sql/hypersonic_fk.sql"), _jdbcConnection);
+                TestUtils.getFile("sql/hypersonic_fk.sql"), _jdbcConnection, false);
         final IDatabaseConnection connection =
                 new DatabaseConnection(_jdbcConnection);
 
@@ -91,7 +91,7 @@ public class DatabaseSequenceFilterTest extends TestCase {
 
         DdlExecutor.executeDdlFile(
                 TestUtils.getFile("sql/hypersonic_cyclic.sql"),
-                _jdbcConnection);
+                _jdbcConnection, false);
         final IDatabaseConnection connection =
                 new DatabaseConnection(_jdbcConnection);
 
@@ -123,7 +123,7 @@ public class DatabaseSequenceFilterTest extends TestCase {
 
         DdlExecutor.executeDdlFile(
                 TestUtils.getFile("sql/hypersonic_case_sensitive_test.sql"),
-                _jdbcConnection);
+                _jdbcConnection, false);
         final IDatabaseConnection connection =
                 new DatabaseConnection(_jdbcConnection);
 
@@ -155,7 +155,7 @@ public class DatabaseSequenceFilterTest extends TestCase {
                 H2Environment.createJdbcConnection("test");
         DdlExecutor.executeDdlFile(
                 TestUtils.getFile("sql/h2_multischema_fk_test.sql"),
-                jdbcConnection);
+                jdbcConnection, false);
         final IDatabaseConnection connection =
                 new DatabaseConnection(jdbcConnection);
         connection.getConfig().setProperty(
