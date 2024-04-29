@@ -130,7 +130,7 @@ public class DbUnitAssert extends DbUnitAssertBase {
      * @since 2.4
      */
     public void assertEquals(final IDataSet expectedDataSet, final IDataSet actualDataSet, final FailureHandler failureHandler) throws DatabaseUnitException {
-        assertWithValueComparer(expectedDataSet, actualDataSet, failureHandler, null, null);
+        assertWithValueComparer(expectedDataSet, actualDataSet, failureHandler, ValueComparers.isActualEqualToExpected, null);
     }
 
     protected void compareTables(final IDataSet expectedDataSet, final IDataSet actualDataSet, final String[] expectedNames, final FailureHandler failureHandler) throws DatabaseUnitException {

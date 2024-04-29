@@ -21,6 +21,7 @@
 package org.dbunit.assertion;
 
 import java.util.Arrays;
+import java.util.List;
 
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -172,6 +173,18 @@ public class DefaultFailureHandler implements FailureHandler {
         throw this.createFailure(msg, String.valueOf(diff.getExpectedValue()), String.valueOf(diff.getActualValue()));
     }
 
+    public void handle(final List<Difference> diffList) {
+        StringBuilder sb = new StringBuilder();
+        for (Difference each : diffList) {
+            sb.append(buildMessage(each)).append("\n");
+            //addFailMessage(each, sb);
+        }
+        //final String msg = buildMessage(sb.toString());
+        // Throw the assertion error
+        throw this.createFailure(sb.toString());
+        //throw this.createFailure(sb.toString(), String.valueOf(diff.getExpectedValue()), String.valueOf(diff.getActualValue()));
+    }
+
     protected String buildMessage(final Difference diff) {
         final StringBuilder builder = new StringBuilder(200);
 
@@ -217,27 +230,5 @@ public class DefaultFailureHandler implements FailureHandler {
     @Override
     public String toString() {
         return DefaultFailureHandler.class.getName() + "[" + "_additionalColumnInfo=" + (additionalColumnInfo == null ? "null" : Arrays.asList(additionalColumnInfo).toString()) + "]";
-    }
-
-    /**
-     * Default failure factory which returns DBUnits own assertion error
-     * instances.
-     *
-     * @author gommma (gommma AT users.sourceforge.net)
-     * @author Last changed by: $Author: gommma $
-     * @version $Revision: 872 $ $Date: 2008-11-08 09:45:52 -0600 (Sat, 08 Nov
-     * 2008) $
-     * @since 2.4.0
-     */
-    public static class DefaultFailureFactory implements FailureFactory {
-        public Error createFailure(final String message, final String expected, final String actual) {
-            // Return dbunit's own comparison failure object
-            return new DbComparisonFailure(message, expected, actual);
-        }
-
-        public Error createFailure(final String message) {
-            // Return dbunit's own failure object
-            return new DbAssertionFailedError(message);
-        }
     }
 }
