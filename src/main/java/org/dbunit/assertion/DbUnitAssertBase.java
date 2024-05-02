@@ -383,32 +383,14 @@ public class DbUnitAssertBase {
             for (int columnNum = 0; columnNum < columnCount; columnNum++) {
                 compareData(expectedTable, actualTable, comparisonCols, failureHandler, validDefaultValueComparator, validColumnValueComparers, rowNum, columnNum);
             }
-            if (failureHandler instanceof DiffCollectingFailureHandler) {
-                DiffCollectingFailureHandler handler = (DiffCollectingFailureHandler) failureHandler;
-                if (handler.getDiffList().isEmpty()) {
-                    return;
-                }
-                handler.handle(handler.getDiffList());
-                /*
-                String message = handler.getDiffList()
-                        .stream()
-                        .map(d -> formatDifference(d))
-                        .collect(joining("\n"));
-                        log.error(sb.toString());
-                 */
-
-            }
         }
-    }
-
-    private static String formatDifference(Difference diff) {
-        return "value in " + diff.getExpectedTable()
-                .getTableMetaData()
-                .getTableName() + "." +
-                diff.getColumnName() + " row " +
-                diff.getRowIndex() + ", expected : " +
-                diff.getExpectedValue() + ", but was: " +
-                diff.getActualValue();
+        if (failureHandler instanceof DiffCollectingFailureHandler) {
+            DiffCollectingFailureHandler handler = (DiffCollectingFailureHandler) failureHandler;
+            if (handler.getDiffList().isEmpty()) {
+                return;
+            }
+            handler.handle(handler.getDiffList());
+        }
     }
 
     protected void compareData(final ITable expectedTable, final ITable actualTable, final ComparisonColumn[] comparisonCols, final FailureHandler failureHandler, final ValueComparator defaultValueComparator, final Map<String, ValueComparator> columnValueComparers, final int rowNum, final int columnNum) throws DatabaseUnitException {

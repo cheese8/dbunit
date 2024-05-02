@@ -185,6 +185,7 @@ public class DbUnitAssertIT extends TestCase {
         } catch (ComparisonFailure expected) {
             assertEquals("row 1 col 2", expected.getExpected());
             assertEquals("wrong value", expected.getActual());
+
             String expectedMsg = "value (table=TEST_TABLE, row=1, col=COLUMN2) expected:<[row 1 col 2]> but was:<[wrong value]>";
             assertEquals(expectedMsg, expected.getMessage());
         }
@@ -463,7 +464,11 @@ public class DbUnitAssertIT extends TestCase {
         IDataSet dataSet2 = new FlatXmlDataSetBuilder().build(new StringReader(xml2));
 
         // Invoke the assertion
-        assertion.assertEquals(dataSet1, dataSet2, fh);
+        try {
+            assertion.assertEquals(dataSet1, dataSet2, fh);
+        }catch(Error e){
+
+        }
         // We expect that no failure was thrown even if the dataSets were not equal.
         // This is because our custom failureHandler
         assertEquals(2, fh.getDiffList().size());

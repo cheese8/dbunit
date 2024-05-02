@@ -174,9 +174,10 @@ public class DefaultFailureHandler implements FailureHandler {
     }
 
     public void handle(final List<Difference> diffList) {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder(String.format("%s different places was collected as below:\n", diffList.size()));
         for (Difference each : diffList) {
-            sb.append(buildMessage(each)).append("\n");
+            String expectedAndActual = "(expected=<%s>, actual=<%s>)";
+            sb.append(buildMessage(each) + " " + String.format(expectedAndActual, each.getExpectedValue(), each.getActualValue())).append("\n");
             //addFailMessage(each, sb);
         }
         //final String msg = buildMessage(sb.toString());

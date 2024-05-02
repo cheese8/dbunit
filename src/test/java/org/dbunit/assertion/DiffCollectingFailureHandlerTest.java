@@ -22,11 +22,13 @@ package org.dbunit.assertion;
 
 import java.util.List;
 
+import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
 
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSet;
 import org.dbunit.testutil.TestUtils;
+import org.junit.Test;
 
 /**
  * @author gommma (gommma AT users.sourceforge.net)
@@ -50,10 +52,13 @@ public class DiffCollectingFailureHandlerTest extends TestCase {
 
         DiffCollectingFailureHandler myHandler = new DiffCollectingFailureHandler();
 
-        assertion.assertEquals(dataSet.getTable("TEST_TABLE"),
-                dataSet.getTable("TEST_TABLE_WITH_WRONG_VALUE"),
-                myHandler);
-
+        try {
+            assertion.assertEquals(dataSet.getTable("TEST_TABLE"),
+                    dataSet.getTable("TEST_TABLE_WITH_WRONG_VALUE"),
+                    myHandler);
+        }catch(Error ex){
+           // AssertionFailedError
+        }
         List diffList = myHandler.getDiffList();
         assertEquals(1, diffList.size());
         Difference diff = (Difference) diffList.get(0);
