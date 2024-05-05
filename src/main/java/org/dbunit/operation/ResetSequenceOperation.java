@@ -10,6 +10,10 @@ import java.sql.Statement;
 
 public class ResetSequenceOperation extends DatabaseOperation {
 
+    private final static String RESET_SEQ_MYSQL = "";
+    private final static String RESET_SEQ_PG = "";
+    private final static String RESET_SEQ_ORACLE = "";
+
     @Override
     public void execute(IDatabaseConnection connection, IDataSet dataSet) throws DatabaseUnitException, SQLException {
         String[] tables = dataSet.getTableNames();
