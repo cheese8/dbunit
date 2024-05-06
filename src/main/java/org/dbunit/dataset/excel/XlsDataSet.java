@@ -64,7 +64,7 @@ public class XlsDataSet extends AbstractDataSet {
             workbook = WorkbookFactory.create(inputStream);
         }catch(Exception ex) {
             try {
-                workbook = StreamingReader.builder()
+                workbook = StreamingReader.builder().setAvoidTempFiles(true)
                         .rowCacheSize(100)    // number of rows to keep in memory (defaults to 10)
                         .bufferSize(4096)     // buffer size (in bytes) to use when reading InputStream to file (defaults to 1024)
                         .setSharedStringsImplementationType(SharedStringsImplementationType.POI_READ_ONLY)
@@ -88,12 +88,24 @@ public class XlsDataSet extends AbstractDataSet {
     public XlsDataSet(InputStream in) throws IOException, DataSetException {
         _tables = super.createTableNameMap();
 
-        Workbook workbook = WorkbookFactory.create(in);
-
-        int sheetCount = workbook.getNumberOfSheets();
-        for (int i = 0; i < sheetCount; i++) {
-            ITable table = new XlsTable(workbook.getSheetName(i),
-                    workbook.getSheetAt(i));
+        Workbook workbook = null;
+        try {
+            workbook = WorkbookFactory.create(in);
+        }catch(Exception ex) {
+            try {
+                workbook = StreamingReader.builder().setAvoidTempFiles(true)
+                        .rowCacheSize(100)    // number of rows to keep in memory (defaults to 10)
+                        .bufferSize(4096)     // buffer size (in bytes) to use when reading InputStream to file (defaults to 1024)
+                        .setSharedStringsImplementationType(SharedStringsImplementationType.POI_READ_ONLY)
+                        .open(in);
+            }catch(Exception e) {
+            }
+        }
+        if (workbook == null) {
+            throw new IOException();
+        }
+        for (Sheet sheet : workbook) {
+            ITable table = new XlsTable(sheet.getSheetName(), sheet);
             _tables.add(table.getTableMetaData().getTableName(), table);
         }
     }
