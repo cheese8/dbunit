@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum FormatSupport {
-    FLAT("FLAT"), XML("XML"), DTD("DTD"), CSV("CSV"), XLS("XLS");
+    FLAT("FLAT"), XML("XML"), DTD("DTD"), CSV("CSV"), XLS("XLS"), YML("YML");
 
     private final static Map<String, FormatSupport> map = new HashMap<>();
 

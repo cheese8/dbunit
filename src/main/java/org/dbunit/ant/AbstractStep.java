@@ -50,6 +50,7 @@ import org.dbunit.dataset.xml.FlatXmlProducer;
 import org.dbunit.dataset.xml.XmlProducer;
 import org.dbunit.util.FileHelper;
 import org.xml.sax.InputSource;
+import org.dbunit.dataset.yaml.YamlProducer;
 
 /**
  * @author Manuel Laflamme
@@ -139,8 +140,10 @@ public abstract class AbstractStep extends ProjectComponent implements DbUnitTas
                 producer = new FlatDtdProducer(getInputSource(src));
             } else if (format.equalsIgnoreCase(FormatSupport.XLS.getFormat())) {
                 return new CachedDataSet(new XlsDataSet(src));
+            } else if (format.equalsIgnoreCase(FormatSupport.YML.getFormat())) {
+                return new CachedDataSet(new YamlProducer(src), true);
             } else {
-                throw new IllegalArgumentException("Type must be either 'flat'(default), 'xml', 'csv', 'xls' or 'dtd' but was: " + format);
+                throw new IllegalArgumentException("Type must be either 'flat'(default), 'xml', 'csv', 'xls', 'yml' or 'dtd' but was: " + format);
             }
             if (forwardOnly) {
                 return new StreamingDataSet(producer);

@@ -46,6 +46,7 @@ import org.dbunit.dataset.filter.ITableFilter;
 import org.dbunit.dataset.xml.FlatDtdDataSet;
 import org.dbunit.dataset.xml.FlatXmlWriter;
 import org.dbunit.dataset.xml.XmlDataSet;
+import org.dbunit.dataset.yaml.YamlDataSet;
 
 /**
  * The <code>Export</code> class is the step that facilitates exporting
@@ -118,6 +119,8 @@ public class Export extends AbstractStep {
                         FlatDtdDataSet.write(dataset, out);//, getEncoding());
                     } else if (format.equalsIgnoreCase(FormatSupport.XLS.getFormat())) {
                         XlsDataSet.write(dataset, out);
+                    } else if (format.equalsIgnoreCase(FormatSupport.YML.getFormat())) {
+                        YamlDataSet.write(dataset, out);
                     } else {
                         throw new IllegalArgumentException("The given format '" + format + "' is not supported");
                     }

@@ -27,6 +27,7 @@ import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
+import org.dbunit.util.DdlExecutor;
 
 import java.sql.SQLException;
 
@@ -66,5 +67,10 @@ public class TruncateTableOperation extends DeleteAllOperation {
         } finally {
             config.setFeature(DatabaseConfig.FEATURE_BATCHED_STATEMENTS, oldValue);
         }
+    }
+
+    public void execute(IDatabaseConnection connection, String table) throws DatabaseUnitException, SQLException {
+        log.debug("execute(connection={}, sql={}) - start", connection, table);
+        DdlExecutor.executeSql(connection.getConnection(), "truncate table " + table);
     }
 }
