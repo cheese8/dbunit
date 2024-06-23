@@ -23,6 +23,7 @@ package org.dbunit.dataset.excel;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -100,6 +101,7 @@ public class XlsDataSetWriter {
 
             Row headerRow = sheet.createRow(0);
             Column[] columns = metaData.getColumns();
+            Arrays.sort(columns);
             for (int j = 0; j < columns.length; j++) {
                 Column column = columns[j];
                 Cell cell = headerRow.createCell(j);

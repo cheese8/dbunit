@@ -36,7 +36,7 @@ import java.sql.DatabaseMetaData;
  * @version $Revision$ $Date$
  * @since 1.0 (Feb 17, 2002)
  */
-public class Column {
+public class Column implements Comparable{
 
     /**
      * Logger for this class
@@ -269,6 +269,15 @@ public class Column {
         result = 29 * result + _nullable.hashCode();
         result = 29 * result + (_defaultValue == null ? 0 : _defaultValue.hashCode());
         return result;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        if (!(o instanceof Column)) {
+            return 0;
+        }
+        Column col = (Column) o;
+        return this.getColumnName().compareTo(col.getColumnName());
     }
 
     /**

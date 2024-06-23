@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+import java.util.Arrays;
 
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -50,13 +51,15 @@ public class FlatXmlWriter implements IDataSetConsumer {
     private final XmlWriter xmlWriter;
     private ITableMetaData activeMetaData;
     private int activeRowCount;
+    private boolean xmlElememt;
     @Setter
     private boolean includeEmptyTable = false;
     @Setter
     private String systemId = null;
 
-    public FlatXmlWriter(OutputStream out) throws IOException {
+    public FlatXmlWriter(OutputStream out, boolean xmlElememt) throws IOException {
         this(out, null);
+        this.xmlElememt = xmlElememt;
     }
 
     /**
@@ -149,6 +152,7 @@ public class FlatXmlWriter implements IDataSetConsumer {
             xmlWriter.writeElement(tableName);
 
             Column[] columns = activeMetaData.getColumns();
+            Arrays.sort(columns);
             for (int i = 0; i < columns.length; i++) {
                 String columnName = columns[i].getColumnName();
                 Object value = values[i];
@@ -160,7 +164,11 @@ public class FlatXmlWriter implements IDataSetConsumer {
 
                 try {
                     String stringValue = DataType.asString(value);
-                    xmlWriter.writeAttribute(columnName, stringValue, true);
+                    if (xmlElememt) {
+                        xmlWriter.writeElementWithText(columnName, stringValue);
+                    } else {
+                        xmlWriter.writeAttribute(columnName, stringValue, true);
+                    }
                 } catch (TypeCastException e) {
                     throw new DataSetException("table=" + activeMetaData.getTableName() + ", row=" + i + ", column=" + columnName + ", value=" + value, e);
                 }

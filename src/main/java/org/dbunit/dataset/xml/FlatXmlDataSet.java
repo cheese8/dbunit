@@ -350,11 +350,11 @@ public class FlatXmlDataSet extends CachedDataSet {
     /**
      * Write the specified dataset to the specified output stream as xml.
      */
-    public static void write(IDataSet dataSet, OutputStream out)
+    public static void write(IDataSet dataSet, OutputStream out, boolean xmlElement)
             throws IOException, DataSetException {
         logger.debug("write(dataSet={}, out={}) - start", dataSet, out);
 
-        FlatXmlWriter datasetWriter = new FlatXmlWriter(out);
+        FlatXmlWriter datasetWriter = new FlatXmlWriter(out, xmlElement);
         datasetWriter.setIncludeEmptyTable(true);
         datasetWriter.write(dataSet);
     }

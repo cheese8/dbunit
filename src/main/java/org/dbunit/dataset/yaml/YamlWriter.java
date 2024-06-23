@@ -31,6 +31,7 @@ import org.yaml.snakeyaml.Yaml;
 
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -91,7 +92,9 @@ class YamlWriter
             for (int row = 0; row < table.getRowCount(); row++)
             {
                 LinkedHashMap<String, Object> rowMap = new LinkedHashMap<>();
-                for (Column column : tableMetaData.getColumns())
+                Column[] columns = tableMetaData.getColumns();
+                Arrays.sort(columns);
+                for (Column column : columns)
                 {
                     String columnName = column.getColumnName();
                     Object value = table.getValue(row, columnName);

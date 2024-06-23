@@ -96,7 +96,7 @@ public class CompositeDataSetIterationTest extends TestCase {
 
         // 4. Write
         try {
-            FlatXmlDataSet.write(compositeDataSet, new FileOutputStream("target/full.xml"));
+            FlatXmlDataSet.write(compositeDataSet, new FileOutputStream("target/full.xml"), false);
         } catch (Exception e) {
             fail(e.getMessage());
         }
