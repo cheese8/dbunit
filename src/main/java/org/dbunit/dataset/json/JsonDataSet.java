@@ -76,19 +76,19 @@ public class JsonDataSet extends CachedDataSet
     /**
      * Write the specified dataset to the specified output stream as YAML.
      */
-    public static void write(IDataSet dataSet, OutputStream out)
+    public static void write(IDataSet dataSet, OutputStream out, String[] replacements)
     throws DataSetException
     {
-        write(dataSet, new OutputStreamWriter(out));
+        write(dataSet, new OutputStreamWriter(out), replacements);
     }
 
     /**
      * Write the specified dataset to the specified writer as YAML.
      */
-    public static void write(IDataSet dataSet, Writer out)
+    public static void write(IDataSet dataSet, Writer out, String[] replacements)
     throws DataSetException
     {
-        JsonWriter writer = new JsonWriter(out);
+        JsonWriter writer = new JsonWriter(out, replacements);
         writer.write(dataSet);
     }
 

@@ -113,11 +113,11 @@ public class XlsDataSet extends AbstractDataSet {
     /**
      * Write the specified dataset to the specified Excel document.
      */
-    public static void write(IDataSet dataSet, OutputStream out)
+    public static void write(IDataSet dataSet, OutputStream out, String[] replacements)
             throws IOException, DataSetException {
         logger.debug("write(dataSet={}, out={}) - start", dataSet, out);
 
-        new XlsDataSetWriter().write(dataSet, out);
+        new XlsDataSetWriter().write(dataSet, out, replacements);
     }
 
 

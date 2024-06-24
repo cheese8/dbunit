@@ -25,6 +25,8 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -52,14 +54,22 @@ public class FlatXmlWriter implements IDataSetConsumer {
     private ITableMetaData activeMetaData;
     private int activeRowCount;
     private boolean xmlElememt;
+    private Map<String, String> replacementsMap;
     @Setter
     private boolean includeEmptyTable = false;
     @Setter
     private String systemId = null;
 
-    public FlatXmlWriter(OutputStream out, boolean xmlElememt) throws IOException {
+    public FlatXmlWriter(OutputStream out, boolean xmlElememt, String[] replacements) throws IOException {
         this(out, null);
         this.xmlElememt = xmlElememt;
+        Map<String, String> replacementsMap = new HashMap<>();
+        if (replacements.length > 0) {
+            for(int i=0;i<replacements.length;i=i+2) {
+                replacementsMap.put(replacements[i], replacements[i+1]);
+            }
+        }
+        this.replacementsMap = replacementsMap;
     }
 
     /**
@@ -164,10 +174,11 @@ public class FlatXmlWriter implements IDataSetConsumer {
 
                 try {
                     String stringValue = DataType.asString(value);
+                    String entryValue = replacementsMap.get(columnName);
                     if (xmlElememt) {
-                        xmlWriter.writeElementWithText(columnName, stringValue);
+                        xmlWriter.writeElementWithText(columnName, entryValue != null ? entryValue : stringValue);
                     } else {
-                        xmlWriter.writeAttribute(columnName, stringValue, true);
+                        xmlWriter.writeAttribute(columnName, entryValue != null ? entryValue : stringValue, true);
                     }
                 } catch (TypeCastException e) {
                     throw new DataSetException("table=" + activeMetaData.getTableName() + ", row=" + i + ", column=" + columnName + ", value=" + value, e);

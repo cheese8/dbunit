@@ -35,13 +35,20 @@ class JsonWriter
 {
 
     private Gson gson;
-    private Yaml _yaml;
     private Writer _out;
     private boolean _useFlowStyle;
+    private Map<String, String> replacementsMap;
 
-    public JsonWriter(Writer out)
+    public JsonWriter(Writer out, String[] replacements)
     {
         this(out, false);
+        Map<String, String> replacementsMap = new HashMap<>();
+        if (replacements.length > 0) {
+            for(int i=0;i<replacements.length;i=i+2) {
+                replacementsMap.put(replacements[i], replacements[i+1]);
+            }
+        }
+        this.replacementsMap = replacementsMap;
     }
 
     public JsonWriter(Writer out, boolean useFlowStyle)
@@ -95,10 +102,11 @@ class JsonWriter
                 for (Column column : columns)
                 {
                     String columnName = column.getColumnName();
+                    String entryValue = replacementsMap.get(columnName);
                     Object value = table.getValue(row, columnName);
                     if (value != null)
                     {
-                        rowMap.put(columnName, value);
+                        rowMap.put(columnName, entryValue != null ? entryValue : value);
                     }
                 }
                 tableRows.add(rowMap);

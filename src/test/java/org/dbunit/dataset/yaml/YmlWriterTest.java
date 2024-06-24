@@ -81,7 +81,7 @@ public class YmlWriterTest extends TestCase
         IDataSet dataSet = getDefaultDataSet();
 
         StringWriter stringWriter = new StringWriter();
-        YamlWriter yamlWriter = new YamlWriter(stringWriter);
+        YamlWriter yamlWriter = new YamlWriter(stringWriter, new String[] {});
         yamlWriter.write(dataSet);
 
         String actualOutput = stringWriter.toString();
@@ -98,7 +98,7 @@ public class YmlWriterTest extends TestCase
         IDataSet dataSet = getEmptyTableDataSet();
 
         StringWriter stringWriter = new StringWriter();
-        YamlWriter yamlWriter = new YamlWriter(stringWriter);
+        YamlWriter yamlWriter = new YamlWriter(stringWriter, new String[] {});
         yamlWriter.write(dataSet);
 
         String actualOutput = stringWriter.toString();
@@ -129,7 +129,7 @@ public class YmlWriterTest extends TestCase
         table.setValue(1, col1, null);
 
         StringWriter stringWriter = new StringWriter();
-        YamlWriter yamlWriter = new YamlWriter(stringWriter);
+        YamlWriter yamlWriter = new YamlWriter(stringWriter, new String[] {});
         yamlWriter.write(new DefaultDataSet(table));
 
         String actualOutput = stringWriter.toString();
@@ -163,7 +163,7 @@ public class YmlWriterTest extends TestCase
         IDataSet dataSet = getDefaultDataSet();
 
         StringWriter stringWriter = new StringWriter();
-        YamlWriter yamlWriter = new YamlWriter(stringWriter);
+        YamlWriter yamlWriter = new YamlWriter(stringWriter, new String[] {});
         yamlWriter.setUseFlowStyle(true);
         yamlWriter.write(dataSet);
 

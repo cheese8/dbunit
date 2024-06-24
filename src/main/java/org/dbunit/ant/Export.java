@@ -118,9 +118,9 @@ public class Export extends AbstractStep {
                         //TODO Should DTD also support encoding? It is basically an XML file...
                         FlatDtdDataSet.write(dataset, out);//, getEncoding());
                     } else if (format.equalsIgnoreCase(FormatSupport.XLS.getFormat())) {
-                        XlsDataSet.write(dataset, out);
+                        XlsDataSet.write(dataset, out, new String[] {});
                     } else if (format.equalsIgnoreCase(FormatSupport.YML.getFormat())) {
-                        YamlDataSet.write(dataset, out);
+                        YamlDataSet.write(dataset, out, new String[] {});
                     } else {
                         throw new IllegalArgumentException("The given format '" + format + "' is not supported");
                     }

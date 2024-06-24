@@ -194,7 +194,7 @@ public class Main {
                 "P:/dbunit-cvs/dbunit/src/xml/dataSetTest.xml");
         FileOutputStream out = new FileOutputStream(
                 "P:/dbunit-cvs/dbunit/dataSetTest.xls");
-        XlsDataSet.write(new XmlDataSet(in), out);
+        XlsDataSet.write(new XmlDataSet(in), out, new String[] {});
         out.close();
     }
 

@@ -70,7 +70,7 @@ public class XlsDataSetTest extends AbstractDataSetTest {
 
             // write dataset in temp file
             try {
-                XlsDataSet.write(expectedDataSet, out);
+                XlsDataSet.write(expectedDataSet, out, new String[] {});
             } finally {
                 out.close();
             }

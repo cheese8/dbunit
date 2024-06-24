@@ -80,13 +80,20 @@ public class XlsDataSetWriter {
     /**
      * Write the specified dataset to the specified Excel document.
      */
-    public void write(IDataSet dataSet, OutputStream out)
+    public void write(IDataSet dataSet, OutputStream out, String[] replacements)
             throws IOException, DataSetException {
         logger.debug("write(dataSet={}, out={}) - start", dataSet, out);
 
         Workbook workbook = createWorkbook();
 
         this.dateCellStyle = createDateCellStyle(workbook);
+
+        Map<String, String> replacementsMap = new HashMap<>();
+        if (replacements.length > 0) {
+            for(int i=0;i<replacements.length;i=i+2) {
+                replacementsMap.put(replacements[i], replacements[i+1]);
+            }
+        }
 
         int index = 0;
         ITableIterator iterator = dataSet.iterator();
@@ -108,14 +115,20 @@ public class XlsDataSetWriter {
                 cell.setCellValue(column.getColumnName());
             }
 
+
             // write table data
             for (int j = 0; j < table.getRowCount(); j++) {
                 Row row = sheet.createRow(j + 1);
                 for (int k = 0; k < columns.length; k++) {
                     Column column = columns[k];
                     Object value = table.getValue(j, column.getColumnName());
+                    String entryValue = replacementsMap.get(column.getColumnName());
                     if (value != null) {
                         Cell cell = row.createCell(k);
+                        if (entryValue != null) {
+                            cell.setCellValue(DataType.asString(entryValue));
+                            continue;
+                        }
                         if (value instanceof Date) {
                             setDateCell(cell, (Date) value, workbook);
                         } else if (value instanceof BigDecimal) {

@@ -30,10 +30,7 @@ import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.Writer;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Björn Beskow
@@ -45,16 +42,24 @@ class YamlWriter
     private Yaml _yaml;
     private Writer _out;
     private boolean _useFlowStyle;
+    private Map<String, String> replacementsMap;
 
-    public YamlWriter(Writer out)
+    public YamlWriter(Writer out, String[] replacements)
     {
-        this(out, false);
+        this(out, false, replacements);
     }
 
-    public YamlWriter(Writer out, boolean useFlowStyle)
+    public YamlWriter(Writer out, boolean useFlowStyle, String[] replacements)
     {
         this._out = out;
         this._useFlowStyle = useFlowStyle;
+        Map<String, String> replacementsMap = new HashMap<>();
+        if (replacements.length > 0) {
+            for(int i=0;i<replacements.length;i=i+2) {
+                replacementsMap.put(replacements[i], replacements[i+1]);
+            }
+        }
+        this.replacementsMap = replacementsMap;
     }
 
     public void setUseFlowStyle(boolean useFlowStyle)
@@ -97,10 +102,11 @@ class YamlWriter
                 for (Column column : columns)
                 {
                     String columnName = column.getColumnName();
+                    String entryValue = replacementsMap.get(columnName);
                     Object value = table.getValue(row, columnName);
                     if (value != null)
                     {
-                        rowMap.put(columnName, value);
+                        rowMap.put(columnName, entryValue!= null ? entryValue : value);
                     }
                 }
                 tableRows.add(rowMap);
