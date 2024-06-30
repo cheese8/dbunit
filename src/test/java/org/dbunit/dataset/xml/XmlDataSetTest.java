@@ -78,7 +78,7 @@ public class XmlDataSetTest extends AbstractDataSetTest {
 
             try {
                 // write dataset in temp file
-                XmlDataSet.write(expectedDataSet, out);
+                XmlDataSet.write(expectedDataSet, out, false, false, new String[]{});
 
                 // load new dataset from temp file
                 IDataSet actualDataSet =

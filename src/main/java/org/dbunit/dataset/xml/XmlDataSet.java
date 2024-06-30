@@ -80,43 +80,43 @@ public class XmlDataSet extends CachedDataSet {
     /**
      * Write the specified dataset to the specified output stream as xml.
      */
-    public static void write(IDataSet dataSet, OutputStream out)
+    public static void write(IDataSet dataSet, OutputStream out, boolean xmlElement, boolean sortColumn, String[] replacements)
             throws IOException, DataSetException {
         logger.debug("write(dataSet={}, out={}) - start", dataSet, out);
-        XmlDataSet.write(dataSet, out, null);
+        XmlDataSet.write(dataSet, out, null, xmlElement, sortColumn, replacements);
     }
 
     /**
      * Write the specified dataset to the specified output stream as xml (using specified encoding).
      */
-    public static void write(IDataSet dataSet, OutputStream out, String encoding)
+    public static void write(IDataSet dataSet, OutputStream out, String encoding, boolean xmlElement, boolean sortColumn, String[] replacements)
             throws IOException, DataSetException {
         logger.debug("write(dataSet={}, out={}, encoding={}) - start",
                 new Object[]{dataSet, out, encoding});
 
-        XmlDataSetWriter datasetWriter = new XmlDataSetWriter(out, encoding);
+        XmlDataSetWriter datasetWriter = new XmlDataSetWriter(out, encoding, xmlElement, sortColumn, replacements);
         datasetWriter.write(dataSet);
     }
 
     /**
      * Write the specified dataset to the specified writer as xml.
      */
-    public static void write(IDataSet dataSet, Writer writer)
+    public static void write(IDataSet dataSet, Writer writer, boolean xmlElement, boolean sortColumn, String[] replacements)
             throws IOException, DataSetException {
         logger.debug("write(dataSet={}, writer={}) - start", dataSet, writer);
-        write(dataSet, writer, null);
+        write(dataSet, writer, null, xmlElement, sortColumn, replacements);
     }
 
     /**
      * Write the specified dataset to the specified writer as xml.
      */
-    public static void write(IDataSet dataSet, Writer writer, String encoding)
+    public static void write(IDataSet dataSet, Writer writer, String encoding, boolean xmlElement, boolean sortColumn, String[] replacements)
             throws IOException, DataSetException {
         if (logger.isDebugEnabled())
             logger.debug("write(dataSet={}, writer={}, encoding={}) - start",
                     new Object[]{dataSet, writer, encoding});
 
-        XmlDataSetWriter datasetWriter = new XmlDataSetWriter(writer, encoding);
+        XmlDataSetWriter datasetWriter = new XmlDataSetWriter(writer, encoding, xmlElement, sortColumn, replacements);
         datasetWriter.write(dataSet);
     }
 }

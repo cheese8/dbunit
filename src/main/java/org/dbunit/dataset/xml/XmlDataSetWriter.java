@@ -73,22 +73,22 @@ public class XmlDataSetWriter implements IDataSetConsumer {
     /**
      * @param outputStream The stream to which the XML will be written.
      * @param encoding     The encoding to be used for the {@link XmlWriter}.
-     *                     Can be null. See {@link XmlWriter#XmlWriter(OutputStream, String)}.
+     *                     Can be null. See {@link XmlWriter#XmlWriter(OutputStream, String, boolean, boolean, String[])}.
      * @throws UnsupportedEncodingException
      */
-    public XmlDataSetWriter(OutputStream outputStream, String encoding)
+    public XmlDataSetWriter(OutputStream outputStream, String encoding, boolean xmlElement, boolean sortColumn, String[] replacements)
             throws UnsupportedEncodingException {
-        _xmlWriter = new XmlWriter(outputStream, encoding);
+        _xmlWriter = new XmlWriter(outputStream, encoding, xmlElement, sortColumn, replacements);
         _xmlWriter.enablePrettyPrint(true);
     }
 
-    public XmlDataSetWriter(Writer writer) {
-        _xmlWriter = new XmlWriter(writer);
+    public XmlDataSetWriter(Writer writer, boolean xmlElement, boolean sortColumn, String[] replacements) {
+        _xmlWriter = new XmlWriter(writer, xmlElement, sortColumn, replacements);
         _xmlWriter.enablePrettyPrint(true);
     }
 
-    public XmlDataSetWriter(Writer writer, String encoding) {
-        _xmlWriter = new XmlWriter(writer, encoding);
+    public XmlDataSetWriter(Writer writer, String encoding, boolean xmlElement, boolean sortColumn, String[] replacements) {
+        _xmlWriter = new XmlWriter(writer, encoding, xmlElement, sortColumn, replacements);
         _xmlWriter.enablePrettyPrint(true);
     }
 

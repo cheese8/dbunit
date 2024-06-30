@@ -53,42 +53,32 @@ public class FlatXmlWriter implements IDataSetConsumer {
     private final XmlWriter xmlWriter;
     private ITableMetaData activeMetaData;
     private int activeRowCount;
-    private boolean xmlElememt;
-    private Map<String, String> replacementsMap;
     @Setter
     private boolean includeEmptyTable = false;
     @Setter
     private String systemId = null;
 
-    public FlatXmlWriter(OutputStream out, boolean xmlElememt, String[] replacements) throws IOException {
-        this(out, null);
-        this.xmlElememt = xmlElememt;
-        Map<String, String> replacementsMap = new HashMap<>();
-        if (replacements.length > 0) {
-            for(int i=0;i<replacements.length;i=i+2) {
-                replacementsMap.put(replacements[i], replacements[i+1]);
-            }
-        }
-        this.replacementsMap = replacementsMap;
+    public FlatXmlWriter(OutputStream out, boolean xmlElement, boolean sortColumn, String[] replacements) throws IOException {
+        this(out, null, xmlElement, sortColumn, replacements);
     }
 
     /**
      * @param outputStream The stream to which the XML will be written.
      * @param encoding     The encoding to be used for the {@link XmlWriter}.
-     *                     Can be null. See {@link XmlWriter#XmlWriter(OutputStream, String)}.
+     *                     Can be null. See {@link XmlWriter#XmlWriter(OutputStream, String, boolean, boolean, String[])}.
      */
-    public FlatXmlWriter(OutputStream outputStream, String encoding) throws UnsupportedEncodingException {
-        xmlWriter = new XmlWriter(outputStream, encoding);
+    public FlatXmlWriter(OutputStream outputStream, String encoding, boolean xmlElement, boolean sortColumn, String[] replacements) throws UnsupportedEncodingException {
+        xmlWriter = new XmlWriter(outputStream, encoding, xmlElement, sortColumn, replacements);
         xmlWriter.enablePrettyPrint(true);
     }
 
-    public FlatXmlWriter(Writer writer) {
-        xmlWriter = new XmlWriter(writer);
+    public FlatXmlWriter(Writer writer, boolean xmlElement, boolean sortColumn, String[] replacements) {
+        xmlWriter = new XmlWriter(writer, xmlElement, sortColumn, replacements);
         xmlWriter.enablePrettyPrint(true);
     }
 
-    public FlatXmlWriter(Writer writer, String encoding) {
-        xmlWriter = new XmlWriter(writer, encoding);
+    public FlatXmlWriter(Writer writer, String encoding, boolean xmlElement, boolean sortColumn, String[] replacements) {
+        xmlWriter = new XmlWriter(writer, encoding, xmlElement, sortColumn, replacements);
         xmlWriter.enablePrettyPrint(true);
     }
 
@@ -162,7 +152,9 @@ public class FlatXmlWriter implements IDataSetConsumer {
             xmlWriter.writeElement(tableName);
 
             Column[] columns = activeMetaData.getColumns();
-            Arrays.sort(columns);
+            if (xmlWriter.isSortColumn()) {
+                Arrays.sort(columns);
+            }
             for (int i = 0; i < columns.length; i++) {
                 String columnName = columns[i].getColumnName();
                 Object value = values[i];
@@ -174,8 +166,8 @@ public class FlatXmlWriter implements IDataSetConsumer {
 
                 try {
                     String stringValue = DataType.asString(value);
-                    String entryValue = replacementsMap.get(columnName);
-                    if (xmlElememt) {
+                    String entryValue = xmlWriter.getReplacements().get(columnName);
+                    if (xmlWriter.isXmlElememt()) {
                         xmlWriter.writeElementWithText(columnName, entryValue != null ? entryValue : stringValue);
                     } else {
                         xmlWriter.writeAttribute(columnName, entryValue != null ? entryValue : stringValue, true);

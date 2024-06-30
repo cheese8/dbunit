@@ -124,7 +124,7 @@ public class FlatXmlDataSetTest extends AbstractDataSetTest {
 
             // write dataset in temp file
             try {
-                FlatXmlDataSet.write(expectedDataSet, out);
+                FlatXmlDataSet.write(expectedDataSet, out, false, false, new String[]{});
             } finally {
                 out.close();
             }

@@ -45,7 +45,7 @@ public class FlatXmlTableWriteTest extends FlatXmlTableTest {
         try {
             // write DefaultTable in temp file
             try {
-                FlatXmlDataSet.write(super.createDataSet(true), out);
+                FlatXmlDataSet.write(super.createDataSet(true), out, false, false, new String[]{});
             } finally {
                 out.close();
             }
@@ -79,7 +79,7 @@ public class FlatXmlTableWriteTest extends FlatXmlTableTest {
         try {
             // write DefaultTable in temp file
             try {
-                FlatXmlDataSet.write(dataSet, out);
+                FlatXmlDataSet.write(dataSet, out, false, false, new String[]{});
             } finally {
                 out.close();
             }

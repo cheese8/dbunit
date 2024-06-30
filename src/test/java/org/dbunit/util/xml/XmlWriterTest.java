@@ -38,7 +38,7 @@ public class XmlWriterTest extends TestCase {
         String text = "text1\ntext2\rtext3";
         String expectedXml = "<COLUMN1 ATTR=\"" + text + "\">" + text + "</COLUMN1>\n";
         Writer writer = new StringWriter();
-        XmlWriter xmlWriter = new XmlWriter(writer);
+        XmlWriter xmlWriter = new XmlWriter(writer, false, false, new String[]{});
         xmlWriter.writeElement("COLUMN1");
         xmlWriter.writeAttribute("ATTR", text);
         xmlWriter.writeText(text);
@@ -55,7 +55,7 @@ public class XmlWriterTest extends TestCase {
         boolean literally = true;
         String text = "text1\ntext2\rtext3";
         Writer writer = new StringWriter();
-        XmlWriter xmlWriter = new XmlWriter(writer);
+        XmlWriter xmlWriter = new XmlWriter(writer, false, false, new String[]{});
         xmlWriter.writeElement("COLUMN1");
         xmlWriter.writeAttribute("ATTR", text, literally);
         xmlWriter.writeText(text, literally);
@@ -68,7 +68,7 @@ public class XmlWriterTest extends TestCase {
     public void testWriteAttributesAfterText() throws Exception {
         String text = "bla";
         Writer writer = new StringWriter();
-        XmlWriter xmlWriter = new XmlWriter(writer);
+        XmlWriter xmlWriter = new XmlWriter(writer, false, false, new String[]{});
         xmlWriter.writeElement("COLUMN1");
         xmlWriter.writeText(text);
         try {
@@ -82,7 +82,7 @@ public class XmlWriterTest extends TestCase {
     public void testWriteNestedCDATAWithoutSurrounder() throws Exception {
         String text = "<![CDATA[Text that itself is in a CDATA section]]>";
         Writer writer = new StringWriter();
-        XmlWriter xmlWriter = new XmlWriter(writer);
+        XmlWriter xmlWriter = new XmlWriter(writer, false, false, new String[]{});
         xmlWriter.writeElement("COLUMN1");
         xmlWriter.writeCData(text);
         xmlWriter.endElement();
@@ -97,7 +97,7 @@ public class XmlWriterTest extends TestCase {
         String text = "<myXmlText>" + XmlWriter.CDATA_START + "Text that itself is in a CDATA section" + XmlWriter.CDATA_END + "</myXmlText>";
         String expectedResultText = "<myXmlText>" + XmlWriter.CDATA_START + "Text that itself is in a CDATA section]]" + XmlWriter.CDATA_END + XmlWriter.CDATA_START + "></myXmlText>";
         Writer writer = new StringWriter();
-        XmlWriter xmlWriter = new XmlWriter(writer);
+        XmlWriter xmlWriter = new XmlWriter(writer, false, false, new String[]{});
         xmlWriter.writeElement("COLUMN1");
         xmlWriter.writeCData(text);
         xmlWriter.endElement();
@@ -111,7 +111,7 @@ public class XmlWriterTest extends TestCase {
     public void testOutputStreamWithNullEncoding() throws Exception {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         // Use a different encoding than the default
-        XmlWriter xmlWriter = new XmlWriter(out, null);
+        XmlWriter xmlWriter = new XmlWriter(out, null, false, false, new String[]{});
         xmlWriter.writeDeclaration();
         xmlWriter.writeEmptyElement("COLUMN1");
         xmlWriter.close();
@@ -124,7 +124,7 @@ public class XmlWriterTest extends TestCase {
     public void testOutputStreamWithNonDefaultEncoding() throws Exception {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         // Use a different encoding than the default
-        XmlWriter xmlWriter = new XmlWriter(out, "ISO-8859-1");
+        XmlWriter xmlWriter = new XmlWriter(out, "ISO-8859-1", false, false, new String[]{});
         xmlWriter.writeDeclaration();
         xmlWriter.writeEmptyElement("COLUMN1");
         xmlWriter.close();
@@ -146,7 +146,7 @@ public class XmlWriterTest extends TestCase {
         textBuilder.append(registeredSymbol);
         String text = textBuilder.toString();
         Writer writer = new StringWriter();
-        XmlWriter xmlWriter = new XmlWriter(writer);
+        XmlWriter xmlWriter = new XmlWriter(writer, false, false, new String[]{});
         xmlWriter.writeElement("COLUMN1");
         xmlWriter.writeAttribute("ATTR", text, literally);
         xmlWriter.writeText(text, literally);
@@ -163,7 +163,7 @@ public class XmlWriterTest extends TestCase {
 
         boolean literally = true;
         Writer writer = new StringWriter();
-        XmlWriter xmlWriter = new XmlWriter(writer);
+        XmlWriter xmlWriter = new XmlWriter(writer, false, false, new String[]{});
         xmlWriter.writeElement("COLUMN1");
         xmlWriter.writeAttribute("ATTR", expectedText, literally);
         xmlWriter.endElement();

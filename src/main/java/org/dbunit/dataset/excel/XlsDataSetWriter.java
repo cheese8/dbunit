@@ -80,7 +80,7 @@ public class XlsDataSetWriter {
     /**
      * Write the specified dataset to the specified Excel document.
      */
-    public void write(IDataSet dataSet, OutputStream out, String[] replacements)
+    public void write(IDataSet dataSet, OutputStream out, boolean sortColumn, String[] replacements)
             throws IOException, DataSetException {
         logger.debug("write(dataSet={}, out={}) - start", dataSet, out);
 
@@ -108,7 +108,9 @@ public class XlsDataSetWriter {
 
             Row headerRow = sheet.createRow(0);
             Column[] columns = metaData.getColumns();
-            Arrays.sort(columns);
+            if (sortColumn) {
+                Arrays.sort(columns);
+            }
             for (int j = 0; j < columns.length; j++) {
                 Column column = columns[j];
                 Cell cell = headerRow.createCell(j);

@@ -350,11 +350,11 @@ public class FlatXmlDataSet extends CachedDataSet {
     /**
      * Write the specified dataset to the specified output stream as xml.
      */
-    public static void write(IDataSet dataSet, OutputStream out, boolean xmlElement, String[] replacements)
+    public static void write(IDataSet dataSet, OutputStream out, boolean xmlElement, boolean sortColumn, String[] replacements)
             throws IOException, DataSetException {
         logger.debug("write(dataSet={}, out={}) - start", dataSet, out);
 
-        FlatXmlWriter datasetWriter = new FlatXmlWriter(out, xmlElement, replacements);
+        FlatXmlWriter datasetWriter = new FlatXmlWriter(out, xmlElement, sortColumn, replacements);
         datasetWriter.setIncludeEmptyTable(true);
         datasetWriter.write(dataSet);
     }
@@ -362,23 +362,23 @@ public class FlatXmlDataSet extends CachedDataSet {
     /**
      * Write the specified dataset to the specified writer as xml.
      */
-    public static void write(IDataSet dataSet, Writer writer)
+    public static void write(IDataSet dataSet, Writer writer, boolean xmlElement, boolean sortColumn, String[] replacements)
             throws IOException, DataSetException {
         logger.debug("write(dataSet={}, writer={}) - start", dataSet, writer);
-        write(dataSet, writer, null);
+        write(dataSet, writer, null, xmlElement, sortColumn, replacements);
     }
 
     /**
      * Write the specified dataset to the specified writer as xml.
      */
-    public static void write(IDataSet dataSet, Writer writer, String encoding)
+    public static void write(IDataSet dataSet, Writer writer, String encoding, boolean xmlElement, boolean sortColumn, String[] replacements)
             throws IOException, DataSetException {
         if (logger.isDebugEnabled()) {
             logger.debug("write(dataSet={}, writer={}, encoding={}) - start",
                     new Object[]{dataSet, writer, encoding});
         }
 
-        FlatXmlWriter datasetWriter = new FlatXmlWriter(writer, encoding);
+        FlatXmlWriter datasetWriter = new FlatXmlWriter(writer, encoding, xmlElement, sortColumn, replacements);
         datasetWriter.setIncludeEmptyTable(true);
         datasetWriter.write(dataSet);
     }

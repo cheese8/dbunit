@@ -109,18 +109,18 @@ public class Export extends AbstractStep {
             } else {
                 try (OutputStream out = Files.newOutputStream(dest.toPath())) {
                     if (format.equalsIgnoreCase(FormatSupport.FLAT.getFormat())) {
-                        FlatXmlWriter writer = new FlatXmlWriter(out, getEncoding());
+                        FlatXmlWriter writer = new FlatXmlWriter(out, getEncoding(), false, false, new String[]{});
                         writer.setSystemId(doctype);
                         writer.write(dataset);
                     } else if (format.equalsIgnoreCase(FormatSupport.XML.getFormat())) {
-                        XmlDataSet.write(dataset, out, getEncoding());
+                        XmlDataSet.write(dataset, out, getEncoding(), false, false, new String[]{});
                     } else if (format.equalsIgnoreCase(FormatSupport.DTD.getFormat())) {
                         //TODO Should DTD also support encoding? It is basically an XML file...
                         FlatDtdDataSet.write(dataset, out);//, getEncoding());
                     } else if (format.equalsIgnoreCase(FormatSupport.XLS.getFormat())) {
-                        XlsDataSet.write(dataset, out, new String[] {});
+                        XlsDataSet.write(dataset, out, false, new String[] {});
                     } else if (format.equalsIgnoreCase(FormatSupport.YML.getFormat())) {
-                        YamlDataSet.write(dataset, out, new String[] {});
+                        YamlDataSet.write(dataset, out, false, new String[] {});
                     } else {
                         throw new IllegalArgumentException("The given format '" + format + "' is not supported");
                     }

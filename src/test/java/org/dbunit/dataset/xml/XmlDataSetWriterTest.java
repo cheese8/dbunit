@@ -105,7 +105,7 @@ public class XmlDataSetWriterTest extends TestCase {
                         "</dataset>\n";
 
         StringWriter stringWriter = new StringWriter();
-        XmlDataSetWriter xmlWriter = new XmlDataSetWriter(stringWriter);
+        XmlDataSetWriter xmlWriter = new XmlDataSetWriter(stringWriter, false, false, new String[]{});
         IDataSet dataSet = getDefaultDataSet();
         xmlWriter.write(dataSet);
 
@@ -138,7 +138,7 @@ public class XmlDataSetWriterTest extends TestCase {
                         "  </table>\n" +
                         "</dataset>\n";
         StringWriter stringWriter = new StringWriter();
-        XmlDataSetWriter xmlWriter = new XmlDataSetWriter(stringWriter);
+        XmlDataSetWriter xmlWriter = new XmlDataSetWriter(stringWriter, false, false, new String[]{});
         xmlWriter.setIncludeColumnComments(true);
         IDataSet dataSet = getDefaultDataSet();
         xmlWriter.write(dataSet);
@@ -158,7 +158,7 @@ public class XmlDataSetWriterTest extends TestCase {
 
         // Write the XML
         StringWriter stringWriter = new StringWriter();
-        XmlDataSetWriter xmlWriter = new XmlDataSetWriter(stringWriter);
+        XmlDataSetWriter xmlWriter = new XmlDataSetWriter(stringWriter, false, false, new String[]{});
         xmlWriter.write(dataSet);
 
         String actualOutput = stringWriter.toString();
@@ -188,7 +188,7 @@ public class XmlDataSetWriterTest extends TestCase {
                         "</dataset>";
 
         StringWriter stringWriter = new StringWriter();
-        XmlDataSetWriter xmlWriter = new XmlDataSetWriter(stringWriter);
+        XmlDataSetWriter xmlWriter = new XmlDataSetWriter(stringWriter, false, false, new String[]{});
         xmlWriter.setPrettyPrint(false);
         IDataSet dataSet = getMinimalDataSet();
         xmlWriter.write(dataSet);

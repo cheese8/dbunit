@@ -35,6 +35,6 @@ public class XlsDataSetWriterTest {
         File file = new File(excelFileUri);
         IDataSet dataSet = new XlsDataSet(file);
         FileOutputStream outputStream = new FileOutputStream(OUTPUT_EXCEL_FILE);
-        XlsDataSet.write(dataSet, outputStream, new String[] {});
+        XlsDataSet.write(dataSet, outputStream, false, new String[] {});
     }
 }

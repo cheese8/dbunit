@@ -90,19 +90,19 @@ public class YamlDataSet extends CachedDataSet
     /**
      * Write the specified dataset to the specified output stream as YAML.
      */
-    public static void write(IDataSet dataSet, OutputStream out, String[] replacements)
+    public static void write(IDataSet dataSet, OutputStream out, boolean sortColumn, String[] replacements)
     throws DataSetException
     {
-        write(dataSet, new OutputStreamWriter(out), replacements);
+        write(dataSet, new OutputStreamWriter(out), sortColumn, replacements);
     }
 
     /**
      * Write the specified dataset to the specified writer as YAML.
      */
-    public static void write(IDataSet dataSet, Writer out,  String[] replacements)
+    public static void write(IDataSet dataSet, Writer out, boolean sortColumn, String[] replacements)
     throws DataSetException
     {
-        YamlWriter yamlWriter = new YamlWriter(out, replacements);
+        YamlWriter yamlWriter = new YamlWriter(out, sortColumn, replacements);
         yamlWriter.write(dataSet);
     }
 

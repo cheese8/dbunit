@@ -43,13 +43,14 @@ class YamlWriter
     private Writer _out;
     private boolean _useFlowStyle;
     private Map<String, String> replacementsMap;
+    private boolean sortColumn;
 
-    public YamlWriter(Writer out, String[] replacements)
+    public YamlWriter(Writer out, boolean sortColumn, String[] replacements)
     {
-        this(out, false, replacements);
+        this(out, false, sortColumn, replacements);
     }
 
-    public YamlWriter(Writer out, boolean useFlowStyle, String[] replacements)
+    public YamlWriter(Writer out, boolean useFlowStyle, boolean sortColumn, String[] replacements)
     {
         this._out = out;
         this._useFlowStyle = useFlowStyle;
@@ -59,6 +60,7 @@ class YamlWriter
                 replacementsMap.put(replacements[i], replacements[i+1]);
             }
         }
+        this.sortColumn = sortColumn;
         this.replacementsMap = replacementsMap;
     }
 
@@ -98,7 +100,9 @@ class YamlWriter
             {
                 LinkedHashMap<String, Object> rowMap = new LinkedHashMap<>();
                 Column[] columns = tableMetaData.getColumns();
-                Arrays.sort(columns);
+                if (sortColumn) {
+                    Arrays.sort(columns);
+                }
                 for (Column column : columns)
                 {
                     String columnName = column.getColumnName();

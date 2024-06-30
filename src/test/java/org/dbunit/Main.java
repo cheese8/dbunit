@@ -106,7 +106,7 @@ public class Main {
         IDataSet dataSet = new StreamingDataSet(mockProducer);
 
         OutputStream out = new FileOutputStream("flatXmlWriterTest.xml");
-        FlatXmlWriter writer = new FlatXmlWriter(new OutputStreamWriter(out, "UTF8"));
+        FlatXmlWriter writer = new FlatXmlWriter(new OutputStreamWriter(out, "UTF8"), false, false, new String[]{});
         writer.write(dataSet);
     }
 
@@ -118,7 +118,7 @@ public class Main {
         IDataSet dataSet = new StreamingDataSet(mockProducer);
 
         OutputStream out = new FileOutputStream("xmlWriterTest.xml");
-        XmlDataSetWriter writer = new XmlDataSetWriter(new OutputStreamWriter(out, "UTF8"));
+        XmlDataSetWriter writer = new XmlDataSetWriter(new OutputStreamWriter(out, "UTF8"), false, false, new String[]{});
         writer.write(dataSet);
     }
 
@@ -164,7 +164,7 @@ public class Main {
 //
         Writer out = new FileWriter("test.xml");
 //        FlatXmlDataSet.write(connection.createDataSet(), out, "ISO-8859-1");
-        FlatXmlDataSet.write(connection.createDataSet(), out);
+        FlatXmlDataSet.write(connection.createDataSet(), out, false, false, new String[]{});
 //        out.flush();
 //        out.close();
 
@@ -194,7 +194,7 @@ public class Main {
                 "P:/dbunit-cvs/dbunit/src/xml/dataSetTest.xml");
         FileOutputStream out = new FileOutputStream(
                 "P:/dbunit-cvs/dbunit/dataSetTest.xls");
-        XlsDataSet.write(new XmlDataSet(in), out, new String[] {});
+        XlsDataSet.write(new XmlDataSet(in), out, false, new String[] {});
         out.close();
     }
 

@@ -93,7 +93,7 @@ public class YmlDataSetTest extends AbstractDataSetTest
             try
             {
                 // write dataset in temp file
-                YamlDataSet.write(expectedDataSet, out, new String[] {});
+                YamlDataSet.write(expectedDataSet, out, false, new String[] {});
 
                 // load new dataset from temp file
                 IDataSet actualDataSet =

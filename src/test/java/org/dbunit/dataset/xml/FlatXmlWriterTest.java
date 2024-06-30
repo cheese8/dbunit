@@ -52,7 +52,7 @@ public class FlatXmlWriterTest extends TestCase {
         IDataSet dataSet = XmlDataSetWriterTest.getDefaultDataSet();
 
         StringWriter stringWriter = new StringWriter();
-        FlatXmlWriter xmlWriter = new FlatXmlWriter(stringWriter);
+        FlatXmlWriter xmlWriter = new FlatXmlWriter(stringWriter, false, false, new String[]{});
         xmlWriter.write(dataSet);
 
         String actualOutput = stringWriter.toString();
@@ -69,7 +69,7 @@ public class FlatXmlWriterTest extends TestCase {
         IDataSet dataSet = XmlDataSetWriterTest.getMinimalDataSet();
 
         StringWriter stringWriter = new StringWriter();
-        FlatXmlWriter xmlWriter = new FlatXmlWriter(stringWriter);
+        FlatXmlWriter xmlWriter = new FlatXmlWriter(stringWriter, false, false, new String[]{});
         xmlWriter.setSystemId("dataset.dtd");
         xmlWriter.write(dataSet);
 
@@ -86,7 +86,7 @@ public class FlatXmlWriterTest extends TestCase {
         IDataSet dataSet = getEmptyTableDataSet();
 
         StringWriter stringWriter = new StringWriter();
-        FlatXmlWriter datasetWriter = new FlatXmlWriter(stringWriter);
+        FlatXmlWriter datasetWriter = new FlatXmlWriter(stringWriter, false, false, new String[]{});
         datasetWriter.setIncludeEmptyTable(false);
         datasetWriter.write(dataSet);
 
@@ -104,7 +104,7 @@ public class FlatXmlWriterTest extends TestCase {
         IDataSet dataSet = getEmptyTableDataSet();
 
         StringWriter stringWriter = new StringWriter();
-        FlatXmlWriter datasetWriter = new FlatXmlWriter(stringWriter);
+        FlatXmlWriter datasetWriter = new FlatXmlWriter(stringWriter, false, false, new String[]{});
         datasetWriter.setIncludeEmptyTable(true);
         datasetWriter.write(dataSet);
 
@@ -135,7 +135,7 @@ public class FlatXmlWriterTest extends TestCase {
         table.setValue(1, col1, null);
 
         StringWriter stringWriter = new StringWriter();
-        FlatXmlWriter xmlWriter = new FlatXmlWriter(stringWriter);
+        FlatXmlWriter xmlWriter = new FlatXmlWriter(stringWriter, false, false, new String[]{});
         xmlWriter.write(new DefaultDataSet(table));
 
         String actualOutput = stringWriter.toString();
@@ -151,7 +151,7 @@ public class FlatXmlWriterTest extends TestCase {
         IDataSet dataSet = XmlDataSetWriterTest.getMinimalDataSet();
 
         StringWriter stringWriter = new StringWriter();
-        FlatXmlWriter xmlWriter = new FlatXmlWriter(stringWriter);
+        FlatXmlWriter xmlWriter = new FlatXmlWriter(stringWriter, false, false, new String[]{});
         xmlWriter.setPrettyPrint(false);
         xmlWriter.write(dataSet);
 

@@ -38,8 +38,9 @@ class JsonWriter
     private Writer _out;
     private boolean _useFlowStyle;
     private Map<String, String> replacementsMap;
+    private boolean sortColumn;
 
-    public JsonWriter(Writer out, String[] replacements)
+    public JsonWriter(Writer out, boolean sortColumn, String[] replacements)
     {
         this(out, false);
         Map<String, String> replacementsMap = new HashMap<>();
@@ -49,6 +50,7 @@ class JsonWriter
             }
         }
         this.replacementsMap = replacementsMap;
+        this.sortColumn = sortColumn;
     }
 
     public JsonWriter(Writer out, boolean useFlowStyle)
@@ -98,7 +100,9 @@ class JsonWriter
             {
                 LinkedHashMap<String, Object> rowMap = new LinkedHashMap<>();
                 Column[] columns = tableMetaData.getColumns();
-                Arrays.sort(columns);
+                if (sortColumn) {
+                    Arrays.sort(columns);
+                }
                 for (Column column : columns)
                 {
                     String columnName = column.getColumnName();

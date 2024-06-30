@@ -58,6 +58,8 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Stack;
 
 import org.slf4j.Logger;
@@ -145,17 +147,45 @@ public class XmlWriter {
      */
     private String newline = "\n";
 
-    /**
-     * Create an XmlWriter on top of an existing java.io.Writer.
-     */
-    public XmlWriter(final Writer writer) {
-        this(writer, null);
+    private boolean xmlElement;
+
+    private boolean sortColumn;
+
+    private String[] replacements;
+
+    public Map<String, String> getReplacements() {
+        Map<String, String> result = new HashMap<>();
+        if (replacements == null || replacements.length <=0) {
+            return result;
+        }
+        for(int i=0; i<replacements.length;i+=2) {
+            result.put(replacements[i], replacements[i+1]);
+        }
+        return result;
+    }
+
+    public boolean isXmlElememt() {
+        return xmlElement;
+    }
+
+    public boolean isSortColumn() {
+        return sortColumn;
     }
 
     /**
      * Create an XmlWriter on top of an existing java.io.Writer.
      */
-    public XmlWriter(final Writer writer, final String encoding) {
+    public XmlWriter(final Writer writer, boolean xmlElement, boolean sortColumn, String[] replacements) {
+        this(writer, null, xmlElement, sortColumn, replacements);
+    }
+
+    /**
+     * Create an XmlWriter on top of an existing java.io.Writer.
+     */
+    public XmlWriter(final Writer writer, final String encoding, boolean xmlElement, boolean sortColumn, String[] replacements) {
+        this.xmlElement = xmlElement;
+        this.sortColumn = sortColumn;
+        this.replacements = replacements;
         setWriter(writer, encoding);
     }
 
@@ -169,13 +199,16 @@ public class XmlWriter {
      * @throws UnsupportedEncodingException
      * @since 2.4
      */
-    public XmlWriter(final OutputStream outputStream, String encoding)
+    public XmlWriter(final OutputStream outputStream, String encoding, boolean xmlElement, boolean sortColumn, String[] replacements)
             throws UnsupportedEncodingException {
         if (encoding == null) {
             encoding = DEFAULT_ENCODING;
         }
         final OutputStreamWriter writer =
                 new OutputStreamWriter(outputStream, encoding);
+        this.xmlElement = xmlElement;
+        this.sortColumn = sortColumn;
+        this.replacements = replacements;
         setWriter(writer, encoding);
     }
 
@@ -547,7 +580,7 @@ public class XmlWriter {
         logger.debug("test1() - start");
 
         final Writer writer = new java.io.StringWriter();
-        final XmlWriter xmlwriter = new XmlWriter(writer);
+        final XmlWriter xmlwriter = new XmlWriter(writer, false, false, new String[]{});
         xmlwriter.writeElement("person").writeAttribute("name", "fred")
                 .writeAttribute("age", "12").writeElement("phone")
                 .writeText("4254343").endElement().writeElement("friends")
@@ -561,7 +594,7 @@ public class XmlWriter {
         logger.debug("test2() - start");
 
         final Writer writer = new java.io.StringWriter();
-        final XmlWriter xmlwriter = new XmlWriter(writer);
+        final XmlWriter xmlwriter = new XmlWriter(writer, false, false, new String[]{});
         xmlwriter.writeComment("Example of XmlWriter running");
         xmlwriter.writeElement("person");
         xmlwriter.writeAttribute("name", "fred");

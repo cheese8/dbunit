@@ -45,7 +45,7 @@ public class XmlTableWriteTest extends XmlTableTest {
         try {
             // write DefaultTable in temp file
             try {
-                XmlDataSet.write(super.createDataSet(), out);
+                XmlDataSet.write(super.createDataSet(), out, false, false, new String[]{});
             } finally {
                 out.close();
             }
@@ -80,7 +80,7 @@ public class XmlTableWriteTest extends XmlTableTest {
         try {
             // write DefaultTable in temp file
             try {
-                XmlDataSet.write(dataSet, out);
+                XmlDataSet.write(dataSet, out, false, false, new String[]{});
             } finally {
                 out.close();
             }
