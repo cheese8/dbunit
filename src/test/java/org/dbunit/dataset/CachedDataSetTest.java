@@ -40,7 +40,7 @@ public class CachedDataSetTest extends AbstractDataSetDecoratorTest {
 
     protected IDataSet createDataSet() throws Exception {
         FileReader reader = new FileReader(FlatXmlDataSetTest.DATASET_FILE);
-        return new CachedDataSet(new FlatXmlProducer(new InputSource(reader)));
+        return new CachedDataSet(new FlatXmlProducer(new InputSource(reader), null));
     }
 
     public void testGetTable() throws Exception {

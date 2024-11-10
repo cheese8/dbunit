@@ -16,7 +16,7 @@ public class RowFilterTableTest extends TestCase {
 
     private IDataSet getDataSet() throws Exception {
         return new FlatXmlDataSetBuilder().build(TestUtils.getFileReader(
-                "xml/rowFilterTableTest.xml"));
+                "xml/rowFilterTableTest.xml"), null);
     }
 
 

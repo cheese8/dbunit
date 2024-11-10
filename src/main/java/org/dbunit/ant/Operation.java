@@ -163,11 +163,11 @@ public class Operation extends AbstractStep {
             if (sources.size() > 1) {
                 IDataSet[] datasets = new IDataSet[sources.size()];
                 for (int i = 0; i < sources.size(); i++) {
-                    datasets[i] = getSrcDataSet(sources.get(i), getFormat(), useForwardOnly);
+                    datasets[i] = getSrcDataSet(sources.get(i), getFormat(), useForwardOnly, null);
                 }
                 dataset = new CompositeDataSet(datasets, combine);
             } else {
-                dataset = getSrcDataSet(sources.get(0), getFormat(), useForwardOnly);
+                dataset = getSrcDataSet(sources.get(0), getFormat(), useForwardOnly, null);
             }
             if (nullToken != null) {
                 dataset = new ReplacementDataSet(dataset);

@@ -38,7 +38,7 @@ public class SortedDataSetTest extends AbstractDataSetDecoratorTest {
 
     protected IDataSet createDataSet() throws Exception {
         IDataSet dataSet = new FlatXmlDataSetBuilder().build(
-                TestUtils.getFileReader("xml/sortedDataSetTest.xml"));
+                TestUtils.getFileReader("xml/sortedDataSetTest.xml"), null);
 
         return new SortedDataSet(dataSet);
     }

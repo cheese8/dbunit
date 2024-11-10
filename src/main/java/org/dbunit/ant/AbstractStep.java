@@ -126,7 +126,7 @@ public abstract class AbstractStep extends ProjectComponent implements DbUnitTas
         }
     }
 
-    protected IDataSet getSrcDataSet(File src, String format, boolean forwardOnly) throws DatabaseUnitException {
+    protected IDataSet getSrcDataSet(File src, String format, boolean forwardOnly, String[] datasetId) throws DatabaseUnitException {
         log.debug("getSrcDataSet(src={}, format={}, forwardOnly={}) - start", src, format, forwardOnly);
         try {
             IDataSetProducer producer;
@@ -135,7 +135,7 @@ public abstract class AbstractStep extends ProjectComponent implements DbUnitTas
             } else if (format.equalsIgnoreCase(FormatSupport.CSV.getFormat())) {
                 producer = new CsvProducer(src);
             } else if (format.equalsIgnoreCase(FormatSupport.FLAT.getFormat())) {
-                producer = new FlatXmlProducer(getInputSource(src), true, true);
+                producer = new FlatXmlProducer(getInputSource(src), true, true, datasetId);
             } else if (format.equalsIgnoreCase(FormatSupport.DTD.getFormat())) {
                 producer = new FlatDtdProducer(getInputSource(src));
             } else if (format.equalsIgnoreCase(FormatSupport.XLS.getFormat())) {

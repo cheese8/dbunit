@@ -31,8 +31,6 @@ import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.DefaultDataSet;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ReplacementDataSet;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Base class with common implementation for dbUnit data file loaders.
@@ -97,7 +95,7 @@ public abstract class AbstractDataFileLoader implements DataFileLoader {
     /**
      * {@inheritDoc}
      */
-    public IDataSet load(String filename) throws DatabaseUnitRuntimeException {
+    public IDataSet load(String filename, String[] datasetId) throws DatabaseUnitRuntimeException {
         IDataSet ds = new DefaultDataSet();
 
 
@@ -115,7 +113,7 @@ public abstract class AbstractDataFileLoader implements DataFileLoader {
             }
 
             try {
-                ds = loadDataSet(url);
+                ds = loadDataSet(url, datasetId);
                 ds = processReplacementTokens(ds);
             } catch (DataSetException e) {
                 final String msg =

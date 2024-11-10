@@ -43,7 +43,7 @@ public class DataSetProducerAdapterTest extends AbstractProducerTest {
     }
 
     protected IDataSetProducer createProducer() throws Exception {
-        FlatXmlDataSet dataSet = new FlatXmlDataSetBuilder().build(DATASET_FILE);
+        FlatXmlDataSet dataSet = new FlatXmlDataSetBuilder().build(DATASET_FILE, null);
         return new DataSetProducerAdapter(dataSet);
     }
 

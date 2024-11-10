@@ -48,7 +48,7 @@ public class SortedTableTest extends AbstractTableTest {
     }
 
     private IDataSet createUnsortedDataSet() throws DataSetException, IOException {
-        return new FlatXmlDataSetBuilder().build(sortedTableTestFile);
+        return new FlatXmlDataSetBuilder().build(sortedTableTestFile, null);
     }
 
     private ITable createNumericTable() throws Exception {

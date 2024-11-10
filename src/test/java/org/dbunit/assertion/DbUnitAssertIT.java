@@ -62,7 +62,7 @@ public class DbUnitAssertIT extends TestCase {
     }
 
     private IDataSet getDataSet() throws Exception {
-        return new FlatXmlDataSetBuilder().build(TestUtils.getFileReader(FILE_PATH));
+        return new FlatXmlDataSetBuilder().build(TestUtils.getFileReader(FILE_PATH), null);
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -77,7 +77,7 @@ public class DbUnitAssertIT extends TestCase {
 
     public void testAssertTablesEmtpyEquals() throws Exception {
         IDataSet empty1 = new XmlDataSet(TestUtils.getFileReader("xml/assertionTest-empty1.xml"));
-        IDataSet empty2 = new FlatXmlDataSetBuilder().build(TestUtils.getFileReader("xml/assertionTest-empty2.xml"));
+        IDataSet empty2 = new FlatXmlDataSetBuilder().build(TestUtils.getFileReader("xml/assertionTest-empty2.xml"), null);
         assertion.assertEquals(empty1, empty2);
     }
 
@@ -362,8 +362,8 @@ public class DbUnitAssertIT extends TestCase {
     }
 
     public void testAssertDataSetsTableNamesCaseSensitiveNotEquals() throws Exception {
-        IDataSet dataSet1 = new FlatXmlDataSetBuilder().setCaseSensitiveTableNames(true).build(TestUtils.getFileReader("xml/assertion_table_name_case_sensitive_1.xml"));
-        IDataSet dataSet2 = new FlatXmlDataSetBuilder().setCaseSensitiveTableNames(true).build(TestUtils.getFileReader("xml/assertion_table_name_case_sensitive_2.xml"));
+        IDataSet dataSet1 = new FlatXmlDataSetBuilder().setCaseSensitiveTableNames(true).build(TestUtils.getFileReader("xml/assertion_table_name_case_sensitive_1.xml"), null);
+        IDataSet dataSet2 = new FlatXmlDataSetBuilder().setCaseSensitiveTableNames(true).build(TestUtils.getFileReader("xml/assertion_table_name_case_sensitive_2.xml"), null);
 
         try {
             assertion.assertEquals(dataSet1, dataSet2);
@@ -379,8 +379,8 @@ public class DbUnitAssertIT extends TestCase {
     }
 
     public void testAssertDataSetsTableNamesCaseSensitiveWithLowerCaseEquals() throws Exception {
-        IDataSet dataSet1 = new FlatXmlDataSetBuilder().setCaseSensitiveTableNames(true).build(TestUtils.getFileReader("xml/assertion_table_name_case_sensitive_with_lower_case.xml"));
-        IDataSet dataSet2 = new FlatXmlDataSetBuilder().setCaseSensitiveTableNames(true).build(TestUtils.getFileReader("xml/assertion_table_name_case_sensitive_with_lower_case.xml"));
+        IDataSet dataSet1 = new FlatXmlDataSetBuilder().setCaseSensitiveTableNames(true).build(TestUtils.getFileReader("xml/assertion_table_name_case_sensitive_with_lower_case.xml"), null);
+        IDataSet dataSet2 = new FlatXmlDataSetBuilder().setCaseSensitiveTableNames(true).build(TestUtils.getFileReader("xml/assertion_table_name_case_sensitive_with_lower_case.xml"), null);
         assertTrue("Datasets are the same instances.", dataSet1 != dataSet2);
         assertion.assertEquals(dataSet1, dataSet2);
     }
@@ -456,12 +456,12 @@ public class DbUnitAssertIT extends TestCase {
                 "<dataset>\n" +
                         "<TEST_TABLE COLUMN0='row 0 col 0' COLUMN1='row 0 col 1'/>\n" +
                         "</dataset>\n";
-        IDataSet dataSet1 = new FlatXmlDataSetBuilder().build(new StringReader(xml1));
+        IDataSet dataSet1 = new FlatXmlDataSetBuilder().build(new StringReader(xml1), null);
         String xml2 =
                 "<dataset>\n" +
                         "<TEST_TABLE COLUMN0='row 0 col somthing' COLUMN1='row 0 col something mysterious'/>\n" +
                         "</dataset>\n";
-        IDataSet dataSet2 = new FlatXmlDataSetBuilder().build(new StringReader(xml2));
+        IDataSet dataSet2 = new FlatXmlDataSetBuilder().build(new StringReader(xml2), null);
 
         // Invoke the assertion
         try {

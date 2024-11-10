@@ -92,8 +92,8 @@ public final class FlatXmlDataSetBuilder {
      * @return The created {@link FlatXmlDataSet}
      * @throws DataSetException
      */
-    public FlatXmlDataSet build(InputSource inputSource) throws DataSetException {
-        return buildInternal(inputSource);
+    public FlatXmlDataSet build(InputSource inputSource, String[] datasetId) throws DataSetException {
+        return buildInternal(inputSource, datasetId);
     }
 
     /**
@@ -103,10 +103,10 @@ public final class FlatXmlDataSetBuilder {
      * @return The created {@link FlatXmlDataSet}
      * @throws DataSetException
      */
-    public FlatXmlDataSet build(File xmlInputFile) throws MalformedURLException, DataSetException {
+    public FlatXmlDataSet build(File xmlInputFile, String[] datasetId) throws MalformedURLException, DataSetException {
         URL xmlInputUrl = xmlInputFile.toURL();
         InputSource inputSource = createInputSourceFromUrl(xmlInputUrl);
-        return buildInternal(inputSource);
+        return buildInternal(inputSource, datasetId);
     }
 
     /**
@@ -116,9 +116,9 @@ public final class FlatXmlDataSetBuilder {
      * @return The created {@link FlatXmlDataSet}
      * @throws DataSetException
      */
-    public FlatXmlDataSet build(URL xmlInputUrl) throws DataSetException {
+    public FlatXmlDataSet build(URL xmlInputUrl, String[] datasetId) throws DataSetException {
         InputSource inputSource = createInputSourceFromUrl(xmlInputUrl);
-        return buildInternal(inputSource);
+        return buildInternal(inputSource, datasetId);
     }
 
     /**
@@ -128,9 +128,9 @@ public final class FlatXmlDataSetBuilder {
      * @return The created {@link FlatXmlDataSet}
      * @throws DataSetException
      */
-    public FlatXmlDataSet build(Reader xmlReader) throws DataSetException {
+    public FlatXmlDataSet build(Reader xmlReader, String[] datasetId) throws DataSetException {
         InputSource inputSource = new InputSource(xmlReader);
-        return buildInternal(inputSource);
+        return buildInternal(inputSource, datasetId);
     }
 
     /**
@@ -140,9 +140,9 @@ public final class FlatXmlDataSetBuilder {
      * @return The created {@link FlatXmlDataSet}
      * @throws DataSetException
      */
-    public FlatXmlDataSet build(InputStream xmlInputStream) throws DataSetException {
+    public FlatXmlDataSet build(InputStream xmlInputStream, String[] datasetId) throws DataSetException {
         InputSource inputSource = new InputSource(xmlInputStream);
-        return buildInternal(inputSource);
+        return buildInternal(inputSource, datasetId);
     }
 
     /**
@@ -250,7 +250,7 @@ public final class FlatXmlDataSetBuilder {
      * @return The {@link FlatXmlDataSet} built from the configuration of this builder.
      * @throws DataSetException
      */
-    private FlatXmlDataSet buildInternal(InputSource inputSource) throws DataSetException {
+    private FlatXmlDataSet buildInternal(InputSource inputSource, String[] datasetId) throws DataSetException {
         logger.trace("build(inputSource={}) - start", inputSource);
 
         // Validate required parameters
@@ -260,7 +260,7 @@ public final class FlatXmlDataSetBuilder {
 
         // Create the flat XML IDataSet
         logger.debug("Creating FlatXmlDataSet with builder parameters: {}", this);
-        FlatXmlProducer producer = createProducer(inputSource);
+        FlatXmlProducer producer = createProducer(inputSource, datasetId);
         return new FlatXmlDataSet(producer);
     }
 
@@ -268,17 +268,17 @@ public final class FlatXmlDataSetBuilder {
      * @param inputSource The XML input to be built
      * @return The producer which is used to create the {@link FlatXmlDataSet}
      */
-    protected FlatXmlProducer createProducer(InputSource inputSource) {
+    protected FlatXmlProducer createProducer(InputSource inputSource, String[] datasetId) {
         logger.trace("createProducer(inputSource={}) - start", inputSource);
 
         FlatXmlProducer producer = null;
         if (this.metaDataSet != null) {
             logger.debug("Creating FlatXmlProducer using the following metaDataSet: {}", this.metaDataSet);
-            producer = new FlatXmlProducer(inputSource, this.metaDataSet);
+            producer = new FlatXmlProducer(inputSource, this.metaDataSet, datasetId);
         } else {
             logger.debug("Creating FlatXmlProducer using the properties of this builder: {}", this);
             producer = new FlatXmlProducer(
-                    inputSource, this.dtdMetadata, this.columnSensing, this.caseSensitiveTableNames);
+                    inputSource, this.dtdMetadata, this.columnSensing, this.caseSensitiveTableNames, datasetId);
         }
         return producer;
     }

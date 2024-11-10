@@ -142,7 +142,7 @@ public class Main {
 
         // Use the StreamingDataSet to import very large dataset.
         IDataSetProducer producer = new FlatXmlProducer(
-                new InputSource("dataset.xml"));
+                new InputSource("dataset.xml"), null);
         IDataSet dataSet = new StreamingDataSet(producer);
     }
 

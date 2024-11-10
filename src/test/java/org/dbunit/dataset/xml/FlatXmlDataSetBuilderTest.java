@@ -14,6 +14,6 @@ public class FlatXmlDataSetBuilderTest {
             throws MalformedURLException, DataSetException {
         String fileName = "/xml/flatXmlDataSet$Test.xml";
         InputStream inputStream = getClass().getResourceAsStream(fileName);
-        sut.build(inputStream);
+        sut.build(inputStream, null);
     }
 }

@@ -27,8 +27,6 @@ import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ITable;
 import org.dbunit.testutil.TestUtils;
 
-import java.io.File;
-
 /**
  * @author Manuel Laflamme
  * @version $Revision$
@@ -44,7 +42,7 @@ public class FlatXmlTableTest extends AbstractTableTest {
     }
 
     protected IDataSet createDataSet(boolean noneAsNull) throws Exception {
-        return new FlatXmlDataSetBuilder().build(TestUtils.getFile("xml/flatXmlTableTest.xml"));
+        return new FlatXmlDataSetBuilder().build(TestUtils.getFile("xml/flatXmlTableTest.xml"), null);
     }
 
     public void testGetMissingValue() throws Exception {

@@ -67,7 +67,7 @@ public class SQLHelperDomainPostgreSQLIT extends TestCase {
             ReplacementDataSet dataSet = new ReplacementDataSet(
                     new FlatXmlDataSetBuilder().build(
                             new InputSource(
-                                    new StringReader(xmlData))
+                                    new StringReader(xmlData)), null
                     ));
             dataSet.addReplacementObject("[NULL]", null);
             dataSet.setStrictReplacement(true);

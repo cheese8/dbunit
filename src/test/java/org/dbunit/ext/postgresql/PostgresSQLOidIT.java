@@ -60,7 +60,7 @@ public class PostgresSQLOidIT extends TestCase {
         try {
             ReplacementDataSet dataSet =
                     new ReplacementDataSet(new FlatXmlDataSetBuilder()
-                            .build(new InputSource(new StringReader(xmlData))));
+                            .build(new InputSource(new StringReader(xmlData)), null));
             dataSet.addReplacementObject("[NULL]", null);
             dataSet.setStrictReplacement(true);
 

@@ -458,7 +458,7 @@ public class InsertOperationIT extends AbstractDatabaseIT {
             String tableName = "CLOB_TABLE";
 
             Reader in = new FileReader(TestUtils.getFile("xml/clobInsertTest.xml"));
-            IDataSet xmlDataSet = new FlatXmlDataSetBuilder().build(in);
+            IDataSet xmlDataSet = new FlatXmlDataSetBuilder().build(in, null);
 
             assertEquals("count before", 0, connection.getRowCount(tableName));
 
@@ -477,7 +477,7 @@ public class InsertOperationIT extends AbstractDatabaseIT {
             String tableName = "BLOB_TABLE";
 
             Reader in = new FileReader(TestUtils.getFile("xml/blobInsertTest.xml"));
-            IDataSet xmlDataSet = new FlatXmlDataSetBuilder().build(in);
+            IDataSet xmlDataSet = new FlatXmlDataSetBuilder().build(in, null);
 
             assertEquals("count before", 0, connection.getRowCount(tableName));
 
@@ -496,7 +496,7 @@ public class InsertOperationIT extends AbstractDatabaseIT {
             String tableName = "SDO_GEOMETRY_TABLE";
 
             Reader in = new FileReader(TestUtils.getFile("xml/sdoGeometryInsertTest.xml"));
-            IDataSet xmlDataSet = new FlatXmlDataSetBuilder().build(in);
+            IDataSet xmlDataSet = new FlatXmlDataSetBuilder().build(in, null);
 
             assertEquals("count before", 0, connection.getRowCount(tableName));
 
@@ -515,7 +515,7 @@ public class InsertOperationIT extends AbstractDatabaseIT {
             String tableName = "XML_TYPE_TABLE";
 
             Reader in = new FileReader(TestUtils.getFile("xml/xmlTypeInsertTest.xml"));
-            IDataSet xmlDataSet = new FlatXmlDataSetBuilder().build(in);
+            IDataSet xmlDataSet = new FlatXmlDataSetBuilder().build(in, null);
 
             assertEquals("count before", 0, connection.getRowCount(tableName));
 

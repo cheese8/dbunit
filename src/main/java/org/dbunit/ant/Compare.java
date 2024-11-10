@@ -70,7 +70,7 @@ public class Compare extends AbstractStep {
 
     public void execute(IDatabaseConnection connection) throws DatabaseUnitException {
         log.debug("execute(connection={}) - start", connection);
-        IDataSet expectedDataset = getSrcDataSet(src, getFormat(), false);
+        IDataSet expectedDataset = getSrcDataSet(src, getFormat(), false, null);
         IDataSet actualDataset = getDatabaseDataSet(connection, tables);
 
         String[] tableNames;

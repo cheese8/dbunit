@@ -38,15 +38,15 @@ public class DefaultPrepAndExpectedTestCaseTest extends TestCase {
         final String[] expectedDataFiles = {EXP_DATA_FILE_NAME};
         final VerifyTableDefinition[] tables = {};
 
-        tc.configureTest(tables, prepDataFiles, expectedDataFiles);
+        tc.configureTest(tables, prepDataFiles, expectedDataFiles, null);
 
         assertEquals("Configured tables do not match expected.", tables,
                 tc.getVerifyTableDefs());
 
-        final IDataSet expPrepDs = dataFileLoader.load(PREP_DATA_FILE_NAME);
+        final IDataSet expPrepDs = dataFileLoader.load(PREP_DATA_FILE_NAME, null);
         Assertion.assertEquals(expPrepDs, tc.getPrepDataset());
 
-        final IDataSet expExpDs = dataFileLoader.load(EXP_DATA_FILE_NAME);
+        final IDataSet expExpDs = dataFileLoader.load(EXP_DATA_FILE_NAME, null);
         Assertion.assertEquals(expExpDs, tc.getExpectedDataset());
     }
 

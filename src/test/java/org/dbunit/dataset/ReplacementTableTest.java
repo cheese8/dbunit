@@ -46,7 +46,7 @@ public class ReplacementTableTest extends AbstractTableTest {
     }
 
     private IDataSet createDataSet() throws Exception {
-        FlatXmlDataSet fds = new FlatXmlDataSetBuilder().build(TestUtils.getFile("xml/flatXmlTableTest.xml"));
+        FlatXmlDataSet fds = new FlatXmlDataSetBuilder().build(TestUtils.getFile("xml/flatXmlTableTest.xml"), null);
         return new ReplacementDataSet(fds);
     }
 

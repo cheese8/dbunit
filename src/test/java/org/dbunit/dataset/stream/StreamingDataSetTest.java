@@ -42,7 +42,7 @@ public class StreamingDataSetTest extends ForwardOnlyDataSetTest {
 
     protected IDataSet createDataSet() throws Exception {
         IDataSetProducer source = new FlatXmlProducer(
-                new InputSource(new FileReader(FlatXmlDataSetTest.DATASET_FILE)));
+                new InputSource(new FileReader(FlatXmlDataSetTest.DATASET_FILE)), null);
         return new StreamingDataSet(source);
     }
 

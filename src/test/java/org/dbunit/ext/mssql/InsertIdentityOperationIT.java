@@ -63,21 +63,21 @@ public class InsertIdentityOperationIT extends AbstractDatabaseIT {
 
     public void testExecuteFlatXML() throws Exception {
         Reader in = TestUtils.getFileReader("xml/insertIdentityOperationTestFlat.xml");
-        IDataSet dataSet = new FlatXmlDataSetBuilder().build(in);
+        IDataSet dataSet = new FlatXmlDataSetBuilder().build(in, null);
 
         testExecute(dataSet);
     }
 
     public void testExecuteLowerCase() throws Exception {
         Reader in = TestUtils.getFileReader("xml/insertIdentityOperationTestFlat.xml");
-        IDataSet dataSet = new LowerCaseDataSet(new FlatXmlDataSetBuilder().build(in));
+        IDataSet dataSet = new LowerCaseDataSet(new FlatXmlDataSetBuilder().build(in, null));
 
         testExecute(dataSet);
     }
 
     public void testExecuteForwardOnly() throws Exception {
         Reader in = TestUtils.getFileReader("xml/insertIdentityOperationTestFlat.xml");
-        IDataSet dataSet = new ForwardOnlyDataSet(new FlatXmlDataSetBuilder().build(in));
+        IDataSet dataSet = new ForwardOnlyDataSet(new FlatXmlDataSetBuilder().build(in, null));
 
         testExecute(dataSet);
     }
@@ -116,7 +116,7 @@ public class InsertIdentityOperationIT extends AbstractDatabaseIT {
     */
     public void testIdentityInsertNoPK() throws Exception {
         Reader in = TestUtils.getFileReader("xml/insertIdentityOperationTestNoPK.xml");
-        IDataSet xmlDataSet = new FlatXmlDataSetBuilder().build(in);
+        IDataSet xmlDataSet = new FlatXmlDataSetBuilder().build(in, null);
 
         ITable[] tablesBefore = DataSetUtils.getTables(connection.createDataSet());
         InsertIdentityOperation.CLEAN_INSERT.execute(connection, xmlDataSet);

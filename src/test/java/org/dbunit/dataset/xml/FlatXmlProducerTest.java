@@ -54,7 +54,7 @@ public class FlatXmlProducerTest extends AbstractProducerTest {
         String uri = DATASET_FILE.getAbsoluteFile().toURL().toString();
         InputSource source = new InputSource(uri);
 
-        return new FlatXmlProducer(source);
+        return new FlatXmlProducer(source, null);
     }
 
     public void testProduceEmptyDataSet() throws Exception {
@@ -68,7 +68,7 @@ public class FlatXmlProducerTest extends AbstractProducerTest {
                 "<?xml version=\"1.0\"?>" +
                         "<dataset/>";
         InputSource source = new InputSource(new StringReader(content));
-        IDataSetProducer producer = new FlatXmlProducer(source);
+        IDataSetProducer producer = new FlatXmlProducer(source, null);
         producer.setConsumer(consumer);
 
         // Produce and verify consumer
@@ -92,7 +92,7 @@ public class FlatXmlProducerTest extends AbstractProducerTest {
                         "<EMPTY_TABLE/>" +
                         "</dataset>";
         InputSource source = new InputSource(new StringReader(content));
-        IDataSetProducer producer = new FlatXmlProducer(source);
+        IDataSetProducer producer = new FlatXmlProducer(source, null);
         producer.setConsumer(consumer);
 
         // Produce and verify consumer
@@ -117,7 +117,7 @@ public class FlatXmlProducerTest extends AbstractProducerTest {
                         "<EMPTY_TABLE/>" +
                         "</dataset>";
         InputSource source = new InputSource(new StringReader(content));
-        IDataSetProducer producer = new FlatXmlProducer(source, false);
+        IDataSetProducer producer = new FlatXmlProducer(source, false, null);
         producer.setConsumer(consumer);
 
         // Produce and verify consumer
@@ -144,7 +144,7 @@ public class FlatXmlProducerTest extends AbstractProducerTest {
         InputSource source = new InputSource(new StringReader(content));
         DefaultDataSet metaDataSet = new DefaultDataSet();
         metaDataSet.addTable(new DefaultTable(tableName, expectedColumns));
-        IDataSetProducer producer = new FlatXmlProducer(source, metaDataSet);
+        IDataSetProducer producer = new FlatXmlProducer(source, metaDataSet, null);
         producer.setConsumer(consumer);
 
         // Produce and verify consumer
@@ -183,7 +183,7 @@ public class FlatXmlProducerTest extends AbstractProducerTest {
             public InputSource resolveEntity(String s, String s1) throws SAXException, IOException {
                 return dtdSource;
             }
-        });
+        }, null);
         producer.setConsumer(consumer);
 
         // Produce and verify consumer
@@ -201,7 +201,7 @@ public class FlatXmlProducerTest extends AbstractProducerTest {
                 "<?xml version=\"1.0\"?>" +
                         "<dataset>";
         InputSource source = new InputSource(new StringReader(content));
-        IDataSetProducer producer = new FlatXmlProducer(source);
+        IDataSetProducer producer = new FlatXmlProducer(source, null);
         producer.setConsumer(consumer);
 
         // Produce and verify consumer

@@ -54,21 +54,21 @@ public class RefreshOperationIT extends AbstractDatabaseIT {
 
     public void testExecute() throws Exception {
         Reader reader = TestUtils.getFileReader("xml/refreshOperationTest.xml");
-        IDataSet dataSet = new FlatXmlDataSetBuilder().build(reader);
+        IDataSet dataSet = new FlatXmlDataSetBuilder().build(reader, null);
 
         testExecute(dataSet);
     }
 
     public void testExecuteCaseInsensitive() throws Exception {
         Reader reader = TestUtils.getFileReader("xml/refreshOperationTest.xml");
-        IDataSet dataSet = new FlatXmlDataSetBuilder().build(reader);
+        IDataSet dataSet = new FlatXmlDataSetBuilder().build(reader, null);
 
         testExecute(new LowerCaseDataSet(dataSet));
     }
 
     public void testExecuteForwardOnly() throws Exception {
         Reader reader = TestUtils.getFileReader("xml/refreshOperationTest.xml");
-        IDataSet dataSet = new FlatXmlDataSetBuilder().build(reader);
+        IDataSet dataSet = new FlatXmlDataSetBuilder().build(reader, null);
 
         testExecute(new ForwardOnlyDataSet(dataSet));
     }
@@ -89,7 +89,7 @@ public class RefreshOperationIT extends AbstractDatabaseIT {
 
         // verify table after
         IDataSet expectedDataSet = new FlatXmlDataSetBuilder().build(
-                TestUtils.getFileReader("xml/refreshOperationTestExpected.xml"));
+                TestUtils.getFileReader("xml/refreshOperationTestExpected.xml"), null);
 
         for (int i = 0; i < tableNames.length; i++) {
             ITable expectedTable = expectedDataSet.getTable(tableNames[i]);
@@ -102,7 +102,7 @@ public class RefreshOperationIT extends AbstractDatabaseIT {
         String tableName = "TEST_TABLE";
 
         Reader reader = TestUtils.getFileReader("xml/refreshOperationNoPKTest.xml");
-        IDataSet dataSet = new FlatXmlDataSetBuilder().build(reader);
+        IDataSet dataSet = new FlatXmlDataSetBuilder().build(reader, null);
 
         // verify table before
         assertEquals("row count before", 6, connection.getRowCount(tableName));

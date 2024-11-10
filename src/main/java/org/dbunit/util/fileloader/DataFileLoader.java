@@ -50,7 +50,7 @@ public interface DataFileLoader {
      * @throws DatabaseUnitRuntimeException DataSetException wrapped in a DatabaseUnitRuntimeException
      *                                      when file load errors occur.
      */
-    IDataSet load(String fileName);
+    IDataSet load(String fileName, String[] datasetId);
 
     /**
      * Load the specified URL file into a dbUnit dataset. The type of dbUnit
@@ -62,7 +62,7 @@ public interface DataFileLoader {
      * @throws IOException      On file errors.
      * @since 2.4.8
      */
-    IDataSet loadDataSet(URL url) throws DataSetException, IOException;
+    IDataSet loadDataSet(URL url, String[] datasetId) throws DataSetException, IOException;
 
     /**
      * Add the specified replacement objects to existing ones for use with

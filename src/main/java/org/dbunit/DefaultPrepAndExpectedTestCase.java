@@ -126,10 +126,10 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase implements PrepAn
      * {@inheritDoc}
      */
     @Override
-    public void configureTest(final VerifyTableDefinition[] verifyTableDefinitions, final String[] prepDataFiles, final String[] expectedDataFiles) throws Exception {
+    public void configureTest(final VerifyTableDefinition[] verifyTableDefinitions, final String[] prepDataFiles, final String[] expectedDataFiles, final String[] datasetId) throws Exception {
         final boolean isCaseSensitiveTableNames = lookupFeatureValue();
-        this.prepDataSet = makeCompositeDataSet(prepDataFiles, "prep", isCaseSensitiveTableNames);
-        this.expectedDataSet = makeCompositeDataSet(expectedDataFiles, "expected", isCaseSensitiveTableNames);
+        this.prepDataSet = makeCompositeDataSet(prepDataFiles, "prep", isCaseSensitiveTableNames, datasetId);
+        this.expectedDataSet = makeCompositeDataSet(expectedDataFiles, "expected", isCaseSensitiveTableNames, datasetId);
         this.verifyTableDefs = verifyTableDefinitions;
     }
 
@@ -158,8 +158,8 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase implements PrepAn
      * {@inheritDoc}
      */
     @Override
-    public void preTest(final VerifyTableDefinition[] tables, final String[] prepDataFiles, final String[] expectedDataFiles) throws Exception {
-        configureTest(tables, prepDataFiles, expectedDataFiles);
+    public void preTest(final VerifyTableDefinition[] tables, final String[] prepDataFiles, final String[] expectedDataFiles, String[] datasetId) throws Exception {
+        configureTest(tables, prepDataFiles, expectedDataFiles, datasetId);
         preTest();
     }
 
@@ -170,7 +170,7 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase implements PrepAn
     public Object runTest(final VerifyTableDefinition[] verifyTables, final String[] prepDataFiles, final String[] expectedDataFiles, final PrepAndExpectedTestCaseSteps testSteps) throws Exception {
         final Object result;
         try {
-            preTest(verifyTables, prepDataFiles, expectedDataFiles);
+            preTest(verifyTables, prepDataFiles, expectedDataFiles, null);
             result = testSteps.run();
         } catch (final Throwable e) {
             postTest(false);
@@ -504,7 +504,7 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase implements PrepAn
      * @return The composite dataset.
      * @throws DataSetException On dbUnit errors.
      */
-    public IDataSet makeCompositeDataSet(final String[] dataFiles, final String dataFilesName, final boolean isCaseSensitiveTableNames) throws DataSetException {
+    public IDataSet makeCompositeDataSet(final String[] dataFiles, final String dataFilesName, final boolean isCaseSensitiveTableNames, String[] datasetId) throws DataSetException {
         Assert.assertThat(dataFileLoader != null, new IllegalStateException("dataFileLoader is null; must configure or set it first"));
 
         final int count = dataFiles.length;
@@ -515,7 +515,7 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase implements PrepAn
 
         final List<IDataSet> list = new ArrayList<>();
         for (String dataFile : dataFiles) {
-            final IDataSet ds = dataFileLoader.load(dataFile);
+            final IDataSet ds = dataFileLoader.load(dataFile, datasetId);
             list.add(ds);
         }
 

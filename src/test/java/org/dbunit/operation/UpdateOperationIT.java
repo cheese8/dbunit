@@ -66,26 +66,26 @@ public class UpdateOperationIT extends AbstractDatabaseIT {
         DatabaseEnvironment environment = DatabaseEnvironment.getInstance();
         if (environment.support(TestFeature.BLOB)) {
             dataSet = new CompositeDataSet(
-                    new FlatXmlDataSetBuilder().build(TestUtils.getFile("xml/blobInsertTest.xml")),
+                    new FlatXmlDataSetBuilder().build(TestUtils.getFile("xml/blobInsertTest.xml"), null),
                     dataSet);
         }
 
         if (environment.support(TestFeature.CLOB)) {
             dataSet = new CompositeDataSet(
-                    new FlatXmlDataSetBuilder().build(TestUtils.getFile("xml/clobInsertTest.xml")),
+                    new FlatXmlDataSetBuilder().build(TestUtils.getFile("xml/clobInsertTest.xml"), null),
                     dataSet);
         }
 
         if (environment.support(TestFeature.SDO_GEOMETRY)) {
             dataSet = new CompositeDataSet(
-                    new FlatXmlDataSetBuilder().build(TestUtils.getFile("xml/sdoGeometryInsertTest.xml")),
+                    new FlatXmlDataSetBuilder().build(TestUtils.getFile("xml/sdoGeometryInsertTest.xml"), null),
                     dataSet
             );
         }
 
         if (environment.support(TestFeature.XML_TYPE)) {
             dataSet = new CompositeDataSet(
-                    new FlatXmlDataSetBuilder().build(TestUtils.getFile("xml/xmlTypeInsertTest.xml")),
+                    new FlatXmlDataSetBuilder().build(TestUtils.getFile("xml/xmlTypeInsertTest.xml"), null),
                     dataSet);
         }
 
@@ -355,7 +355,7 @@ public class UpdateOperationIT extends AbstractDatabaseIT {
 
             {
                 IDataSet beforeDataSet = new FlatXmlDataSetBuilder().build(
-                        TestUtils.getFile("xml/clobInsertTest.xml"));
+                        TestUtils.getFile("xml/clobInsertTest.xml"), null);
 
                 ITable tableBefore = connection.createDataSet().getTable(tableName);
                 assertEquals("count before", 3, connection.getRowCount(tableName));
@@ -363,7 +363,7 @@ public class UpdateOperationIT extends AbstractDatabaseIT {
             }
 
             IDataSet afterDataSet = new FlatXmlDataSetBuilder().build(
-                    TestUtils.getFile("xml/clobUpdateTest.xml"));
+                    TestUtils.getFile("xml/clobUpdateTest.xml"), null);
             DatabaseOperation.REFRESH.execute(connection, afterDataSet);
 
             {
@@ -382,7 +382,7 @@ public class UpdateOperationIT extends AbstractDatabaseIT {
 
             {
                 IDataSet beforeDataSet = new FlatXmlDataSetBuilder().build(
-                        TestUtils.getFile("xml/blobInsertTest.xml"));
+                        TestUtils.getFile("xml/blobInsertTest.xml"), null);
 
                 ITable tableBefore = connection.createDataSet().getTable(tableName);
                 assertEquals("count before", 3, connection.getRowCount(tableName));
@@ -393,7 +393,7 @@ public class UpdateOperationIT extends AbstractDatabaseIT {
             }
 
             IDataSet afterDataSet = new FlatXmlDataSetBuilder().build(
-                    TestUtils.getFile("xml/blobUpdateTest.xml"));
+                    TestUtils.getFile("xml/blobUpdateTest.xml"), null);
             DatabaseOperation.REFRESH.execute(connection, afterDataSet);
 
             {
@@ -415,7 +415,7 @@ public class UpdateOperationIT extends AbstractDatabaseIT {
 
             {
                 IDataSet beforeDataSet = new FlatXmlDataSetBuilder().build(
-                        TestUtils.getFile("xml/sdoGeometryInsertTest.xml"));
+                        TestUtils.getFile("xml/sdoGeometryInsertTest.xml"), null);
 
                 ITable tableBefore = connection.createDataSet().getTable(tableName);
                 assertEquals("count before", 1, connection.getRowCount(tableName));
@@ -423,7 +423,7 @@ public class UpdateOperationIT extends AbstractDatabaseIT {
             }
 
             IDataSet afterDataSet = new FlatXmlDataSetBuilder().build(
-                    TestUtils.getFile("xml/sdoGeometryUpdateTest.xml"));
+                    TestUtils.getFile("xml/sdoGeometryUpdateTest.xml"), null);
             DatabaseOperation.REFRESH.execute(connection, afterDataSet);
 
             {
@@ -442,7 +442,7 @@ public class UpdateOperationIT extends AbstractDatabaseIT {
 
             {
                 IDataSet beforeDataSet = new FlatXmlDataSetBuilder().build(
-                        TestUtils.getFile("xml/xmlTypeInsertTest.xml"));
+                        TestUtils.getFile("xml/xmlTypeInsertTest.xml"), null);
 
                 ITable tableBefore = connection.createDataSet().getTable(tableName);
                 assertEquals("count before", 3, connection.getRowCount(tableName));
@@ -450,7 +450,7 @@ public class UpdateOperationIT extends AbstractDatabaseIT {
             }
 
             IDataSet afterDataSet = new FlatXmlDataSetBuilder().build(
-                    TestUtils.getFile("xml/xmlTypeUpdateTest.xml"));
+                    TestUtils.getFile("xml/xmlTypeUpdateTest.xml"), null);
             DatabaseOperation.REFRESH.execute(connection, afterDataSet);
 
             {
@@ -490,7 +490,7 @@ public class UpdateOperationIT extends AbstractDatabaseIT {
         String tableName = "TEST_TABLE";
 
         Reader reader = TestUtils.getFileReader("xml/updateOperationNoPKTest.xml");
-        IDataSet dataSet = new FlatXmlDataSetBuilder().build(reader);
+        IDataSet dataSet = new FlatXmlDataSetBuilder().build(reader, null);
 
         // verify table before
         assertEquals("row count before", 6, connection.getRowCount(tableName));

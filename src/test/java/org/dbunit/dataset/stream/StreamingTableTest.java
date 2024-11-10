@@ -45,7 +45,7 @@ public class StreamingTableTest extends ForwardOnlyTableTest {
         FileReader reader = new FileReader(FlatXmlDataSetTest.DATASET_FILE);
 
 //        IDataSetProducer source = new DataSetProducerAdapter(new FlatXmlDataSet(reader));
-        IDataSetProducer source = new FlatXmlProducer(new InputSource(reader));
+        IDataSetProducer source = new FlatXmlProducer(new InputSource(reader), null);
         ITableIterator iterator = new StreamingDataSet(source).iterator();
         while (iterator.next()) {
             ITable table = iterator.getTable();

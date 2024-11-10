@@ -111,7 +111,7 @@ public class DBTestCaseIT extends TestCase {
         final IDatabaseConnection conn = dbEnv.getConnection();
         try {
             final DefaultDatabaseTester tester = new DefaultDatabaseTester(conn);
-            final IDataSet dataset = new FlatXmlDataSetBuilder().build(FlatXmlDataSetTest.DATASET_FILE);
+            final IDataSet dataset = new FlatXmlDataSetBuilder().build(FlatXmlDataSetTest.DATASET_FILE, null);
 
             // Connection should not be closed during setUp/tearDown because of userDefined IOperationListener
             DBTestCase testSubject = new DBTestCase() {

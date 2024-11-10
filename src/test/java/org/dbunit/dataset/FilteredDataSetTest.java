@@ -127,7 +127,7 @@ public class FilteredDataSetTest extends AbstractDataSetTest {
         // Case sensitive check
         FileReader fileReader = TestUtils.getFileReader("xml/dataSetTest.xml");
         final IDataSet caseSensitive = new FlatXmlDataSetBuilder()
-                .setCaseSensitiveTableNames(true).build(fileReader);
+                .setCaseSensitiveTableNames(true).build(fileReader, null);
 
         final FilteredDataSet caseSesitiveFilter =
                 new FilteredDataSet(getExpectedNames(), caseSensitive);
@@ -137,7 +137,7 @@ public class FilteredDataSetTest extends AbstractDataSetTest {
         // Case insensitive check
         fileReader = TestUtils.getFileReader("xml/dataSetTest.xml");
         final IDataSet caseInsensitive = new FlatXmlDataSetBuilder()
-                .setCaseSensitiveTableNames(false).build(fileReader);
+                .setCaseSensitiveTableNames(false).build(fileReader, null);
 
         final FilteredDataSet caseInsesitiveFilter =
                 new FilteredDataSet(getExpectedNames(), caseInsensitive);

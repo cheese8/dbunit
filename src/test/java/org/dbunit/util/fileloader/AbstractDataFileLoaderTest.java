@@ -44,7 +44,7 @@ public class AbstractDataFileLoaderTest extends TestCase {
     }
 
     public void testLoadDefaultDataSetEmpty() throws DataSetException {
-        IDataSet ds = loader.load(null);
+        IDataSet ds = loader.load(null, null);
         assertEquals("Default dataset had tables in it.",
                 ds.getTableNames().length, 0);
     }

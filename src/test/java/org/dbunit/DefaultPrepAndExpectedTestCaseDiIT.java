@@ -53,7 +53,7 @@ public class DefaultPrepAndExpectedTestCaseDiIT extends TestCase {
                 new DefaultPrepAndExpectedTestCase(dataFileLoader,
                         databaseTester);
 
-        tc.configureTest(tables, prepDataFiles, expectedDataFiles);
+        tc.configureTest(tables, prepDataFiles, expectedDataFiles, null);
 
         // reopen connection as DefaultPrepAndExpectedTestCase#configureTest
         // closes after it obtains feature setting
@@ -84,7 +84,7 @@ public class DefaultPrepAndExpectedTestCaseDiIT extends TestCase {
                 new DefaultPrepAndExpectedTestCase(dataFileLoader,
                         databaseTester);
 
-        tc.configureTest(tables, prepDataFiles, expectedDataFiles);
+        tc.configureTest(tables, prepDataFiles, expectedDataFiles, null);
 
         // reopen connection as DefaultPrepAndExpectedTestCase#configureTest
         // closes after it obtains feature setting

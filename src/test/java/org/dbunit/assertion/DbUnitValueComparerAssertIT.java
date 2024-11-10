@@ -19,7 +19,7 @@ public class DbUnitValueComparerAssertIT {
     private final DbUnitValueComparerAssert sut = new DbUnitValueComparerAssert();
 
     private IDataSet getDataSet() throws DataSetException, FileNotFoundException {
-        return new FlatXmlDataSetBuilder().build(TestUtils.getFileReader(FILE_PATH));
+        return new FlatXmlDataSetBuilder().build(TestUtils.getFileReader(FILE_PATH), null);
     }
 
     @Test

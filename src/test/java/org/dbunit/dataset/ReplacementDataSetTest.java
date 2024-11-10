@@ -42,14 +42,14 @@ public class ReplacementDataSetTest extends AbstractDataSetDecoratorTest {
 
     protected IDataSet createDataSet() throws Exception {
         return new ReplacementDataSet(new FlatXmlDataSetBuilder().build(new FileReader(
-                FlatXmlDataSetTest.DATASET_FILE)));
+                FlatXmlDataSetTest.DATASET_FILE), null));
     }
 
     public void testConstructor_DataSetHasCaseSensitive_ReplacementSetHasCaseSensitive()
             throws Exception {
         FileReader xmlReader = new FileReader(FlatXmlDataSetTest.DATASET_FILE);
         FlatXmlDataSet flatDataSet = new FlatXmlDataSetBuilder()
-                .setCaseSensitiveTableNames(true).build(xmlReader);
+                .setCaseSensitiveTableNames(true).build(xmlReader, null);
         ReplacementDataSet dataSet = new ReplacementDataSet(flatDataSet);
 
         assertTrue(dataSet.isCaseSensitiveTableNames());
@@ -60,7 +60,7 @@ public class ReplacementDataSetTest extends AbstractDataSetDecoratorTest {
         FileReader fileReader = TestUtils
                 .getFileReader("/xml/replacementDataSetCaseSensitive.xml");
         IDataSet originalDataSet = new FlatXmlDataSetBuilder()
-                .setCaseSensitiveTableNames(true).build(fileReader);
+                .setCaseSensitiveTableNames(true).build(fileReader, null);
         assertCaseSensitiveTables(originalDataSet);
 
         IDataSet replacementDataSet = new ReplacementDataSet(originalDataSet);

@@ -47,7 +47,7 @@ public class XlsDataFileLoaderTest extends TestCase {
      */
     public void testLoad() throws DataSetException {
         String filename = "/xml/dataSetTest.xls";
-        IDataSet ds = loader.load(filename);
+        IDataSet ds = loader.load(filename, null);
         assertTrue("No tables found in dataset.", ds.getTableNames().length > 0);
         // DataSet loading tests verify data accuracy
     }

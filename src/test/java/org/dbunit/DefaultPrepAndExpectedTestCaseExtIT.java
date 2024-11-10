@@ -59,7 +59,7 @@ public class DefaultPrepAndExpectedTestCaseExtIT
         final IDatabaseTester databaseTester = makeDatabaseTester();
         setDatabaseTester(databaseTester);
 
-        configureTest(tables, prepDataFiles, expectedDataFiles);
+        configureTest(tables, prepDataFiles, expectedDataFiles, null);
 
         // reopen connection as DefaultPrepAndExpectedTestCase#configureTest
         // closes after it obtains feature setting
@@ -88,7 +88,7 @@ public class DefaultPrepAndExpectedTestCaseExtIT
         final IDatabaseTester databaseTester = makeDatabaseTester();
         setDatabaseTester(databaseTester);
 
-        configureTest(tables, prepDataFiles, expectedDataFiles);
+        configureTest(tables, prepDataFiles, expectedDataFiles, null);
 
         // reopen connection as DefaultPrepAndExpectedTestCase#configureTest
         // closes after it obtains feature setting

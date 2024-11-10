@@ -38,7 +38,7 @@ public class LowerCaseDataSetTest extends AbstractDataSetDecoratorTest {
 
     protected IDataSet createDataSet() throws Exception {
         return new LowerCaseDataSet(new FlatXmlDataSetBuilder().build(new FileReader(
-                FlatXmlDataSetTest.DATASET_FILE)));
+                FlatXmlDataSetTest.DATASET_FILE), null));
     }
 
     protected String[] getExpectedNames() throws Exception {
