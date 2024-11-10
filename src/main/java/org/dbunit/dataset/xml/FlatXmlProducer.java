@@ -68,6 +68,7 @@ public class FlatXmlProducer extends DefaultHandler implements IDataSetProducer,
 
     private static final IDataSetConsumer EMPTY_CONSUMER = new DefaultConsumer();
     private static final String DATASET = "dataset";
+    private static final String DATASETS = "datasets";
 
     private final InputSource _inputSource;
     private final EntityResolver _resolver;
@@ -236,7 +237,7 @@ public class FlatXmlProducer extends DefaultHandler implements IDataSetProducer,
      * which means that it differs from the last active table name.
      */
     private boolean isNewTable(String tableName) {
-        return !_orderedTableNameMap.isLastTable(tableName);
+        return _orderedTableNameMap != null && !_orderedTableNameMap.isLastTable(tableName);
     }
 
 
@@ -378,13 +379,27 @@ public class FlatXmlProducer extends DefaultHandler implements IDataSetProducer,
             ITableMetaData activeMetaData = getActiveMetaData();
             // Start of dataset
             if (activeMetaData == null && qName.equals(DATASET)) {
-                _consumer.startDataSet();
-                _orderedTableNameMap = new OrderedTableNameMap(_caseSensitiveTableNames);
-                return;
+                if (datasetId != null && attributes.getLength() > 0) {
+                    boolean matched = false;
+                    for (String each : datasetId) {
+                        if (Objects.equals(attributes.getValue("id"), each)) {
+                            matched = true;
+                        }
+                    }
+                    if (matched) {
+                        _consumer.startDataSet();
+                        _orderedTableNameMap = new OrderedTableNameMap(_caseSensitiveTableNames);
+                        return;
+                    }
+                } else {
+                    _consumer.startDataSet();
+                    _orderedTableNameMap = new OrderedTableNameMap(_caseSensitiveTableNames);
+                    return;
+                }
             }
 
             // New table
-            if (isNewTable(qName)) {
+            if (_orderedTableNameMap != null && isNewTable(qName)) {
                 // If not first table, notify end of previous table to consumer
                 if (activeMetaData != null) {
                     _consumer.endTable();
@@ -406,7 +421,7 @@ public class FlatXmlProducer extends DefaultHandler implements IDataSetProducer,
 
             // Row notification
             int attributesLength = attributes.getLength();
-            if (attributesLength > 0) {
+            if (_orderedTableNameMap != null && attributesLength > 0) {
                 // If we do not have a DTD
                 if (_dtdHandler == null || !_dtdHandler.isDtdPresent()) {
                     handleMissingColumns(attributes);
