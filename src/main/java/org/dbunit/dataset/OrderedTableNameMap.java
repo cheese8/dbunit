@@ -61,6 +61,7 @@ public class OrderedTableNameMap {
     private final List<String> tableNames = new ArrayList<>();
 
     private String lastTableNameOverride;
+    private boolean datasetMatched = false;
 
     /**
      * Whether case-sensitive table names should be used. Defaults to false.
@@ -218,5 +219,13 @@ public class OrderedTableNameMap {
 
     public String toString() {
         return getClass().getName() + "[" + "tableNames=" + tableNames + ", tableMap=" + tableMap + ", caseSensitiveTableNames=" + caseSensitiveTableNames + "]";
+    }
+
+    public boolean getDatasetMatched() {
+        return datasetMatched;
+    }
+
+    public void setDatasetMatched(boolean datasetMatched) {
+        this.datasetMatched = datasetMatched;
     }
 }

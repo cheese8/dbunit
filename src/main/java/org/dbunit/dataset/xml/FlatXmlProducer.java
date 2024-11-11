@@ -378,28 +378,31 @@ public class FlatXmlProducer extends DefaultHandler implements IDataSetProducer,
         try {
             ITableMetaData activeMetaData = getActiveMetaData();
             // Start of dataset
-            if (activeMetaData == null && qName.equals(DATASET)) {
+            if (qName.equals(DATASET)) {
                 if (datasetId != null && attributes.getLength() > 0) {
                     boolean matched = false;
                     for (String each : datasetId) {
                         if (Objects.equals(attributes.getValue("id"), each)) {
                             matched = true;
+                            break;
                         }
                     }
                     if (matched) {
                         _consumer.startDataSet();
-                        _orderedTableNameMap = new OrderedTableNameMap(_caseSensitiveTableNames);
-                        return;
                     }
+                    _orderedTableNameMap = new OrderedTableNameMap(_caseSensitiveTableNames);
+                    _orderedTableNameMap.setDatasetMatched(matched);
+                    return;
                 } else {
                     _consumer.startDataSet();
                     _orderedTableNameMap = new OrderedTableNameMap(_caseSensitiveTableNames);
+                    _orderedTableNameMap.setDatasetMatched(true);
                     return;
                 }
             }
 
             // New table
-            if (_orderedTableNameMap != null && isNewTable(qName)) {
+            if (!qName.equals(DATASET) && _orderedTableNameMap != null && _orderedTableNameMap.getDatasetMatched() && isNewTable(qName)) {
                 // If not first table, notify end of previous table to consumer
                 if (activeMetaData != null) {
                     _consumer.endTable();
@@ -421,7 +424,7 @@ public class FlatXmlProducer extends DefaultHandler implements IDataSetProducer,
 
             // Row notification
             int attributesLength = attributes.getLength();
-            if (_orderedTableNameMap != null && attributesLength > 0) {
+            if (!qName.equals(DATASET) && _orderedTableNameMap != null && _orderedTableNameMap.getDatasetMatched() && attributesLength > 0) {
                 // If we do not have a DTD
                 if (_dtdHandler == null || !_dtdHandler.isDtdPresent()) {
                     handleMissingColumns(attributes);
