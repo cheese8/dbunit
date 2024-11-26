@@ -59,7 +59,7 @@ public class H2Environment extends DatabaseEnvironment {
         DatabaseOperation.DELETE_ALL.execute(getConnection(), getInitDataSet());
     }
 
-    public static void shutdown(Connection connection) throws SQLException {
+    public static void shutdown(Connection connection) throws Exception {
         DdlExecutor.executeSql(connection, "SHUTDOWN IMMEDIATELY", false);
     }
 

@@ -69,7 +69,7 @@ public class TruncateTableOperation extends DeleteAllOperation {
         }
     }
 
-    public void execute(IDatabaseConnection connection, String table) throws DatabaseUnitException, SQLException {
+    public void execute(IDatabaseConnection connection, String table) throws Exception {
         log.debug("execute(connection={}, sql={}) - start", connection, table);
         DdlExecutor.executeSql(connection.getConnection(), "truncate table " + table);
     }

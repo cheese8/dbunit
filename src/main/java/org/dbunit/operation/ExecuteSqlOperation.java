@@ -61,7 +61,7 @@ public class ExecuteSqlOperation extends AbstractOperation {
         }
     }
 
-    public void execute(IDatabaseConnection connection, String sql) throws DatabaseUnitException, SQLException {
+    public void execute(IDatabaseConnection connection, String sql) throws Exception {
         log.debug("execute(connection={}, sql={}) - start", connection, sql);
         DdlExecutor.executeSql(connection.getConnection(), sql);
     }

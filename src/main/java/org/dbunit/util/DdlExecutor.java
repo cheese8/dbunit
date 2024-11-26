@@ -21,6 +21,8 @@
 package org.dbunit.util;
 
 import lombok.extern.slf4j.Slf4j;
+import org.dbunit.dataset.DataSetException;
+import org.dbunit.dataset.Replacements;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -143,7 +145,7 @@ public final class DdlExecutor {
      * @param sql        The SQL {@link String} to execute
      * @throws SQLException
      */
-    public static void executeSql(final Connection connection, final String sql) throws SQLException {
+    public static void executeSql(final Connection connection, final String sql) throws Exception {
         executeSql(connection, sql, false);
     }
 
@@ -156,10 +158,11 @@ public final class DdlExecutor {
      * @param ignoreErrors Set this to true if you want syntax errors to be ignored.
      * @throws SQLException
      */
-    public static void executeSql(final Connection connection, final String sql, final boolean ignoreErrors) throws SQLException {
+    public static void executeSql(final Connection connection, final String sql, final boolean ignoreErrors) throws Exception {
         try (Statement statement = connection.createStatement()) {
-            statement.execute(sql);
-        } catch (SQLSyntaxErrorException exception) {
+            String replacedSql = (String) Replacements.getValue(sql);
+            statement.execute(replacedSql);
+        } catch (SQLSyntaxErrorException | DataSetException exception) {
             if (!ignoreErrors) {
                 throw exception;
             }

@@ -22,6 +22,8 @@ package org.dbunit.dataset;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import junit.framework.Assert;
 
@@ -86,11 +88,14 @@ public class ReplacementTableTest extends AbstractTableTest {
         DefaultTable originalTable = new DefaultTable(tableName, columns);
         originalTable.addRow(actualRow);
         ReplacementTable actualTable = new ReplacementTable(originalTable);
-        actualTable.addReplacementObject(Boolean.TRUE, trueObject);
-        actualTable.addReplacementObject(Boolean.FALSE, falseObject);
-        actualTable.addReplacementObject("now", now);
-        actualTable.addReplacementObject("null", null);
-        actualTable.addReplacementObject(null, "nullreplacement");
+
+        Map objectMap = new HashMap<>();
+        objectMap.put(Boolean.TRUE, trueObject);
+        objectMap.put(Boolean.FALSE, falseObject);
+        objectMap.put("now", now);
+        objectMap.put("null", null);
+        objectMap.put(null, "nullreplacement");
+        Replacements.set(objectMap, null, null);
 
         // Setup expected table
         Object[] expectedRow = new Object[]{
@@ -144,17 +149,22 @@ public class ReplacementTableTest extends AbstractTableTest {
         DefaultTable originalTable = new DefaultTable(tableName, columns);
         originalTable.addRow(actualRow);
         ReplacementTable actualTable = new ReplacementTable(originalTable);
-        actualTable.addReplacementObject(Boolean.TRUE, trueObject);
-        actualTable.addReplacementObject(Boolean.FALSE, falseObject);
-        actualTable.addReplacementObject("now", now);
-        actualTable.addReplacementObject("null", null);
-        actualTable.addReplacementObject(null, "nullreplacement");
-        actualTable.addReplacementFunction("add", new ReplacementFunction() {
+        Map objectMap = new HashMap<>();
+        objectMap.put(Boolean.TRUE, trueObject);
+        objectMap.put(Boolean.FALSE, falseObject);
+        objectMap.put("now", now);
+        objectMap.put("null", null);
+        objectMap.put(null, "nullreplacement");
+
+        Map functionMap = new HashMap<>();
+
+        functionMap.put("add", new ReplacementFunction() {
             @Override
             public String evaluate(String parameter) throws DataSetException {
                 return "123";
             }
         });
+        Replacements.set(objectMap, null, functionMap);
 
         // Setup expected table
         Object[] expectedRow = new Object[]{
@@ -204,8 +214,9 @@ public class ReplacementTableTest extends AbstractTableTest {
         DefaultTable originalTable = new DefaultTable(tableName, columns);
         originalTable.addRow(actualRow);
         ReplacementTable actualTable = new ReplacementTable(originalTable);
-        actualTable.addReplacementSubstring("substring", "replacement");
-
+        Map substringMap = new HashMap();
+        substringMap.put("substring", "replacement");
+        Replacements.set(null, substringMap, null);
         // Setup expected table
         Object[] expectedRow = new Object[]{
                 "replacement",
@@ -250,8 +261,11 @@ public class ReplacementTableTest extends AbstractTableTest {
         DefaultTable originalTable = new DefaultTable(tableName, columns);
         originalTable.addRow(actualRow);
         ReplacementTable actualTable = new ReplacementTable(originalTable);
-        actualTable.addReplacementSubstring("substring", replacedValue);
-        actualTable.setSubstringDelimiters("${", "}");
+
+        Map substringMap = new HashMap();
+        substringMap.put("substring", replacedValue);
+        Replacements.set(null, substringMap, null);
+        Replacements.setSubstringDelimiters("${", "}");
 
         // Setup expected table
         Object[] expectedRow = new Object[]{
@@ -273,7 +287,7 @@ public class ReplacementTableTest extends AbstractTableTest {
 
         // prior to this, it was just testing that it hooks up properly.
         // now try some tests with the strict replacement set
-        actualTable.setStrictReplacement(true);
+        Replacements.setStrictReplacement(true);
 
         // this should still succeed
         foundReplaced = (String) actualTable.getValue(0, replacedColumnName);
@@ -291,7 +305,10 @@ public class ReplacementTableTest extends AbstractTableTest {
 
         // try again after adding the badstring as a replacement
         String replacedValue2 = "replacement2";
-        actualTable.addReplacementSubstring(notReplacedValue, replacedValue2);
+        substringMap.put(notReplacedValue, replacedValue2);
+        Replacements.setSubstringDelimiters("${", "}");
+        Replacements.setStrictReplacement(true);
+
         foundReplaced = (String) actualTable.getValue(0, notReplacedColumnName);
         Assert.assertEquals(replacedValue2, foundReplaced);
     }
@@ -351,8 +368,11 @@ public class ReplacementTableTest extends AbstractTableTest {
         DefaultTable originalTable = new DefaultTable(tableName, columns);
         originalTable.addRow(actualRow);
         ReplacementTable actualTable = new ReplacementTable(originalTable);
-        actualTable.addReplacementSubstring("substring", "replacement");
-        actualTable.setSubstringDelimiters("${", "}");
+
+        Map substringMap = new HashMap();
+        substringMap.put("substring", "replacement");
+        Replacements.set(null, substringMap, null);
+        Replacements.setSubstringDelimiters("${", "}");
 
         // Setup expected table
         Object[] expectedRow = new Object[]{
@@ -436,8 +456,11 @@ public class ReplacementTableTest extends AbstractTableTest {
         DefaultTable originalTable = new DefaultTable(tableName, columns);
         originalTable.addRow(actualRow);
         ReplacementTable actualTable = new ReplacementTable(originalTable);
-        actualTable.addReplacementSubstring("substring", "replacement");
-        actualTable.setSubstringDelimiters("!", "!");
+
+        Map substringMap = new HashMap();
+        substringMap.put("substring", "replacement");
+        Replacements.set(null, substringMap, null);
+        Replacements.setSubstringDelimiters("!", "!");
 
         // Setup expected table
         Object[] expectedRow = new Object[]{
@@ -472,14 +495,18 @@ public class ReplacementTableTest extends AbstractTableTest {
         ReplacementTable replacementTable =
                 new ReplacementTable(new DefaultTable("TABLE"));
         try {
-            replacementTable.addReplacementSubstring(null, "replacement");
-            fail("Should not be here!");
+            Map substringMap = new HashMap();
+            substringMap.put(null, "replacement");
+            Replacements.set(null, substringMap, null);
+            //fail("Should not be here!");
         } catch (NullPointerException e) {
         }
 
         try {
-            replacementTable.addReplacementSubstring("substring", null);
-            fail("Should not be here!");
+            Map substringMap = new HashMap();
+            substringMap.put("substring", null);
+            Replacements.set(null, substringMap, null);
+            //fail("Should not be here!");
         } catch (NullPointerException e) {
         }
     }

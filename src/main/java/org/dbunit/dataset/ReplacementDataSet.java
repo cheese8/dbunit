@@ -42,12 +42,6 @@ public class ReplacementDataSet extends AbstractDataSet {
     private static final Logger logger = LoggerFactory.getLogger(ReplacementDataSet.class);
 
     private final IDataSet _dataSet;
-    private final Map _objectMap;
-    private final Map _substringMap;
-    private final Map<String, ReplacementFunction> _functionMap;
-    private String _startDelim;
-    private String _endDelim;
-    private boolean _strictReplacement;
 
     /**
      * Create a new ReplacementDataSet object that decorates the specified dataset.
@@ -69,9 +63,7 @@ public class ReplacementDataSet extends AbstractDataSet {
     public ReplacementDataSet(IDataSet dataSet, Map objectMap, Map substringMap, Map functionMap) {
         super(dataSet.isCaseSensitiveTableNames());
         _dataSet = dataSet;
-        _objectMap = objectMap == null ? new HashMap() : objectMap;
-        _substringMap = substringMap == null ? new HashMap() : substringMap;
-        _functionMap = functionMap == null ? new HashMap() : functionMap;
+        Replacements.set(objectMap, substringMap, functionMap);
     }
 
     /**
@@ -81,7 +73,7 @@ public class ReplacementDataSet extends AbstractDataSet {
      * @param strictReplacement true if replacement should be strict
      */
     public void setStrictReplacement(boolean strictReplacement) {
-        this._strictReplacement = strictReplacement;
+        Replacements.setStrictReplacement(strictReplacement);
     }
 
     /**
@@ -92,8 +84,7 @@ public class ReplacementDataSet extends AbstractDataSet {
      */
     public void addReplacementObject(Object originalObject, Object replacementObject) {
         logger.debug("addReplacementObject(originalObject={}, replacementObject={}) - start", originalObject, replacementObject);
-
-        _objectMap.put(originalObject, replacementObject);
+        Replacements.addReplacementObject(originalObject, replacementObject);
     }
 
     /**
@@ -104,8 +95,7 @@ public class ReplacementDataSet extends AbstractDataSet {
      */
     public void addReplacementFunction(String originalObject, ReplacementFunction replacementFunction) {
         logger.debug("addReplacementFunction(originalObject={}, replacementFunction={}) - start", originalObject, replacementFunction);
-
-        _functionMap.put(originalObject, replacementFunction);
+        Replacements.addReplacementFunction(originalObject, replacementFunction);
     }
 
     /**
@@ -121,8 +111,7 @@ public class ReplacementDataSet extends AbstractDataSet {
         if (originalSubstring == null || replacementSubstring == null) {
             throw new NullPointerException();
         }
-
-        _substringMap.put(originalSubstring, replacementSubstring);
+        Replacements.addReplacementSubstring(originalSubstring, replacementSubstring);
     }
 
     /**
@@ -134,18 +123,13 @@ public class ReplacementDataSet extends AbstractDataSet {
         if (startDelimiter == null || endDelimiter == null) {
             throw new NullPointerException();
         }
-
-        _startDelim = startDelimiter;
-        _endDelim = endDelimiter;
+        Replacements.setSubstringDelimiters(startDelimiter, endDelimiter);
     }
 
     private ReplacementTable createReplacementTable(ITable table) {
         logger.debug("createReplacementTable(table={}) - start", table);
 
-        ReplacementTable replacementTable = new ReplacementTable(
-                table, _objectMap, _substringMap, _functionMap, _startDelim, _endDelim);
-        replacementTable.setStrictReplacement(_strictReplacement);
-        return replacementTable;
+        return new ReplacementTable(table);
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -154,7 +138,7 @@ public class ReplacementDataSet extends AbstractDataSet {
     protected ITableIterator createIterator(boolean reversed)
             throws DataSetException {
         if (logger.isDebugEnabled())
-            logger.debug("createIterator(reversed={}) - start", String.valueOf(reversed));
+            logger.debug("createIterator(reversed={}) - start", reversed);
 
         return new ReplacementIterator(reversed ?
                 _dataSet.reverseIterator() : _dataSet.iterator());

@@ -116,7 +116,7 @@ public abstract class DatabaseOperation {
      * @param connection the database connection.
      * @param sql    the dataset to be used by this operation.
      */
-    public void execute(IDatabaseConnection connection, String sql) throws DatabaseUnitException, SQLException {
+    public void execute(IDatabaseConnection connection, String sql) throws Exception {
     }
 
     private static class DummyOperation extends DatabaseOperation {
