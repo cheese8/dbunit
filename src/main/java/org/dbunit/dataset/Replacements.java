@@ -26,6 +26,9 @@ public class Replacements {
     private final static String regex = "\\[(.*)\\((.*)\\)\\]";
     private final static Pattern pattern = Pattern.compile(regex);
 
+    private static final String REGEX_FUNCTION = "\\[(.*?)\\((.*?)\\)(.*?)\\]";
+    private static final Pattern PATTERN_FUNCTION = Pattern.compile(REGEX_FUNCTION);
+
     public static void set(Map objectMap, Map substringMap, Map functionMap) {
         _objectMap = new HashMap();
         _substringMap = new HashMap();
@@ -199,21 +202,21 @@ public class Replacements {
         if (value instanceof String) {
             // Function replacement
             String valueStr = (String) value;
-            Matcher m = pattern.matcher(valueStr);
-            if (!m.find()) {
-                // Substring replacement
-                if (_startDelim != null && _endDelim != null) {
-                    return replaceDelimitedSubstrings(valueStr);
-                }
-                return replaceSubstrings((String) value);
-            } else {
-                String functionName = m.group(1);
-                String parameter = m.group(2);
+            Matcher M_FUNCTION = PATTERN_FUNCTION.matcher(valueStr);
+            if (M_FUNCTION.find()) {
+                String functionName = M_FUNCTION.group(1);
+                String parameter = M_FUNCTION.group(2);
                 if (_functionMap.containsKey(functionName)) {
                     return _functionMap.get(functionName).evaluate(parameter);
                 } else {
                     throw new DataSetException("ReplacementFunction " + functionName + " was not registered.");
                 }
+            } else {
+                // Substring replacement
+                if (_startDelim != null && _endDelim != null) {
+                    return replaceDelimitedSubstrings(valueStr);
+                }
+                return replaceSubstrings((String) value);
             }
         }
         // Stop here if substring replacement not applicable

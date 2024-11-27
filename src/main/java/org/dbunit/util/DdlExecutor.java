@@ -33,6 +33,8 @@ import java.sql.SQLException;
 import java.sql.SQLSyntaxErrorException;
 import java.sql.Statement;
 import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Test Helper class for Executing DDL.
@@ -44,6 +46,12 @@ import java.util.StringTokenizer;
 
 @Slf4j
 public final class DdlExecutor {
+
+    private static final String REGEX_SUBSTRING = "\\[.*?\\]";
+    private static final Pattern PATTERN_SUBSTRING = Pattern.compile(REGEX_SUBSTRING);
+    private static final String REGEX_FUNCTION = "\\[(.*?)\\((.*?)\\)(.*?)\\]";
+    private static final Pattern PATTERN_FUNCTION = Pattern.compile(REGEX_FUNCTION);
+
     private DdlExecutor() {
         // no instances
     }
@@ -158,11 +166,21 @@ public final class DdlExecutor {
      * @param ignoreErrors Set this to true if you want syntax errors to be ignored.
      * @throws SQLException
      */
-    public static void executeSql(final Connection connection, final String sql, final boolean ignoreErrors) throws Exception {
+    public static void executeSql(final Connection connection, String sql, final boolean ignoreErrors) throws Exception {
+        Matcher M_SUBSTRING = PATTERN_SUBSTRING.matcher(sql);
+        while (M_SUBSTRING.find()) {
+            String eachSubString = M_SUBSTRING.group();
+            Matcher M_FUNCTION = PATTERN_FUNCTION.matcher(eachSubString);
+            if (M_FUNCTION.find()) {
+                String each = M_FUNCTION.group();
+                sql = sql.replace(each, (String) Replacements.getValue(each));
+            } else {
+                sql = sql.replace(eachSubString, (String) Replacements.getValue(eachSubString));
+            }
+        }
         try (Statement statement = connection.createStatement()) {
-            String replacedSql = (String) Replacements.getValue(sql);
-            statement.execute(replacedSql);
-        } catch (SQLSyntaxErrorException | DataSetException exception) {
+            statement.execute(sql);
+        } catch (SQLSyntaxErrorException exception) {
             if (!ignoreErrors) {
                 throw exception;
             }
