@@ -23,10 +23,7 @@ public class Replacements {
 
     private static Map<Object, ReplacementFunction> _functionMap = new HashMap();
 
-    private final static String regex = "\\[(.*)\\((.*)\\)\\]";
-    private final static Pattern pattern = Pattern.compile(regex);
-
-    private static final String REGEX_FUNCTION = "\\[(.*?)\\((.*?)\\)(.*?)\\]";
+    private static final String REGEX_FUNCTION = "\\[(.*?)\\((.*?)\\]";
     private static final Pattern PATTERN_FUNCTION = Pattern.compile(REGEX_FUNCTION);
 
     public static void set(Map objectMap, Map substringMap, Map functionMap) {
