@@ -26,6 +26,15 @@ public class Replacements {
     private static final String REGEX_FUNCTION = "\\[(.[^\\[\\]{}]*?)\\((.*?)\\]";
     private static final Pattern PATTERN_FUNCTION = Pattern.compile(REGEX_FUNCTION);
 
+    private static final String REGEX_SUB = "\\[.[^\\[\\]{}]*?\\]"; // match [XXX]
+    private static final Pattern PATTERN_SUB = Pattern.compile(REGEX_SUB);
+
+    private static final String REGEX_FUN = "\\[(.*?)\\((.*?)\\)\\]"; // match [XXX([XXX])]
+    private static final Pattern PATTERN_FUN = Pattern.compile(REGEX_FUN);
+
+    private static final String REGEX_ALL = "(?<=\\\")[^\\\",:]*[\\[\\]\\(\\)](?=\\\")"; // match [XXX] and [XXX([XXX])]
+    private static final Pattern PATTERN_ALL = Pattern.compile(REGEX_ALL);
+
     public static void set(Map objectMap, Map substringMap, Map functionMap) {
         _objectMap = new HashMap();
         _substringMap = new HashMap();
@@ -188,6 +197,46 @@ public class Replacements {
         }
 
         return buffer == null ? value : buffer.toString();
+    }
+
+    public static String clean(String str) {
+        Matcher MATCHER_ALL = PATTERN_ALL.matcher(str);
+        while(MATCHER_ALL.find()) {
+            String eachAll = MATCHER_ALL.group();
+            Matcher MATCHER_FUN = PATTERN_FUN.matcher(eachAll);
+            if (MATCHER_FUN.find()) {
+                String funName = MATCHER_FUN.group(1);
+                String paramName = MATCHER_FUN.group(2);
+                Matcher MATCHER_SUB = PATTERN_SUB.matcher(paramName);
+                if (MATCHER_SUB.find()) {
+                    paramName = paramName.replace(paramName, (String) _objectMap.get(paramName));
+                }
+                ReplacementFunction function = _functionMap.get(funName);
+                if (function != null) {
+                    try {
+                        String result = function.evaluate(paramName);
+                        str = str.replace(eachAll, result);
+                    } catch (Exception e) {
+                        throw new RuntimeException("ReplacementFunction "+ funName +" invoke error", e);
+                    }
+                } else {
+                    throw new RuntimeException("ReplacementFunction "+ funName +" was not found");
+                }
+            }
+            Matcher MATCHER_SUB = PATTERN_SUB.matcher(eachAll);
+            if (MATCHER_SUB.find()) {
+                str = str.replace(eachAll, (String) _objectMap.get(eachAll));
+            }
+        }
+        return str;
+    }
+
+    public static void main(String[] args) {
+        String json = "{\"code\":\"\", \"data\":[{\"cardNo\":\"[CARDNO]\", {\"encryptCardNo\":\"[encrypt([CARDNO])]\"}]}";
+        Matcher matcher = PATTERN_ALL.matcher(json);
+        while (matcher.find()) {
+            System.out.println(matcher.group());
+        }
     }
 
     public static Object getValue(Object value) throws DataSetException {
