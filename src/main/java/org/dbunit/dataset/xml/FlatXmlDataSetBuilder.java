@@ -92,7 +92,7 @@ public final class FlatXmlDataSetBuilder {
      * @return The created {@link FlatXmlDataSet}
      * @throws DataSetException
      */
-    public FlatXmlDataSet build(InputSource inputSource, String[] datasetId) throws DataSetException {
+    public FlatXmlDataSet build(InputSource inputSource, String datasetId) throws DataSetException {
         return buildInternal(inputSource, datasetId);
     }
 
@@ -103,7 +103,7 @@ public final class FlatXmlDataSetBuilder {
      * @return The created {@link FlatXmlDataSet}
      * @throws DataSetException
      */
-    public FlatXmlDataSet build(File xmlInputFile, String[] datasetId) throws MalformedURLException, DataSetException {
+    public FlatXmlDataSet build(File xmlInputFile, String datasetId) throws MalformedURLException, DataSetException {
         URL xmlInputUrl = xmlInputFile.toURL();
         InputSource inputSource = createInputSourceFromUrl(xmlInputUrl);
         return buildInternal(inputSource, datasetId);
@@ -116,7 +116,7 @@ public final class FlatXmlDataSetBuilder {
      * @return The created {@link FlatXmlDataSet}
      * @throws DataSetException
      */
-    public FlatXmlDataSet build(URL xmlInputUrl, String[] datasetId) throws DataSetException {
+    public FlatXmlDataSet build(URL xmlInputUrl, String datasetId) throws DataSetException {
         InputSource inputSource = createInputSourceFromUrl(xmlInputUrl);
         return buildInternal(inputSource, datasetId);
     }
@@ -128,7 +128,7 @@ public final class FlatXmlDataSetBuilder {
      * @return The created {@link FlatXmlDataSet}
      * @throws DataSetException
      */
-    public FlatXmlDataSet build(Reader xmlReader, String[] datasetId) throws DataSetException {
+    public FlatXmlDataSet build(Reader xmlReader, String datasetId) throws DataSetException {
         InputSource inputSource = new InputSource(xmlReader);
         return buildInternal(inputSource, datasetId);
     }
@@ -140,7 +140,7 @@ public final class FlatXmlDataSetBuilder {
      * @return The created {@link FlatXmlDataSet}
      * @throws DataSetException
      */
-    public FlatXmlDataSet build(InputStream xmlInputStream, String[] datasetId) throws DataSetException {
+    public FlatXmlDataSet build(InputStream xmlInputStream, String datasetId) throws DataSetException {
         InputSource inputSource = new InputSource(xmlInputStream);
         return buildInternal(inputSource, datasetId);
     }
@@ -250,7 +250,7 @@ public final class FlatXmlDataSetBuilder {
      * @return The {@link FlatXmlDataSet} built from the configuration of this builder.
      * @throws DataSetException
      */
-    private FlatXmlDataSet buildInternal(InputSource inputSource, String[] datasetId) throws DataSetException {
+    private FlatXmlDataSet buildInternal(InputSource inputSource, String datasetId) throws DataSetException {
         logger.trace("build(inputSource={}) - start", inputSource);
 
         // Validate required parameters
@@ -268,7 +268,7 @@ public final class FlatXmlDataSetBuilder {
      * @param inputSource The XML input to be built
      * @return The producer which is used to create the {@link FlatXmlDataSet}
      */
-    protected FlatXmlProducer createProducer(InputSource inputSource, String[] datasetId) {
+    protected FlatXmlProducer createProducer(InputSource inputSource, String datasetId) {
         logger.trace("createProducer(inputSource={}) - start", inputSource);
 
         FlatXmlProducer producer = null;

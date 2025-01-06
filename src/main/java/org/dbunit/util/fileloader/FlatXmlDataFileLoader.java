@@ -93,7 +93,7 @@ public class FlatXmlDataFileLoader extends AbstractDataFileLoader {
     /**
      * {@inheritDoc}
      */
-    public IDataSet loadDataSet(URL url, String[] datasetId) throws DataSetException, IOException {
+    public IDataSet loadDataSet(URL url, String datasetId) throws DataSetException, IOException {
         IDataSet ds = builder.build(url, datasetId);
         return ds;
     }

@@ -126,7 +126,7 @@ public abstract class AbstractStep extends ProjectComponent implements DbUnitTas
         }
     }
 
-    protected IDataSet getSrcDataSet(File src, String format, boolean forwardOnly, String[] datasetId) throws DatabaseUnitException {
+    protected IDataSet getSrcDataSet(File src, String format, boolean forwardOnly, String datasetId) throws DatabaseUnitException {
         log.debug("getSrcDataSet(src={}, format={}, forwardOnly={}) - start", src, format, forwardOnly);
         try {
             IDataSetProducer producer;

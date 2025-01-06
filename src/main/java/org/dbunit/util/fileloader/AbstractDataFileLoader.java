@@ -95,7 +95,7 @@ public abstract class AbstractDataFileLoader implements DataFileLoader {
     /**
      * {@inheritDoc}
      */
-    public IDataSet load(String filename, String[] datasetId) throws DatabaseUnitRuntimeException {
+    public IDataSet load(String filename, String datasetId) throws DatabaseUnitRuntimeException {
         IDataSet ds = new DefaultDataSet();
 
 

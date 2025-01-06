@@ -74,7 +74,7 @@ public class FlatXmlProducer extends DefaultHandler implements IDataSetProducer,
     private final EntityResolver _resolver;
     private boolean _validating = false;
 
-    private final String[] datasetId;
+    private final String datasetId;
     /**
      * The dataset used to retrieve the metadata for the tables via {@link IDataSet#getTableMetaData(String)}.
      * Can be null
@@ -111,15 +111,15 @@ public class FlatXmlProducer extends DefaultHandler implements IDataSetProducer,
     private OrderedTableNameMap _orderedTableNameMap;
 
 
-    public FlatXmlProducer(InputSource xmlSource, String[] datasetId) {
+    public FlatXmlProducer(InputSource xmlSource, String datasetId) {
         this(xmlSource, true, datasetId);
     }
 
-    public FlatXmlProducer(InputSource xmlSource, boolean dtdMetadata, String[] datasetId) {
+    public FlatXmlProducer(InputSource xmlSource, boolean dtdMetadata, String datasetId) {
         this(xmlSource, dtdMetadata, false, datasetId);
     }
 
-    public FlatXmlProducer(InputSource xmlSource, IDataSet metaDataSet, String[] datasetId) {
+    public FlatXmlProducer(InputSource xmlSource, IDataSet metaDataSet, String datasetId) {
         _inputSource = xmlSource;
         _metaDataSet = metaDataSet;
         _resolver = this;
@@ -128,7 +128,7 @@ public class FlatXmlProducer extends DefaultHandler implements IDataSetProducer,
         initialize(false);
     }
 
-    public FlatXmlProducer(InputSource xmlSource, EntityResolver resolver, String[] datasetId) {
+    public FlatXmlProducer(InputSource xmlSource, EntityResolver resolver, String datasetId) {
         _inputSource = xmlSource;
         _resolver = resolver;
         this.datasetId = datasetId;
@@ -140,7 +140,7 @@ public class FlatXmlProducer extends DefaultHandler implements IDataSetProducer,
      * @param dtdMetadata   Whether or not DTD metadata is available to parse via a DTD handler
      * @param columnSensing Whether or not the column sensing feature should be used (see FAQ)
      */
-    public FlatXmlProducer(InputSource xmlSource, boolean dtdMetadata, boolean columnSensing, String[] datasetId) {
+    public FlatXmlProducer(InputSource xmlSource, boolean dtdMetadata, boolean columnSensing, String datasetId) {
         this(xmlSource, dtdMetadata, columnSensing, false, datasetId);
     }
 
@@ -151,7 +151,7 @@ public class FlatXmlProducer extends DefaultHandler implements IDataSetProducer,
      * @param caseSensitiveTableNames Whether or not this dataset should use case sensitive table names
      * @since 2.4.2
      */
-    public FlatXmlProducer(InputSource xmlSource, boolean dtdMetadata, boolean columnSensing, boolean caseSensitiveTableNames, String[] datasetId) {
+    public FlatXmlProducer(InputSource xmlSource, boolean dtdMetadata, boolean columnSensing, boolean caseSensitiveTableNames, String datasetId) {
         _inputSource = xmlSource;
         _columnSensing = columnSensing;
         _caseSensitiveTableNames = caseSensitiveTableNames;
@@ -381,11 +381,8 @@ public class FlatXmlProducer extends DefaultHandler implements IDataSetProducer,
             if (qName.equals(DATASET)) {
                 if (datasetId != null && attributes.getLength() > 0) {
                     boolean matched = false;
-                    for (String each : datasetId) {
-                        if (Objects.equals(attributes.getValue("id"), each)) {
-                            matched = true;
-                            break;
-                        }
+                    if (Objects.equals(attributes.getValue("id"), datasetId)) {
+                        matched = true;
                     }
                     if (matched) {
                         _consumer.startDataSet();

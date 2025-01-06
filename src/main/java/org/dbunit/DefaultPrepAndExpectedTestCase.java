@@ -126,7 +126,7 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase implements PrepAn
      * {@inheritDoc}
      */
     @Override
-    public void configureTest(final VerifyTableDefinition[] verifyTableDefinitions, final String[] prepDataFiles, final String[] expectedDataFiles, final String[] datasetId) throws Exception {
+    public void configureTest(final VerifyTableDefinition[] verifyTableDefinitions, final String[] prepDataFiles, final String[] expectedDataFiles, final String datasetId) throws Exception {
         final boolean isCaseSensitiveTableNames = lookupFeatureValue();
         this.prepDataSet = makeCompositeDataSet(prepDataFiles, "prep", isCaseSensitiveTableNames, datasetId);
         this.expectedDataSet = makeCompositeDataSet(expectedDataFiles, "expected", isCaseSensitiveTableNames, datasetId);
@@ -158,7 +158,7 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase implements PrepAn
      * {@inheritDoc}
      */
     @Override
-    public void preTest(final VerifyTableDefinition[] tables, final String[] prepDataFiles, final String[] expectedDataFiles, String[] datasetId) throws Exception {
+    public void preTest(final VerifyTableDefinition[] tables, final String[] prepDataFiles, final String[] expectedDataFiles, String datasetId) throws Exception {
         configureTest(tables, prepDataFiles, expectedDataFiles, datasetId);
         preTest();
     }
@@ -504,7 +504,7 @@ public class DefaultPrepAndExpectedTestCase extends DBTestCase implements PrepAn
      * @return The composite dataset.
      * @throws DataSetException On dbUnit errors.
      */
-    public IDataSet makeCompositeDataSet(final String[] dataFiles, final String dataFilesName, final boolean isCaseSensitiveTableNames, String[] datasetId) throws DataSetException {
+    public IDataSet makeCompositeDataSet(final String[] dataFiles, final String dataFilesName, final boolean isCaseSensitiveTableNames, String datasetId) throws DataSetException {
         Assert.assertThat(dataFileLoader != null, new IllegalStateException("dataFileLoader is null; must configure or set it first"));
 
         final int count = dataFiles.length;

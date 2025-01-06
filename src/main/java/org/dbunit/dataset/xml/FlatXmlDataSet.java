@@ -114,7 +114,7 @@ public class FlatXmlDataSet extends CachedDataSet {
      *
      * @deprecated since 2.4.7 - use {@link FlatXmlDataSetBuilder} to create a {@link FlatXmlDataSet}
      */
-    public FlatXmlDataSet(InputSource source, String[] datasetId) throws IOException, DataSetException {
+    public FlatXmlDataSet(InputSource source, String datasetId) throws IOException, DataSetException {
         super(new FlatXmlProducer(source, datasetId));
     }
 
@@ -125,7 +125,7 @@ public class FlatXmlDataSet extends CachedDataSet {
      * @param xmlFile the xml file
      * @deprecated since 2.4.7 - use {@link FlatXmlDataSetBuilder} to create a {@link FlatXmlDataSet}
      */
-    public FlatXmlDataSet(File xmlFile, String[] datasetId) throws IOException, DataSetException {
+    public FlatXmlDataSet(File xmlFile, String datasetId) throws IOException, DataSetException {
         this(xmlFile, true, datasetId);
     }
 
@@ -137,7 +137,7 @@ public class FlatXmlDataSet extends CachedDataSet {
      * @param dtdMetadata if <code>false</code> do not use DTD as metadata
      * @deprecated since 2.4.7 - use {@link FlatXmlDataSetBuilder} to create a {@link FlatXmlDataSet}
      */
-    public FlatXmlDataSet(File xmlFile, boolean dtdMetadata, String[] datasetId)
+    public FlatXmlDataSet(File xmlFile, boolean dtdMetadata, String datasetId)
             throws IOException, DataSetException {
         this(xmlFile.toURL(), dtdMetadata, datasetId);
     }
@@ -152,7 +152,7 @@ public class FlatXmlDataSet extends CachedDataSet {
      *                      is scanned for columns that have not been there in a previous column.
      * @deprecated since 2.4.7 - use {@link FlatXmlDataSetBuilder} to create a {@link FlatXmlDataSet}
      */
-    public FlatXmlDataSet(File xmlFile, boolean dtdMetadata, boolean columnSensing, String[] datasetId)
+    public FlatXmlDataSet(File xmlFile, boolean dtdMetadata, boolean columnSensing, String datasetId)
             throws IOException, DataSetException {
         this(xmlFile.toURL(), dtdMetadata, columnSensing, datasetId);
     }
@@ -168,7 +168,7 @@ public class FlatXmlDataSet extends CachedDataSet {
      * @param caseSensitiveTableNames Whether or not this dataset should use case sensitive table names
      * @deprecated since 2.4.7 - use {@link FlatXmlDataSetBuilder} to create a {@link FlatXmlDataSet}
      */
-    public FlatXmlDataSet(File xmlFile, boolean dtdMetadata, boolean columnSensing, boolean caseSensitiveTableNames, String[] datasetId)
+    public FlatXmlDataSet(File xmlFile, boolean dtdMetadata, boolean columnSensing, boolean caseSensitiveTableNames, String datasetId)
             throws IOException, DataSetException {
         this(xmlFile.toURL(), dtdMetadata, columnSensing, caseSensitiveTableNames, datasetId);
     }
@@ -180,7 +180,7 @@ public class FlatXmlDataSet extends CachedDataSet {
      * @param xmlUrl the xml URL
      * @deprecated since 2.4.7 - use {@link FlatXmlDataSetBuilder} to create a {@link FlatXmlDataSet}
      */
-    public FlatXmlDataSet(URL xmlUrl, String[] datasetId) throws IOException, DataSetException {
+    public FlatXmlDataSet(URL xmlUrl, String datasetId) throws IOException, DataSetException {
         this(xmlUrl, true, datasetId);
     }
 
@@ -192,7 +192,7 @@ public class FlatXmlDataSet extends CachedDataSet {
      * @param dtdMetadata if <code>false</code> do not use DTD as metadata
      * @deprecated since 2.4.7 - use {@link FlatXmlDataSetBuilder} to create a {@link FlatXmlDataSet}
      */
-    public FlatXmlDataSet(URL xmlUrl, boolean dtdMetadata, String[] datasetId)
+    public FlatXmlDataSet(URL xmlUrl, boolean dtdMetadata, String datasetId)
             throws IOException, DataSetException {
         this(xmlUrl, dtdMetadata, false, datasetId);
     }
@@ -208,7 +208,7 @@ public class FlatXmlDataSet extends CachedDataSet {
      *                      is scanned for columns that have not been there in a previous column.
      * @deprecated since 2.4.7 - use {@link FlatXmlDataSetBuilder} to create a {@link FlatXmlDataSet}
      */
-    public FlatXmlDataSet(URL xmlUrl, boolean dtdMetadata, boolean columnSensing, String[] datasetId)
+    public FlatXmlDataSet(URL xmlUrl, boolean dtdMetadata, boolean columnSensing, String datasetId)
             throws IOException, DataSetException {
         super(new FlatXmlProducer(
                 new InputSource(xmlUrl.toString()), dtdMetadata, columnSensing, datasetId));
@@ -225,7 +225,7 @@ public class FlatXmlDataSet extends CachedDataSet {
      * @param caseSensitiveTableNames Whether or not this dataset should use case sensitive table names
      * @deprecated since 2.4.7 - use {@link FlatXmlDataSetBuilder} to create a {@link FlatXmlDataSet}
      */
-    public FlatXmlDataSet(URL xmlUrl, boolean dtdMetadata, boolean columnSensing, boolean caseSensitiveTableNames, String[] datasetId)
+    public FlatXmlDataSet(URL xmlUrl, boolean dtdMetadata, boolean columnSensing, boolean caseSensitiveTableNames, String datasetId)
             throws IOException, DataSetException {
         super(new FlatXmlProducer(
                         new InputSource(xmlUrl.toString()), dtdMetadata, columnSensing, caseSensitiveTableNames, datasetId),
@@ -239,7 +239,7 @@ public class FlatXmlDataSet extends CachedDataSet {
      * @param xmlReader the xml reader
      * @deprecated since 2.4.7 - use {@link FlatXmlDataSetBuilder} to create a {@link FlatXmlDataSet}
      */
-    public FlatXmlDataSet(Reader xmlReader, String[] datasetId) throws IOException, DataSetException {
+    public FlatXmlDataSet(Reader xmlReader, String datasetId) throws IOException, DataSetException {
         this(xmlReader, true, datasetId);
     }
 
@@ -251,7 +251,7 @@ public class FlatXmlDataSet extends CachedDataSet {
      * @param dtdMetadata if <code>false</code> do not use DTD as metadata
      * @deprecated since 2.4.7 - use {@link FlatXmlDataSetBuilder} to create a {@link FlatXmlDataSet}
      */
-    public FlatXmlDataSet(Reader xmlReader, boolean dtdMetadata, String[] datasetId)
+    public FlatXmlDataSet(Reader xmlReader, boolean dtdMetadata, String datasetId)
             throws IOException, DataSetException {
         this(xmlReader, dtdMetadata, false, false, datasetId);
     }
@@ -268,7 +268,7 @@ public class FlatXmlDataSet extends CachedDataSet {
      * @since 2.4.3
      * @deprecated since 2.4.7 - use {@link FlatXmlDataSetBuilder} to create a {@link FlatXmlDataSet}
      */
-    public FlatXmlDataSet(Reader xmlReader, boolean dtdMetadata, boolean columnSensing, boolean caseSensitiveTableNames, String[] datasetId)
+    public FlatXmlDataSet(Reader xmlReader, boolean dtdMetadata, boolean columnSensing, boolean caseSensitiveTableNames, String datasetId)
             throws IOException, DataSetException {
         super(new FlatXmlProducer(new InputSource(xmlReader), dtdMetadata, columnSensing, caseSensitiveTableNames, datasetId),
                 caseSensitiveTableNames);
@@ -281,7 +281,7 @@ public class FlatXmlDataSet extends CachedDataSet {
      * @param dtdReader the dtd reader
      * @deprecated since 2.4.7 - use {@link FlatXmlDataSetBuilder} to create a {@link FlatXmlDataSet}
      */
-    public FlatXmlDataSet(Reader xmlReader, Reader dtdReader, String[] datasetId)
+    public FlatXmlDataSet(Reader xmlReader, Reader dtdReader, String datasetId)
             throws IOException, DataSetException {
         this(xmlReader, new FlatDtdDataSet(dtdReader), datasetId);
     }
@@ -293,7 +293,7 @@ public class FlatXmlDataSet extends CachedDataSet {
      * @param metaDataSet the dataset used as metadata source.
      * @deprecated since 2.4.7 - use {@link FlatXmlDataSetBuilder} to create a {@link FlatXmlDataSet}
      */
-    public FlatXmlDataSet(Reader xmlReader, IDataSet metaDataSet, String[] datasetId)
+    public FlatXmlDataSet(Reader xmlReader, IDataSet metaDataSet, String datasetId)
             throws IOException, DataSetException {
         super(new FlatXmlProducer(new InputSource(xmlReader), metaDataSet, datasetId));
     }
@@ -305,7 +305,7 @@ public class FlatXmlDataSet extends CachedDataSet {
      * @param xmlStream the xml input stream
      * @deprecated since 2.4.7 - use {@link FlatXmlDataSetBuilder} to create a {@link FlatXmlDataSet}
      */
-    public FlatXmlDataSet(InputStream xmlStream, String[] datasetId) throws IOException, DataSetException {
+    public FlatXmlDataSet(InputStream xmlStream, String datasetId) throws IOException, DataSetException {
         this(xmlStream, true, datasetId);
     }
 
@@ -317,7 +317,7 @@ public class FlatXmlDataSet extends CachedDataSet {
      * @param dtdMetadata if <code>false</code> do not use DTD as metadata
      * @deprecated since 2.4.7 - use {@link FlatXmlDataSetBuilder} to create a {@link FlatXmlDataSet}
      */
-    public FlatXmlDataSet(InputStream xmlStream, boolean dtdMetadata, String[] datasetId)
+    public FlatXmlDataSet(InputStream xmlStream, boolean dtdMetadata, String datasetId)
             throws IOException, DataSetException {
         super(new FlatXmlProducer(new InputSource(xmlStream), dtdMetadata, datasetId));
     }
@@ -330,7 +330,7 @@ public class FlatXmlDataSet extends CachedDataSet {
      * @param dtdStream the dtd input stream
      * @deprecated since 2.4.7 - use {@link FlatXmlDataSetBuilder} to create a {@link FlatXmlDataSet}
      */
-    public FlatXmlDataSet(InputStream xmlStream, InputStream dtdStream, String[] datasetId)
+    public FlatXmlDataSet(InputStream xmlStream, InputStream dtdStream, String datasetId)
             throws IOException, DataSetException {
         this(xmlStream, new FlatDtdDataSet(dtdStream), datasetId);
     }
@@ -342,7 +342,7 @@ public class FlatXmlDataSet extends CachedDataSet {
      * @param metaDataSet the dataset used as metadata source.
      * @deprecated since 2.4.7 - use {@link FlatXmlDataSetBuilder} to create a {@link FlatXmlDataSet}
      */
-    public FlatXmlDataSet(InputStream xmlStream, IDataSet metaDataSet, String[] datasetId)
+    public FlatXmlDataSet(InputStream xmlStream, IDataSet metaDataSet, String datasetId)
             throws IOException, DataSetException {
         super(new FlatXmlProducer(new InputSource(xmlStream), metaDataSet, datasetId));
     }

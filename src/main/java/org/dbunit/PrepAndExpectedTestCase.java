@@ -40,7 +40,7 @@ public interface PrepAndExpectedTestCase {
      * @param expectedDataFiles      The expected data files (as classpath resources) to load as
      *                               expected data and verify actual data matches at test end.
      */
-    void configureTest(VerifyTableDefinition[] verifyTableDefinitions, String[] prepDataFiles, String[] expectedDataFiles, String[] datasetId) throws Exception;
+    void configureTest(VerifyTableDefinition[] verifyTableDefinitions, String[] prepDataFiles, String[] expectedDataFiles, String datasetId) throws Exception;
 
     /**
      * Execute pre-test steps. Call this method before performing the test steps.
@@ -56,7 +56,7 @@ public interface PrepAndExpectedTestCase {
      * @param expectedDataFiles The expected data files (as classpath resources) to load as
      *                          expected data and verify actual data matches at test end.
      */
-    void preTest(VerifyTableDefinition[] verifyTables, String[] prepDataFiles, String[] expectedDataFiles, String[] datasetId) throws Exception;
+    void preTest(VerifyTableDefinition[] verifyTables, String[] prepDataFiles, String[] expectedDataFiles, String datasetId) throws Exception;
 
     /**
      * Run the DbUnit test.
