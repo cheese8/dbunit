@@ -88,10 +88,10 @@ public class DbUnitAssert extends DbUnitAssertBase {
      * @throws DatabaseUnitException If an error occurs while performing the comparison.
      * @throws java.sql.SQLException If an SQL error occurs.
      */
-    public void assertEqualsByQuery(final IDataSet expectedDataset, final IDatabaseConnection connection, final String sqlQuery, final String tableName, final String[] ignoreCols) throws DatabaseUnitException, SQLException {
+    public void assertEqualsByQuery(final IDataSet expectedDataset, final IDatabaseConnection connection, final String sqlQuery, final String tableName, final String[] ignoreCols, FailureHandler failureHandler) throws DatabaseUnitException, SQLException {
         log.debug("assertEqualsByQuery(expectedDataset={}, connection={}, tableName={}, sqlQuery={}, ignoreCols={}) - start", expectedDataset, connection, tableName, sqlQuery, ignoreCols);
         final ITable expectedTable = expectedDataset.getTable(tableName);
-        assertEqualsByQuery(expectedTable, connection, tableName, sqlQuery, ignoreCols);
+        assertEqualsByQuery(expectedTable, connection, tableName, sqlQuery, ignoreCols, failureHandler);
     }
 
     /**
@@ -106,12 +106,12 @@ public class DbUnitAssert extends DbUnitAssertBase {
      * @throws DatabaseUnitException If an error occurs while performing the comparison.
      * @throws java.sql.SQLException If an SQL error occurs.
      */
-    public void assertEqualsByQuery(final ITable expectedTable, final IDatabaseConnection connection, final String tableName, final String sqlQuery, final String[] ignoreCols) throws DatabaseUnitException, SQLException {
+    public void assertEqualsByQuery(final ITable expectedTable, final IDatabaseConnection connection, final String tableName, final String sqlQuery, final String[] ignoreCols, FailureHandler failureHandler) throws DatabaseUnitException, SQLException {
         log.debug("assertEqualsByQuery(expectedTable={}, connection={}, tableName={}, sqlQuery={}, ignoreCols={}) - start", expectedTable, connection, tableName, sqlQuery, ignoreCols);
         final ITable expected = DefaultColumnFilter.excludedColumnsTable(expectedTable, ignoreCols);
         final ITable queriedTable = connection.createQueryTable(tableName, sqlQuery);
         final ITable actual = DefaultColumnFilter.excludedColumnsTable(queriedTable, ignoreCols);
-        assertEquals(expected, actual);
+        assertEquals(expected, actual, failureHandler);
     }
 
     /**

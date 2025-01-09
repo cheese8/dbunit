@@ -83,8 +83,8 @@ public class Assertion {
      * String, String, String[])
      */
     public static void assertEqualsByQuery(final IDataSet expectedDataset, final IDatabaseConnection connection, final String sqlQuery,
-                                           final String tableName, final String[] ignoreCols) throws DatabaseUnitException, SQLException {
-        EQUALS_INSTANCE.assertEqualsByQuery(expectedDataset, connection, sqlQuery, tableName, ignoreCols);
+                                           final String tableName, final String[] ignoreCols, FailureHandler failureHandler) throws DatabaseUnitException, SQLException {
+        EQUALS_INSTANCE.assertEqualsByQuery(expectedDataset, connection, sqlQuery, tableName, ignoreCols, failureHandler);
     }
 
     /**
@@ -92,8 +92,8 @@ public class Assertion {
      * String, String, String[])
      */
     public static void assertEqualsByQuery(final ITable expectedTable, final IDatabaseConnection connection, final String tableName,
-                                           final String sqlQuery, final String[] ignoreCols) throws DatabaseUnitException, SQLException {
-        EQUALS_INSTANCE.assertEqualsByQuery(expectedTable, connection, tableName, sqlQuery, ignoreCols);
+                                           final String sqlQuery, final String[] ignoreCols, FailureHandler failureHandler) throws DatabaseUnitException, SQLException {
+        EQUALS_INSTANCE.assertEqualsByQuery(expectedTable, connection, tableName, sqlQuery, ignoreCols, failureHandler);
     }
 
     /**
