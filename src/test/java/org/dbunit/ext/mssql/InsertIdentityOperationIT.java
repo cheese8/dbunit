@@ -56,7 +56,7 @@ public class InsertIdentityOperationIT extends AbstractDatabaseIT {
 
     public void testExecuteXML() throws Exception {
         Reader in = TestUtils.getFileReader("xml/insertIdentityOperationTest.xml");
-        IDataSet dataSet = new XmlDataSet(in);
+        IDataSet dataSet = new XmlDataSet(in, null);
 
         testExecute(dataSet);
     }

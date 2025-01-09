@@ -53,7 +53,7 @@ public class XmlTableWriteTest extends XmlTableTest {
             // load new dataset from temp file
             FileReader in = new FileReader(tempFile);
             try {
-                return new XmlDataSet(in);
+                return new XmlDataSet(in, null);
             } finally {
                 in.close();
             }
@@ -88,7 +88,7 @@ public class XmlTableWriteTest extends XmlTableTest {
             // load new dataset from temp file
             FileReader in = new FileReader(tempFile);
             try {
-                XmlDataSet xmlDataSet2 = new XmlDataSet(in);
+                XmlDataSet xmlDataSet2 = new XmlDataSet(in, null);
 
                 // verify each table
                 for (int i = 0; i < tables.length; i++) {

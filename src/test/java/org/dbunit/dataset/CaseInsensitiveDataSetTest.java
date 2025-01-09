@@ -38,8 +38,7 @@ public class CaseInsensitiveDataSetTest extends AbstractDataSetTest {
     }
 
     protected IDataSet createDataSet() throws Exception {
-        return new CaseInsensitiveDataSet(new XmlDataSet(TestUtils.getFileReader(
-                "xml/caseInsensitiveDataSetTest.xml")));
+        return new CaseInsensitiveDataSet(new XmlDataSet(TestUtils.getFileReader("xml/caseInsensitiveDataSetTest.xml"), null));
     }
 
     protected IDataSet createDuplicateDataSet() throws Exception {

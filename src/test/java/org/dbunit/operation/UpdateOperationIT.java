@@ -464,7 +464,7 @@ public class UpdateOperationIT extends AbstractDatabaseIT {
     public void testExecute() throws Exception {
         Reader in = new FileReader(
                 TestUtils.getFile("xml/updateOperationTest.xml"));
-        IDataSet dataSet = new XmlDataSet(in);
+        IDataSet dataSet = new XmlDataSet(in, null);
 
         testExecute(dataSet);
 
@@ -473,7 +473,7 @@ public class UpdateOperationIT extends AbstractDatabaseIT {
     public void testExecuteCaseInsensitive() throws Exception {
         Reader in = new FileReader(
                 TestUtils.getFile("xml/updateOperationTest.xml"));
-        IDataSet dataSet = new XmlDataSet(in);
+        IDataSet dataSet = new XmlDataSet(in, null);
 
         testExecute(new LowerCaseDataSet(dataSet));
     }
@@ -481,7 +481,7 @@ public class UpdateOperationIT extends AbstractDatabaseIT {
     public void testExecuteForwardOnly() throws Exception {
         Reader in = new FileReader(
                 TestUtils.getFile("xml/updateOperationTest.xml"));
-        IDataSet dataSet = new XmlDataSet(in);
+        IDataSet dataSet = new XmlDataSet(in, null);
 
         testExecute(new ForwardOnlyDataSet(dataSet));
     }

@@ -52,7 +52,7 @@ public class TransactionOperationIT extends AbstractDatabaseIT {
         String tableName = "TEST_TABLE";
         Reader in = new FileReader(
                 TestUtils.getFile("xml/transactionOperationTest.xml"));
-        IDataSet xmlDataSet = new XmlDataSet(in);
+        IDataSet xmlDataSet = new XmlDataSet(in, null);
         Connection jdbcConnection = connection.getConnection();
 
         ITable tableBefore = connection.createDataSet().getTable(tableName);
@@ -74,7 +74,7 @@ public class TransactionOperationIT extends AbstractDatabaseIT {
         String tableName = "TEST_TABLE";
         Reader in = new FileReader(
                 TestUtils.getFile("xml/transactionOperationTest.xml"));
-        IDataSet xmlDataSet = new XmlDataSet(in);
+        IDataSet xmlDataSet = new XmlDataSet(in, null);
         Connection jdbcConnection = connection.getConnection();
 
         jdbcConnection.setAutoCommit(false);
@@ -104,7 +104,7 @@ public class TransactionOperationIT extends AbstractDatabaseIT {
         String tableName = "TEST_TABLE";
         Reader in = new FileReader(
                 TestUtils.getFile("xml/transactionOperationTest.xml"));
-        IDataSet xmlDataSet = new XmlDataSet(in);
+        IDataSet xmlDataSet = new XmlDataSet(in, null);
         Exception[] exceptions = new Exception[]{
                 new SQLException(),
                 new DatabaseUnitException(),

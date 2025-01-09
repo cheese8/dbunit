@@ -529,7 +529,7 @@ public class InsertOperationIT extends AbstractDatabaseIT {
 
     public void testMissingColumns() throws Exception {
         Reader in = TestUtils.getFileReader("xml/missingColumnTest.xml");
-        IDataSet xmlDataSet = new XmlDataSet(in);
+        IDataSet xmlDataSet = new XmlDataSet(in, null);
 
         ITable[] tablesBefore = DataSetUtils.getTables(connection.createDataSet());
         DatabaseOperation.INSERT.execute(connection, xmlDataSet);
@@ -623,21 +623,21 @@ public class InsertOperationIT extends AbstractDatabaseIT {
 
     public void testExecute() throws Exception {
         Reader in = TestUtils.getFileReader("xml/insertOperationTest.xml");
-        IDataSet dataSet = new XmlDataSet(in);
+        IDataSet dataSet = new XmlDataSet(in, null);
 
         testExecute(dataSet);
     }
 
     public void testExecuteCaseInsensitive() throws Exception {
         Reader in = TestUtils.getFileReader("xml/insertOperationTest.xml");
-        IDataSet dataSet = new XmlDataSet(in);
+        IDataSet dataSet = new XmlDataSet(in, null);
 
         testExecute(new LowerCaseDataSet(dataSet));
     }
 
     public void testExecuteForwardOnly() throws Exception {
         Reader in = TestUtils.getFileReader("xml/insertOperationTest.xml");
-        IDataSet dataSet = new XmlDataSet(in);
+        IDataSet dataSet = new XmlDataSet(in, null);
 
         testExecute(new ForwardOnlyDataSet(dataSet));
     }

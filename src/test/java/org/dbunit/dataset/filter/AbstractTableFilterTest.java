@@ -39,8 +39,7 @@ public abstract class AbstractTableFilterTest
     }
 
     protected IDataSet createDataSet() throws Exception {
-        IDataSet dataSet1 = new XmlDataSet(
-                TestUtils.getFileReader("xml/dataSetTest.xml"));
+        IDataSet dataSet1 = new XmlDataSet(TestUtils.getFileReader("xml/dataSetTest.xml"), null);
         IDataSet dataSet2 = new DefaultDataSet(
                 new DefaultTable(getExtraTableName()));
 
@@ -51,8 +50,7 @@ public abstract class AbstractTableFilterTest
     }
 
     protected IDataSet createDuplicateDataSet() throws Exception {
-        IDataSet dataSet1 = new XmlDataSet(
-                TestUtils.getFileReader("xml/xmlDataSetDuplicateTest.xml"));
+        IDataSet dataSet1 = new XmlDataSet(TestUtils.getFileReader("xml/xmlDataSetDuplicateTest.xml"), null);
         IDataSet dataSet2 = new DefaultDataSet(
                 new DefaultTable(getExtraTableName()));
 

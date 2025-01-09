@@ -66,15 +66,15 @@ public class XmlDataSet extends CachedDataSet {
     /**
      * Creates an XmlDataSet with the specified xml reader.
      */
-    public XmlDataSet(Reader reader) throws DataSetException {
-        super(new XmlProducer(new InputSource(reader)));
+    public XmlDataSet(Reader reader, String datasetId) throws DataSetException {
+        super(new XmlProducer(new InputSource(reader), datasetId));
     }
 
     /**
      * Creates an XmlDataSet with the specified xml input stream.
      */
-    public XmlDataSet(InputStream in) throws DataSetException {
-        super(new XmlProducer(new InputSource(in)));
+    public XmlDataSet(InputStream in, String datasetId) throws DataSetException {
+        super(new XmlProducer(new InputSource(in), datasetId));
     }
 
     /**

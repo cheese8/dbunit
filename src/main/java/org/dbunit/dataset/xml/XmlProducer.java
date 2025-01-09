@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
@@ -33,6 +34,7 @@ import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.DefaultTableMetaData;
 import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.ITableMetaData;
+import org.dbunit.dataset.OrderedTableNameMap;
 import org.dbunit.dataset.datatype.DataType;
 import org.dbunit.dataset.stream.DefaultConsumer;
 import org.dbunit.dataset.stream.IDataSetConsumer;
@@ -88,8 +90,11 @@ public class XmlProducer extends DefaultHandler
     private StringBuffer _activeCharacters;
     private List _activeRowValues;
 
-    public XmlProducer(InputSource inputSource) {
+    private final String datasetId;
+
+    public XmlProducer(InputSource inputSource, String datasetId) {
         _inputSource = inputSource;
+        this.datasetId = datasetId;
     }
 
     private ITableMetaData createMetaData(String tableName, List columnNames) {
@@ -189,8 +194,19 @@ public class XmlProducer extends DefaultHandler
         try {
             // dataset
             if (qName.equals(DATASET)) {
-                _consumer.startDataSet();
-                return;
+                if (datasetId != null && attributes.getLength() > 0) {
+                    boolean matched = false;
+                    if (Objects.equals(attributes.getValue("id"), datasetId)) {
+                        matched = true;
+                    }
+                    if (matched) {
+                        _consumer.startDataSet();
+                    }
+                    return;
+                } else {
+                    _consumer.startDataSet();
+                    return;
+                }
             }
 
             // table

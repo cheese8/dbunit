@@ -188,7 +188,7 @@ public class DeleteOperationIT extends AbstractDatabaseIT {
     public void testExecute() throws Exception {
         Reader in = new FileReader(
                 TestUtils.getFile("xml/deleteOperationTest.xml"));
-        IDataSet dataSet = new XmlDataSet(in);
+        IDataSet dataSet = new XmlDataSet(in, null);
 
         testExecute(dataSet);
 
@@ -197,7 +197,7 @@ public class DeleteOperationIT extends AbstractDatabaseIT {
     public void testExecuteCaseInsensitive() throws Exception {
         Reader in = new FileReader(
                 TestUtils.getFile("xml/deleteOperationTest.xml"));
-        IDataSet dataSet = new XmlDataSet(in);
+        IDataSet dataSet = new XmlDataSet(in, null);
 
         testExecute(new LowerCaseDataSet(dataSet));
     }

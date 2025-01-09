@@ -38,8 +38,7 @@ public class DefaultDataSetTest extends AbstractDataSetTest {
     }
 
     protected IDataSet createDataSet() throws Exception {
-        IDataSet dataSet = new XmlDataSet(
-                TestUtils.getFileReader("xml/dataSetTest.xml"));
+        IDataSet dataSet = new XmlDataSet(TestUtils.getFileReader("xml/dataSetTest.xml"), null);
         ITable[] tables = DataSetUtils.getTables(dataSet);
 
         return new DefaultDataSet(tables);

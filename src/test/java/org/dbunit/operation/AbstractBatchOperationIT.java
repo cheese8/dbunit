@@ -40,7 +40,7 @@ public class AbstractBatchOperationIT extends AbstractDatabaseIT {
 
     public void testGetOperationMetaDataAndMissingColumns() throws Exception {
         Reader in = TestUtils.getFileReader("xml/missingColumnTest.xml");
-        IDataSet xmlDataSet = new XmlDataSet(in);
+        IDataSet xmlDataSet = new XmlDataSet(in, null);
 
         ITable[] xmlTables = DataSetUtils.getTables(xmlDataSet);
         for (int i = 0; i < xmlTables.length; i++) {
@@ -87,7 +87,7 @@ public class AbstractBatchOperationIT extends AbstractDatabaseIT {
     public void testGetOperationMetaDataAndUnknownColumns() throws Exception {
         String tableName = "PK_TABLE";
         Reader in = TestUtils.getFileReader("xml/unknownColumnTest.xml");
-        IDataSet xmlDataSet = new XmlDataSet(in);
+        IDataSet xmlDataSet = new XmlDataSet(in, null);
         ITable xmlTable = xmlDataSet.getTable(tableName);
         try {
             AbstractBatchOperation.getOperationMetaData(connection, xmlTable.getTableMetaData());

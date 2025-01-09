@@ -40,13 +40,11 @@ public class CompositeDataSetTest extends AbstractDataSetTest {
     }
 
     protected IDataSet createDataSet() throws Exception {
-        IDataSet dataSet1 = new XmlDataSet(
-                TestUtils.getFileReader("xml/compositeDataSetTest1.xml"));
+        IDataSet dataSet1 = new XmlDataSet(TestUtils.getFileReader("xml/compositeDataSetTest1.xml"), null);
         assertTrue("count before combine (1)",
                 dataSet1.getTableNames().length < getExpectedNames().length);
 
-        IDataSet dataSet2 = new XmlDataSet(
-                TestUtils.getFileReader("xml/compositeDataSetTest2.xml"));
+        IDataSet dataSet2 = new XmlDataSet(TestUtils.getFileReader("xml/compositeDataSetTest2.xml"), null);
         assertTrue("count before combine (2)",
                 dataSet2.getTableNames().length < getExpectedNames().length);
 

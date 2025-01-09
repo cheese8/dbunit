@@ -131,7 +131,7 @@ public abstract class AbstractStep extends ProjectComponent implements DbUnitTas
         try {
             IDataSetProducer producer;
             if (format.equalsIgnoreCase(FormatSupport.XML.getFormat())) {
-                producer = new XmlProducer(getInputSource(src));
+                producer = new XmlProducer(getInputSource(src), null);
             } else if (format.equalsIgnoreCase(FormatSupport.CSV.getFormat())) {
                 producer = new CsvProducer(src);
             } else if (format.equalsIgnoreCase(FormatSupport.FLAT.getFormat())) {

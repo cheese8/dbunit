@@ -53,21 +53,21 @@ public class XmlDataSetTest extends AbstractDataSetTest {
     @Override
     protected IDataSet createDataSet() throws Exception {
         Reader in = new FileReader(TestUtils.getFile("xml/dataSetTest.xml"));
-        return new XmlDataSet(in);
+        return new XmlDataSet(in, null);
     }
 
     @Override
     protected IDataSet createDuplicateDataSet() throws Exception {
         InputStream in = new FileInputStream(
                 TestUtils.getFile("xml/xmlDataSetDuplicateTest.xml"));
-        return new XmlDataSet(in);
+        return new XmlDataSet(in, null);
     }
 
     @Override
     protected IDataSet createMultipleCaseDuplicateDataSet() throws Exception {
         InputStream in = new FileInputStream(TestUtils
                 .getFile("xml/xmlDataSetDuplicateMultipleCaseTest.xml"));
-        return new XmlDataSet(in);
+        return new XmlDataSet(in, null);
     }
 
     public void testWrite() throws Exception {
@@ -81,8 +81,7 @@ public class XmlDataSetTest extends AbstractDataSetTest {
                 XmlDataSet.write(expectedDataSet, out, false, false, new String[]{});
 
                 // load new dataset from temp file
-                IDataSet actualDataSet =
-                        new XmlDataSet(new FileReader(tempFile));
+                IDataSet actualDataSet = new XmlDataSet(new FileReader(tempFile), null);
 
                 // verify table count
                 assertEquals("table count",
@@ -159,7 +158,7 @@ public class XmlDataSetTest extends AbstractDataSetTest {
         final String tableName = "TEST_TA$BLE";
 
         InputStream inputStream = getClass().getResourceAsStream(fileName);
-        XmlDataSet dataSet = new XmlDataSet(inputStream);
+        XmlDataSet dataSet = new XmlDataSet(inputStream, null);
 
         ITable table = dataSet.getTable(tableName);
 

@@ -46,7 +46,7 @@ public class CaseInsensitiveTableTest extends XmlTableTest {
     protected IDataSet createDataSet() throws Exception {
         Reader in = new FileReader(
                 TestUtils.getFile("xml/caseInsensitiveTableTest.xml"));
-        return new XmlDataSet(in);
+        return new XmlDataSet(in, null);
     }
 
     public void testTableMetaData() throws Exception {

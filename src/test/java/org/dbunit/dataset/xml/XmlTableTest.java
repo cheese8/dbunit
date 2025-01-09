@@ -46,9 +46,8 @@ public class XmlTableTest extends AbstractTableTest {
     }
 
     protected IDataSet createDataSet() throws Exception {
-        Reader in = new FileReader(
-                TestUtils.getFile("xml/xmlTableTest.xml"));
-        return new XmlDataSet(in);
+        Reader in = new FileReader(TestUtils.getFile("xml/xmlTableTest.xml"));
+        return new XmlDataSet(in, "1");
     }
 
     public void testGetMissingValue() throws Exception {

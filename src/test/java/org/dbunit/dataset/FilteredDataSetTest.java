@@ -38,10 +38,8 @@ public class FilteredDataSetTest extends AbstractDataSetTest {
     }
 
     protected IDataSet createDataSet() throws Exception {
-        IDataSet dataSet1 = new XmlDataSet(
-                TestUtils.getFileReader("xml/dataSetTest.xml"));
-        IDataSet dataSet2 = new XmlDataSet(
-                TestUtils.getFileReader("xml/filteredDataSetTest.xml"));
+        IDataSet dataSet1 = new XmlDataSet(TestUtils.getFileReader("xml/dataSetTest.xml"), null);
+        IDataSet dataSet2 = new XmlDataSet(TestUtils.getFileReader("xml/filteredDataSetTest.xml"), null);
 
         IDataSet dataSet = new CompositeDataSet(dataSet1, dataSet2);
         assertEquals("count before filter", getExpectedNames().length + 1,
@@ -50,10 +48,8 @@ public class FilteredDataSetTest extends AbstractDataSetTest {
     }
 
     protected IDataSet createDuplicateDataSet() throws Exception {
-        IDataSet dataSet1 = new XmlDataSet(
-                TestUtils.getFileReader("xml/xmlDataSetDuplicateTest.xml"));
-        IDataSet dataSet2 = new XmlDataSet(
-                TestUtils.getFileReader("xml/filteredDataSetTest.xml"));
+        IDataSet dataSet1 = new XmlDataSet(TestUtils.getFileReader("xml/xmlDataSetDuplicateTest.xml"), null);
+        IDataSet dataSet2 = new XmlDataSet(TestUtils.getFileReader("xml/filteredDataSetTest.xml"), null);
 
         assertEquals(2, dataSet1.getTableNames().length);
         assertEquals(1, dataSet2.getTableNames().length);

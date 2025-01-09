@@ -45,7 +45,7 @@ public class CompositeOperationIT extends AbstractDatabaseIT {
         String columnName = "PK0";
         Reader in = new FileReader(
                 TestUtils.getFile("xml/compositeOperationTest.xml"));
-        IDataSet xmlDataSet = new XmlDataSet(in);
+        IDataSet xmlDataSet = new XmlDataSet(in, null);
 
         // verify table before
         ITable tableBefore = createOrderedTable(tableName, columnName);

@@ -165,7 +165,7 @@ public class DatabaseEnvironment {
 
         _profile = profile;
         final File file = TestUtils.getFile("xml/dataSetTest.xml");
-        _dataSet = new XmlDataSet(new FileReader(file));
+        _dataSet = new XmlDataSet(new FileReader(file), null);
         _databaseTester = new JdbcDatabaseTester(_profile.getDriverClass(),
                 _profile.getConnectionUrl(), _profile.getUser(),
                 _profile.getPassword(), _profile.getSchema());

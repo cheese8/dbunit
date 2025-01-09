@@ -76,7 +76,7 @@ public class DbUnitAssertIT extends TestCase {
     }
 
     public void testAssertTablesEmtpyEquals() throws Exception {
-        IDataSet empty1 = new XmlDataSet(TestUtils.getFileReader("xml/assertionTest-empty1.xml"));
+        IDataSet empty1 = new XmlDataSet(TestUtils.getFileReader("xml/assertionTest-empty1.xml"), null);
         IDataSet empty2 = new FlatXmlDataSetBuilder().build(TestUtils.getFileReader("xml/assertionTest-empty2.xml"), null);
         assertion.assertEquals(empty1, empty2);
     }

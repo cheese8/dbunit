@@ -67,7 +67,7 @@ public class FullXmlDataFileLoader extends AbstractDataFileLoader {
     public IDataSet loadDataSet(URL url, String datasetId) throws DataSetException,
             IOException {
         InputStream in = url.openStream();
-        IDataSet ds = new XmlDataSet(in);
+        IDataSet ds = new XmlDataSet(in, datasetId);
 
         return ds;
     }

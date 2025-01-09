@@ -49,7 +49,7 @@ public class XmlProducerTest extends AbstractProducerTest {
         String uri = DATASET_FILE.getAbsoluteFile().toURL().toString();
         InputSource source = new InputSource(uri);
 
-        XmlProducer producer = new XmlProducer(source);
+        XmlProducer producer = new XmlProducer(source, null);
         producer.setValidating(true);
         return producer;
     }
@@ -69,7 +69,7 @@ public class XmlProducerTest extends AbstractProducerTest {
                 "<?xml version=\"1.0\"?>" +
                         "<dataset/>";
         InputSource source = new InputSource(new StringReader(content));
-        IDataSetProducer producer = new XmlProducer(source);
+        IDataSetProducer producer = new XmlProducer(source, null);
         producer.setConsumer(consumer);
 
         // Produce and verify consumer
@@ -110,7 +110,7 @@ public class XmlProducerTest extends AbstractProducerTest {
                         "   </table>" +
                         "</dataset>";
         InputSource source = new InputSource(new StringReader(content));
-        IDataSetProducer producer = new XmlProducer(source);
+        IDataSetProducer producer = new XmlProducer(source, null);
         producer.setConsumer(consumer);
 
         // Produce and verify consumer
@@ -152,7 +152,7 @@ public class XmlProducerTest extends AbstractProducerTest {
                         "   </table>" +
                         "</dataset>";
         InputSource source = new InputSource(new StringReader(content));
-        IDataSetProducer producer = new XmlProducer(source);
+        IDataSetProducer producer = new XmlProducer(source, null);
         producer.setConsumer(consumer);
 
         // Produce and verify consumer
@@ -170,7 +170,7 @@ public class XmlProducerTest extends AbstractProducerTest {
                 "<?xml version=\"1.0\"?>" +
                         "<dataset>";
         InputSource source = new InputSource(new StringReader(content));
-        IDataSetProducer producer = new XmlProducer(source);
+        IDataSetProducer producer = new XmlProducer(source, null);
         producer.setConsumer(consumer);
 
         // Produce and verify consumer
@@ -194,7 +194,7 @@ public class XmlProducerTest extends AbstractProducerTest {
                         "<invalid/>";
         InputSource source = new InputSource(new StringReader(content));
         source.setSystemId("http:/nowhere.to.go");
-        XmlProducer producer = new XmlProducer(source);
+        XmlProducer producer = new XmlProducer(source, null);
         producer.setValidating(true);
         producer.setConsumer(consumer);
 
