@@ -62,34 +62,27 @@ import java.io.*;
  * @author Björn Beskow
  * @version $Revision$ $Date$
  */
-public class JsonDataSet extends CachedDataSet
-{
+public class JsonDataSet extends CachedDataSet {
 
     /**
      * Creates a YAML dataset based on a yaml file
      */
-    public JsonDataSet(File file) throws IOException, DataSetException
-    {
+    public JsonDataSet(File file) throws IOException, DataSetException {
         super(new JsonProducer(file), true);
     }
 
     /**
      * Write the specified dataset to the specified output stream as YAML.
      */
-    public static void write(IDataSet dataSet, OutputStream out, boolean sortColumn, String[] replacements)
-    throws DataSetException
-    {
+    public static void write(IDataSet dataSet, OutputStream out, boolean sortColumn, String[] replacements) throws DataSetException {
         write(dataSet, new OutputStreamWriter(out), sortColumn, replacements);
     }
 
     /**
      * Write the specified dataset to the specified writer as YAML.
      */
-    public static void write(IDataSet dataSet, Writer out, boolean sortColumn, String[] replacements)
-    throws DataSetException
-    {
+    public static void write(IDataSet dataSet, Writer out, boolean sortColumn, String[] replacements) throws DataSetException {
         JsonWriter writer = new JsonWriter(out, sortColumn, replacements);
         writer.write(dataSet);
     }
-
 }

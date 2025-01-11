@@ -49,8 +49,7 @@ import java.util.Set;
  * @version $Revision$ $Date$
  */
 
-public class YamlProducer implements IDataSetProducer
-{
+public class YamlProducer implements IDataSetProducer {
 
     private static final IDataSetConsumer EMPTY_CONSUMER = new DefaultConsumer();
 
@@ -63,13 +62,11 @@ public class YamlProducer implements IDataSetProducer
 
     private Yaml _yaml;
 
-    public YamlProducer(File file) throws IOException
-    {
+    public YamlProducer(File file) throws IOException {
         this(new FileInputStream(file));
     }
 
-    public YamlProducer(InputStream inputStream)
-    {
+    public YamlProducer(InputStream inputStream) {
         this._inputStream = inputStream;
         LoaderOptions options = new LoaderOptions();
         options.setAllowDuplicateKeys(false);
@@ -84,32 +81,25 @@ public class YamlProducer implements IDataSetProducer
         _consumer = consumer;
     }
 
-    public void produce() throws DataSetException
-    {
+    public void produce() throws DataSetException {
         _consumer.startDataSet();
         LinkedHashMap<String, Object> dataset;
         // get the base object tree from the stream
-        try
-        {
+        try {
             dataset = (LinkedHashMap<String, Object>) _yaml.load(_inputStream);
-        }
-        catch (DuplicateKeyException e)
-        {
+        } catch (DuplicateKeyException e) {
             String problem = e.getProblem();
             String duplicateTable = problem.replace("found duplicate key ", "");
             throw new AmbiguousTableNameException(duplicateTable, e);
         }
         // iterate over the tables in the object tree
-        for (String tableName : dataset.keySet())
-        {
+        for (String tableName : dataset.keySet()) {
             // get the rows for the table
             List<Map<String, Object>> rows = (List<Map<String, Object>>) dataset.get(tableName);
             ITableMetaData meta = getMetaData(tableName, rows);
             _consumer.startTable(meta);
-            if (rows != null)
-            {
-                for (Map<String, Object> row : rows)
-                {
+            if (rows != null) {
+                for (Map<String, Object> row : rows) {
                     _consumer.row(getRow(meta, row));
                 }
             }
@@ -117,41 +107,31 @@ public class YamlProducer implements IDataSetProducer
         }
     }
 
-
-    private ITableMetaData getMetaData(String tableName, List<Map<String, Object>> rows)
-    {
+    private ITableMetaData getMetaData(String tableName, List<Map<String, Object>> rows) {
         Set<String> columns = new LinkedHashSet<String>();
-        if (rows != null)
-        {
+        if (rows != null) {
             // iterate through the dataset and add the column names to a set
-            for (Map<String, Object> row : rows)
-            {
-                for (Map.Entry<String, Object> column : row.entrySet())
-                {
+            for (Map<String, Object> row : rows) {
+                for (Map.Entry<String, Object> column : row.entrySet()) {
                     columns.add(column.getKey());
                 }
             }
             List<Column> list = new ArrayList<Column>(columns.size());
             // create a list of DBUnit columns based on the column name set
-            for (String s : columns)
-            {
+            for (String s : columns) {
                 list.add(new Column(s, DataType.UNKNOWN));
             }
             return new DefaultTableMetaData(tableName, list.toArray(new Column[list.size()]));
-        } else
-        {
+        } else {
             return new DefaultTableMetaData(tableName, new Column[0]);
         }
     }
 
-    private Object[] getRow(ITableMetaData meta, Map<String, Object> row) throws DataSetException
-    {
+    private Object[] getRow(ITableMetaData meta, Map<String, Object> row) throws DataSetException {
         Object[] result = new Object[meta.getColumns().length];
-        for (int i = 0; i < meta.getColumns().length; i++)
-        {
+        for (int i = 0; i < meta.getColumns().length; i++) {
             result[i] = row.get(meta.getColumns()[i].getColumnName());
         }
         return result;
     }
-
 }

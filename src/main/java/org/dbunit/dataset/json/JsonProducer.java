@@ -45,8 +45,7 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-public class JsonProducer implements IDataSetProducer
-{
+public class JsonProducer implements IDataSetProducer {
 
     private static final IDataSetConsumer EMPTY_CONSUMER = new DefaultConsumer();
 
@@ -59,13 +58,11 @@ public class JsonProducer implements IDataSetProducer
 
     private Gson gson;
 
-    public JsonProducer(File file) throws IOException
-    {
+    public JsonProducer(File file) throws IOException {
         this(FileUtils.readFileToString(file, StandardCharsets.UTF_8));
     }
 
-    public JsonProducer(String json)
-    {
+    public JsonProducer(String json) {
         this.json = json;
         gson = new GsonBuilder().setPrettyPrinting().create();
     }
@@ -73,37 +70,29 @@ public class JsonProducer implements IDataSetProducer
     ////////////////////////////////////////////////////////////////////////////
     // IDataSetProducer interface
 
-    public void setConsumer(IDataSetConsumer consumer)
-    {
+    public void setConsumer(IDataSetConsumer consumer) {
         _consumer = consumer;
     }
 
-    public void produce() throws DataSetException
-    {
+    public void produce() throws DataSetException {
         _consumer.startDataSet();
         LinkedHashMap<String, Object> dataset;
         // get the base object tree from the stream
-        try
-        {
+        try {
             dataset = (LinkedHashMap<String, Object>) gson.fromJson(json, Map.class);
-        }
-        catch (DuplicateKeyException e)
-        {
+        } catch (DuplicateKeyException e) {
             String problem = e.getProblem();
             String duplicateTable = problem.replace("found duplicate key ", "");
             throw new AmbiguousTableNameException(duplicateTable, e);
         }
         // iterate over the tables in the object tree
-        for (String tableName : dataset.keySet())
-        {
+        for (String tableName : dataset.keySet()) {
             // get the rows for the table
             List<Map<String, Object>> rows = (List<Map<String, Object>>) dataset.get(tableName);
             ITableMetaData meta = getMetaData(tableName, rows);
             _consumer.startTable(meta);
-            if (rows != null)
-            {
-                for (Map<String, Object> row : rows)
-                {
+            if (rows != null) {
+                for (Map<String, Object> row : rows) {
                     _consumer.row(getRow(meta, row));
                 }
             }
@@ -111,41 +100,31 @@ public class JsonProducer implements IDataSetProducer
         }
     }
 
-
-    private ITableMetaData getMetaData(String tableName, List<Map<String, Object>> rows)
-    {
+    private ITableMetaData getMetaData(String tableName, List<Map<String, Object>> rows) {
         Set<String> columns = new LinkedHashSet<String>();
-        if (rows != null)
-        {
+        if (rows != null) {
             // iterate through the dataset and add the column names to a set
-            for (Map<String, Object> row : rows)
-            {
-                for (Map.Entry<String, Object> column : row.entrySet())
-                {
+            for (Map<String, Object> row : rows) {
+                for (Map.Entry<String, Object> column : row.entrySet()) {
                     columns.add(column.getKey());
                 }
             }
             List<Column> list = new ArrayList<Column>(columns.size());
             // create a list of DBUnit columns based on the column name set
-            for (String s : columns)
-            {
+            for (String s : columns) {
                 list.add(new Column(s, DataType.UNKNOWN));
             }
             return new DefaultTableMetaData(tableName, list.toArray(new Column[list.size()]));
-        } else
-        {
+        } else {
             return new DefaultTableMetaData(tableName, new Column[0]);
         }
     }
 
-    private Object[] getRow(ITableMetaData meta, Map<String, Object> row) throws DataSetException
-    {
+    private Object[] getRow(ITableMetaData meta, Map<String, Object> row) throws DataSetException {
         Object[] result = new Object[meta.getColumns().length];
-        for (int i = 0; i < meta.getColumns().length; i++)
-        {
+        for (int i = 0; i < meta.getColumns().length; i++) {
             result[i] = row.get(meta.getColumns()[i].getColumnName());
         }
         return result;
     }
-
 }

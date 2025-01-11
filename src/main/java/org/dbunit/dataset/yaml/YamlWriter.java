@@ -36,8 +36,7 @@ import java.util.*;
  * @author Björn Beskow
  * @version $Revision$ $Date$
  */
-class YamlWriter
-{
+class YamlWriter {
 
     private Yaml _yaml;
     private Writer _out;
@@ -45,13 +44,11 @@ class YamlWriter
     private Map<String, String> replacementsMap;
     private boolean sortColumn;
 
-    public YamlWriter(Writer out, boolean sortColumn, String[] replacements)
-    {
+    public YamlWriter(Writer out, boolean sortColumn, String[] replacements) {
         this(out, false, sortColumn, replacements);
     }
 
-    public YamlWriter(Writer out, boolean useFlowStyle, boolean sortColumn, String[] replacements)
-    {
+    public YamlWriter(Writer out, boolean useFlowStyle, boolean sortColumn, String[] replacements) {
         this._out = out;
         this._useFlowStyle = useFlowStyle;
         Map<String, String> replacementsMap = new HashMap<>();
@@ -69,16 +66,13 @@ class YamlWriter
         this._useFlowStyle = useFlowStyle;
     }
 
-    public void write(IDataSet dataSet) throws DataSetException
-    {
+    public void write(IDataSet dataSet) throws DataSetException {
         LinkedHashMap<String, List<LinkedHashMap<String, Object>>> dataSetAsMap = dataSetAsMap(dataSet);
         DumperOptions options = new DumperOptions();
-        if (_useFlowStyle)
-        {
+        if (_useFlowStyle) {
             options.setDefaultFlowStyle(DumperOptions.FlowStyle.FLOW);
             options.setPrettyFlow(true);
-        } else
-        {
+        } else {
             options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
             options.setIndent(4);
             options.setIndicatorIndent(2);
@@ -87,29 +81,24 @@ class YamlWriter
         _yaml.dump(dataSetAsMap, _out);
     }
 
-    private LinkedHashMap<String, List<LinkedHashMap<String, Object>>> dataSetAsMap(IDataSet dataSet) throws DataSetException
-    {
+    private LinkedHashMap<String, List<LinkedHashMap<String, Object>>> dataSetAsMap(IDataSet dataSet) throws DataSetException {
         LinkedHashMap<String, List<LinkedHashMap<String, Object>>> result = new LinkedHashMap<>();
         ITableIterator iterator = dataSet.iterator();
-        while (iterator.next())
-        {
+        while (iterator.next()) {
             ITableMetaData tableMetaData = iterator.getTableMetaData();
             List<LinkedHashMap<String, Object>> tableRows = new ArrayList<>();
             ITable table = iterator.getTable();
-            for (int row = 0; row < table.getRowCount(); row++)
-            {
+            for (int row = 0; row < table.getRowCount(); row++) {
                 LinkedHashMap<String, Object> rowMap = new LinkedHashMap<>();
                 Column[] columns = tableMetaData.getColumns();
                 if (sortColumn) {
                     Arrays.sort(columns);
                 }
-                for (Column column : columns)
-                {
+                for (Column column : columns) {
                     String columnName = column.getColumnName();
                     String entryValue = replacementsMap.get(columnName);
                     Object value = table.getValue(row, columnName);
-                    if (value != null)
-                    {
+                    if (value != null) {
                         rowMap.put(columnName, entryValue!= null ? entryValue : value);
                     }
                 }

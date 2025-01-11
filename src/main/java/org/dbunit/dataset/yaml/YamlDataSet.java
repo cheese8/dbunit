@@ -66,14 +66,12 @@ import java.io.Writer;
  * @author Björn Beskow
  * @version $Revision$ $Date$
  */
-public class YamlDataSet extends CachedDataSet
-{
+public class YamlDataSet extends CachedDataSet {
 
     /**
      * Creates a YAML dataset based on a yaml file
      */
-    public YamlDataSet(File file) throws IOException, DataSetException
-    {
+    public YamlDataSet(File file) throws IOException, DataSetException {
         super(new YamlProducer(file), true);
     }
 
@@ -82,28 +80,22 @@ public class YamlDataSet extends CachedDataSet
      *
      * @param inputStream An inputstream pointing to a YAML dataset
      */
-    public YamlDataSet(InputStream inputStream) throws DataSetException
-    {
+    public YamlDataSet(InputStream inputStream) throws DataSetException {
         super(new YamlProducer(inputStream), true);
     }
 
     /**
      * Write the specified dataset to the specified output stream as YAML.
      */
-    public static void write(IDataSet dataSet, OutputStream out, boolean sortColumn, String[] replacements)
-    throws DataSetException
-    {
+    public static void write(IDataSet dataSet, OutputStream out, boolean sortColumn, String[] replacements) throws DataSetException {
         write(dataSet, new OutputStreamWriter(out), sortColumn, replacements);
     }
 
     /**
      * Write the specified dataset to the specified writer as YAML.
      */
-    public static void write(IDataSet dataSet, Writer out, boolean sortColumn, String[] replacements)
-    throws DataSetException
-    {
+    public static void write(IDataSet dataSet, Writer out, boolean sortColumn, String[] replacements) throws DataSetException {
         YamlWriter yamlWriter = new YamlWriter(out, sortColumn, replacements);
         yamlWriter.write(dataSet);
     }
-
 }

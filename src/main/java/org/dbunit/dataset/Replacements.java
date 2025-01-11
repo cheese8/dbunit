@@ -83,8 +83,7 @@ public class Replacements {
      * @param originalSubstring    the substring to replace
      * @param replacementSubstring the replacement substring
      */
-    public static void addReplacementSubstring(String originalSubstring,
-                                        String replacementSubstring) {
+    public static void addReplacementSubstring(String originalSubstring, String replacementSubstring) {
         logger.debug("addReplacementSubstring(originalSubstring={}, replacementSubstring={}) - start", originalSubstring, replacementSubstring);
 
         if (originalSubstring == null || replacementSubstring == null) {
@@ -172,15 +171,10 @@ public class Replacements {
                         buffer.append(value.substring(lastEndIndex, startIndex));
                         buffer.append(_substringMap.get(substring));
                     } else if (_strictReplacement) {
-                        throw new DataSetException(
-                                "Strict Replacement was set to true, but no"
-                                        + " replacement was found for substring '"
-                                        + substring + "' in the value '" + value + "'");
+                        throw new DataSetException("Strict Replacement was set to true, but no replacement was found for substring '" + substring + "' in the value '" + value + "'");
                     } else {
-                        logger.debug("Did not find a replacement map entry for substring={}. " +
-                                "Leaving original value there.", substring);
-                        buffer.append(value.substring(
-                                lastEndIndex, endIndex + _endDelim.length()));
+                        logger.debug("Did not find a replacement map entry for substring={}. Leaving original value there.", substring);
+                        buffer.append(value.substring(lastEndIndex, endIndex + _endDelim.length()));
                     }
 
                     lastEndIndex = endIndex + _endDelim.length();
